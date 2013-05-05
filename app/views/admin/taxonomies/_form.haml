@@ -1,0 +1,11 @@
+
+#main
+  = form_for [:admin, @taxonomy] do |f|
+
+    = f.label :name
+    = f.text_field :name
+
+    %br
+
+    = f.submit
+

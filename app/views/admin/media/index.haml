@@ -1,0 +1,12 @@
+
+#main
+  %ul
+    - @media.each do |medium|
+      %li
+        = medium.title
+        %br
+        = medium.asset_file_name
+        %br
+        = link_to '[Edit]', edit_admin_medium_path(medium)
+        = link_to '[Delete]', admin_medium_path(medium), remote: true, method: :delete
+

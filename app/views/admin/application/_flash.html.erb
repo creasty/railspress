@@ -1,0 +1,16 @@
+<%
+	_flash = flash[:notice] || flash[:alert]
+
+	if _flash
+		_flash = { message: _flash, icon: nil } unless _flash == Hash
+		_flash[:icon] = _flash[:icon] ? "'#{_flash[:icon]}'" : 'null'
+
+%>
+<script>
+	require(['jquery', 'common/notify'], function ($, notify) {
+		notify().create().<%= flash[:notice] ? 'success' : 'fail' %>('<%= j _flash[:message] %>', <%= j _flash[:icon] %>);
+	});
+</script>
+<%
+	end
+%>

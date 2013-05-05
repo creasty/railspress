@@ -1,0 +1,13 @@
+.DS_Store
+Thumbs.db
+
+/.bundle
+
+/db/*.sqlite3
+
+/log/*.log
+/tmp
+
+db/schema.rb
+
+public/system

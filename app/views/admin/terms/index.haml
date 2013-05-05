@@ -1,0 +1,20 @@
+#main
+  - @terms.group_by(&:taxonomy_id).each do |_, terms|
+
+    - taxonomy = terms.first.taxonomy
+
+    %h3
+      #{taxonomy.name} (#{terms.size})
+      = link_to '[Edit]', edit_admin_taxonomy_path(taxonomy)
+      = link_to '[Delete]', admin_taxonomy_path(taxonomy), remote: true, method: :delete
+
+    %ul
+      - terms.each do |term|
+        %li
+          = term.name
+          (#{term.term_rels.size})
+          %br
+          = link_to '[Edit]', edit_admin_term_path(term)
+          = link_to '[Delete]', admin_term_path(term), remote: true, method: :delete
+
+    %br

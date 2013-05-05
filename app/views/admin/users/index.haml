@@ -1,0 +1,13 @@
+
+#main
+  %ul
+    - @users.each do |user|
+      %li
+        = user.name
+        %br
+        = user.email
+        %br
+        = link_to 'Edit', edit_admin_user_path(user)
+        = link_to 'Delete', admin_user_path(user), remote: true, method: :delete
+
+

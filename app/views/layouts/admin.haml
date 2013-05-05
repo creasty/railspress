@@ -1,0 +1,26 @@
+!!!
+%html
+  %head
+    %title= page_title
+
+    = csrf_meta_tags
+
+    = stylesheet_link_tag 'http://fonts.googleapis.com/css?family=Open+Sans:400,700'
+    = stylesheet_link_tag 'admin/application', media: 'all'
+
+    = javascript_include_tag 'require-config'
+    = javascript_include_tag 'require', data: { main: 'admin/application' }
+
+    = render 'admin/application/flash', flash: flash
+
+  %body{ id: controller_name, class: action_name }
+
+    - if user_signed_in?
+      = render 'header'
+
+      #menubar
+        %h1
+          = document_title
+          = yield :menubar
+
+    = yield

@@ -1,0 +1,954 @@
+
+/*=== List
+==============================================================================================*/
+ul,
+ol,
+dl {
+	position: relative;
+	font-size: 1em;
+	word-spacing: -2ex;
+	letter-spacing: -2ex;
+}
+dt,
+dd,
+li {
+	word-spacing: normal;
+	letter-spacing: normal;
+}
+ul,
+ol {
+	margin-top: 1em;
+	margin-bottom: 1em;
+	padding-left: 3ex;
+	overflow: visible;
+}
+ul {
+	list-style: outside disc;
+}
+ol {
+	list-style: outside decimal;
+
+	ol {
+		margin-left: 0.5ex;
+	}
+}
+
+li {
+	padding-bottom: 0.5em;
+
+	ol,
+	ul {
+		margin-top: 0;
+		margin-bottom: 0.3ex;
+	}
+}
+
+dt {
+	font-weight: bold;
+	margin-bottom: 1em;
+	margin-top: 0.5em;
+}
+dl,
+dd {
+	margin-bottom: 1.5em;
+}
+dd {
+	margin-left: 16px;
+}
+
+
+/*=== Cool list
+==============================================================================================*/
+ul.list {
+	list-style: none;
+	*list-style: disc;
+}
+ol.list {
+	counter-reset: li;
+	list-style: none;
+	*list-style: decimal;
+}
+
+ul.list li,
+ol.list li {
+	&:before {
+		position: absolute;
+		display: block;
+		width: 3ex;
+		text-align: right;
+		left: -1ex;
+	}
+
+	li:before {
+		left: 4.5ex;
+	}
+}
+
+ul.list li:before { content: "\25cf"; }
+ol.list li:before {
+	content: counter(li) ".";
+	counter-increment: li;
+	font-weight: bold;
+}
+
+dl.list {
+	@extend .clear-after;
+
+	position: relative;
+
+	ul,
+	ol {
+		margin: 0;
+	}
+	li {
+		line-height: 1.5em;
+		padding-bottom: 0;
+	}
+
+	dt {
+		float: left;
+		margin: 0 10px 5px 0;
+		font-weight: normal;
+		color: #000;
+	}
+	dd {
+		margin: 0 0 5px 100px;
+	}
+}
+
+@each $list in 80, 150 {
+	dl.list-#{$list} dd {
+		margin-left: #{$list}px;
+	}
+}
+
+
+/*=== Rule
+==============================================================================================*/
+hr {
+	border: 0;
+}
+#main hr {
+	background: $main-rule-color;
+	height: 1px;
+	width: 100%;
+	margin: 40px 0;
+}
+
+
+/*=== Frame
+==============================================================================================*/
+.alert {
+	@extend .clear-after;
+	border-width: 1px;
+	border-style: solid;
+	padding: 10px;
+	margin-bottom: 15px;
+	text-shadow: 0 1px 0 rgba(255, 255, 255, .5);
+	@include border-radius(4px);
+
+	strong {
+		color: inherit;
+	}
+}
+
+.alert-success {
+	background-color: #dff0d8;
+	border-color: #d6e9c6;
+	color: #468847;
+}
+.alert-error {
+	background-color: #f2dede;
+	border-color: #edd3d7;
+	color: #b94a48;
+}
+.alert-info {
+	background-color: #d9edf7;
+	border-color: #bce8f1;
+	color: #3a87ad;
+}
+
+/*=== Table
+==============================================================================================*/
+table.form {
+	width: 100%;
+
+	tr + tr > td {
+		padding-top: 10px;
+	}
+	td + td {
+		padding-left: 10px;
+	}
+}
+table.table {
+	font-size: 1em;
+	border-collapse: collapse;
+	margin-bottom: 1em;
+	width: 100%;
+
+	caption {
+		padding-bottom: 0.5em;
+	}
+	tbody th {
+		text-align: left;
+	}
+
+	td {
+		line-height: 1.35;
+	}
+	td,
+	th {
+		padding: 10px 20px;
+	}
+
+	thead {
+		tr {
+			background: $menubar-bg-color;
+			width: 100%;
+			height: 42px;
+			padding: 15px 20px;
+			@include box-sizing(border-box);
+
+			color: rgba(#000, .5);
+		}
+
+		th:after {
+			font-family: "LigatureSymbols";
+			padding-left: .5em;
+		}
+		th.sortable:after {
+			content: "\E120";
+			opacity: .6;
+		}
+		th.desc:after {
+			content: "\E03e";
+		}
+		th.asce:after {
+			content: "\E135";
+		}
+	}
+	tbody {
+		tr {
+			@include transition(background-color .3s);
+			border-bottom: 1px solid $main-rule-color;
+		}
+
+		td {
+
+			> input[type=checkbox] {
+				margin: 0;
+			}
+		}
+	}
+
+	thead th,
+	.headerBlock th {
+		// background: $sub-base-color;
+		font-weight: bold;
+	}
+}
+
+table.table-hover {
+	tbody tr {
+		&:hover,
+		&.hover {
+			background-color: rgba($success-color, .05);
+		}
+	}
+}
+
+table.table-stripe-v tbody tr:nth-child(even),
+table.table-stripe-h tbody td:nth-child(even) {
+	background-color: #f3f7fb;
+}
+
+
+/*=== Form
+==============================================================================================*/
+label {
+	vertical-align: middle;
+	cursor: pointer;
+}
+button,
+input,
+select,
+textarea {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	font: 12px/1.6 $family;
+	color: inherit;
+	-webkit-font-smoothing: antialiased;
+	padding: 0;
+	margin: 0;
+	border: 0;
+	background: none;
+	@include box-sizing(border-box);
+	@include inline-block;
+}
+textarea {
+	resize: none;
+}
+
+/*	Base
+-----------------------------------------------*/
+.text,
+.select {
+	position: relative;
+	@include inline-block;
+}
+input.text,
+.text > input,
+.textarea,
+input.checkbox,
+label.checkbox > input,
+input.radio,
+label.radio > input,
+.select > select {
+	position: relative;
+	border: 2px solid rgba(#000, .4);
+	@include inline-block;
+	// @include box-shadow(inset 0 1px 0 rgba(#000, .15));
+	@include border-radius(3px);
+	@include transition(.3s linear);
+
+	&:hover, &:active, &:focus {
+		border-color: rgba(#000, .5);
+	}
+
+	&:active, &:focus {
+		// @include box-shadow(inset 0 1px 0 rgba(#000, .15));
+	}
+
+	&.error {
+		background: rgba($danger-color, .2);
+	}
+	&.success {
+		background: rgba($success-color, .2);
+	}
+}
+
+/*	Input Text
+-----------------------------------------------*/
+input.text,
+.text > input {
+	padding: 0 10px;
+	line-height: 1;
+	height: 30px;
+}
+
+.text[class*="icon-"] {
+	> input {
+		padding-right: 30px;
+	}
+
+	&:before {
+		display: block;
+		position: absolute;
+		right: 8px;
+		padding-right: 0 !important;
+		top: 6px;
+		font-size: 18px;
+	}
+}
+
+.text.icon-on-left {
+	> input {
+		padding-right: 10px;
+		padding-left: 38px;
+	}
+	&:before {
+		right: none;
+		left: 8px;
+	}
+}
+
+/*	Radio Button / Checkbox
+-----------------------------------------------*/
+input.radio,
+input.checkbox,
+label.radio > input,
+label.checkbox > input {
+	margin: 0 1ex 0 0;
+	width: 16px;
+	height: 16px;
+	vertical-align: middle;
+	cursor: pointer;
+}
+
+label.radio,
+label.checkbox {
+	margin-right: 10px;
+
+	> input {
+		margin-top: -2px;
+	}
+}
+
+input.radio,
+label.radio > input {
+	@include border-radius(50%);
+
+	&:checked:after {
+		content: "";
+		display: block;
+		position: absolute;
+		height: 8px;
+		width: 8px;
+		top: 2px;
+		left: 2px;
+		@include border-radius(8px);
+		background: $body-text-color;
+
+		#main & {
+			background: $main-text-color;
+		}
+	}
+}
+
+input.checkbox:checked:after,
+label.checkbox > input:checked:after {
+	content: "\E029";
+	font-family: "LigatureSymbols";
+	display: block;
+	position: absolute;
+	left: 1px;
+	top: -7px;
+	font-size: 15px;
+}
+
+/*	Select Box
+-----------------------------------------------*/
+.select {
+	> select {
+		position: relative;
+		padding: 0 38px 0 10px;
+		line-height: 26px;
+		cursor: pointer;
+		width: 100%;
+		z-index: 2;
+	}
+
+	&:before {
+		content: "";
+		position: absolute;
+		display: block;
+		height: 20px;
+		border-left: 2px solid rgba(#000, .4);
+		right: 26px;
+		top: 5px;
+		z-index: 1;
+	}
+
+	&:after {
+		content: "";
+		@include arrow(bottom, 5px, $body-text-color, none, 50%);
+		margin-top: -2px;
+		right: 9px;
+		z-index: 1;
+	}
+
+	&:focus {
+		outline: none;
+	}
+}
+
+#main .select {
+	&:after {
+		border-top-color: $main-text-color;
+	}
+}
+
+
+/*	Button
+-----------------------------------------------*/
+.btn {
+	@include inline-block;
+	border: 0;
+	background: #666;
+	height: 35px;
+	font-size: 12px;
+	color: #fff;
+	cursor: pointer;
+	padding: 0 20px;
+	@include border-radius(3px);
+	@include transition(.3s linear);
+	@include box-shadow(inset 0 -2px 0 rgba(#000, .15));
+
+	&:hover {
+		color: #fff;
+		background: darken(#666, 5%);
+	}
+
+	&:active {
+		color: #fff;
+		@include box-shadow(inset 0 2px 0 rgba(#000, .15));
+	}
+}
+a.btn {
+	line-height: 35px;
+}
+
+$btn-color-list:
+	primary $primary-color,
+	danger  $danger-color,
+	success $success-color;
+
+@each $btn-color in $btn-color-list {
+	.btn-#{nth($btn-color, 1)} {
+		background: nth($btn-color, 2);
+
+		&:hover {
+			background: darken(nth($btn-color, 2), 5%);
+		}
+	}
+}
+
+/*	Sizing
+-----------------------------------------------*/
+input.text.size-large,
+.text.size-large > input {
+	height: 35px;
+}
+.text[class*="icon-"].size-large:before {
+	top: 7px;
+	font-size: 22px;
+}
+
+/*	Block Level
+-----------------------------------------------*/
+.text.block,
+.text.block > input,
+div.text,
+div.text > input,
+.select.block,
+.select.block > select,
+div.select,
+div.select > select,
+.btn.block {
+	display: block;
+	width: 100%;
+}
+
+
+/*=== Pagination
+==============================================================================================*/
+ul.pagination {
+	@extend .compact;
+	@extend .menu;
+
+	li {
+		font-size: 14px;
+
+		a {
+			padding: 6px;
+		}
+
+		&.current a {
+			color: $primary-color;
+		}
+
+		i[class*="icon-"]:before {
+			padding-right: 0;
+		}
+	}
+}
+
+
+/*=== Modal
+==============================================================================================*/
+.overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 2000;
+	background: rgba(#000, .4);
+
+	&.overlay-alert {
+		z-index: 3000;
+	}
+}
+
+.modal {
+	@extend %modal-box;
+
+	position: fixed;
+	top: 60px;
+	bottom: 60px;
+	left: 60px;
+	right: 60px;
+	z-index: 2001;
+
+	> .close-btn {
+		position: absolute;
+		right: -11px;
+		top: -11px;
+		background: $header-bg-color;
+		width: 22px;
+		height: 22px;
+		border: 2px solid $menubar-bg-color;
+		cursor: pointer;
+		@include border-radius(50%);
+		@include transition(background .3s);
+
+		&:before, &:after {
+			content: "";
+			display: block;
+			position: absolute;
+			background: $menubar-bg-color;
+			top: 9px;
+			left: 5px;
+			height: 3px;
+			width: 12px;
+		}
+
+		&:before {
+			@include transform(rotate(45deg));
+		}
+		&:after {
+			@include transform(rotate(-45deg));
+		}
+
+		&:hover {
+			background: $primary-color;
+		}
+	}
+
+	> header {
+		height: 60px;
+		background: $menubar-bg-color;
+		@include border-radius(3px 3px 0 0);
+
+		h2 {
+			font-size: 20px;
+			padding: 20px 20px;
+			line-height: 1;
+			letter-spacing: 1px;
+			color: $main-text-color;
+		}
+	}
+
+	> footer {
+		position: absolute;
+		bottom: 0;
+		width: 100%;
+		height: 75px;
+		background: $menubar-bg-color;
+		padding: 20px;
+		@include box-sizing(border-box);
+		@include border-radius(0 0 3px 3px);
+	}
+
+	> .content {
+		position: absolute;
+		top: 60px;
+		left: 0;
+		right: 0;
+		bottom: 75px;
+		color: $main-text-color;
+		padding: 20px;
+
+		&.no-footer {
+			bottom: 0;
+		}
+	}
+}
+
+
+.alert-box {
+	@extend %modal-box;
+
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin-left: -207px;
+	margin-top: -100px;
+	@include box-sizing(border-box);
+	width: 415px;
+	padding: 20px;
+	z-index: 3001;
+	@include modal-box-shadow;
+
+	h2 {
+		font-size: 20px;
+		line-height: 1;
+		margin-bottom: 20px;
+		color: $body-bg-color;
+	}
+
+	p {
+		color: $main-text-color;
+		margin-bottom: 10px;
+	}
+
+	footer {
+		margin-top: 20px;
+	}
+
+	&.danger {
+		@include modal-box-shadow(inset 0 0 0 3px rgba(#f00, .5));
+
+		h2 {
+			color: $danger-color;
+		}
+	}
+	&.success {
+		@include modal-box-shadow(inset 0 0 0 3px rgba(#0f0, .5));
+
+		h2 {
+			color: $success-color;
+		}
+	}
+}
+
+
+
+/*=== Tags Input
+==============================================================================================*/
+
+div.tagsinput{
+	span.tag,
+	input {
+		margin: 0 5px 5px 0;
+		line-height: 1;
+		height: 22px;
+		@include box-sizing(border-box);
+	}
+	span.tag {
+		padding: 4px 4px 4px 6px;
+		color: $body-bg-color;
+		background: $body-text-color;
+		@include border-radius(3px);
+		float: left;
+		cursor: default;
+
+		a {
+			@extend .icon-remove;
+			color: $body-bg-color;
+
+			display: inline-block;
+			font-size: 16px;
+			width: 1em;
+			height: 1em;
+			overflow: hidden;
+			margin: -2px 0;
+
+			&:before {
+				@extend %icon;
+				padding: 0 0 10px 0;
+			}
+
+			&:hover {
+				color: $primary-color;
+			}
+		}
+	}
+
+	input {
+		width: 80px;
+		color: $body-text-color !important;
+	}
+
+	div {
+		display: block;
+		float: left;
+	}
+
+	.tags_clear { clear: both; width: 100%; height: 0; }
+	.not_valid {
+		color: $danger-color;
+	}
+}
+
+.acResults {
+	@extend %modal-box;
+
+	ul {
+		list-style: none;
+		margin: 0;
+		padding: 3px 0;
+
+		li {
+			padding: 5px;
+			margin: 0;
+
+			&.jquery-autocomplete-selected-item {
+				background: $menubar-bg-color;
+			}
+		}
+	}
+}
+
+/*
+<div style="position: absolute; top: 391px; left: 1168px; min-width: 80px; display: none;" class="acResults"><ul><li class="jquery-autocomplete-selected-item acSelect">test 1</li></ul></div>
+*/
+
+
+/*=== Date Picker
+==============================================================================================*/
+/*
+<div class="datepicker dropdown-menu" style="display: block; top: 475px; left: 430px;"><div class="datepicker-days" style="display: block;"><table class=" table-condensed"><thead><tr><th class="prev">‹</th><th colspan="5" class="switch">March 2012</th><th class="next">›</th></tr><tr><th class="dow">Su</th><th class="dow">Mo</th><th class="dow">Tu</th><th class="dow">We</th><th class="dow">Th</th><th class="dow">Fr</th><th class="dow">Sa</th></tr></thead><tbody><tr><td class="day  old">26</td><td class="day  old">27</td><td class="day  old">28</td><td class="day  old">29</td><td class="day ">1</td><td class="day ">2</td><td class="day ">3</td></tr><tr><td class="day ">4</td><td class="day ">5</td><td class="day ">6</td><td class="day ">7</td><td class="day ">8</td><td class="day ">9</td><td class="day ">10</td></tr><tr><td class="day ">11</td><td class="day ">12</td><td class="day ">13</td><td class="day ">14</td><td class="day ">15</td><td class="day ">16</td><td class="day ">17</td></tr><tr><td class="day ">18</td><td class="day ">19</td><td class="day ">20</td><td class="day  active">21</td><td class="day ">22</td><td class="day ">23</td><td class="day ">24</td></tr><tr><td class="day ">25</td><td class="day ">26</td><td class="day ">27</td><td class="day ">28</td><td class="day ">29</td><td class="day ">30</td><td class="day ">31</td></tr><tr><td class="day  new">1</td><td class="day  new">2</td><td class="day  new">3</td><td class="day  new">4</td><td class="day  new">5</td><td class="day  new">6</td><td class="day  new">7</td></tr></tbody></table></div><div class="datepicker-months" style="display: none;"><table class="table-condensed"><thead><tr><th class="prev">‹</th><th colspan="5" class="switch">2012</th><th class="next">›</th></tr></thead><tbody><tr><td colspan="7"><span class="month">Jan</span><span class="month">Feb</span><span class="month active">Mar</span><span class="month">Apr</span><span class="month">May</span><span class="month">Jun</span><span class="month">Jul</span><span class="month">Aug</span><span class="month">Sep</span><span class="month">Oct</span><span class="month">Nov</span><span class="month">Dec</span></td></tr></tbody></table></div><div class="datepicker-years" style="display: none;"><table class="table-condensed"><thead><tr><th class="prev">‹</th><th colspan="5" class="switch">2010-2019</th><th class="next">›</th></tr></thead><tbody><tr><td colspan="7"><span class="year old">2009</span><span class="year">2010</span><span class="year">2011</span><span class="year active">2012</span><span class="year">2013</span><span class="year">2014</span><span class="year">2015</span><span class="year">2016</span><span class="year">2017</span><span class="year">2018</span><span class="year">2019</span><span class="year old">2020</span></td></tr></tbody></table></div></div>
+
+ */
+/*!
+ * Datepicker for Bootstrap
+ *
+ * Copyright 2012 Stefan Petre
+ * Licensed under the Apache License v2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ */
+.datepicker {
+  @extend %modal-box;
+  display: none;
+	position: absolute;
+  top: 0;
+  left: 0;
+  padding: 4px;
+  margin-top: 1px;
+  z-index: 100;
+}
+.datepicker > div {
+  display: none;
+}
+.datepicker table {
+  width: 100%;
+  margin: 0;
+}
+.datepicker td,
+.datepicker th {
+  text-align: center;
+  width: 20px;
+  height: 20px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+}
+.datepicker td.day:hover {
+  background: #eeeeee;
+  cursor: pointer;
+}
+.datepicker td.day.disabled {
+  color: #eeeeee;
+}
+.datepicker td.old,
+.datepicker td.new {
+  color: #999999;
+}
+.datepicker td.active,
+.datepicker td.active:hover {
+  color: #ffffff;
+  background-color: #006dcc;
+  background-image: -moz-linear-gradient(top, #0088cc, #0044cc);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#0088cc), to(#0044cc));
+  background-image: -webkit-linear-gradient(top, #0088cc, #0044cc);
+  background-image: -o-linear-gradient(top, #0088cc, #0044cc);
+  background-image: linear-gradient(to bottom, #0088cc, #0044cc);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff0088cc', endColorstr='#ff0044cc', GradientType=0);
+  border-color: #0044cc #0044cc #002a80;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  *background-color: #0044cc;
+  /* Darken IE7 buttons by default so they stand out more given they won't have borders */
+
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+  color: #fff;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+}
+.datepicker td.active:hover,
+.datepicker td.active:hover:hover,
+.datepicker td.active:focus,
+.datepicker td.active:hover:focus,
+.datepicker td.active:active,
+.datepicker td.active:hover:active,
+.datepicker td.active.active,
+.datepicker td.active:hover.active,
+.datepicker td.active.disabled,
+.datepicker td.active:hover.disabled,
+.datepicker td.active[disabled],
+.datepicker td.active:hover[disabled] {
+  color: #ffffff;
+  background-color: #0044cc;
+  *background-color: #003bb3;
+}
+.datepicker td.active:active,
+.datepicker td.active:hover:active,
+.datepicker td.active.active,
+.datepicker td.active:hover.active {
+  background-color: #003399 \9;
+}
+.datepicker td span {
+  display: block;
+  width: 47px;
+  height: 54px;
+  line-height: 54px;
+  float: left;
+  margin: 2px;
+  cursor: pointer;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+}
+.datepicker td span:hover {
+  background: #eeeeee;
+}
+.datepicker td span.active {
+  color: #ffffff;
+  background-color: #006dcc;
+  background-image: -moz-linear-gradient(top, #0088cc, #0044cc);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#0088cc), to(#0044cc));
+  background-image: -webkit-linear-gradient(top, #0088cc, #0044cc);
+  background-image: -o-linear-gradient(top, #0088cc, #0044cc);
+  background-image: linear-gradient(to bottom, #0088cc, #0044cc);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff0088cc', endColorstr='#ff0044cc', GradientType=0);
+  border-color: #0044cc #0044cc #002a80;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  *background-color: #0044cc;
+  /* Darken IE7 buttons by default so they stand out more given they won't have borders */
+
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+  color: #fff;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+}
+.datepicker td span.active:hover,
+.datepicker td span.active:focus,
+.datepicker td span.active:active,
+.datepicker td span.active.active,
+.datepicker td span.active.disabled,
+.datepicker td span.active[disabled] {
+  color: #ffffff;
+  background-color: #0044cc;
+  *background-color: #003bb3;
+}
+.datepicker td span.active:active,
+.datepicker td span.active.active {
+  background-color: #003399 \9;
+}
+.datepicker td span.old {
+  color: #999999;
+}
+.datepicker th.switch {
+  width: 145px;
+}
+.datepicker th.next,
+.datepicker th.prev {
+  font-size: 21px;
+}
+.datepicker thead tr:first-child th {
+  cursor: pointer;
+}
+.datepicker thead tr:first-child th:hover {
+  background: #eeeeee;
+}
+.input-append.date .add-on i,
+.input-prepend.date .add-on i {
+  display: block;
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+}
+
+

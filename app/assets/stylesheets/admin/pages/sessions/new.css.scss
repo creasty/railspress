@@ -1,0 +1,51 @@
+
+#sessions.new {
+	#signin {
+		@extend %modal-box;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		width: 340px;
+		// height: 250px;
+		padding: 20px;
+		margin-left: -340px / 2 - 20px;
+		margin-top: -250px / 2 - 20px;
+
+		h2 {
+			height: 60px;
+			margin-bottom: 20px;
+			background: url(/assets/sessions/new/img_admin_logo.png) no-repeat 50% 50%;
+
+			span {
+				@extend .visually-hidden;
+			}
+		}
+
+		.text {
+			margin-bottom: 10px;
+		}
+		div:nth-child(4) {
+			margin: 20px 0;
+		}
+
+		.btn {
+			width: 100%;
+		}
+
+		#links {
+			position: absolute;
+			bottom: -80px;
+			width: 340px;
+			height: 50px;
+			text-align: center;
+
+			a {
+				color: rgba(#fff, .3);
+
+				&:hover {
+					color: rgba(#fff, .4);
+				}
+			}
+		}
+	}
+}

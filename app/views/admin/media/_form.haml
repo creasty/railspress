@@ -1,0 +1,30 @@
+
+#main
+  = form_for [:admin, @medium] do |f|
+
+    = f.label :title
+    = f.text_field :title
+
+    %br
+
+    = f.label :description
+    = f.text_area :description, size: '30x5'
+
+    %br
+
+    - if @medium.asset.present?
+      = link_to @medium.asset_file_name, @medium.asset.url
+      = f.check_box :asset_delete
+    - else
+      = f.file_field :asset
+
+    %br
+
+    - %w[crop_x crop_y crop_w crop_h].each do |a|
+      = f.text_field a, id: a
+
+    %br
+
+    = f.submit
+
+

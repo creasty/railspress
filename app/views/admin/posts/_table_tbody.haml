@@ -1,0 +1,17 @@
+- @posts.each do |post|
+  %tr[post]
+    %td.bulk
+      = check_box :macro, post.id, { class: 'checkbox' }
+    %td= link_to post.title, edit_admin_post_path(post)
+    %td= post.user.name
+    %td= I18n.l post.created_at
+    %td
+      .post-thumbnail
+        = image_tag post.thumbnail.url(:small), size: '80x57'
+    %td.controller
+      = link_to edit_admin_post_path(post) do
+        %i.icon-edit
+      = link_to admin_post_path(post), confirm: 'Sure?', method: :delete, remote: true do
+        %i.icon-delete
+      = link_to post_path(post), target: '_blank' do
+        %i.icon-view

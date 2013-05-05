@@ -1,0 +1,181 @@
+/*=== Headering
+==============================================================================================*/
+#main {
+
+	h2, h3, h4, h5 {
+		color: $body-bg-color;
+		letter-spacing: 1px;
+	}
+
+	h2 {
+		font-size: 20px;
+		margin-top: 40px;
+		padding-bottom: 20px;
+		margin-bottom: 20px;
+		border-bottom: 1px solid $main-rule-color;
+	}
+
+	h3 {
+		font-size: 18px;
+		margin-top: 40px;
+		margin-bottom: 10px;
+	}
+	h4 {
+		font-size: 14px;
+		margin-top: 10px;
+		margin-bottom: 5px;
+	}
+
+	h5 {
+		font-size: 11px;
+		font-weight: bold;
+		margin-top: 5px;
+		margin-bottom: 5px;
+	}
+
+	h2 + h3 {
+		margin-top: 20px;
+	}
+
+	* > h2:first-child,
+	* > h3:first-child,
+	* > h4:first-child {
+		margin-top: 0;
+	}
+}
+
+
+/*=== Paragraph
+==============================================================================================*/
+p + p {
+	margin-top: 10px;
+}
+
+
+/*=== Anchor
+==============================================================================================*/
+a {
+	color: $anchor-color;
+	@include transition(.3s linear);
+
+	&:hover {
+		color: darken($anchor-color, 20%);
+	}
+}
+
+
+/*=== Emphasize
+==============================================================================================*/
+em {
+	font-weight: normal;
+	font-style: italic;
+}
+strong {
+	font-weight: bold;
+}
+
+
+/*=== Sup / Reference
+==============================================================================================*/
+sup {
+	padding-left: 1px;
+	font-size: 9px !important;
+	font-weight: normal !important;
+	vertical-align: top;
+	position: relative;
+	top: 0;
+	white-space: nowrap;
+	display: inline-block;
+	line-height: 9px;
+
+	a {
+		color: #888;
+
+		&:hover {
+			color: #005195;
+			text-decoration: none;
+		}
+	}
+}
+
+
+/*=== Phrase Elements
+==============================================================================================*/
+pre,
+code {
+	font-size: 11px;
+	font-family: Monaco, "Courier New", Courier, monospace;
+	background-color: #f7f7f7;
+	border: 1px solid rgba(0, 0, 0, .15);
+	letter-spacing: 0 !important;
+}
+pre {
+	display: block;
+	margin: 0 0 10px;
+	@include force-wrap;
+	@include border-radius(4px);
+
+	& + & {
+		margin-top: -11px;
+	}
+}
+code {
+	padding: 2px 4px;
+	@include border-radius(3px);
+	white-space: normal;
+
+	pre & {
+		display: block;
+		padding: 6px;
+		background-color: transparent;
+		border: 0;
+		@include force-wrap;
+	}
+}
+
+acronym {
+	font-size: 0.917em;
+}
+abbr {
+	cursor: help;
+}
+del {
+	text-decoration: line-through;
+}
+
+
+/*=== Custom Phrase Elements
+==============================================================================================*/
+.note {
+	color: #aaa !important;
+	text-decoration: none;
+	background-color: none;
+}
+
+.note-red {
+	color: #ff3f47;
+	text-decoration: none;
+	background-color: none;
+}
+
+.required {
+	color: #c00;
+}
+
+.txt-big {
+	font-size: 1.35em;
+}
+.txt-small {
+	font-size: 0.85em;
+}
+
+.txt-left {
+	text-align: left;
+}
+.txt-right {
+	text-align: right;
+}
+.txt-center {
+	text-align: center;
+}
+

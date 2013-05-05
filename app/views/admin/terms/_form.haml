@@ -1,0 +1,10 @@
+
+#main
+  = form_for [:admin, @term] do |f|
+
+    = f.label :name
+    = f.text_field :name
+
+    = f.collection_select :taxonomy_id, Taxonomy.all, :id, :name, {}, class: 'select'
+
+    = f.submit

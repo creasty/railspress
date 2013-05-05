@@ -1,0 +1,53 @@
+%p= link_to '< Home', posts_path
+
+- if @post.thumbnail.present?
+  %p= image_tag @post.thumbnail.url
+
+
+%h1= @post.title
+%p= @post.content
+
+
+%h2 Comments (#{@post.comments.size})
+
+%ul#comments
+  - if @post.comments.any?
+    - @post.comments.each do |comment|
+      %li[comment]
+        %h3<
+          = comment.author
+          = link_to '(delete)', [comment.post, comment], confirm: 'Sure?', method: :delete, remote: true
+        %p<!= comment.content.strip.html_safe.gsub /\n/, '<br />'
+  - else
+    %li No comment yet.
+
+
+%h2 Leave a Comment
+
+= form_for [@post, @comment_new] do |f|
+  - if @comment_new.errors.any?
+    %ul
+      - @comment_new.errors.full_messages.each do |msg|
+        %li= msg
+
+  .field
+    = f.label :author
+    = f.text_field :author
+
+  .field
+    = f.label :author_email
+    = f.text_field :author_email
+
+  .field
+    = f.label :content
+    = f.text_area :content, rows: 5
+
+  .actions
+    = f.submit
+
+:coffee
+  $ ->
+    $('#comments a[data-method="delete"]')
+    .on 'ajax:success', (e, data) ->
+      $('#comment_' + data.comment.id).fadeOut 'slow'
+

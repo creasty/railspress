@@ -1,0 +1,4 @@
+- content_for :menubar do
+  = link_to '', admin_post_path(@post), remote: true, method: :delete, confirm: true, class: 'icon-delete'
+
+= render 'form'

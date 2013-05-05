@@ -1,0 +1,144 @@
+
+= form_for [:admin, @post], html: { multipart: true, id: 'post_form' }, remote: (action_name == 'edit') do |f|
+
+  #pocket_body
+    #main.no-padding
+      = f.text_field :title, placeholder: 'タイトルを入力してください', class: 'panel-title', autocomplete: 'off'
+
+      .menubar
+
+      = f.text_area :content, rows: 5, class: 'hide'
+
+
+  #pocket_side
+
+    %section
+      %h2 ステータス
+
+      %table.form
+        %tr
+          %td{ width: '50px' }
+            = f.label :status, '公開状況'
+          %td{ colspan: 2 }
+            %div.select
+              = f.select :status, { '非公開' => 0, '公開' => 1 }
+        %tr
+          %td
+            = f.label :user_id, '作成者'
+          %td{ colspan: 2 }
+            %div.select
+              = f.collection_select :user_id, User.all, :id, :name
+
+        %tr
+          %td
+            = label_tag 'post[date_str]', '作成日時'
+          %td{ width: '110px' }
+            %div.text.icon-dailycalendar
+              = text_field_tag 'post[date_str]', @post.created_at.strftime('%Y.%m.%d')
+          %td
+            %div.text.icon-time
+              = text_field_tag 'post[time_str]', @post.created_at.strftime('%H:%M')
+
+      = f.submit class: 'btn btn-primary block'
+
+    %section
+      %h2 サムネイル
+
+      #post_thumbnail_preview.post-thumbnail
+        - if @post.thumbnail.present?
+          = image_tag @post.thumbnail.url(:small)
+
+          .edit.has-two
+            %i.icon-image
+            %i.icon-ban
+
+          = f.check_box :thumbnail_delete, class: 'hide'
+
+        - else
+          .sample
+
+          .edit.has-one
+            %i.icon-plus
+
+          = f.file_field :thumbnail, class: 'hide'
+
+    %section
+      %h2 タグ
+      = text_field_tag 'post[tags]', 'foo,bar,baz', class: 'hide'
+
+      - @post.terms.map do |v|
+        %p
+          = v.name
+          = v.taxonomy.name
+
+:coffee
+  require ['jquery', 'datepicker'], ($) ->
+    $('#post_date_str').datepicker(format: 'yyyy.mm.dd')
+
+  require ['jquery', 'tags-input'], ($) ->
+    $('#post_tags').tagsInput
+      autocomplete_url: '/admin/terms/search.txt'
+      autocomplete: {selectFirst:true,width:'100px',autoFill:true}
+      width: 260
+      height: 'auto'
+      defaultText: 'タグを追加'
+
+  require ['jquery', 'ace/ace', 'domReady!'], ($, ace) ->
+    $textarea = $('#post_content').hide()
+    $('<div id="post_content_ace"></div>')
+      .insertBefore $textarea
+
+    editor = ace.edit 'post_content_ace'
+    editor.setTheme 'ace/theme/solarized_light'
+    editor.getSession().setMode 'ace/mode/html'
+
+    editor.getSession().setTabSize 2
+    editor.getSession().setUseWrapMode true
+    editor.setShowPrintMargin false
+
+    editor.getSession().setValue $textarea.val()
+    editor.getSession().on 'change', ->
+      $textarea.val editor.getSession().getValue()
+
+
+  require ['jquery', 'common/notify', 'common/transit', 'domReady!'], ($, notify, transit) ->
+    st = notify().create()
+
+    $form = $ 'form'
+
+    $post_thumbnail = $ '#post_thumbnail'
+    $post_thumbnail_preview = $ '#post_thumbnail_preview'
+
+    $post_thumbnail_preview.find('i').on 'click', ->
+      $post_thumbnail.click()
+
+    $post_thumbnail.on 'change', (e) ->
+      file = e.target.files[0]
+
+      $post_thumbnail_preview.addClass('post-thumbnail').empty() if file
+
+      $img = $('<img/>').appendTo $post_thumbnail_preview
+
+      reader = new FileReader()
+
+      reader.onload = (e) ->
+        $img.attr 'src', e.target.result
+
+      reader.readAsDataURL file
+
+    $form
+    .on 'submit', ->
+      st.progress '変更を保存中'
+    .on 'ajax:success', (_, res) ->
+      if res.success
+        st.success res.msg, 'save'
+        $form.attr 'action', res.action
+
+        if $form.find('input[name="_method"]').length == 0
+          $form.append '<input type="hidden" name="_method" value="put">'
+          transit.changeUrl res.redirect, false
+      else
+        st.fail res.msg
+
+        $form.prepend '<p>' + e + '</p>' for e in res.errors ? []
+

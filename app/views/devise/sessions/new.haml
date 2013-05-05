@@ -1,0 +1,21 @@
+#signin
+  %h2<
+    %span Sign in
+
+  = form_for resource, as: resource_name, url: session_path(resource_name) do |f|
+
+    %div.text.size-large.icon-user.icon-on-left
+      = f.email_field :email, autofocus: true, placeholder: 'user@email.com'
+
+    %div.text.size-large.icon-key.icon-on-left
+      = f.password_field :password, password: 'password'
+
+    - if devise_mapping.rememberable?
+      %div
+        = f.check_box :remember_me, class: 'checkbox'
+        = f.label :remember_me, 'ログイン状態を記憶'
+
+    %div= f.submit 'ログイン', class: 'btn btn-primary'
+
+  #links
+    = link_to 'パスワードを忘れましたか？', new_password_path(resource_name), class: 'icon-key icon-large'

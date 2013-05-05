@@ -1,0 +1,24 @@
+ja:
+  title:
+    _site: "RailsPress"
+    _new: "新規%s"
+    _edit: "%sを編集"
+    # _index: "%s一覧"
+    _search: "検索 “%s”"
+
+    post: "ブログ"
+
+    devise:
+      _site: "管理画面ログイン"
+
+    admin:
+      _site: "管理画面"
+
+      admin: "ダッシュボード"
+      page: "ページ"
+      post: "ブログ記事"
+      comment: "コメント"
+      medium: "メディア"
+      user: "ユーザ"
+      term: "タグ"
+      taxonomy: "分類"

@@ -1,0 +1,244 @@
+
+// Grid
+
+@function grid-span($n) {
+	@return $n * $grid-width + ($n - 1) * $grid-gutter;
+}
+@function grid-span-px($n, $width: $grid-pixel-default) {
+	@return ceil((grid-span($n) / 100%) * $width);
+}
+
+// Font
+
+@mixin font($color: null, $size: null, $line: null) {
+	@if $color {
+		color: $color;
+	}
+	@if $size {
+		font-size: $size;
+	}
+	@if $line {
+		line-height: $line;
+	}
+}
+
+// Spacing
+
+@mixin spacing($margin: null, $padding: null) {
+	@if $margin {
+		margin: $margin;
+	}
+	@if $padding {
+		padding: $padding;
+	}
+}
+
+// Size
+
+@mixin size($width: null, $height: null) {
+	@if $width {
+		width: $width;
+	}
+	@if $height {
+		height: $height;
+	}
+}
+
+// Float
+
+@mixin float($selector: ">*", $margin: null, $direction: left, $width: null) {
+	@extend .clear-after;
+
+	#{$selector} {
+		margin-#{$direction}: $margin;
+		display: block;
+		float: $direction;
+
+		&:first-child {
+			margin-#{$direction}: 0;
+		}
+
+		@if length($width) < 2 {
+			width: $width;
+		}
+		@else {
+			$s: "&:first-child";
+
+			@for $i from 1 through length($width) {
+				@if $i > 1 {
+					$s: $s + "+*";
+				}
+				#{$s} {
+					width: nth($width, $i);
+				}
+			}
+		}
+	}
+}
+
+// Arrow
+
+@mixin arrow($side, $size, $color, $left: 0, $top: 0) {
+	$side: opposite($side);
+
+	display: block;
+	position: absolute;
+	@if $left != none {
+		margin-left: -$size;
+		left: $left;
+	}
+	@if $top != none {
+		top: $top;
+	}
+	@include size(0, 0);
+	border: $size solid transparent;
+	border-#{$side}-color: $color;
+}
+
+// Keyframes
+
+@mixin keyframes($name) {
+	@-webkit-keyframes #{$name} {
+		@content;
+	}
+	@-moz-keyframes #{$name} {
+		@content;
+	}
+	@-ms-keyframes #{$name} {
+		@content;
+	}
+	@keyframes #{$name} {
+		@content;
+	}
+}
+
+// Opposite
+
+@function opposite($side) {
+	$oppo: right;
+
+	@if $side == top {
+		$oppo: bottom;
+	}
+	@else if $side == right {
+		$oppo: left;
+	}
+	@else if $side == bottom {
+		$oppo: top;
+	}
+
+	@return $oppo;
+}
+
+
+/*=== Floats
+==============================================================================================*/
+.clear-after {
+	zoom: 1;
+
+	&:after {
+		content: "";
+		display: block;
+		clear: both;
+	}
+}
+
+.clear { clear: both; }
+.clear-left { clear: left; }
+
+br.clear,
+div.clear,
+br.clear-left,
+div.clear-left { display: block; font: 1px/1px monospace; }
+
+.float-left { float: left; }
+.float-right { float: right; }
+
+
+/*=== Utilities
+==============================================================================================*/
+.no-padding { padding: 0 !important; }
+.no-margin { margin: 0 !important; }
+
+.hide { display: none !important; }
+
+.visually-hidden {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	border: 0;
+	clip: rect(0 0 0 0);
+	overflow: hidden;
+}
+
+.text-replace {
+	text-indent: 150%;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+
+/*=== Compact - float child elements, clear floats
+==============================================================================================*/
+.compact {
+	@extend .clear-after;
+
+	> * {
+		float: left;
+	}
+
+	> p,
+	> span {
+		margin-right: 1ex;
+		margin-bottom: 0;
+		padding: 0;
+	}
+
+	> ul,
+	> ol {
+		list-style: none;
+	}
+}
+dl.compact > dd { margin-left: 0; }
+
+
+/*=== Menu
+==============================================================================================*/
+.menu {
+	position: relative;
+	display: block;
+	margin: 0 0 1em;
+	padding: 0;
+	line-height: 0;
+	list-style: none;
+
+	* { line-height: 1.25; }
+	li,
+	dd,
+	dt { margin: 0; padding: 0; }
+}
+
+
+/*=== Modal
+==============================================================================================*/
+@mixin modal-box-shadow($add: none) {
+	//$sh: 0 1px 6px rgba(#000, .35), 0 0 0 1px rgba(#000, .2);
+	$sh: 0 0 0 1px rgba(#000, .2), 0 6px 0 -3px rgba(#000, .1);
+
+	@if $add == none {
+		@include box-shadow($sh);
+	}
+	@else {
+		@include box-shadow($sh, $add);
+	}
+}
+%modal-box {
+	background: $main-bg-color;
+	color: $main-text-color;
+	@include border-radius(3px);
+	@include modal-box-shadow;
+}
+
+

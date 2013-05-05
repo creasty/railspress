@@ -1,0 +1,31 @@
+
+#main
+  = form_for [:admin, @user] do |f|
+
+    = f.label :name
+    = f.text_field :name
+
+    %br
+
+    = f.label :email
+    = f.text_field :email
+
+    %br
+
+    = f.label :password
+
+    - if 'new' == action_name
+      = f.text_field :password
+    - else
+      = f.password_field :password, value: ''
+
+    %br
+
+    = f.label :password_confirmation
+    - if 'new' == action_name
+      = f.text_field :password_confirmation
+    - else
+      = f.password_field :password_confirmation
+
+    = f.submit
+

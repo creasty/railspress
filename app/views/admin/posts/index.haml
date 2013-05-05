@@ -1,0 +1,100 @@
+- content_for :menubar do
+  = link_to '', new_admin_post_path, class: 'icon-plus'
+
+
+#pocket_body
+  #main.no-padding
+    %table.table.table-hover
+      %thead
+        %tr
+          %th{ width: '10px' }
+            %i.icon-check
+          %th.sortable タイトル
+          %th.sortable 作成者
+          %th.sortable.desc{ width: '130px' } 作成日
+          %th{ width: '94px' } サムネイル
+          %th
+            %i.icon-play
+
+      %tbody
+        = render 'table_tbody'
+
+
+#pocket_side
+  %section
+    %h2 ページ
+
+    = paginate @posts, window: 4, outer_window: 2, theme: 'admin_table'
+
+:coffee
+
+  require ['jquery', 'common/transit', 'domReady!'], ($, transit) ->
+    $tbody = $ 'table > tbody'
+
+    $(document).on 'click', 'ul.pagination a', (e) ->
+      $t = $ @
+      link = $t.get(0).href
+      $.ajax
+        url: link
+        data: only_table: true
+      .done (json) ->
+        $('ul.pagination').replaceWith json.pager
+        $tbody.html json.html
+        transit.changeUrl link, false
+
+      e.preventDefault()
+
+
+:coffee
+  require ['jquery', 'common/notify', 'domReady!'], ($, notify) ->
+    st = notify().create()
+    bulk_count = 0
+
+    $(document)
+    .on 'change', 'tr.post td.bulk input', ->
+      $t = $ @
+      $t_tr = $t.closest('tr')
+      checked = $t.is(':checked')
+
+      if checked
+        $t_tr.addClass 'hover'
+        ++bulk_count
+      else
+        $t_tr.removeClass 'hover'
+        --bulk_count
+
+      $tr = $ 'tbody tr'
+
+      if bulk_count > 1
+        $first = $tr.eq(0)
+        $first.find('td.controller')
+          .attr('rowspan', $tr.length)
+          .addClass('bulk-controller')
+        $first.nextAll().find('td.controller').hide()
+      else
+        $tr.find('td.controller')
+          .removeAttr('rowspan')
+          .removeClass('bulk-controller')
+          .show()
+
+
+    .on 'click', 'tr.post a[data-method="delete"]', ->
+      st.progress '記事を削除しています'
+    .on 'ajax:success','tr.post a[data-method="delete"]', (e, res) ->
+      if res.success
+        $post = $ '#post_' + res.id
+
+        $post
+        .animate
+          opacity: 0
+        ,
+          complete: ->
+            st.success res.msg
+            $post.remove()
+
+            $.ajax
+              url: window.location.href
+              data: only_table: true
+            .done (json) ->
+              $('ul.pagination').replaceWith json.pager
+              $('table > tbody').html json.html

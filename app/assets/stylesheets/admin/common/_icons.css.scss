@@ -1,0 +1,325 @@
+
+@include font-face(
+	"LigatureSymbols",
+	font-files(
+		"/assets/LigatureSymbols/LigatureSymbols-2.11.woff",
+		"/assets/LigatureSymbols/LigatureSymbols-2.11.ttf",
+		"/assets/LigatureSymbols/LigatureSymbols-2.11.svg"
+	),
+	"/assets/LigatureSymbols/LigatureSymbols-2.11.eot"
+);
+
+@mixin icon-define($class, $char) {
+	.icon-#{$class}:before { content: $char !important; }
+}
+
+/*	Icon: General (186)
+-----------------------------------------------*/
+@include icon-define(table, "\E127");
+@include icon-define(copy, "\E038");
+@include icon-define(cut, "\E03b");
+@include icon-define(backspace, "\E010");
+@include icon-define(alignleft, "\E005");
+@include icon-define(aligncenter, "\E004");
+@include icon-define(alignright, "\E006");
+@include icon-define(alignadjust, "\E003");
+@include icon-define(italic, "\E079");
+@include icon-define(bold, "\E01f");
+@include icon-define(underline, "\E132");
+@include icon-define(strike, "\E159");
+@include icon-define(emphasis, "\E152");
+@include icon-define(code, "\E032");
+@include icon-define(link, "\E082");
+@include icon-define(quote, "\E10b");
+@include icon-define(graph, "\E05b");
+@include icon-define(magic, "\E089");
+@include icon-define(brush, "\E022");
+@include icon-define(color, "\E033");
+@include icon-define(contrast, "\E001");
+@include icon-define(ink, "\E14a");
+@include icon-define(gradation, "\E149");
+@include icon-define(sepia, "\E14e");
+@include icon-define(invert, "\E14b");
+@include icon-define(paint, "\E09b");
+@include icon-define(paramater, "\E09c");
+@include icon-define(crop, "\E039");
+@include icon-define(check, "\E029");
+@include icon-define(checkbox, "\E02a");
+@include icon-define(checkboxempty, "\E02b");
+@include icon-define(pc, "\E09e");
+@include icon-define(keyboard, "\E07d");
+@include icon-define(mobile, "\E078");
+@include icon-define(horizontal, "\E071");
+@include icon-define(vertical, "\E138");
+@include icon-define(web, "\E13f");
+@include icon-define(mail, "\E08a");
+@include icon-define(shopping, "\E119");
+@include icon-define(dashboard, "\E03c");
+@include icon-define(key, "\E07c");
+@include icon-define(sns, "\E11f");
+@include icon-define(calendar, "\E15e");
+@include icon-define(dailycalendar, "\E025");
+@include icon-define(ban, "\E012");
+@include icon-define(remove, "\E10f");
+@include icon-define(pen, "\E09f");
+@include icon-define(eraser, "\E148");
+@include icon-define(edit, "\E041");
+@include icon-define(tabs, "\E095");
+@include icon-define(tag, "\E128");
+@include icon-define(setup, "\E117");
+@include icon-define(setting, "\E055");
+@include icon-define(etc, "\E043");
+@include icon-define(clip, "\E030");
+@include icon-define(bookmark, "\E021");
+@include icon-define(book, "\E020");
+@include icon-define(album, "\E002");
+@include icon-define(user, "\E137");
+@include icon-define(friend, "\E051");
+@include icon-define(group, "\E05c");
+@include icon-define(frustrate, "\E052");
+@include icon-define(laugh, "\E07f");
+@include icon-define(wink, "\E081");
+@include icon-define(smile, "\E11e");
+@include icon-define(surprise, "\E124");
+@include icon-define(trouble, "\E12d");
+@include icon-define(male, "\E176");
+@include icon-define(female, "\E175");
+@include icon-define(game, "\E054");
+@include icon-define(globe, "\E058");
+@include icon-define(home, "\E072");
+@include icon-define(building, "\E023");
+@include icon-define(rss, "\E113");
+@include icon-define(server, "\E16c");
+@include icon-define(sitemap, "\E16d");
+@include icon-define(app, "\E009");
+@include icon-define(memo, "\E08d");
+@include icon-define(meal, "\E08c");
+@include icon-define(coffee, "\E146");
+@include icon-define(spa, "\E177");
+@include icon-define(college, "\E174");
+@include icon-define(bag, "\E173");
+@include icon-define(present, "\E109");
+@include icon-define(umbrella, "\E178");
+@include icon-define(twinkle, "\E073");
+@include icon-define(crown, "\E03a");
+@include icon-define(category, "\E028");
+@include icon-define(circle, "\E02e");
+@include icon-define(info, "\E075");
+@include icon-define(help, "\E070");
+@include icon-define(refreshbutton, "\E14d");
+@include icon-define(terminal, "\E16e");
+@include icon-define(file, "\E048");
+@include icon-define(print, "\E10a");
+@include icon-define(delete, "\E12c");
+@include icon-define(clear, "\E02f");
+@include icon-define(save, "\E115");
+@include icon-define(upload, "\E136");
+@include icon-define(cloud, "\E031");
+@include icon-define(folder, "\E04c");
+@include icon-define(camera, "\E026");
+@include icon-define(photo, "\E101");
+@include icon-define(image, "\E074");
+@include icon-define(barcode, "\E013");
+@include icon-define(phone, "\E100");
+@include icon-define(music, "\E094");
+@include icon-define(video, "\E139");
+@include icon-define(playmedia, "\E107");
+@include icon-define(record, "\E10d");
+@include icon-define(play, "\E106");
+@include icon-define(pause, "\E09d");
+@include icon-define(stop, "\E123");
+@include icon-define(eject, "\E042");
+@include icon-define(bell, "\E014");
+@include icon-define(volumeup, "\E13d");
+@include icon-define(volumedown, "\E13c");
+@include icon-define(volume, "\E13b");
+@include icon-define(off, "\E098");
+@include icon-define(light, "\E14c");
+@include icon-define(dark, "\E147");
+@include icon-define(lock, "\E086");
+@include icon-define(unlock, "\E134");
+@include icon-define(flag, "\E04a");
+@include icon-define(wifi, "\E140");
+@include icon-define(time, "\E12b");
+@include icon-define(map, "\E08b");
+@include icon-define(geo, "\E056");
+@include icon-define(location, "\E085");
+@include icon-define(pin, "\E103");
+@include icon-define(walking, "\E13e");
+@include icon-define(bicycle, "\E015");
+@include icon-define(car, "\E027");
+@include icon-define(bus, "\E024");
+@include icon-define(plane, "\E105");
+@include icon-define(compass, "\E036");
+@include icon-define(cursor, "\E166");
+@include icon-define(pointer, "\E16b");
+@include icon-define(grab, "\E169");
+@include icon-define(arrowup, "\E00e");
+@include icon-define(arrowright, "\E00d");
+@include icon-define(arrowdown, "\E00b");
+@include icon-define(arrowleft, "\E00c");
+@include icon-define(up, "\E135");
+@include icon-define(right, "\E112");
+@include icon-define(down, "\E03e");
+@include icon-define(left, "\E080");
+@include icon-define(back, "\E00f");
+@include icon-define(next, "\E096");
+@include icon-define(dropdown, "\E040");
+@include icon-define(sort, "\E120");
+@include icon-define(good, "\E059");
+@include icon-define(bad, "\E011");
+@include icon-define(full, "\E053");
+@include icon-define(small, "\E11d");
+@include icon-define(move, "\E093");
+@include icon-define(undo, "\E133");
+@include icon-define(forward, "\E04e");
+@include icon-define(reply, "\E111");
+@include icon-define(share, "\E118");
+@include icon-define(login, "\E087");
+@include icon-define(logout, "\E088");
+@include icon-define(exchange, "\E045");
+@include icon-define(shuffle, "\E11a");
+@include icon-define(repeat, "\E110");
+@include icon-define(refresh, "\E10e");
+@include icon-define(sync, "\E125");
+@include icon-define(external, "\E046");
+@include icon-define(addstar, "\E000");
+@include icon-define(star, "\E121");
+@include icon-define(starempty, "\E122");
+@include icon-define(heart, "\E06e");
+@include icon-define(heartempty, "\E06f");
+@include icon-define(view, "\E13a");
+@include icon-define(comment, "\E034");
+@include icon-define(comments, "\E035");
+@include icon-define(plus, "\E108");
+@include icon-define(minus, "\E08f");
+@include icon-define(zoomin, "\E142");
+@include icon-define(zoomout, "\E143");
+@include icon-define(search, "\E116");
+@include icon-define(menu, "\E08e");
+@include icon-define(tilemenu, "\E12a");
+@include icon-define(list, "\E084");
+@include icon-define(tile, "\E129");
+@include icon-define(notify, "\E097");
+
+/*	Icon: Logos (53)
+-----------------------------------------------*/
+@include icon-define(apple, "\E00a");
+@include icon-define(android, "\E008");
+@include icon-define(windows, "\E151");
+@include icon-define(ubuntu, "\E17b");
+@include icon-define(amazon, "\E007");
+@include icon-define(facebook, "\E047");
+@include icon-define(twitter, "\E12f");
+@include icon-define(vk, "\E17c");
+@include icon-define(google, "\E05a");
+@include icon-define(yahoo, "\E172");
+@include icon-define(bing, "\E164");
+@include icon-define(hatena, "\E05d");
+@include icon-define(hatenabookmark, "\E161");
+@include icon-define(digg, "\E167");
+@include icon-define(linkedin, "\E083");
+@include icon-define(myspace, "\E16a");
+@include icon-define(paperboy, "\E162");
+@include icon-define(mixi, "\E090");
+@include icon-define(line, "\E157");
+@include icon-define(mobage, "\E158");
+@include icon-define(gree, "\E153");
+@include icon-define(skype, "\E11b");
+@include icon-define(aim, "\E163");
+@include icon-define(yelp, "\E17d");
+@include icon-define(foursquare, "\E04d");
+@include icon-define(pinterest, "\E104");
+@include icon-define(flickr, "\E04b");
+@include icon-define(tumblr, "\E12e");
+@include icon-define(wordpress, "\E171");
+@include icon-define(blogger, "\E165");
+@include icon-define(evernote, "\E044");
+@include icon-define(dropbox, "\E168");
+@include icon-define(slideshare, "\E179");
+@include icon-define(github, "\E057");
+@include icon-define(yapcasialogomark, "\E15c");
+@include icon-define(dribbble, "\E03f");
+@include icon-define(cookpad, "\E037");
+@include icon-define(instapaper, "\E076");
+@include icon-define(readability, "\E10c");
+@include icon-define(gumroad, "\E154");
+@include icon-define(picasa, "\E102");
+@include icon-define(instagram, "\E155");
+@include icon-define(delicious, "\E03d");
+@include icon-define(youtube, "\E141");
+@include icon-define(vimeo, "\E170");
+@include icon-define(ustream, "\E16f");
+@include icon-define(soundcloud, "\E17a");
+@include icon-define(chrome, "\E02c");
+@include icon-define(safari, "\E114");
+@include icon-define(sleipnir, "\E11c");
+@include icon-define(firefox, "\E049");
+@include icon-define(opera, "\E099");
+@include icon-define(internetexplorer, "\E077");
+
+
+/*	.icon
+-----------------------------------------------*/
+%icon {
+	@include inline-block;
+	width: 1em;
+	height: 1em;
+	padding-right: 5px;
+	text-align: center;
+	font-family: "LigatureSymbols";
+	font-weight: normal !important;
+	font-size: 1em;
+	line-height: 1;
+	vertical-align: baseline;
+	text-transform: none !important;
+
+	@include experimental(text-rendering, optimizeLegibility);
+	@include experimental(font-smoothing, antialiased);
+	@include experimental(font-feature-settings, "liga" 1, "dlig" 1);
+	-moz-font-feature-settings: "liga=1, dlig=1";
+}
+
+.icon,
+[class*="icon-"] {
+	&:before {
+		@extend %icon;
+	}
+	&.icon-large:before {
+		font-size: 1.667em;
+		vertical-align: -.15ex;
+	}
+}
+
+ul li.icon {
+	list-style: none;
+	*list-style: disc;
+
+	&:before {
+		position: absolute;
+		display: block;
+		width: 1em !important;
+		left: 0 !important;
+		line-height: inherit;
+		text-align: center !important;
+	}
+
+	li.icon:before {
+		left: 4.5ex;
+	}
+}
+
+ul.compact li.icon {
+	&:before {
+		position: relative;
+		left: 0 !important;
+		float: left;
+		margin-top: 0;
+		bottom: -.15ex;
+	}
+	&.icon-large {
+		line-height: 1.667em;
+	}
+}
+
+
