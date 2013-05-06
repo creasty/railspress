@@ -1,0 +1,79 @@
+
+/*=== Tags Input
+==============================================================================================*/
+div.tagsinput{
+	span.tag,
+	input {
+		margin: 0 5px 5px 0;
+		line-height: 1;
+		height: 22px;
+		@include box-sizing(border-box);
+	}
+	span.tag {
+		padding: 4px 4px 4px 6px;
+		color: $body-bg-color;
+		background: $body-text-color;
+		@include border-radius(3px);
+		float: left;
+		cursor: default;
+
+		a {
+			@extend .icon-remove;
+			color: $body-bg-color;
+
+			display: inline-block;
+			font-size: 16px;
+			width: 1em;
+			height: 1em;
+			overflow: hidden;
+			margin: -2px 0;
+
+			&:before {
+				@extend %icon;
+				padding: 0 0 10px 0;
+			}
+
+			&:hover {
+				color: $primary-color;
+			}
+		}
+	}
+
+	input {
+		width: 80px;
+		color: $body-text-color !important;
+	}
+
+	div {
+		display: block;
+		float: left;
+	}
+
+	.tags_clear { clear: both; width: 100%; height: 0; }
+	.not_valid {
+		color: $danger-color;
+	}
+}
+
+.acResults {
+	@extend %modal-box;
+
+	ul {
+		list-style: none;
+		margin: 0;
+		padding: 3px 0;
+
+		li {
+			padding: 5px;
+			margin: 0;
+
+			&.jquery-autocomplete-selected-item {
+				background: $menubar-bg-color;
+			}
+		}
+	}
+}
+
+/*
+<div style="position: absolute; top: 391px; left: 1168px; min-width: 80px; display: none;" class="acResults"><ul><li class="jquery-autocomplete-selected-item acSelect">test 1</li></ul></div>
+*/

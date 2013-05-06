@@ -155,4 +155,61 @@
           = link_to 'ボタン', '#', class: 'btn btn-success'
 
 
+  %h3 サイズ
+
+  %table.table
+    %thead
+      %tr
+        %th サイズ
+        %th ボタン
+        %th Text field
+        %th Select box
+
+    %tbody
+      %tr
+        %td
+          %code .size-small
+        %td
+          = link_to 'ボタン', '#', class: 'btn size-small'
+        %td
+          なし
+        %td
+          なし
+
+      %tr
+        %td
+          普通
+        %td
+          = link_to 'ボタン', '#', class: 'btn'
+        %td
+          = text_field_tag '', '', class: 'text'
+        %td
+          %span.select
+            = select '', '', [['オプション', 0], ['オプション', 1], ['オプション', 2]], { prompt: '選択して下さい' }
+
+      %tr
+        %td
+          %code .size-large
+        %td
+          = link_to 'ボタン', '#', class: 'btn size-large'
+        %td
+          = text_field_tag '', '', class: 'text size-large'
+        %td
+          %span.select.size-large
+            = select '', '', [['オプション', 0], ['オプション', 1], ['オプション', 2]], { prompt: '選択して下さい' }
+
+
+  %h3
+    ブロック
+    %code .block
+
+  %p= link_to 'ボタン', '#', class: 'btn block'
+
+  %p= text_field_tag '', '', class: 'text block'
+
+  %p
+    %div.select
+      = select '', '', [['オプション', 0], ['オプション', 1], ['オプション', 2]], { prompt: '選択して下さい' }
+
+
 %br.clear

@@ -27,7 +27,11 @@ class Admin::MediaController < Admin::ApplicationController
   def update
     @medium = Medium.find params[:id]
 
-    if @medium.update_attributes params[:meduim]
+    if @medium.update_attributes params[:medium]
+      if @medium.cropping?
+        @medium.asset.reprocess!
+      end
+
       flash.now[:notice] = 'Updated!'
     else
       flash.now[:alert] = 'Failed!'

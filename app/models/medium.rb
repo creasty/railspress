@@ -10,7 +10,7 @@ class Medium < ActiveRecord::Base
 
   #  Paperclip
   #-----------------------------------------------
-  attr_accessor :crop_x, :crop_y, :crop_w, :crop_h
+  # attr_accessor :crop_x, :crop_y, :crop_w, :crop_h
   attr_accessible :crop_x, :crop_y, :crop_w, :crop_h
 
   has_attached_file :asset,
@@ -18,6 +18,7 @@ class Medium < ActiveRecord::Base
       large: '1020>',
       small: '243x172#',
       facebook: '300x300#',
+      cropped: { geometry: '', processors: [:cropper] }
     },
     convert_options: {
       large: '-strip',
@@ -26,14 +27,9 @@ class Medium < ActiveRecord::Base
     default_url: 'http://cambelt.co/243x172'
 
   # before_post_process :skip_for_non_image
+  # before_post_process :rename_image, unless: :cropping?
   before_validation :destroy?
-
-  after_update :reprocess_image, if: :cropping?
-  before_post_process :rename_image, unless: :cropping?
-
-  #  Private Methods
-  #-----------------------------------------------
-  private
+  # after_update :reprocess_image, if: :cropping?
 
   def cropping?
     !crop_x.blank? &&
@@ -42,8 +38,12 @@ class Medium < ActiveRecord::Base
     !crop_h.blank?
   end
 
+  #  Private Methods
+  #-----------------------------------------------
+  private
+
   def skip_for_non_image
-    %w[image/jpeg image/jpg image/png image/gif].include?(asset.content_type)
+    !%w[image/jpeg image/jpg image/png image/gif].include?(asset.content_type)
   end
 
   def reprocess_image

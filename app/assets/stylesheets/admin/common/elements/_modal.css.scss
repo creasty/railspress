@@ -1,0 +1,101 @@
+
+/*=== Modal
+==============================================================================================*/
+.overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 2000;
+	background: rgba(#000, .4);
+
+	&.overlay-alert {
+		z-index: 3000;
+	}
+}
+
+.modal {
+	@extend .popup-box;
+
+	position: fixed;
+	top: 60px;
+	bottom: 60px;
+	left: 60px;
+	right: 60px;
+	z-index: 2001;
+
+	> .close-btn {
+		position: absolute;
+		right: -11px;
+		top: -11px;
+		background: $header-bg-color;
+		width: 22px;
+		height: 22px;
+		border: 2px solid $menubar-bg-color;
+		cursor: pointer;
+		@include border-radius(50%);
+		@include transition(background .3s);
+
+		&:before, &:after {
+			content: "";
+			display: block;
+			position: absolute;
+			background: $menubar-bg-color;
+			top: 9px;
+			left: 5px;
+			height: 3px;
+			width: 12px;
+		}
+
+		&:before {
+			@include transform(rotate(45deg));
+		}
+		&:after {
+			@include transform(rotate(-45deg));
+		}
+
+		&:hover {
+			background: $primary-color;
+		}
+	}
+
+	> header {
+		height: 60px;
+		background: $menubar-bg-color;
+		@include border-radius(3px 3px 0 0);
+
+		h2 {
+			font-size: 20px;
+			padding: 20px 20px;
+			line-height: 1;
+			letter-spacing: 1px;
+			color: $main-text-color;
+		}
+	}
+
+	> footer {
+		position: absolute;
+		bottom: 0;
+		width: 100%;
+		height: 75px;
+		background: $menubar-bg-color;
+		padding: 20px;
+		@include box-sizing(border-box);
+		@include border-radius(0 0 3px 3px);
+	}
+
+	> .content {
+		position: absolute;
+		top: 60px;
+		left: 0;
+		right: 0;
+		bottom: 75px;
+		color: $main-text-color;
+		padding: 20px;
+
+		&.no-footer {
+			bottom: 0;
+		}
+	}
+}

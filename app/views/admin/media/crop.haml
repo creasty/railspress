@@ -1,6 +1,6 @@
 
 #main
-  = form_for [:admin, @medium], html: { multipart: true } do |f|
+  = form_for [:admin, @medium] do |f|
 
     = f.label :title
     = f.text_field :title, class: 'text'
@@ -20,12 +20,8 @@
       = f.check_box :asset_delete, class: 'checkbox'
 
       %br
-      %br
 
-      = image_tag @medium.asset.url, id: 'cropbox'
-
-      %br
-      %br
+      = image_tag @medium.asset.url(:large), id: 'cropbox'
 
       - %w[crop_x crop_y crop_w crop_h].each do |a|
         = f.text_field a, id: a, class: 'text'
@@ -41,28 +37,15 @@
 
 :coffee
   require ['jquery', 'jcrop', 'domReady!'], ->
-    $x = $ '#crop_x'
-    $y = $ '#crop_y'
-    $w = $ '#crop_w'
-    $h = $ '#crop_h'
-
     update_crop = (coords) ->
-      $x.val coords.x
-      $y.val coords.y
-      $w.val coords.w
-      $h.val coords.h
-
-    getSelection = ->
-      x = parseInt $x.val(), 10
-      y = parseInt $y.val(), 10
-      w = parseInt $w.val(), 10
-      h = parseInt $h.val(), 10
-
-      [x, y, x + w, y + h]
+      $('#crop_x').val coords.x
+      $('#crop_y').val coords.y
+      $('#crop_w').val coords.w
+      $('#crop_h').val coords.h
 
     $('#cropbox').Jcrop
       onChange: update_crop
       onSelect: update_crop
-      setSelect: getSelection()
+      setSelect: [0, 0, 500, 500]
       # aspectRatio: 1
 

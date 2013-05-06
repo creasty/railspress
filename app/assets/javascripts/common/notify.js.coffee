@@ -1,5 +1,5 @@
-define ['jquery', 'common/timeago'], ($) ->
-  $statusbar = null
+define ['jquery', 'common/timeago', 'domReady!'], ($) ->
+  $statusbar = $('<div id="statusbar"></div>').appendTo $ '#globalheader'
 
   class NotificationCenter
 
@@ -110,10 +110,6 @@ define ['jquery', 'common/timeago'], ($) ->
       @events()
 
     init: ->
-      return if $statusbar
-
-      $statusbar = $('<div id="statusbar"></div>').appendTo $ '#globalheader'
-
       @refreash()
 
     events: ->
@@ -154,10 +150,7 @@ define ['jquery', 'common/timeago'], ($) ->
 
     create: -> new Statusbar @nc
 
-
-  _Notify = null
-
   # Exports
-  -> _Notify ?= new Notify()
+  -> new Notify()
 
 

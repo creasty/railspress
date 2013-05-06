@@ -1,7 +1,7 @@
 
 #sessions.new {
 	#signin {
-		@extend %modal-box;
+		@extend .popup-box;
 		position: absolute;
 		top: 50%;
 		left: 50%;

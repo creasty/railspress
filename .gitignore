@@ -11,3 +11,6 @@ Thumbs.db
 db/schema.rb
 
 public/system
+
+*.sublime-project
+*.sublime-workspace

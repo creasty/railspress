@@ -131,99 +131,9 @@
 }
 
 
-/*=== Floats
-==============================================================================================*/
-.clear-after {
-	zoom: 1;
+// Popup Box Shadow
 
-	&:after {
-		content: "";
-		display: block;
-		clear: both;
-	}
-}
-
-.clear { clear: both; }
-.clear-left { clear: left; }
-
-br.clear,
-div.clear,
-br.clear-left,
-div.clear-left { display: block; font: 1px/1px monospace; }
-
-.float-left { float: left; }
-.float-right { float: right; }
-
-
-/*=== Utilities
-==============================================================================================*/
-.no-padding { padding: 0 !important; }
-.no-margin { margin: 0 !important; }
-
-.hide { display: none !important; }
-
-.visually-hidden {
-	position: absolute;
-	width: 1px;
-	height: 1px;
-	padding: 0;
-	margin: -1px;
-	border: 0;
-	clip: rect(0 0 0 0);
-	overflow: hidden;
-}
-
-.text-replace {
-	text-indent: 150%;
-	white-space: nowrap;
-	overflow: hidden;
-}
-
-
-/*=== Compact - float child elements, clear floats
-==============================================================================================*/
-.compact {
-	@extend .clear-after;
-
-	> * {
-		float: left;
-	}
-
-	> p,
-	> span {
-		margin-right: 1ex;
-		margin-bottom: 0;
-		padding: 0;
-	}
-
-	> ul,
-	> ol {
-		list-style: none;
-	}
-}
-dl.compact > dd { margin-left: 0; }
-
-
-/*=== Menu
-==============================================================================================*/
-.menu {
-	position: relative;
-	display: block;
-	margin: 0 0 1em;
-	padding: 0;
-	line-height: 0;
-	list-style: none;
-
-	* { line-height: 1.25; }
-	li,
-	dd,
-	dt { margin: 0; padding: 0; }
-}
-
-
-/*=== Modal
-==============================================================================================*/
-@mixin modal-box-shadow($add: none) {
+@mixin popup-box-shadow($add: none) {
 	//$sh: 0 1px 6px rgba(#000, .35), 0 0 0 1px rgba(#000, .2);
 	$sh: 0 0 0 1px rgba(#000, .2), 0 6px 0 -3px rgba(#000, .1);
 
@@ -234,11 +144,4 @@ dl.compact > dd { margin-left: 0; }
 		@include box-shadow($sh, $add);
 	}
 }
-%modal-box {
-	background: $main-bg-color;
-	color: $main-text-color;
-	@include border-radius(3px);
-	@include modal-box-shadow;
-}
-
 

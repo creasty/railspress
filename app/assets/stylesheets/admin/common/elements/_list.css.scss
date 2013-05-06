@@ -1,0 +1,123 @@
+
+/*=== List
+==============================================================================================*/
+ul,
+ol,
+dl {
+	position: relative;
+	font-size: 1em;
+	word-spacing: -2ex;
+	letter-spacing: -2ex;
+}
+dt,
+dd,
+li {
+	word-spacing: normal;
+	letter-spacing: normal;
+}
+ul,
+ol {
+	margin-top: 1em;
+	margin-bottom: 1em;
+	padding-left: 3ex;
+	overflow: visible;
+}
+ul {
+	list-style: outside disc;
+}
+ol {
+	list-style: outside decimal;
+
+	ol {
+		margin-left: 0.5ex;
+	}
+}
+
+li {
+	padding-bottom: 0.5em;
+
+	ol,
+	ul {
+		margin-top: 0;
+		margin-bottom: 0.3ex;
+	}
+}
+
+dt {
+	font-weight: bold;
+	margin-bottom: 1em;
+	margin-top: 0.5em;
+}
+dl,
+dd {
+	margin-bottom: 1.5em;
+}
+dd {
+	margin-left: 16px;
+}
+
+
+/*=== Cool list
+==============================================================================================*/
+ul.list {
+	list-style: none;
+	*list-style: disc;
+}
+ol.list {
+	counter-reset: li;
+	list-style: none;
+	*list-style: decimal;
+}
+
+ul.list li,
+ol.list li {
+	&:before {
+		position: absolute;
+		display: block;
+		width: 3ex;
+		text-align: right;
+		left: -1ex;
+	}
+
+	li:before {
+		left: 4.5ex;
+	}
+}
+
+ul.list li:before { content: "\25cf"; }
+ol.list li:before {
+	content: counter(li) ".";
+	counter-increment: li;
+	font-weight: bold;
+}
+
+dl.list {
+	@extend .clear-after;
+
+	position: relative;
+
+	ul,
+	ol {
+		margin: 0;
+	}
+	li {
+		line-height: 1.5em;
+		padding-bottom: 0;
+	}
+
+	dt {
+		float: left;
+		margin: 0 10px 5px 0;
+		font-weight: normal;
+		color: #000;
+	}
+	dd {
+		margin: 0 0 5px 100px;
+	}
+}
+
+@each $list in 80, 150 {
+	dl.list-#{$list} dd {
+		margin-left: #{$list}px;
+	}
+}

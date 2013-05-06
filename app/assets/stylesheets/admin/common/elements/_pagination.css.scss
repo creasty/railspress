@@ -1,0 +1,23 @@
+
+/*=== Pagination
+==============================================================================================*/
+ul.pagination {
+	@extend .compact;
+	@extend .menu;
+
+	li {
+		font-size: 14px;
+
+		a {
+			padding: 6px;
+		}
+
+		&.current a {
+			color: $primary-color;
+		}
+
+		i[class*="icon-"]:before {
+			padding-right: 0;
+		}
+	}
+}

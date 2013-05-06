@@ -1,0 +1,97 @@
+
+/*=== Table
+==============================================================================================*/
+table.form {
+	width: 100%;
+
+	tr + tr > td {
+		padding-top: 10px;
+	}
+	td + td {
+		padding-left: 10px;
+	}
+}
+table.table {
+	font-size: 1em;
+	border-collapse: collapse;
+	margin-bottom: 1em;
+	width: 100%;
+
+	caption {
+		padding-bottom: 0.5em;
+	}
+	tbody th {
+		text-align: left;
+	}
+
+	td {
+		line-height: 1.35;
+	}
+	td,
+	th {
+		padding: 10px 20px;
+	}
+	td + td,
+	th + th {
+		padding-left: 0;
+	}
+
+	thead {
+		tr {
+			background: $menubar-bg-color;
+			width: 100%;
+			height: 42px;
+			padding: 15px 20px;
+
+			color: rgba(#000, .5);
+		}
+
+		th:after {
+			font-family: "LigatureSymbols";
+			padding-left: .5em;
+		}
+		th.sortable:after {
+			content: "\E120";
+			opacity: .6;
+		}
+		th.desc:after {
+			content: "\E03e";
+		}
+		th.asce:after {
+			content: "\E135";
+		}
+	}
+	tbody {
+		tr {
+			@include transition(background-color .3s);
+			border-bottom: 1px solid $main-rule-color;
+		}
+
+		td {
+
+			> input[type=checkbox] {
+				margin: 0;
+			}
+		}
+	}
+
+	thead th,
+	.headerBlock th {
+		// background: $sub-base-color;
+		font-weight: bold;
+	}
+}
+
+table.table-hover {
+	tbody tr {
+		&:hover,
+		&.hover {
+			background-color: rgba($success-color, .05);
+		}
+	}
+}
+
+table.table-stripe-v tbody tr:nth-child(even),
+table.table-stripe-h tbody td:nth-child(even) {
+	background-color: #f3f7fb;
+}

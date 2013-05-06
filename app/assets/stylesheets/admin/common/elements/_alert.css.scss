@@ -1,0 +1,32 @@
+
+/*=== Frame
+==============================================================================================*/
+.alert {
+	@extend .clear-after;
+	border-width: 1px;
+	border-style: solid;
+	padding: 10px;
+	margin-bottom: 15px;
+	text-shadow: 0 1px 0 rgba(255, 255, 255, .5);
+	@include border-radius(4px);
+
+	strong {
+		color: inherit;
+	}
+}
+
+.alert-success {
+	background-color: #dff0d8;
+	border-color: #d6e9c6;
+	color: #468847;
+}
+.alert-error {
+	background-color: #f2dede;
+	border-color: #edd3d7;
+	color: #b94a48;
+}
+.alert-info {
+	background-color: #d9edf7;
+	border-color: #bce8f1;
+	color: #3a87ad;
+}
