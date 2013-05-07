@@ -19,7 +19,7 @@ div.tagsinput{
 
 		a {
 			@extend .icon-remove;
-			color: $body-bg-color;
+			color: $body-bg-color !important;
 
 			display: inline-block;
 			font-size: 16px;
@@ -34,7 +34,7 @@ div.tagsinput{
 			}
 
 			&:hover {
-				color: $primary-color;
+				color: $primary-color !important;
 			}
 		}
 	}

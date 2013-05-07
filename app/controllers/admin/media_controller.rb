@@ -1,3 +1,5 @@
+# coding: utf-8
+
 class Admin::MediaController < Admin::ApplicationController
 
   def index
@@ -16,8 +18,7 @@ class Admin::MediaController < Admin::ApplicationController
     @medium = Medium.new params[:medium]
 
     if @medium.save
-      flash.now[:notice] = 'Created!'
-      render :edit
+      redirect_to edit_admin_medium_path(@medium), notice: 'Created!'
     else
       flash.now[:alert] = 'Failed!'
       render :new
@@ -28,23 +29,26 @@ class Admin::MediaController < Admin::ApplicationController
     @medium = Medium.find params[:id]
 
     if @medium.update_attributes params[:medium]
-      if @medium.cropping?
-        @medium.asset.reprocess!
-      end
-
-      flash.now[:notice] = 'Updated!'
+      redirect_to edit_admin_medium_path(@medium), notice: 'Updated!'
     else
       flash.now[:alert] = 'Failed!'
+      render :edit
     end
-
-    render :edit
   end
 
   def destroy
     @medium = Medium.find params[:id]
     @medium.destroy
 
-    render :index
+    if ajax_request?
+      render json: {
+        success: true,
+        msg: '削除しました',
+        id: @medium.id
+      }
+    else
+      redirect_to admin_media_path, notice: 'Deleted!'
+    end
   end
 
 end

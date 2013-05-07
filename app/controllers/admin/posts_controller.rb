@@ -3,13 +3,21 @@
 class Admin::PostsController < Admin::ApplicationController
 
   def index
-    @posts = Post.order('created_at DESC')
+    @posts = Post
+      .order('created_at DESC')
       .page(params[:page])
       .per(params[:per_page])
       .includes(:user)
 
+    if params[:user_id]
+      @posts = @posts.where 'user_id = ?', params[:user_id]
+    end
+    if params[:title]
+      @posts = @posts.where 'title like ?', "%#{params[:title]}%"
+    end
+
     if ajax_request? && params[:only_table]
-      params[:only_table] = nil
+      params.delete :only_table
       render json: {
         pager: view_context.paginate(
           @posts,

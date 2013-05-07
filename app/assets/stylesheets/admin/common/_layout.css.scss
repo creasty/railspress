@@ -134,24 +134,105 @@ body {
 	width: 300px;
 	padding: 0 20px 20px;
 
+	a {
+		color: rgba($body-text-color, .5);
+
+		&:hover {
+			color: $primary-color;
+		}
+	}
+
 	h2 {
+		@extend .clear-after;
+
 		font-size: 14px;
 		font-weight: bold;
 		line-height: 1;
+		overflow: visible;
 		margin-bottom: 20px;
 		letter-spacing: 1px;
+
+		> a {
+			color: rgba($body-text-color, .5);
+			float: right;
+			font-size: 22px;
+			line-height: 1;
+			margin: -4px 0 -8px;
+
+			&:hover {
+				color: $primary-color;
+			}
+		}
 	}
 
-	> section {
+	h2 + .btn {
+		margin-top: 20px;
+	}
+
+	section {
+		@extend .clear-after;
+
 		margin-bottom: 40px;
 	}
 }
 
+
+/*=== Menubar
+==============================================================================================*/
 .menubar {
+	@extend .clear-after;
+
 	background: $menubar-bg-color;
 	width: 100%;
 	height: 42px;
-	padding: 15px 20px;
+	padding: 10px 20px;
 	@include box-sizing(border-box);
+
+	> ul {
+		@extend .menu;
+		@extend .compact;
+		float: left;
+
+		&.right {
+			float: right;
+		}
+
+		li {
+			height: 22px;
+			line-height: 22px;
+			vertical-align: middle;
+			font-weight: bold;
+			color: $menubar-text-color;
+
+			&.divide {
+				border-left: 1px solid #d3d0ca;
+				padding-left: 20px;
+			}
+
+			a {
+				color: $menubar-text-color;
+			}
+			&.selected a,
+			a.hover,
+			a:hover {
+				color: $primary-color;
+			}
+
+			a[class*="icon-"] {
+				position: relative;
+				font-size: 18px;
+				top: -2px;
+
+				&:before {
+					padding-right: 0;
+				}
+			}
+		}
+
+		li + li {
+			margin-left: 20px;
+		}
+	}
 }
+
 

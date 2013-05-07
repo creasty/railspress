@@ -2,30 +2,46 @@
 #main
   = form_for [:admin, @user] do |f|
 
-    = f.label :name
-    = f.text_field :name
+    %table.form
+      %tr
+        %td
+          = f.label :name, '名前'
+        %td
+          = f.text_field :name, class: 'text'
 
-    %br
+      %tr
+        %td
+          = f.label :email, 'メールアドレス'
+        %td
+          = f.text_field :email, class: 'text'
 
-    = f.label :email
-    = f.text_field :email
+      - if 'new' == action_name
+        %tr
+          %td
+            = f.label :password, 'パスワード'
+          %td
+            = f.text_field :password, class: 'text'
 
-    %br
+        %tr
+          %td
+            = f.label :password_confirmation, 'パスワード (確認用)'
+          %td
+            = f.text_field :password_confirmation, class: 'text'
 
-    = f.label :password
+      - else
+        %tr
+          %td
+            = f.label :password, 'パスワード'
+          %td
+            = f.password_field :password, value: '', class: 'text'
 
-    - if 'new' == action_name
-      = f.text_field :password
-    - else
-      = f.password_field :password, value: ''
+        %tr
+          %td
+            = f.label :password_confirmation, 'パスワード (確認用)'
+          %td
+            = f.password_field :password_confirmation, class: 'text'
 
-    %br
-
-    = f.label :password_confirmation
-    - if 'new' == action_name
-      = f.text_field :password_confirmation
-    - else
-      = f.password_field :password_confirmation
-
-    = f.submit
+      %tr.doubled
+        %td{ colspan: 2 }
+          = f.submit nil, class: 'btn btn-primary'
 

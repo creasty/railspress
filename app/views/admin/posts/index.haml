@@ -21,15 +21,78 @@
 
 
 #pocket_side
-  %section
-    %h2 ページ
+  %div{ data: { toggle: 'bulk-action', state: 'normal' } }
+    %section
+      %h2 ページ
 
-    = paginate @posts, window: 4, outer_window: 2, theme: 'admin_table'
+      %table.form
+        %tr
+          %td= label_tag :page_num, 'ページ'
+          %td
+            = text_field_tag :page_num, '1', class: 'text block'
+        %tr
+          %td= label_tag :per_page, '表示数件'
+          %td
+            = text_field_tag :per_page, '1', class: 'text block'
+
+        %tr
+          %td{ colspan: 2 }
+            = paginate @posts, window: 4, outer_window: 2, theme: 'admin_table'
+
+    %section
+      %h2 検索
+
+      = form_tag admin_posts_path, method: :get do
+        %table.form
+          %tr
+            %td
+              .text.icon-search
+                = text_field_tag :title, '', placeholder: 'タイトル で検索'
+          %tr
+            %td
+              %div.select
+                = collection_select :user_id, :user_id, User.all, :id, :name, prompt: '作成者 で絞り込み'
+
+          %tr.doubled
+            %td{ colspan: 2 }
+              = button_tag '検索する', class: 'btn btn-primary block'
+
+    %div.hide{ data: { toggle: 'bulk-action', state: 'selecting' } }
+      %section
+        %h2
+          %span.counter 0
+          項目を選択中
+
+        = button_tag '選択を解除する', class: 'btn btn-primary block'
+
+      %section
+        %h2 一括編集
+
+        = form_tag admin_posts_path, method: :get do
+          %table.form.table-doubled
+            %tr
+              %td{ colspan: 2 }
+                %h3= label_tag :bulk_status,'公開状況'
+                %div.select
+                  = select :bulk_status, nil, { '非公開' => 0, '公開' => 1 }, prompt: '変更なし'
+            %tr
+              %td{ colspan: 2 }
+                %h3= label_tag :bulk_user,'作成者'
+                %div.select
+                  = collection_select :bulk_user, :user_id, User.all, :id, :name, prompt: '変更なし'
+
+            %tr
+              %td
+                = button_tag '変更を適応する', class: 'btn btn-success block'
+              %td
+                = button_tag '削除する', class: 'btn btn-danger block'
+
+
 
 :coffee
 
   require ['jquery', 'common/transit', 'domReady!'], ($, transit) ->
-    $tbody = $ 'table > tbody'
+    $tbody = $ '#main > table > tbody'
 
     $(document).on 'click', 'ul.pagination a', (e) ->
       $t = $ @
@@ -49,6 +112,11 @@
   require ['jquery', 'common/notify', 'domReady!'], ($, notify) ->
     st = notify().create()
     bulk_count = 0
+    $bulk_aciton = $ 'div[data-toggle="bulk-action"]'
+    console.log $bulk_aciton
+    $normal = $bulk_aciton.filter '[data-state=normal]'
+    $selecting = $bulk_aciton.filter '[data-state=selecting]'
+    $selecting_counter = $selecting.find 'span.counter'
 
     $(document)
     .on 'change', 'tr.post td.bulk input', ->
@@ -63,19 +131,13 @@
         $t_tr.removeClass 'hover'
         --bulk_count
 
-      $tr = $ 'tbody tr'
-
       if bulk_count > 1
-        $first = $tr.eq(0)
-        $first.find('td.controller')
-          .attr('rowspan', $tr.length)
-          .addClass('bulk-controller')
-        $first.nextAll().find('td.controller').hide()
+        $normal.addClass 'hide'
+        $selecting.removeClass 'hide'
+        $selecting_counter.text bulk_count
       else
-        $tr.find('td.controller')
-          .removeAttr('rowspan')
-          .removeClass('bulk-controller')
-          .show()
+        $selecting.addClass 'hide'
+        $normal.removeClass 'hide'
 
 
     .on 'click', 'tr.post a[data-method="delete"]', ->

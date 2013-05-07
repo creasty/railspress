@@ -10,6 +10,27 @@ table.form {
 	td + td {
 		padding-left: 10px;
 	}
+
+	tr.doubled > td {
+		padding-top: 20px !important;
+	}
+	tr.condensed > td {
+		padding-top: 10px !important;
+	}
+
+	&.table-doubled {
+		tr + tr > td {
+			padding-top: 20px;
+		}
+		td + td {
+			padding-left: 20px;
+		}
+	}
+
+	h3 {
+		margin-bottom: 10px;
+		line-height: 1;
+	}
 }
 table.table {
 	font-size: 1em;

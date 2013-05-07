@@ -1,53 +1,62 @@
 define ['jquery', 'common/timeago', 'domReady!'], ($) ->
+  S_HEIGHT = 15
+  N_HEIGHT = 25
+  ANIMATION = 300
+
+  count = 0
+  active_count = 0
+
   $statusbar = $('<div id="statusbar"></div>').appendTo $ '#globalheader'
 
-  class NotificationCenter
+  $statusbar.hover =>
+    return if count < 1
 
-    tableName: 'notifications'
+    $statusbar
+    .addClass('has-notifications')
+    .stop()
+    .animate
+      opacity: 1
+      height: count * N_HEIGHT
+    ,
+      duration: ANIMATION
 
-    constructor: -> @refreash()
-
-    refreash: ->
-      data = localStorage.getItem @tableName
-      data = $.parseJSON data if data
-      @table = data ? {}
-      @count = Object.keys(@table).length
-      @table.alloc ?= 1000
-
-    uid: -> ++@table.alloc
-
-    update: -> localStorage.setItem @tableName, JSON.stringify @table
-
-    get: (id) -> if id? then @table[id] ? {} else @table
-
-    set: (obj, id) ->
-      id ?= @uid()
-      @table[id] = obj
-      @update()
-      id
-
-    remove: (id) -> @set undefined, id
-
+  , =>
+    $statusbar
+    .animate
+      opacity: 0
+      height: S_HEIGHT
+    ,
+      duration: ANIMATION
+      complete: ->
+        $statusbar.removeClass('has-notifications')
 
   class Statusbar
 
-    constructor: (@nc) ->
+    update: ->
+      $statusbar
+      .addClass('has-notifications')
+      .height('auto')
+      .stop()
+      .animate
+        opacity: 1
+      ,
+        duration: ANIMATION
 
     remove: ->
       return unless @$notification
 
       $n = @$notification
-      count = @nc.count--
+      --count
       @$notification = null
 
       $n.animate
         opacity: 0
         left: '-100%'
       ,
-        duration: 300
+        duration: ANIMATION
         complete: =>
           $n.remove()
-          $statusbar.removeClass 'has-notifications' if count == 1
+          $statusbar.removeClass 'has-notifications' if count == 0
 
     hide: ->
       return unless @$notification
@@ -56,15 +65,17 @@ define ['jquery', 'common/timeago', 'domReady!'], ($) ->
       .animate
         height: 0
       ,
-        duration: 300
+        duration: ANIMATION
         complete: =>
-          @$notification.height(25).appendTo $statusbar
+          @$notification.height(N_HEIGHT).appendTo $statusbar
+          --active_count
+          @update()
 
       setTimeout (=> @remove()), 12e4
 
     create: ->
       return if @$notification
-      ++@nc.count
+      ++count
 
       @$notification = $ '<div></div>'
       @$text = $('<span></span>').appendTo @$notification
@@ -72,6 +83,7 @@ define ['jquery', 'common/timeago', 'domReady!'], ($) ->
       @$timestamp = $('<div class="timestamp"></div>').appendTo @$notification
 
       @events()
+      @
 
     events: ->
       @$close.on 'click', => @remove()
@@ -88,7 +100,10 @@ define ['jquery', 'common/timeago', 'domReady!'], ($) ->
       .attr('class', state)
       .addClass("icon-#{icon} icon-large")
       .stop()
-      .animate height: 25
+      .animate height: N_HEIGHT
+
+      ++active_count
+      @update()
 
     progress: (message, icon = 'clear') ->
       @show 'progress', message, icon
@@ -101,56 +116,7 @@ define ['jquery', 'common/timeago', 'domReady!'], ($) ->
       @show 'fail', message, icon
       setTimeout (=> @hide()), 6e3
 
-
-  class Notify
-
-    constructor: ->
-      @nc = new NotificationCenter()
-      @init()
-      @events()
-
-    init: ->
-      @refreash()
-
-    events: ->
-      $(window).on 'storage', =>
-        @nc.refreash()
-        @refreash()
-
-      $statusbar.hover =>
-        return if @nc.count < 1
-
-        $statusbar.addClass 'has-notifications'
-
-        $statusbar
-        .stop()
-        .animate
-          height: 25 * @nc.count
-        ,
-          duration: 300
-      , =>
-        $statusbar
-        .stop()
-        .animate
-          height: 5
-        ,
-          duration: 300
-          complete: =>
-            $statusbar.removeClass 'has-notifications'
-
-    refreash: ->
-      @clear()
-      queues = @nc.get()
-      for id, q of queues
-        @set id, q
-
-    clear: ->
-
-    set: ->
-
-    create: -> new Statusbar @nc
-
   # Exports
-  -> new Notify()
+  -> new Statusbar()
 
 

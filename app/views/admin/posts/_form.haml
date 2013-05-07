@@ -6,6 +6,37 @@
       = f.text_field :title, placeholder: 'タイトルを入力してください', class: 'panel-title', autocomplete: 'off'
 
       .menubar
+        %ul
+          %li
+            %a.icon-link{ href: '#' }
+          %li
+            %a.icon-image{ href: '#' }
+          %li.divide
+            %a.icon-bold{ href: '#' }
+          %li
+            %a.icon-italic{ href: '#' }
+          %li
+            %a.icon-underline{ href: '#' }
+          %li
+            %a.icon-emphasis{ href: '#' }
+          %li
+            %a.icon-strike{ href: '#' }
+          %li
+            %a.icon-quote{ href: '#' }
+          %li.divide
+            %a.icon-alignleft{ href: '#' }
+          %li
+            %a.icon-aligncenter{ href: '#' }
+          %li
+            %a.icon-alignright{ href: '#' }
+
+        %ul.right
+          %li
+            %a.icon-tile{ href: '#' }
+          %li.selected
+            %a.icon-code{ href: '#' }
+
+
 
       = f.text_area :content, rows: 5, class: 'hide'
 
@@ -70,6 +101,11 @@
         %p
           = v.name
           = v.taxonomy.name
+
+    %section
+      %h2 記事を削除
+      = link_to '削除する', admin_post_path(@post), method: :delete, confirm: true, class: 'btn btn-danger block'
+
 
 :coffee
   require ['jquery', 'datepicker'], ($) ->

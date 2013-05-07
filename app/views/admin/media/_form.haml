@@ -1,42 +1,56 @@
+- content_for :menubar do
+  - if @medium.asset.present?
+    = link_to @medium.asset.url, target: '_blank' do
+      %i.icon-link
 
-#main
-  = form_for [:admin, @medium], html: { multipart: true } do |f|
 
-    = f.label :title
-    = f.text_field :title, class: 'text'
+= form_for [:admin, @medium], html: { multipart: true, id: 'medium_form' } do |f|
+  #pocket_body
+    #main
+      - if @medium.asset.present?
 
-    %br
-    %br
+        - if @medium.image?
+          = image_tag @medium.asset.url, id: 'cropbox'
 
-    = f.label :description
-    = f.text_area :description, size: '30x5', class: 'textarea'
+          - %w[crop_x crop_y crop_w crop_h].each do |a|
+            = f.hidden_field a, id: a, class: 'text'
 
-    %br
-    %br
+        - else
+
+          No Preview
+
+      - else
+
+        = f.file_field :asset
+
+  #pocket_side
+    %section
+      %h2
+        ファイル情報
+
+      %table.form.table-doubled
+        %tr
+          %td
+            %h3= f.label :title, 'タイトル'
+            = f.text_field :title, class: 'text block'
+        %tr
+          %td
+            %h3= f.label :description, '説明文'
+            = f.text_area :description, size: '30x5', class: 'textarea block'
+
+        %tr
+          %td
+            = f.submit nil, class: 'btn btn-primary block'
+
+        - if @medium.asset.present?
+          %tr.condensed
+            %td
+              = f.button 'アップロードし直す', class: 'btn btn-success block'
 
     - if @medium.asset.present?
-
-      = link_to @medium.asset_file_name, @medium.asset.url
-      = f.check_box :asset_delete, class: 'checkbox'
-
-      %br
-      %br
-
-      = image_tag @medium.asset.url, id: 'cropbox'
-
-      %br
-      %br
-
-      - %w[crop_x crop_y crop_w crop_h].each do |a|
-        = f.text_field a, id: a, class: 'text'
-
-    - else
-      = f.file_field :asset, class: 'text'
-
-    %br
-    %br
-
-    = f.submit nil, class: 'btn btn-primary'
+      %section
+        %h2 データを削除
+        = link_to '削除する', admin_medium_path(@medium), method: :delete, confirm: true, class: 'btn btn-danger block'
 
 
 :coffee
@@ -57,6 +71,8 @@
       y = parseInt $y.val(), 10
       w = parseInt $w.val(), 10
       h = parseInt $h.val(), 10
+
+      return if isNaN x + y + w + h
 
       [x, y, x + w, y + h]
 
