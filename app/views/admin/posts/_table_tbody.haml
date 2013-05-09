@@ -7,7 +7,10 @@
     %td= I18n.l post.created_at
     %td
       .post-thumbnail
-        = image_tag post.thumbnail.url(:small), size: '80x57'
+        - if post.thumbnail.present?
+          = image_tag post.thumbnail.asset.url(:small), size: '80x57'
+        - else
+          = image_tag 'http://placehold.it/243x172', size: '80x57'
     %td.controller
       = link_to edit_admin_post_path(post) do
         %i.icon-edit

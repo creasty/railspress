@@ -36,8 +36,6 @@
           %li.selected
             %a.icon-code{ href: '#' }
 
-
-
       = f.text_area :content, rows: 5, class: 'hide'
 
 
@@ -70,20 +68,20 @@
             %div.text.icon-time
               = text_field_tag 'post[time_str]', @post.created_at.strftime('%H:%M')
 
-      = f.submit class: 'btn btn-primary block'
+        %tr.doubled
+          %td{ colspan: 3 }
+            = f.submit class: 'btn btn-primary block'
 
     %section
       %h2 サムネイル
 
       #post_thumbnail_preview.post-thumbnail
         - if @post.thumbnail.present?
-          = image_tag @post.thumbnail.url(:small)
+          = image_tag @post.thumbnail.asset.url(:small)
 
           .edit.has-two
             %i.icon-image
             %i.icon-ban
-
-          = f.check_box :thumbnail_delete, class: 'hide'
 
         - else
           .sample
@@ -91,7 +89,10 @@
           .edit.has-one
             %i.icon-plus
 
-          = f.file_field :thumbnail, class: 'hide'
+      - if @post.thumbnail.present?
+        = f.hidden_field :thumbnail_id
+      - else
+        = f.text_field :thumbnail_id, class: 'text block'
 
     %section
       %h2 タグ
@@ -102,9 +103,10 @@
           = v.name
           = v.taxonomy.name
 
-    %section
-      %h2 記事を削除
-      = link_to '削除する', admin_post_path(@post), method: :delete, confirm: true, class: 'btn btn-danger block'
+    - unless @post.new_record?
+      %section
+        %h2 記事を削除
+        = link_to '削除する', admin_post_path(@post), method: :delete, confirm: true, class: 'btn btn-danger block'
 
 
 :coffee

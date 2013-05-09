@@ -2,8 +2,8 @@
 
 class Post < ActiveRecord::Base
 
-  attr_accessor :thumbnail_delete, :date_str, :time_str
-  attr_accessible :content, :excerpt, :status, :title, :thumbnail, :thumbnail_delete, :user_id, :created_at
+  attr_accessor :date_str, :time_str, :tags
+  attr_accessible :content, :excerpt, :status, :title, :thumbnail_id, :user_id, :created_at, :date_str, :time_str, :tags
 
   #  Association
   #-----------------------------------------------
@@ -12,6 +12,7 @@ class Post < ActiveRecord::Base
   has_many :metas, as: :object
   has_many :term_rels, as: :object
   has_many :terms, through: :term_rels, include: :taxonomy
+  belongs_to :thumbnail, class_name: '::Medium'
 
   accepts_nested_attributes_for :user, allow_destroy: true
   accepts_nested_attributes_for :terms
@@ -37,22 +38,6 @@ class Post < ActiveRecord::Base
   #-----------------------------------------------
   paginates_per 10
 
-  #  Paperclip
-  #-----------------------------------------------
-  has_attached_file :thumbnail,
-    styles: {
-      large: '1020>',
-      small: '243x172#',
-      facebook: '300x300#',
-    },
-    convert_options: {
-      large: '-strip',
-      small: '-quality 75 -strip',
-    },
-    default_url: 'http://cambelt.co/243x172'
-
-  before_validation :destroy_thumbnail?
-
   #  Public Methods
   #-----------------------------------------------
   def private?
@@ -60,14 +45,6 @@ class Post < ActiveRecord::Base
   end
   def publish?
     self.status == 1
-  end
-
-  #  Private Methods
-  #-----------------------------------------------
-  private
-
-  def destroy_thumbnail?
-    self.thumbnail.clear if self.thumbnail_delete == '1'
   end
 
 end

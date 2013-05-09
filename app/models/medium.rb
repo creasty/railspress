@@ -1,18 +1,22 @@
 class Medium < ActiveRecord::Base
 
-  attr_accessor :asset_delete
+  include Rails.application.routes.url_helpers
+
+  attr_accessor :asset_delete, :processing
   attr_accessible :title, :description, :asset, :asset_delete
+  attr_accessible :crop_x, :crop_y, :crop_w, :crop_h
 
   #  Validation
   #-----------------------------------------------
   validate :title, presence: true
   validate :asset, presence: true
 
+  #  General Callbacks
+  #-----------------------------------------------
+  before_validation :generate_title
+
   #  Paperclip
   #-----------------------------------------------
-  attr_accessor :processing
-  attr_accessible :crop_x, :crop_y, :crop_w, :crop_h
-
   has_attached_file :asset,
     styles: {
       large: '1020>',
@@ -24,16 +28,18 @@ class Medium < ActiveRecord::Base
       large: '-strip',
       small: '-quality 75 -strip'
     },
-    default_url: 'http://cambelt.co/243x172',
+    default_url: 'http://placehold.it/243x172',
     url: '/system/:class/:id_partition/:style.:extension',
     path: ':rails_root/public:url'
 
+  before_validation :destroy?
+  # before_validation :fix_crop_coord
   # before_post_process :rename_image
   before_post_process :image?
-  # before_validation :fix_crop_coord
-  before_validation :destroy?
   after_update :reprocess_image
 
+  #  Public Methods
+  #-----------------------------------------------
   def cropping?
     !crop_x.blank? &&
     !crop_y.blank? &&
@@ -45,9 +51,36 @@ class Medium < ActiveRecord::Base
     %w[image/jpeg image/jpg image/png image/gif].include? asset.content_type
   end
 
+  def to_jq_upload
+    {
+      name: read_attribute(:asset_file_name),
+      size: read_attribute(:asset_file_size),
+      url: asset.url(:original),
+      delete_url: admin_medium_path(self),
+      delete_type: :delete
+    }
+  end
+
+
   #  Private Methods
   #-----------------------------------------------
   private
+
+  def generate_title
+    unless self.title.present?
+      title = self.asset_file_name.dup
+      title.gsub!(/\.\w+$/, '')
+      title.gsub!(/[\']/, '')
+      title.gsub!('&', ' and ')
+      title.gsub!('@', ' at ')
+      title.gsub!(/[^a-z0-9]+/i, ' ')
+      title.gsub!(/\s+/, ' ')
+      title.strip!
+      title.capitalize!
+
+      self.title = title
+    end
+  end
 
   def reprocess_image
     return unless cropping? && !processing

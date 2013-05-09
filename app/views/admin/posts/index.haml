@@ -47,45 +47,45 @@
           %tr
             %td
               .text.icon-search
-                = text_field_tag :title, '', placeholder: 'タイトル で検索'
+                = text_field :post, :title, placeholder: 'タイトル で検索'
           %tr
             %td
               %div.select
-                = collection_select :user_id, :user_id, User.all, :id, :name, prompt: '作成者 で絞り込み'
+                = collection_select :post, :user_id, User.all, :id, :name, prompt: '作成者 で絞り込み'
 
           %tr.doubled
             %td{ colspan: 2 }
               = button_tag '検索する', class: 'btn btn-primary block'
 
-    %div.hide{ data: { toggle: 'bulk-action', state: 'selecting' } }
-      %section
-        %h2
-          %span.counter 0
-          項目を選択中
+  %div.hide{ data: { toggle: 'bulk-action', state: 'selecting' } }
+    %section
+      %h2
+        %span.counter 0
+        項目を選択中
 
-        = button_tag '選択を解除する', class: 'btn btn-primary block'
+      = button_tag '選択を解除する', class: 'btn btn-primary block'
 
-      %section
-        %h2 一括編集
+    %section
+      %h2 一括編集
 
-        = form_tag admin_posts_path, method: :get do
-          %table.form.table-doubled
-            %tr
-              %td{ colspan: 2 }
-                %h3= label_tag :bulk_status,'公開状況'
-                %div.select
-                  = select :bulk_status, nil, { '非公開' => 0, '公開' => 1 }, prompt: '変更なし'
-            %tr
-              %td{ colspan: 2 }
-                %h3= label_tag :bulk_user,'作成者'
-                %div.select
-                  = collection_select :bulk_user, :user_id, User.all, :id, :name, prompt: '変更なし'
+      = form_tag admin_posts_path, method: :get do
+        %table.form.table-doubled
+          %tr
+            %td{ colspan: 2 }
+              %h3= label_tag :bulk_status,'公開状況'
+              %div.select
+                = select :bulk_status, nil, { '非公開' => 0, '公開' => 1 }, prompt: '変更なし'
+          %tr
+            %td{ colspan: 2 }
+              %h3= label_tag :bulk_user,'作成者'
+              %div.select
+                = collection_select :bulk_user, :user_id, User.all, :id, :name, prompt: '変更なし'
 
-            %tr
-              %td
-                = button_tag '変更を適応する', class: 'btn btn-success block'
-              %td
-                = button_tag '削除する', class: 'btn btn-danger block'
+          %tr
+            %td
+              = button_tag '変更を適応する', class: 'btn btn-success block'
+            %td
+              = button_tag '削除する', class: 'btn btn-danger block'
 
 
 
@@ -113,7 +113,7 @@
     st = notify().create()
     bulk_count = 0
     $bulk_aciton = $ 'div[data-toggle="bulk-action"]'
-    console.log $bulk_aciton
+
     $normal = $bulk_aciton.filter '[data-state=normal]'
     $selecting = $bulk_aciton.filter '[data-state=selecting]'
     $selecting_counter = $selecting.find 'span.counter'

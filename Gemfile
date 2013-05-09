@@ -9,17 +9,18 @@ gem 'kaminari'
 gem 'simple-navigation'
 gem 'paperclip'
 gem 'remotipart'
-gem 'enumerize'
-gem 'json'
+# gem 'enumerize'
+
 
 group :assets do
-  gem 'sass-rails',   '~> 3.2.3'
+  gem 'sass-rails', '~> 3.2.3'
   gem 'compass-rails'
   gem 'coffee-rails', '~> 3.2.1'
   gem 'jquery-rails'
   gem 'haml-rails'
-  gem 'requirejs-rails'
   gem 'uglifier', '>= 1.0.3'
+  gem 'requirejs-rails'
+  gem 'jquery-fileupload-rails'
 end
 
 group :development do

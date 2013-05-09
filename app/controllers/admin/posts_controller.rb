@@ -9,12 +9,18 @@ class Admin::PostsController < Admin::ApplicationController
       .per(params[:per_page])
       .includes(:user)
 
-    if params[:user_id]
-      @posts = @posts.where 'user_id = ?', params[:user_id]
+    where = ['1 = 1']
+
+    if params[:post].try(:[], :user_id).try(&:present?)
+      where[0] << ' and user_id = ?'
+      where << params[:post][:user_id]
     end
-    if params[:title]
-      @posts = @posts.where 'title like ?', "%#{params[:title]}%"
+    if params[:post].try(:[], :title).try(&:present?)
+      where[0] << ' and title like ?'
+      where << "%#{params[:post][:title]}%"
     end
+
+    @posts = @posts.where where
 
     if ajax_request? && params[:only_table]
       params.delete :only_table

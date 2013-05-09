@@ -17,11 +17,20 @@ class Admin::MediaController < Admin::ApplicationController
   def create
     @medium = Medium.new params[:medium]
 
-    if @medium.save
-      redirect_to edit_admin_medium_path(@medium), notice: 'Created!'
-    else
-      flash.now[:alert] = 'Failed!'
-      render :new
+    respond_to do |format|
+      if @medium.save
+        format.html do
+          redirect_to edit_admin_medium_path(@medium), notice: 'Created!'
+        end
+        format.json do
+          render json: {
+            files: [@medium.to_jq_upload]
+          }, status: :created#, location: [:admin, @medium]
+        end
+      else
+        flash.now[:alert] = 'Failed!'
+        format.html { render :new }
+      end
     end
   end
 

@@ -8,10 +8,6 @@ body#posts {
 			padding: 0 20px;
 			width: 100%;
 		}
-
-		input[type=submit] {
-			margin-top: 20px;
-		}
 	}
 
 	#post_content_ace {
@@ -25,7 +21,7 @@ body#posts {
 			background: none;
 		}
 		.ace_gutter {
-			background: none;//#f1f0ee;
+			background: none;
 		}
 		.ace_gutter-cell {
 			color: #bbb;
@@ -151,7 +147,8 @@ body#posts.index {
 		}
 
 		.post-thumbnail {
-			max-width: 80px;
+			width: 80px;
+			height: 57px;
 		}
 	}
 }
