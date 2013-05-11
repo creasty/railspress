@@ -121,7 +121,13 @@
       height: 'auto'
       defaultText: 'タグを追加'
 
-  require ['jquery', 'ace/ace', 'domReady!'], ($, ace) ->
+  require [
+    'jquery'
+    'ace/ace'
+    'ace/theme/solarized_light'
+    'ace/mode/html'
+    'domReady!'
+  ], ($, ace) ->
     $textarea = $('#post_content').hide()
     $('<div id="post_content_ace"></div>')
       .insertBefore $textarea
@@ -133,11 +139,18 @@
     editor.getSession().setTabSize 2
     editor.getSession().setUseWrapMode true
     editor.setShowPrintMargin false
+    editor.focus();
 
     editor.getSession().setValue $textarea.val()
     editor.getSession().on 'change', ->
       $textarea.val editor.getSession().getValue()
 
+    editor.commands.addCommand
+      name: 'Save'
+      bindKey: win: 'Ctrl-S', mac: 'Command-S'
+      readOnly: false
+      exec: (editor) ->
+        $('#post_form').submit()
 
   require ['jquery', 'common/notify', 'common/transit', 'domReady!'], ($, notify, transit) ->
     st = notify().create()

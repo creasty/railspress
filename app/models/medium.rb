@@ -55,7 +55,7 @@ class Medium < ActiveRecord::Base
     {
       name: read_attribute(:asset_file_name),
       size: read_attribute(:asset_file_size),
-      url: asset.url(:original),
+      url: asset.url(:small),
       delete_url: admin_medium_path(self),
       delete_type: :delete
     }

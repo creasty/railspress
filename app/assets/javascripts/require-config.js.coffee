@@ -4,21 +4,21 @@
   paths:
     'jquery': [
       'http://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min'
-      'components/jquery.min'
+      'jquery.min'
     ]
-    'components': './components'
-    'ace': 'components/ace/lib/ace'
-    'flight': 'components/flight/lib'
-    'hashchange': 'components/jquery-hashchange/jquery.ba-hashchange.min'
-    'tags-input': 'components/tags-input/jquery.tagsinput.min'
-    'jquery-autocomplete': 'components/jquery-autocomplete/src/jquery.autocomplete.min'
-    'datepicker': 'components/datepicker/js/bootstrap-datepicker'
-    'jcrop': 'components/jcrop/js/jquery.Jcrop.min'
+    'ace': 'ace/lib/ace'
+    'flight': 'flight/lib'
+    'hashchange': 'jquery-hashchange/jquery.ba-hashchange.min'
+    'tags-input': 'tags-input/jquery.tagsinput.min'
+    'jquery-autocomplete': 'jquery-autocomplete/src/jquery.autocomplete.min'
+    'datepicker': 'datepicker/js/bootstrap-datepicker'
+    'jcrop': 'jcrop/js/jquery.Jcrop.min'
+    'flight': 'flight/lib'
 
   map:
     '*':
       'ujs': 'jquery_ujs'
-      'css': 'components/require-css/css'
+      'css': 'require-css/css'
 
   shim:
     'jquery_ujs': ['jquery']

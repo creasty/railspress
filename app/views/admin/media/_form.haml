@@ -1,7 +1,6 @@
 - content_for :menubar do
   - if @medium.asset.present?
-    = link_to @medium.asset.url, target: '_blank' do
-      %i.icon-link
+    = link_to '', @medium.asset.url, target: '_blank', class: 'icon-link'
 
 
 = form_for [:admin, @medium], html: { multipart: true, id: 'medium_form' } do |f|

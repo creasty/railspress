@@ -2,10 +2,22 @@
 #main
   = form_for [:admin, @taxonomy] do |f|
 
-    = f.label :name
-    = f.text_field :name
+    %table.form
+      %tr
+        %td
+          = f.label :name, '名前'
+        %td
+          = f.text_field :name, class: 'text'
 
-    %br
+      %tr
+        %td
+          = f.label :multiple, '複数'
+        %td
+          = label_tag nil, class: 'checkbox' do
+            = f.check_box :multiple
+            一つのモデルが複数の term を持てるようにします
 
-    = f.submit
+      %tr.doubled
+        %td{ colspan: 2 }
+          = f.submit nil, class: 'btn btn-primary'
 

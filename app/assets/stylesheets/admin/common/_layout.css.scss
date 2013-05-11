@@ -44,12 +44,13 @@ body {
 	[class*="icon-"] {
 		@include inline-block;
 		color: rgba($body-text-color, .5);
-		margin: -14px 10px -10px;
+		margin: -14px 0 -10px 10px;
 		@include transition(.3s linear);
 
 		&:before {
 			display: block;
 			font-size: 24px;
+			padding-right: 0;
 		}
 
 		&:hover {

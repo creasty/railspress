@@ -6,6 +6,7 @@ class PagesController < ApplicationController
 
   def show
     @page_title = { depth: nil }
+    @page = Page.find params[:id]
   end
 
 end

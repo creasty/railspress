@@ -1,6 +1,6 @@
 class Page < ActiveRecord::Base
 
-  attr_accessible :content, :excerpt, :status, :title
+  attr_accessible :content, :excerpt, :status, :title, :slug
 
   #  Association
   #-----------------------------------------------
@@ -14,7 +14,7 @@ class Page < ActiveRecord::Base
 
   #  FriendlyId
   #-----------------------------------------------
-  # extend FriendlyId
-  # friendly_id :slug
+  extend FriendlyId
+  friendly_id :slug
 
 end

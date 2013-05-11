@@ -1,3 +1,70 @@
+###
+
+- nc
+  - active     <= notification == active
+  - progress   <= notification == progress
+  - total      <= notification != hidden
+
+- notification
+  - state
+    - acitive: 1
+    - inactive: 0
+    - removed: -1
+
+  - (style)
+    - success
+    - fail
+    - progress
+
+- statubar
+  - mute    (display: 0)
+  - active  (display: 1)
+  - hover   (display: all)
+
+---------------------------------
+
+[nc.active > 1]
+  statusbar -> active
+
+[]
+
+###
+
+###
+define ['jquery', 'common/timeago', 'domReady!'], ($) ->
+  config =
+    threshold: 15
+    height: 25
+    duration: 300
+
+
+  Statusbar =
+    mute: ->
+    active: ->
+    hover: ->
+
+    events: ->
+
+  NotifiCenter =
+    count:
+      acitive: 0
+      progress: 0
+      total: 0
+
+    update: ->
+
+
+  class Notification
+    state: 0
+
+    constructor: ->
+
+    success: ->
+    fail: ->
+    progress: ->
+
+###
+
 define ['jquery', 'common/timeago', 'domReady!'], ($) ->
   S_HEIGHT = 15
   N_HEIGHT = 25

@@ -1,11 +1,11 @@
 %p= link_to '< Home', posts_path
 
 - if @post.thumbnail.present?
-  %p= image_tag @post.thumbnail.url
+  %p= image_tag @post.thumbnail.asset.url
 
 
 %h1= @post.title
-%p= @post.content
+!= @post.content
 
 
 %h2 Comments (#{@post.comments.size})

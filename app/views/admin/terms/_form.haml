@@ -2,9 +2,20 @@
 #main
   = form_for [:admin, @term] do |f|
 
-    = f.label :name
-    = f.text_field :name
+    %table.form
+      %tr
+        %td
+          = f.label :name, '名前'
+        %td
+          = f.text_field :name, class: 'text'
 
-    = f.collection_select :taxonomy_id, Taxonomy.all, :id, :name, {}, class: 'select'
+      %tr
+        %td
+          = f.label :taxonomy_id, '分類'
+        %td
+          %span.select
+            = f.collection_select :taxonomy_id, Taxonomy.all, :id, :name
 
-    = f.submit
+      %tr.doubled
+        %td{ colspan: 2 }
+          = f.submit nil, class: 'btn btn-primary'

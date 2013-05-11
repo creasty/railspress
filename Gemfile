@@ -4,12 +4,17 @@ gem 'rails', '3.2.13'
 gem 'mysql2'
 
 gem 'friendly_id'
-gem 'devise'
 gem 'kaminari'
 gem 'simple-navigation'
 gem 'paperclip'
 gem 'remotipart'
-# gem 'enumerize'
+
+gem 'devise'
+gem 'omniauth'
+gem 'omniauth-twitter'
+gem 'omniauth-facebook'
+gem 'koala'
+gem 'twitter'
 
 
 group :assets do

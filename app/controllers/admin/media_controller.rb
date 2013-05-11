@@ -4,14 +4,31 @@ class Admin::MediaController < Admin::ApplicationController
 
   def index
     @media = Medium.all
+
+    respond_to do |format|
+      format.html { render }
+      format.json do
+        render json: @media.map { |m| m.to_jq_upload }
+      end
+    end
   end
 
   def new
     @medium = Medium.new
+
+    respond_to do |format|
+      format.html { render }
+      format.json { render json: @medium }
+    end
   end
 
   def edit
     @medium = Medium.find params[:id]
+
+    respond_to do |format|
+      format.html { render }
+      format.json { render json: @medium }
+    end
   end
 
   def create
@@ -28,8 +45,13 @@ class Admin::MediaController < Admin::ApplicationController
           }, status: :created#, location: [:admin, @medium]
         end
       else
-        flash.now[:alert] = 'Failed!'
-        format.html { render :new }
+        format.html do
+          flash.now[:alert] = 'Failed!'
+          render :new
+        end
+        format.json do
+          render json: @medium.errors, status: :unprocessable_entity
+        end
       end
     end
   end
@@ -37,11 +59,21 @@ class Admin::MediaController < Admin::ApplicationController
   def update
     @medium = Medium.find params[:id]
 
-    if @medium.update_attributes params[:medium]
-      redirect_to edit_admin_medium_path(@medium), notice: 'Updated!'
-    else
-      flash.now[:alert] = 'Failed!'
-      render :edit
+    respond_to do |format|
+      if @medium.update_attributes params[:medium]
+        format.html do
+          redirect_to edit_admin_medium_path(@medium), notice: 'Updated!'
+          end
+          format.json { head :no_content }
+      else
+        format.htl do
+          flash.now[:alert] = 'Failed!'
+          render :edit
+        end
+        format.json do
+          render json: @medium.upload_errors, status: :unprocessable_entity
+        end
+      end
     end
   end
 

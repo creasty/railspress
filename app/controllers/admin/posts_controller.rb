@@ -9,18 +9,7 @@ class Admin::PostsController < Admin::ApplicationController
       .per(params[:per_page])
       .includes(:user)
 
-    where = ['1 = 1']
-
-    if params[:post].try(:[], :user_id).try(&:present?)
-      where[0] << ' and user_id = ?'
-      where << params[:post][:user_id]
-    end
-    if params[:post].try(:[], :title).try(&:present?)
-      where[0] << ' and title like ?'
-      where << "%#{params[:post][:title]}%"
-    end
-
-    @posts = @posts.where where
+    @posts = @posts.where get_search_where
 
     if ajax_request? && params[:only_table]
       params.delete :only_table
@@ -39,8 +28,8 @@ class Admin::PostsController < Admin::ApplicationController
     end
   end
 
-  def thumbnail
-    # todo
+  def search
+
   end
 
   def new
@@ -49,7 +38,7 @@ class Admin::PostsController < Admin::ApplicationController
   end
 
   def edit
-    @post = Post.find(params[:id])
+    @post = Post.find params[:id]
   end
 
   def create
@@ -97,6 +86,25 @@ class Admin::PostsController < Admin::ApplicationController
       msg: '記事を削除しました',
       id: @post.id
     }
+  end
+
+
+
+  private
+
+  def get_search_where
+    where = ['1 = 1']
+
+    if params[:post].try(:[], :user_id).try(&:present?)
+      where[0] << ' and user_id = ?'
+      where << params[:post][:user_id]
+    end
+    if params[:post].try(:[], :title).try(&:present?)
+      where[0] << ' and title like ?'
+      where << "%#{params[:post][:title]}%"
+    end
+
+    where
   end
 
 end

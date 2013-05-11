@@ -1,0 +1,32 @@
+
+#main
+  = form_for [:admin, @page] do |f|
+
+    %table.form
+      %tr
+        %td
+          = f.label :title, 'タイトル'
+        %td
+          = f.text_field :title, class: 'text'
+
+      %tr
+        %td
+          = f.label :slug, 'URL'
+        %td
+          = f.text_field :slug, class: 'text'
+
+      %tr
+        %td
+          = f.label :content, '本文'
+        %td
+          = f.text_area :content, class: 'textarea', size: '50x5'
+
+      %tr
+        %td
+          = f.label :excerpt, '抜粋'
+        %td
+          = f.text_area :excerpt, class: 'textarea', size: '50x5'
+
+      %tr.doubled
+        %td{ colspan: 2 }
+          = f.submit nil, class: 'btn btn-primary'

@@ -15,7 +15,7 @@ class Admin::TermsController < Admin::ApplicationController
   end
 
   def new
-    @term = Term.new
+    @term = Term.new params[:term]
   end
 
   def edit

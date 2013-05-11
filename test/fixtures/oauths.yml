@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  provider: MyString
+  uid: MyString
+  token: MyString
+  token_expires_at: MyString
+  token_secret: MyString
+  avatar_file_name: MyString
+  avatar_content_type: MyString
+  avatar_file_size: 1
+
+two:
+  provider: MyString
+  uid: MyString
+  token: MyString
+  token_expires_at: MyString
+  token_secret: MyString
+  avatar_file_name: MyString
+  avatar_content_type: MyString
+  avatar_file_size: 1

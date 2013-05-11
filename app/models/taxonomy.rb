@@ -1,6 +1,6 @@
 class Taxonomy < ActiveRecord::Base
 
-  attr_accessible :name, :parent
+  attr_accessible :name, :multiple
 
   #  Association
   #-----------------------------------------------

@@ -1,1 +1,10 @@
 #main
+  %ul
+    - @comments.each do |comment|
+      %li
+        = comment.author
+        %br
+        = comment.content
+        %br
+        = link_to '[edit]', edit_admin_comment_path(comment)
+        = link_to '[delete]', admin_comment_path(comment), remote: true, method: :delete
