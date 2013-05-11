@@ -18,7 +18,7 @@ class OauthController < ApplicationController
     oauth = Oauth.find_or_create_by_provider_and_uid account[:provider], account[:uid]
 
     unless oauth.user.present?
-      @user = User.new nickname: oauth_data[:name]
+      @user = User.new name: oauth_data[:name]
       oauth.update_attributes user_id: @user.id if @user.save validate: false
     end
 

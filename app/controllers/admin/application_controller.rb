@@ -10,6 +10,10 @@ module Admin
       unless user_signed_in?
         redirect_to new_user_session_path
       end
+      unless current_user.admin?
+        error_403
+        # redirect_to root_path
+      end
     end
 
   end

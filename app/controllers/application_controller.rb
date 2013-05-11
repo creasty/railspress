@@ -38,12 +38,17 @@ class ApplicationController < ActionController::Base
 
   #  Error Page
   #-----------------------------------------------
-  def error_404
-    render file: "#{Rails.root}/public/404", layout: false, status: 404
+  def error_page(code)
+    render file: "#{Rails.root}/public/#{code}", layout: false, status: code
   end
-
+  def error_404
+    error_page 404
+  end
+  def error_403
+    error_page 403
+  end
   def error_500
-    render file: "#{Rails.root}/public/500", layout: false, status: 500
+    error_page 500
   end
 
   #  Devise
