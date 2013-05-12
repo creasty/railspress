@@ -87,11 +87,11 @@ class Admin::PostsController < Admin::ApplicationController
   def get_search_where
     where = ['1 = 1']
 
-    if params[:post].try(:[], :user_id).try(&:present?)
+    if params[:post].try(:[], :user_id).present?
       where[0] << ' and user_id = ?'
       where << params[:post][:user_id]
     end
-    if params[:post].try(:[], :title).try(&:present?)
+    if params[:post].try(:[], :title).present?
       where[0] << ' and title like ?'
       where << "%#{params[:post][:title]}%"
     end

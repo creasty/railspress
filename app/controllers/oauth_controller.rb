@@ -27,13 +27,11 @@ class OauthController < ApplicationController
       end
     end
 
-    defalt_avatar_path = URI.parse 'https://d1cyqrzrnzp5gp.cloudfront.net/common/images/default_avatar.jpg'
-
     case provider
     when 'facebook'
 
       oauth_data[:image_url] = account[:info][:image].sub '?type=square', '?width=200&height=200'
-      avatar_image = open URI.parse(oauth_data[:image_url]) rescue open defalt_avatar_path
+      avatar_image = open URI.parse(oauth_data[:image_url]) rescue nil
 
       oauth.update_attributes(
         token:            account[:credentials][:token],
@@ -44,7 +42,7 @@ class OauthController < ApplicationController
     when 'twitter'
 
       oauth_data[:image_url] = account[:info][:image].sub 'normal', 'bigger'
-      avatar_image = open URI.parse(oauth_data[:image_url]) rescue open defalt_avatar_path
+      avatar_image = open URI.parse(oauth_data[:image_url]) rescue nil
 
       oauth.update_attributes(
         token:        account[:credentials][:token],

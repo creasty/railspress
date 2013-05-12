@@ -16,7 +16,8 @@ class Oauth < ActiveRecord::Base
 
   #  Paperclip
   #-----------------------------------------------
-  has_attached_file :avatar
+  has_attached_file :avatar,
+    default_url: 'http://placehold.it/200x200'
 
   #  Public Methods
   #-----------------------------------------------

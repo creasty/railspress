@@ -2,7 +2,7 @@
   %ul
     - @comments.each do |comment|
       %li
-        = comment.author
+        = comment.user.name
         %br
         = comment.content
         %br
