@@ -22,3 +22,9 @@ ja:
       user: "ユーザ"
       term: "タグ"
       taxonomy: "分類"
+
+    page: "ページ"
+    post: "ブログ"
+    comment: "コメント"
+    user: "ユーザ"
+    term: "タグ"

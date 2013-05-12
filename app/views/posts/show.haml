@@ -8,42 +8,64 @@
 != @post.content
 
 
-%h2 Comments (#{@post.comments.size})
+%h2 コメント (#{@post.comments.size})
 
-%ul#comments
-  - if @post.comments.any?
+- if user_signed_in?
+  = form_for [@post, @comment_new] do |f|
+    - if @comment_new.errors.any?
+      %ul
+        - @comment_new.errors.full_messages.each do |msg|
+          %li= msg
+
+    %table.form
+      %tr
+        %td 名前
+        %td
+          = current_user.name
+          = link_to '[ログアウト]', destroy_user_session_path
+
+      %tr
+        %td
+          = f.label :content, 'コメント'
+        %td
+          = f.text_area :content, rows: 5
+
+      %tr.doubled{ colspan: 2 }
+        %td
+          = f.submit
+
+- else
+
+  %p= link_to 'Twitter アカウントでログイン', '/auth/twitter'
+  %p= link_to 'Facebook アカウントでログイン', '/auth/facebook'
+
+  = form_for :user, url: user_session_path do |f|
+
+    .text.size-large.icon-user.icon-on-left
+      = f.email_field :email, autofocus: true, placeholder: 'user@email.com'
+
+    .text.size-large.icon-key.icon-on-left
+      = f.password_field :password, password: 'password'
+
+    %div
+      = f.check_box :remember_me, class: 'checkbox'
+      = f.label :remember_me, 'ログイン状態を記憶'
+
+    %div= f.submit 'ログイン', class: 'btn btn-primary'
+
+
+- if @post.comments.any?
+  %hr
+
+  %ul#comments
     - @post.comments.each do |comment|
       %li[comment]
         %h3<
-          = comment.author
-          = link_to '(delete)', [comment.post, comment], confirm: 'Sure?', method: :delete, remote: true
+          = comment.user.name
+          - if is_current_user?(comment.user_id) || is_admin?
+            = link_to '(delete)', [comment.post, comment], confirm: 'Sure?', method: :delete, remote: true
         %p<!= comment.content.strip.html_safe.gsub /\n/, '<br />'
-  - else
-    %li No comment yet.
 
-
-%h2 Leave a Comment
-
-= form_for [@post, @comment_new] do |f|
-  - if @comment_new.errors.any?
-    %ul
-      - @comment_new.errors.full_messages.each do |msg|
-        %li= msg
-
-  .field
-    = f.label :author
-    = f.text_field :author
-
-  .field
-    = f.label :author_email
-    = f.text_field :author_email
-
-  .field
-    = f.label :content
-    = f.text_area :content, rows: 5
-
-  .actions
-    = f.submit
 
 :coffee
   $ ->

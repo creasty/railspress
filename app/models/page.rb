@@ -11,6 +11,7 @@ class Page < ActiveRecord::Base
   #  Validation
   #-----------------------------------------------
   validates :title, presence: true
+  validates_uniqueness_of :slug
 
   #  FriendlyId
   #-----------------------------------------------

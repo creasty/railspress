@@ -47,5 +47,22 @@ class Post < ActiveRecord::Base
     self.status == 1
   end
 
+  #  Attributes
+  #-----------------------------------------------
+  def date_str
+    self.created_at ||= Time.now
+    self.created_at.strftime '%Y.%m.%d'
+  end
+  def time_str
+    self.created_at ||= Time.now
+    self.created_at.strftime '%H:%M'
+  end
+  def date_str=(date)
+    self.created_at = "#{date} #{time_str}"
+  end
+  def time_str=(time)
+    self.created_at = "#{date_str} #{time}"
+  end
+
 end
 

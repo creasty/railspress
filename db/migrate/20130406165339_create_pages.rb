@@ -6,6 +6,7 @@ class CreatePages < ActiveRecord::Migration
       t.string :title
       t.string :excerpt
       t.text :content
+      t.references :user
 
       t.timestamps
     end

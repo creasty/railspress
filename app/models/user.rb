@@ -6,7 +6,8 @@ class User < ActiveRecord::Base
   #-----------------------------------------------
   has_many :posts, dependent: :destroy
   has_many :pages, dependent: :destroy
-  has_one :oauth
+  has_one :oauth, dependent: :destroy
+  accepts_nested_attributes_for :oauth
 
   #  Devise
   #-----------------------------------------------

@@ -2,11 +2,8 @@ class CommentsController < ApplicationController
 
   def create
     @post = Post.find params[:post_id]
-
-    comment_object = params[:comment]
-    comment_object[:author_ip] = request.remote_ip
-
-    @comment = @post.comments.new(comment_object)
+    params[:comment][:user_id] = current_user.id
+    @comment = @post.comments.new params[:comment]
 
     if @comment.save
       redirect_to post_path(@post)
@@ -17,6 +14,9 @@ class CommentsController < ApplicationController
 
   def destroy
     @comment = Comment.find params[:id]
+
+    return unless is_current_user?(@comment.user_id) || is_admin?
+
     @comment.destroy
     render json: { comment: @comment }
   end

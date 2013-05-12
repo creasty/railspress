@@ -1,13 +1,14 @@
 class CreateComments < ActiveRecord::Migration
   def change
     create_table :comments do |t|
-      t.string :author, default: ''
-      t.string :author_email, null: false
-      t.string :author_ip, null: false
-      t.text :content
+      t.references :user
       t.references :post
+      t.text :content
 
       t.timestamps
     end
+
+    add_index :comments, :user_id
+    add_index :comments, :post_id
   end
 end

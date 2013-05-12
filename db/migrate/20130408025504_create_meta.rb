@@ -8,7 +8,8 @@ class CreateMeta < ActiveRecord::Migration
       t.timestamps
     end
 
-    add_index :meta, :object_id
+    add_index :metas, :object_id
+    add_index :metas, :object_type
   end
 
   def self.down

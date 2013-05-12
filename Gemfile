@@ -3,6 +3,7 @@ source 'https://rubygems.org'
 gem 'rails', '3.2.13'
 gem 'mysql2'
 
+gem 'figaro'
 gem 'friendly_id'
 gem 'kaminari'
 gem 'simple-navigation'
@@ -15,7 +16,6 @@ gem 'omniauth-twitter'
 gem 'omniauth-facebook'
 gem 'koala'
 gem 'twitter'
-
 
 group :assets do
   gem 'sass-rails', '~> 3.2.3'

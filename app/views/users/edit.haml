@@ -1,0 +1,53 @@
+
+#main
+  = form_for @user, url: commenter_path do |f|
+    %table.form
+      %tr
+        %td
+          = f.label :name, '名前'
+        %td
+          = f.text_field :name, class: 'text'
+
+      %tr
+        %td
+          = f.label :email, 'メールアドレス'
+        %td
+          = f.text_field :email, class: 'text'
+
+      - if 'new' == action_name
+        %tr
+          %td
+            = f.label :password, 'パスワード'
+          %td
+            = f.text_field :password, class: 'text'
+
+        %tr
+          %td
+            = f.label :password_confirmation, 'パスワード (確認用)'
+          %td
+            = f.text_field :password_confirmation, class: 'text'
+
+      - else
+        %tr
+          %td
+            = f.label :password, 'パスワード'
+          %td
+            = f.password_field :password, value: '', class: 'text'
+
+        %tr
+          %td
+            = f.label :password_confirmation, 'パスワード (確認用)'
+          %td
+            = f.password_field :password_confirmation, class: 'text'
+
+        %tr
+          %td
+            = f.label :oauth, 'アカウント'
+          %td
+            - if @user.oauth.presence
+              = @user.oauth.provider
+
+      %tr.doubled
+        %td{ colspan: 2 }
+          = f.submit nil, class: 'btn btn-primary'
+

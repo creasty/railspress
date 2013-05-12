@@ -15,9 +15,28 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  #  User
+  #-----------------------------------------------
+  helper_method :is_admin?
+  helper_method :is_current_user?
+
+  def is_admin?
+    user_signed_in? && current_user.try(&:admin?)
+  end
+  def is_current_user?(id)
+    user_signed_in? && current_user.id == id
+  end
+
+  #  Previous Params
+  #-----------------------------------------------
+  def previous_params
+    flash[:params] || {}
+  end
+  def save_current_params
+    flash[:params] = params
+  end
 
   protected
-
 
   #  Rescue
   #-----------------------------------------------
@@ -53,11 +72,15 @@ class ApplicationController < ActionController::Base
 
   #  Devise
   #-----------------------------------------------
-  def after_sign_in_path_for(resource_or_scope)
-    admin_root_path
+  def after_sign_in_path_for(scope)
+    if current_user.admin?
+      admin_root_path
+    else
+      root_path
+    end
   end
 
-  def after_sign_out_path_for(resource_or_scope)
+  def after_sign_out_path_for(scope)
     new_user_session_path
   end
 

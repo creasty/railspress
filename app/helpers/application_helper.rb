@@ -1,12 +1,11 @@
 module ApplicationHelper
 
-  # extend ActiveSupport::Memoizable
-  # memoize :page_title, :page_title_hash, :document_title
-
   def awesome(title, &body)
     render 'shared/awesome', title: title, body: capture(&body)
   end
 
+  #  Page Title
+  #-----------------------------------------------
   def page_title(cn = nil, ac = nil, ns = nil)
     title_form_hash page_title_hash(cn, ac, ns)
   end

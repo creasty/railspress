@@ -62,8 +62,13 @@ module RailsPress
     config.assets.version = '1.0'
 
     config.to_prepare do
-      Devise::SessionsController.layout "admin"
+      Devise::SessionsController.layout 'admin'
     end
+
+    config.paperclip_defaults = {
+      url: '/system/:class/:attachment/:id_partition/:style.:extension',
+      path: ':rails_root/public:url'
+    }
   end
 end
 

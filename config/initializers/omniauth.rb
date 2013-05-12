@@ -1,11 +1,7 @@
 Rails.application.config.middleware.use OmniAuth::Builder do
 
-  provider :twitter,
-    'UWC1Z3BYQ9GGNg1ixBiVJw',
-    'ZimTPG4Cj19ETvkmPZusPKHaHN975CbIqnPrEgYXw8'
+  provider :twitter, ENV['TWITTER_KEY'], ENV['TWITTER_SECRET']
 
-  provider :facebook,
-    '423468787678045',
-    '9149b132fc2dc63a2b0c582c3f68da41'
+  provider :facebook, ENV['FACEBOOK_APP_ID'], ENV['FACEBOOK_SECRET']
 
 end

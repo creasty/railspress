@@ -60,13 +60,13 @@
 
         %tr
           %td
-            = label_tag 'post[date_str]', '作成日時'
+            = f.label :date_str, '作成日時'
           %td{ width: '110px' }
-            %div.text.icon-dailycalendar
-              = text_field_tag 'post[date_str]', @post.created_at.strftime('%Y.%m.%d')
+            .text.icon-dailycalendar
+              = f.text_field :date_str
           %td
-            %div.text.icon-time
-              = text_field_tag 'post[time_str]', @post.created_at.strftime('%H:%M')
+            .text.icon-time
+              = f.text_field :time_str
 
         %tr.doubled
           %td{ colspan: 3 }
@@ -89,10 +89,7 @@
           .edit.has-one
             %i.icon-plus
 
-      - if @post.thumbnail.present?
-        = f.hidden_field :thumbnail_id
-      - else
-        = f.text_field :thumbnail_id, class: 'text block'
+      = f.hidden_field :thumbnail_id
 
     %section
       %h2 タグ

@@ -33,8 +33,8 @@ class Admin::PostsController < Admin::ApplicationController
   end
 
   def new
-    @post = Post.new
-    @post.created_at = Time.now
+    @post = Post.new previous_params[:post]
+    @post.created_at = Time.now unless previous_params[:post]
   end
 
   def edit
@@ -45,18 +45,10 @@ class Admin::PostsController < Admin::ApplicationController
     @post = Post.new params[:post]
 
     if @post.save
-      flash.now[:notice] = '作成されました'
-      render :edit
+      redirect_to edit_admin_post_path, notice: '作成されました'
     else
-      flash.now[:alert] = '保存に失敗しました'
-      render :new
-=begin
-      render json: {
-        success: false,
-        msg: '保存に失敗しました',
-        errors: @post.errors.full_messages
-      }
-=end
+      save_current_params
+      redirect_to new_admin_post_path, alert: '保存に失敗しました'
     end
   end
 

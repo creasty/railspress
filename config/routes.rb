@@ -8,6 +8,13 @@ RailsPress::Application.routes.draw do
       sign_out: 'logout'
     }
 
+  devise_for :users,
+    path: '/admin',
+    path_names: {
+      sign_in: 'login',
+      sign_out: 'logout'
+    }
+
   # OmniAuth
   get '/auth/:provider/callback' => 'oauth#callback'
 
@@ -37,6 +44,11 @@ RailsPress::Application.routes.draw do
   resources :posts, only: %w[index show] do
     resources :comments
   end
+
+  # Commenter
+  get '/commenter' => 'users#edit'
+  put '/commenter' => 'users#update'
+  delete '/commenter' => 'users#destroy'
 
   # Page
   root to: 'pages#index'
