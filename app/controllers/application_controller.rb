@@ -21,7 +21,7 @@ class ApplicationController < ActionController::Base
   helper_method :is_current_user?
 
   def is_admin?
-    user_signed_in? && current_user.try(&:admin?)
+    user_signed_in? && current_user.try(:admin?)
   end
   def is_current_user?(id)
     user_signed_in? && current_user.id == id
@@ -36,7 +36,26 @@ class ApplicationController < ActionController::Base
     flash[:params] = params
   end
 
+  #  Utils
+  #-----------------------------------------------
+  helper_method :get_namespace
+
+  def get_namespace
+    path = self.class.name.split '::'
+    name = controller_name.capitalize
+
+    if path.second
+      path.first.downcase
+    elsif !!(Module.const_get(name) rescue false)
+      name.downcase
+    else
+      nil
+    end
+  end
+
+
   protected
+
 
   #  Rescue
   #-----------------------------------------------
@@ -73,7 +92,7 @@ class ApplicationController < ActionController::Base
   #  Devise
   #-----------------------------------------------
   def after_sign_in_path_for(scope)
-    if current_user.admin?
+    if request.referer.try(:include?, '/admin')
       admin_root_path
     else
       root_path
@@ -81,7 +100,7 @@ class ApplicationController < ActionController::Base
   end
 
   def after_sign_out_path_for(scope)
-    new_user_session_path
+    request.referer || root_path
   end
 
 end

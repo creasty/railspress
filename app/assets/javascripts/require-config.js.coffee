@@ -14,6 +14,7 @@
     'datepicker': 'datepicker/js/bootstrap-datepicker'
     'jcrop': 'jcrop/js/jquery.Jcrop.min'
     'flight': 'flight/lib'
+    'panzoom': 'panzoom/dist/jquery.panzoom.min'
 
   map:
     '*':
@@ -28,3 +29,4 @@
     'jquery-autocomplete': ['jquery']
     'datepicker': ['jquery']
     'jcrop': ['jquery', 'css!jcrop/../../css/jquery.Jcrop.min']
+    'panzoom': ['jquery']

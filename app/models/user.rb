@@ -9,6 +9,10 @@ class User < ActiveRecord::Base
   has_one :oauth, dependent: :destroy
   accepts_nested_attributes_for :oauth
 
+  #  Scope
+  #-----------------------------------------------
+  scope :admin, where(admin: true)
+
   #  Devise
   #-----------------------------------------------
   devise :database_authenticatable, :rememberable, :trackable, :validatable, :recoverable

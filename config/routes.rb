@@ -8,19 +8,17 @@ RailsPress::Application.routes.draw do
       sign_out: 'logout'
     }
 
-  devise_for :users,
-    path: '/admin',
-    path_names: {
-      sign_in: 'login',
-      sign_out: 'logout'
-    }
-
   # OmniAuth
   get '/auth/:provider/callback' => 'oauth#callback'
 
   # Admin
   namespace :admin do
     root to: 'admin#index'
+
+    devise_scope :user do
+      get '/login' => 'admin#login'
+      get '/logout' => 'admin#logout'
+    end
 
     resources :pages
     resources :posts do

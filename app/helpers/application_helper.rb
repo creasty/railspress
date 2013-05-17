@@ -74,19 +74,6 @@ module ApplicationHelper
     end
   end
 
-  def get_namespace
-    path = controller.class.name.split '::'
-    name = controller_name.capitalize
-
-    if path.second
-      path.first.downcase
-    elsif !!(Module.const_get(name) rescue false)
-      name.downcase
-    else
-      nil
-    end
-  end
-
   def title_form_hash(hash, style = :page)
     # prefix     main      sub    depth      site       after
     # Aaaaaaaaa: Bbbbbbbbb - Cccc | Dddddddd | Eeeeeeee * Fffffff

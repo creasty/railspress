@@ -1,0 +1,143 @@
+@import "compass/utilities/general/clearfix";
+
+/* Defaults which you can freely override */
+$column-width: 60px !default;
+$gutter-width: 20px !default;
+$columns: 12 !default;
+$use-flexbox: true !default; /* use flexbox if avaiable */
+$grid-debug: false !default;
+
+
+/* compass box flex defaults */
+/* box-align: start | end | center | baseline | stretch */
+$default-box-align: stretch;
+/* box-orient: horizontal | vertical | inline-axis | block-axis | inherit */
+$default-box-orient: horizontal;
+
+
+/*//////////
+// GRID //
+//////////*/
+
+@mixin grid-width($max-width:false) {
+	$width: ($column-width*$columns) + ($gutter-width*$columns) - $gutter-width;
+	width: $width;
+
+	@if $use-flexbox {
+		html.flexboxlegacy & {
+			width: 100%;
+			@if $max-width == true {
+				max-width: $width;
+			}
+			@elseif $max-width {
+				max-width: $max-width;
+			}
+		}
+	}
+
+	@if $grid-debug {
+		@debug "GRID-WIDTH";
+		@debug "columns: #{$columns}";
+		@debug "width: #{$width}";
+	}
+}
+
+
+@mixin row($x:$columns) {
+
+	width: auto;
+	display: block;
+	margin-right: 0;
+
+	@if $x == false {
+		margin-left: 0;
+	}
+	@else {
+		/* use a negative margin for gutters, unless we've been passed false turning off rowness */
+		margin-left: -1 * $gutter-width;
+		@include pie-clearfix();
+
+		@if $use-flexbox {
+			/*
+				only for when we have flexbox
+			   	use flexboxlegacy class since we don't need all of flexbox's features
+			*/
+			html.flexboxlegacy & {
+				width: 100%;
+				margin-left: 0;
+				@include display-box;
+				@include box-orient();
+				@include box-align();
+			}
+		}
+	}
+
+
+	@if $grid-debug {
+		@debug "ROW";
+		@debug "width: #{$width}";
+	}
+
+}
+
+
+@mixin column($x, $row_columns:$columns, $fixed:false) {
+
+	/* if we are passed false, turn off any column settings */
+	@if $x == false {
+		display: block;
+		width: auto;
+		margin-left: 0;
+		margin-right: 0;
+	}
+	/* if we are passed 0, hide column */
+	@else if $x == 0 {
+			display: none;
+	}
+	@else {
+
+		$width: ($x * $column-width) + (($x - 1) * $gutter-width);
+		$margin: $gutter-width;
+
+		width: $width;
+		margin-left: $margin;
+
+
+		/* default, no flexbox styles */
+		display: inline;
+		float: left;
+
+
+		@if $use-flexbox {
+			/*
+				only for when we have flexbox
+			   	use flexboxlegacy class since we don't need all of flexbox's features
+			*/
+			html.flexboxlegacy & {
+				display: block;
+				float: none;
+				&:first-child { margin-left: 0; }
+				@if $fixed  {
+					@include box-flex(0);
+				}
+				@else {
+					@include box-flex($x);
+				}
+			}
+		}
+	}
+	@if $grid-debug {
+		@debug "COLUMN";
+		@debug "width: #{$width}";
+		@debug "margin: #{$margin}";
+	}
+
+}
+
+@mixin column-classes($prefix:'cols',$columns:$columns,$row_columns:$columns) {
+
+	@for $i from 1 through $columns {
+		.#{$prefix}-#{$i} { @include column( $i, $row_columns); }
+	}
+
+}

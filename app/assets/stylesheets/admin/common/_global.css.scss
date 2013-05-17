@@ -135,14 +135,13 @@
 #statusbar {
 	position: absolute;
 	width: 100%;
-	height: 15px;
 	overflow: hidden;
 	background-color: $header-bg-color;
 	z-index: 1001;
 	@include transition(box-shadow .3s);
 	@include opacity(0);
 
-	&.has-notifications {
+	&.show {
 		@include box-shadow(0 3px 0 rgba(#000, .4));
 	}
 

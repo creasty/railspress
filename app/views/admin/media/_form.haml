@@ -9,7 +9,14 @@
       - if @medium.asset.present?
 
         - if @medium.image?
-          = image_tag @medium.asset.url, id: 'cropbox'
+          #zoom
+            = image_tag @medium.asset.url, id: 'cropbox'
+
+          #zoom_controller
+            = button_tag 'Zoom In', class: 'zoom-in'
+            = button_tag 'Zoom Out', class: 'zoom-out'
+            %input{ type: 'range', class: 'zoom-range' }
+            = button_tag 'Reset', class: 'reset'
 
           - %w[crop_x crop_y crop_w crop_h].each do |a|
             = f.hidden_field a, id: a, class: 'text'
@@ -53,7 +60,7 @@
 
 
 :coffee
-  require ['jquery', 'jcrop', 'domReady!'], ->
+  require ['jquery', 'jcrop', 'panzoom', 'domReady!'], ($) ->
     $x = $ '#crop_x'
     $y = $ '#crop_y'
     $w = $ '#crop_w'
@@ -80,4 +87,12 @@
       onSelect: update_crop
       setSelect: getSelection()
       # aspectRatio: 1
+
+    $zoom_controller = $ '#zoom_contorller'
+
+    $('#zoom').panzoom
+      $zoomIn: $ '.zoom-in'
+      $zoomOut: $ '.zoom-out'
+      $zoomRange: $ '.zoom-range'
+      $reset: $ '.reset'
 

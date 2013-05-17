@@ -1,0 +1,56 @@
+@import "compass/reset";
+@import "compass/css3";
+@import "blueprint/typography";
+@import "blueprint/scaffolding";
+
+body {
+	margin: 0 auto;
+	padding: 10px;
+	@include blueprint-typography-body(12px);
+	@include blueprint-typography-defaults;
+	#{headings(all)} { margin: 1em 0 0 0; }
+	li {
+		margin-bottom: .5em;
+	}
+	background-color: #666;
+	#intro {
+		.inner {
+			margin:0 20px;
+		}
+	}
+	.container {
+		background-color: #fff;
+		overflow: hidden;
+	}
+	#samples {
+		#{headings(all)} { margin-left: 20px; }
+		.col {
+			background-color: #ddd;
+			margin-top: 10px;
+			text-align: center;
+			#{headings(all)} { margin-left: 0; }
+			.col {
+				background-color: #ccc;
+				.col {
+					background-color: #bbb;
+					.col {
+						background-color: #aaa;
+					}
+				}
+			}
+		}
+	}
+	#fixed-width-sample {
+		.subnav, .center, .sidebar {
+			background-color: #ccc;
+			text-align: center;
+		}
+	}
+
+	#docs {
+		#{headings(all)} { margin-left: 20px; }
+	}
+}
+
+
+

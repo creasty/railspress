@@ -2,7 +2,8 @@
   %ul
     - @comments.each do |comment|
       %li
-        = comment.user.name
+        - if comment.user.present?
+          = comment.user.name
         %br
         = comment.content
         %br

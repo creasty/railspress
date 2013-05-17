@@ -45,7 +45,7 @@ class Admin::PostsController < Admin::ApplicationController
     @post = Post.new params[:post]
 
     if @post.save
-      redirect_to edit_admin_post_path, notice: '作成されました'
+      redirect_to edit_admin_post_path(@post), notice: '作成されました'
     else
       save_current_params
       redirect_to new_admin_post_path, alert: '保存に失敗しました'
@@ -73,11 +73,15 @@ class Admin::PostsController < Admin::ApplicationController
     @post = Post.find params[:id]
     @post.destroy
 
-    render json: {
-      success: true,
-      msg: '記事を削除しました',
-      id: @post.id
-    }
+    if ajax_request?
+      render json: {
+        success: true,
+        msg: '記事を削除しました',
+        id: @post.id
+      }
+    else
+      redirect_to admin_posts_path
+    end
   end
 
 

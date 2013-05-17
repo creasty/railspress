@@ -6,6 +6,7 @@
     "jcrop": "git://github.com/tapmodo/Jcrop.git",
     "jquery-autocomplete": "git://github.com/dyve/jquery-autocomplete.git",
     "require-css": "git://github.com/guybedford/require-css.git",
-    "grass": "git://github.com/phil-quinn/grass-framework.git"
+    "grass": "git://github.com/phil-quinn/grass-framework.git",
+    "panzoom": "git://github.com/timmywil/jquery.panzoom.git"
   }
 }

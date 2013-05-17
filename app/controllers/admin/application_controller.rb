@@ -4,14 +4,13 @@ module Admin
 
     layout 'admin'
 
-    before_filter :authenticate_admin!
+    before_filter :authenticate_admin!, except: [:login, :logout]
 
     def authenticate_admin!
       if !user_signed_in?
-        redirect_to new_user_session_path
+        redirect_to admin_login_path
       elsif !current_user.try(:admin?)
-        error_403
-        # redirect_to root_path
+        redirect_to root_path
       end
     end
 

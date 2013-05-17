@@ -36,8 +36,9 @@
 
 - else
 
-  %p= link_to 'Twitter アカウントでログイン', '/auth/twitter'
-  %p= link_to 'Facebook アカウントでログイン', '/auth/facebook'
+  /
+    %p= link_to 'Twitter アカウントでログイン', '/auth/twitter'
+    %p= link_to 'Facebook アカウントでログイン', '/auth/facebook'
 
   = form_for :user, url: user_session_path do |f|
 
@@ -51,7 +52,12 @@
       = f.check_box :remember_me, class: 'checkbox'
       = f.label :remember_me, 'ログイン状態を記憶'
 
-    %div= f.submit 'ログイン', class: 'btn btn-primary'
+    %div
+      = f.submit 'ログイン', class: 'btn btn-primary'
+
+    %div
+      = button_tag 'Login with Twitter', class: 'login_btn', data: { url: '/auth/twitter' }
+      = button_tag 'Login with Facebook', class: 'login_btn', data: { url: '/auth/facebook' }
 
 
 - if @post.comments.any?
@@ -68,6 +74,18 @@
 
 
 :coffee
+  $(window).on 'accountLinked', ->
+    # TODO
+    alert 'ログインしたでー！'
+
+  $ ->
+    option = 'width=420,height=230,resizable=no,scrollbars=no,status=no'
+
+    $('.login_btn').on 'click', (e) ->
+      window.open $(@).data('url'), '', option
+      e.preventDefault()
+
+
   $ ->
     $('#comments a[data-method="delete"]')
     .on 'ajax:success', (e, data) ->

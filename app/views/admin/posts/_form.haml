@@ -56,7 +56,7 @@
             = f.label :user_id, '作成者'
           %td{ colspan: 2 }
             %div.select
-              = f.collection_select :user_id, User.all, :id, :name
+              = f.collection_select :user_id, User.admin, :id, :name
 
         %tr
           %td
@@ -150,7 +150,7 @@
         $('#post_form').submit()
 
   require ['jquery', 'common/notify', 'common/transit', 'domReady!'], ($, notify, transit) ->
-    st = notify().create()
+    st = notify()
 
     $form = $ 'form'
 

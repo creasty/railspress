@@ -1,153 +1,98 @@
-###
-
-- nc
-  - active     <= notification == active
-  - progress   <= notification == progress
-  - total      <= notification != hidden
-
-- notification
-  - state
-    - acitive: 1
-    - inactive: 0
-    - removed: -1
-
-  - (style)
-    - success
-    - fail
-    - progress
-
-- statubar
-  - mute    (display: 0)
-  - active  (display: 1)
-  - hover   (display: all)
-
----------------------------------
-
-[nc.active > 1]
-  statusbar -> active
-
-[]
-
-###
-
-###
 define ['jquery', 'common/timeago', 'domReady!'], ($) ->
   config =
     threshold: 15
     height: 25
     duration: 300
+    parent: '#globalheader'
+    statusbar: '<div id="statusbar"></div>'
+    showClass: 'show'
 
+  #  Statusbar UI
+  #-----------------------------------------------
+  Statusbar = new class
+    states:
+      active: 0
+      inactive: 0
+      none: 0
 
-  Statusbar =
-    mute: ->
-    active: ->
-    hover: ->
-
-    events: ->
-
-  NotifiCenter =
-    count:
-      acitive: 0
-      progress: 0
-      total: 0
-
-    update: ->
-
-
-  class Notification
-    state: 0
+      total: -> @inactive + @active
 
     constructor: ->
+      @hovering = false
+      @$statusbar = $(config.statusbar).appendTo $ config.parent
+      @events()
 
-    success: ->
-    fail: ->
-    progress: ->
+    events: ->
+      @$statusbar.hover (=> @hover()), (=> @unhover())
 
-###
+    append: ($el) -> $el.appendTo @$statusbar
+    prepend: ($el) -> $el.prependTo @$statusbar
 
-define ['jquery', 'common/timeago', 'domReady!'], ($) ->
-  S_HEIGHT = 15
-  N_HEIGHT = 25
-  ANIMATION = 300
-
-  count = 0
-  active_count = 0
-
-  $statusbar = $('<div id="statusbar"></div>').appendTo $ '#globalheader'
-
-  $statusbar.hover =>
-    return if count < 1
-
-    $statusbar
-    .addClass('has-notifications')
-    .stop()
-    .animate
-      opacity: 1
-      height: count * N_HEIGHT
-    ,
-      duration: ANIMATION
-
-  , =>
-    $statusbar
-    .animate
-      opacity: 0
-      height: S_HEIGHT
-    ,
-      duration: ANIMATION
-      complete: ->
-        $statusbar.removeClass('has-notifications')
-
-  class Statusbar
-
-    update: ->
-      $statusbar
-      .addClass('has-notifications')
-      .height('auto')
+    animate: (params, complete) ->
+      @$statusbar
       .stop()
-      .animate
+      .animate params,
+        duration: config.duration
+        complete: => complete?()
+
+    active: ->
+      @animate
         opacity: 1
-      ,
-        duration: ANIMATION
+        height: config.height
 
-    remove: ->
-      return unless @$notification
+      @$statusbar.addClass config.showClass
 
-      $n = @$notification
-      --count
-      @$notification = null
-
-      $n.animate
+    inactive: ->
+      @animate
         opacity: 0
-        left: '-100%'
-      ,
-        duration: ANIMATION
-        complete: =>
-          $n.remove()
-          $statusbar.removeClass 'has-notifications' if count == 0
+        height: config.threshold
+      , =>
+        @$statusbar.removeClass config.showClass
 
-    hide: ->
-      return unless @$notification
+    hover: ->
+      total = @states.total()
 
-      @$notification
-      .animate
-        height: 0
-      ,
-        duration: ANIMATION
-        complete: =>
-          @$notification.height(N_HEIGHT).appendTo $statusbar
-          --active_count
-          @update()
+      return @inactive() unless total > 0
 
-      setTimeout (=> @remove()), 12e4
+      @hovering = true
+      @animate
+        opacity: 1
+        height: total * config.height
+
+      @$statusbar.addClass config.showClass
+
+    unhover: ->
+      @hovering = false
+      @update()
+
+    update: (state, former) ->
+      --@states[former] if former
+      ++@states[state]
+
+      if @hovering
+        @hover()
+      else if @states.active > 0
+        @active()
+      else
+        @inactive()
+
+      state
+
+
+  #  Notify
+  #-----------------------------------------------
+  class Notify
+    constructor: ->
+      @create()
 
     create: ->
-      return if @$notification
-      ++count
+      return if @$notifi
 
-      @$notification = $ '<div></div>'
-      @$text = $('<span></span>').appendTo @$notification
-      @$close = $('<div class="close"></div>').appendTo @$notification
-      @$timestamp = $('<div class="timestamp"></div>').appendTo @$notification
+      @state = 'none'
+      @$notifi = $('<div></div>').css 'height', 0
+      @$text = $('<span></span>').appendTo @$notifi
+      @$close = $('<div class="close"></div>').appendTo @$notifi
+      @$timestamp = $('<div class="timestamp"></div>').appendTo @$notifi
 
       @events()
       @
@@ -155,35 +100,65 @@ define ['jquery', 'common/timeago', 'domReady!'], ($) ->
     events: ->
       @$close.on 'click', => @remove()
 
-    show: (state, message, icon) ->
+    animate: (params, complete, $t = @$notifi) ->
+      $t
+      .stop()
+      .animate params,
+        duration: config.duration
+        complete: => complete?()
+
+    update: (state) -> @state = Statusbar.update state, @state
+
+    active: (state, message, icon) ->
       @create()
 
       @$text.text message
       @$timestamp.timeago new Date()
 
-      @$notification
-      .css('height', 0)
-      .prependTo($statusbar)
-      .attr('class', state)
-      .addClass("icon-#{icon} icon-large")
-      .stop()
-      .animate height: N_HEIGHT
+      Statusbar.prepend @$notifi
+        .attr('class', state)
+        .addClass("icon-#{icon} icon-large")
 
-      ++active_count
-      @update()
+      @animate
+        height: config.height
+      , =>
+        @update 'active'
+
+    inactive: ->
+      return unless @$notifi
+
+      @update 'inactive'
+      @animate
+        height: 0
+      , =>
+        Statusbar.append @$notifi.height config.height
+
+      setTimeout (=> @remove()), 12e4
+
+    remove: ->
+      return unless @$notifi
+
+      $n = @$notifi
+      @$notifi = null
+
+      @animate
+        opacity: 0
+        left: '-100%'
+      , =>
+        @update 'none'
+        $n.remove()
+      , $n
 
     progress: (message, icon = 'clear') ->
-      @show 'progress', message, icon
+      @active 'progress', message, icon
 
     success: (message, icon = 'check') ->
-      @show 'success', message, icon
-      setTimeout (=> @hide()), 3e3
+      @active 'success', message, icon
+      setTimeout (=> @inactive()), 3e3
 
     fail: (message, icon = 'ban') ->
-      @show 'fail', message, icon
-      setTimeout (=> @hide()), 6e3
-
-  # Exports
-  -> new Statusbar()
+      @active 'fail', message, icon
+      setTimeout (=> @inactive()), 4e3
 
 
+  -> new Notify()

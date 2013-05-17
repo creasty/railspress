@@ -15,7 +15,7 @@
 
   %body{ id: controller_name, class: action_name }
 
-    - if user_signed_in?
+    - if is_admin?
       = render 'header'
 
       #menubar

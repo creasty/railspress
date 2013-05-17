@@ -8,7 +8,7 @@
 %>
 <script>
 	require(['jquery', 'common/notify'], function ($, notify) {
-		notify().create().<%= flash[:notice] ? 'success' : 'fail' %>('<%= j _flash[:message] %>', <%= j _flash[:icon] %>);
+		notify().<%= flash[:notice] ? 'success' : 'fail' %>('<%= j _flash[:message] %>', <%= j _flash[:icon] %>);
 	});
 </script>
 <%
