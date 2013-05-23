@@ -4,96 +4,83 @@ define [
 ], ($, defineComponent) ->
 
   defineComponent ->
+
     @defaultAttrs
       threshold: 15
       height: 25
       duration: 300
       parent: '#globalheader'
-      statusbar: '<div id="statusbar"></div>'
       showClass: 'show'
 
-    class Notification
-      constructor: ->
-        @create()
+    @create = ->
+      @state = null
 
-      create: ->
-        return if @$notifi
+      @$notifi = $('<div></div>').css 'height', 0
+      @$text = $('<span></span>').appendTo @$notifi
+      @$close = $('<div class="close"></div>').appendTo @$notifi
+      @$timestamp = $('<div class="timestamp"></div>').appendTo @$notifi
 
-        @state = null
-        @$notifi = $('<div></div>').css 'height', 0
-        @$text = $('<span></span>').appendTo @$notifi
-        @$close = $('<div class="close"></div>').appendTo @$notifi
-        @$timestamp = $('<div class="timestamp"></div>').appendTo @$notifi
+      @events()
 
-        @events()
-        @
+    @events = ->
+      @$close.on 'click', => @remove()
 
-      events: ->
-        @$close.on 'click', => @remove()
+    @animate = (params, complete) ->
+      @$notifi
+      .stop()
+      .animate params,
+        duration: config.duration
+        complete: -> complete?()
 
-      animate: (params, complete, $t = @$notifi) ->
-        $t
-        .stop()
-        .animate params,
-          duration: config.duration
-          complete: => complete?()
+    @update = (state) ->
+      $(document).trigger 'statusbarUpdate', [state, @state]
+      @state = state
 
-      update: (state) ->
-        $(document).trigger 'statusbarUpdate', [state, @state]
-        @state = state
+    @active = (state, message, icon) ->
+      @$text.text message
+      @$timestamp.timeago new Date()
 
-      active: (state, message, icon) ->
-        @create()
+      $(document).trigger 'statusbarPrependElement',
+        @$notifi
+        .attr('class', state)
+        .addClass("icon-#{icon} icon-large")
 
-        @$text.text message
-        @$timestamp.timeago new Date()
+      @animate
+        height: config.height
+      , =>
+        @update 'active'
 
-        $(document).trigger 'statusbarPrependElement',
-          @$notifi
-          .attr('class', state)
-          .addClass("icon-#{icon} icon-large")
+    @inactive = ->
+      @update 'inactive'
 
-        @animate
-          height: config.height
-        , =>
-          @update 'active'
+      @animate
+        height: 0
+      , =>
+        $(document).trigger 'statusbarAppend', @$notifi.height config.height
 
-      inactive: ->
-        return unless @$notifi
+      clearTimeout @timer if @timer?
+      @timer = setTimeout (=> @remove()), 12e4
 
-        @update 'inactive'
-        @animate
-          height: 0
-        , =>
-          $(document).trigger 'statusbarAppend', @$notifi.height config.height
+    @remove = ->
+      clearTimeout @timer if @timer?
 
-        setTimeout (=> @remove()), 12e4
+      @animate
+        opacity: 0
+        left: '-100%'
+      , =>
+        @update 'none'
 
-      remove: ->
-        return unless @$notifi
+    @progress = (message, icon = 'clear') ->
+      @active 'progress', message, icon
 
-        $n = @$notifi
-        @$notifi = null
+    @success = (message, icon = 'check') ->
+      @active 'success', message, icon
+      @timer = setTimeout (=> @inactive()), 3e3
 
-        @animate
-          opacity: 0
-          left: '-100%'
-        , =>
-          @update 'none'
-          $n.remove()
-        , $n
+    @fail = (message, icon = 'ban') ->
+      @active 'fail', message, icon
+      @timer = setTimeout (=> @inactive()), 4e3
 
-      progress: (message, icon = 'clear') ->
-        @active 'progress', message, icon
+    @after 'initialize', ->
 
-      success: (message, icon = 'check') ->
-        @active 'success', message, icon
-        setTimeout (=> @inactive()), 3e3
 
-      fail: (message, icon = 'ban') ->
-        @active 'fail', message, icon
-        setTimeout (=> @inactive()), 4e3
-
-    -> new Notification()
-
-  defineComponent notify

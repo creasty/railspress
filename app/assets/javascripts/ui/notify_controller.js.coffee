@@ -1,7 +1,11 @@
 
 define [
   'jquery'
+  'components/statusbar'
   'components/notify'
-], ($, Notify) ->
-  Notify.attachTo '#globalheader'
+], ($, Statusbar, Notify) ->
+  Notify.attachTo '#globalheader',
+    statusbarSelector
+
+  Statusbar.attachTo '#globalheader'
 

@@ -27,9 +27,24 @@
 
     %br.clear
 
-
   %br.clear
 
+  %h2 Components
+
+  .col-ab-a
+
+    %h3 Modal
+
+    = button_tag 'Open', class: 'btn', data: { toggle: 'modal', target: '#sample_modal' }
+
+  .col-ab-b
+
+    %h3 Alert
+
+    = button_tag 'Open', class: 'btn', data: { toggle: 'alert', target: '#sample_alert' }
+
+
+  %br.clear
 
 
   %h2 Form
@@ -42,20 +57,34 @@
 
 
 
-/
-  .overlay
-  .modal
-    .close-btn
-    %header
-      %h2 dsfa
-    .content
-      asdf
-    %footer
-
-/
-  .overlay.overlay-alert
-  .alert-box.danger
+= modal 'sample_modal' do
+  %header
     %h2 dsfa
-    %p sdfasdfa
-    %footer
-      %button.btn.btn-danger sdfa
+  .content
+    asdf
+  %footer
+
+
+= alert 'sample_alert', 'Alert!', 'danger' do
+  %p sdfasdfa
+  %footer
+    %button.btn.btn-danger{ data: { toggle: 'modal', target: '#sample_alert' } } sdfa
+
+
+
+:coffee
+  require ['jquery'], ($) ->
+    #  Overlay
+    #-----------------------------------------------
+    $(document).on 'click', '.overlay', (e) ->
+      $t = $(@).parent().removeClass 'show'
+
+    #  Modal / Alert
+    #-----------------------------------------------
+    $(document).on 'click',
+      '[data-toggle="modal"], [data-toggle="alert"]',
+      (e) ->
+        $t = $ @
+        $($t.data('target')).toggleClass 'show'
+        e.preventDefault()
+

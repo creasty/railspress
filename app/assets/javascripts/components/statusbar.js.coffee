@@ -12,6 +12,7 @@ define [
       threshold: 15
       height: 25
       duration: 300
+      statusbarId: 'statusbar'
       showClass: 'show'
 
     #  Private
@@ -26,31 +27,34 @@ define [
 
     #  Public
     #-----------------------------------------------
-    @prepend: (e, $el) -> @$node.prepend $el
-    @append: (e, $el) -> @$node.append $el
+    @render = ->
+      @$statusbar = $("<div id=\"#{@attr.statusbarId}\"/>").appendTo @$node
+
+    @prepend = (e, $el) -> @$statusbar.prepend $el
+    @append = (e, $el) -> @$statusbar.append $el
 
     @animate = (params, complete) ->
-      @$node
+      @$statusbar
       .stop()
       .animate params,
         duration: @attr.duration
         complete: => complete?()
 
-    @active: ->
+    @active = ->
       animate
         opacity: 1
         height: @attr.height
 
-      @$node.addClass @attr.showClass
+      @$statusbar.addClass @attr.showClass
 
-    @inactive: ->
+    @inactive = ->
       animate
         opacity: 0
         height: @attr.threshold
       , =>
-        @$node.removeClass @attr.showClass
+        @$statusbar.removeClass @attr.showClass
 
-    @showAll: ->
+    @showAll = ->
       total = states.total()
 
       return @inactive() unless total > 0
@@ -61,13 +65,13 @@ define [
         opacity: 1
         height: total * @attr.height
 
-      @$node.addClass @attr.showClass
+      @$statusbar.addClass @attr.showClass
 
-    @inactiveOrActive: ->
+    @inactiveOrActive = ->
       hovering = false
       @update()
 
-    @update: (e, state, former) ->
+    @update = (e, state, former) ->
       --states[former] if former
       ++states[state]
 
@@ -83,8 +87,12 @@ define [
     #  Initializer
     #-----------------------------------------------
     @after 'initialize', ->
-      @on 'mouseover', @showAll
-      @on 'mouseout', @inactiveOrActive
+      @render()
+
+      @attr.statusbarSelector = '#' + @attr.statusbarId
+
+      @on 'mouseover', statusbarSelector: @showAll
+      @on 'mouseout', statusbarSelector: @inactiveOrActive
 
       @on document, 'statusbarUpdate', @update
       @on document, 'statusbarPrependElement', @prepend

@@ -33,12 +33,14 @@ body {
 	top: 55px;
 	height: 60px;
 	width: 100%;
+	@include experimental(user-select, none);
 
 	h1 {
 		font-size: 20px;
 		padding: 20px 20px;
 		line-height: 1;
 		letter-spacing: 1px;
+		cursor: default;
 	}
 
 	[class*="icon-"] {
@@ -152,6 +154,7 @@ body {
 		overflow: visible;
 		margin-bottom: 20px;
 		letter-spacing: 1px;
+		cursor: default;
 
 		> a {
 			color: rgba($body-text-color, .5);

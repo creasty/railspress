@@ -1,7 +1,9 @@
 
-define ['flight/component'], (defineComponent) ->
+define [
+  'flight/component'
+  'mixin/popup'
+], (defineComponent, Popup) ->
 
   modal = ->
 
-
-  defineComponent modal
+  defineComponent modal, Popup

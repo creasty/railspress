@@ -1,9 +1,5 @@
 module ApplicationHelper
 
-  def awesome(title, &body)
-    render 'shared/awesome', title: title, body: capture(&body)
-  end
-
   #  Page Title
   #-----------------------------------------------
   def page_title(cn = nil, ac = nil, ns = nil)

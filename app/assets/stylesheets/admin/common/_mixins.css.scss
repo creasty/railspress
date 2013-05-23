@@ -1,6 +1,6 @@
 
-// Grid
-
+/*=== Grid
+==============================================================================================*/
 @function grid-span($n) {
 	@return $n * $grid-width + ($n - 1) * $grid-gutter;
 }
@@ -8,8 +8,9 @@
 	@return ceil((grid-span($n) / 100%) * $width);
 }
 
-// Font
 
+/*=== Font
+==============================================================================================*/
 @mixin font($color: null, $size: null, $line: null) {
 	@if $color {
 		color: $color;
@@ -22,8 +23,9 @@
 	}
 }
 
-// Spacing
 
+/*=== Spacing
+==============================================================================================*/
 @mixin spacing($margin: null, $padding: null) {
 	@if $margin {
 		margin: $margin;
@@ -33,8 +35,9 @@
 	}
 }
 
-// Size
 
+/*=== Size
+==============================================================================================*/
 @mixin size($width: null, $height: null) {
 	@if $width {
 		width: $width;
@@ -44,8 +47,9 @@
 	}
 }
 
-// Float
 
+/*=== Float
+==============================================================================================*/
 @mixin float($selector: ">*", $margin: null, $direction: left, $width: null) {
 	@extend .clear-after;
 
@@ -76,8 +80,9 @@
 	}
 }
 
-// Arrow
 
+/*=== Arrow
+==============================================================================================*/
 @mixin arrow($side, $size, $color, $left: 0, $top: 0) {
 	$side: opposite($side);
 
@@ -95,8 +100,9 @@
 	border-#{$side}-color: $color;
 }
 
-// Keyframes
 
+/*=== Keyframes
+==============================================================================================*/
 @mixin keyframes($name) {
 	@-webkit-keyframes #{$name} {
 		@content;
@@ -112,8 +118,9 @@
 	}
 }
 
-// Opposite
 
+/*=== Opposite
+==============================================================================================*/
 @function opposite($side) {
 	$oppo: right;
 
@@ -131,8 +138,8 @@
 }
 
 
-// Popup Box Shadow
-
+/*=== Popup Box Shadow
+==============================================================================================*/
 @mixin popup-box-shadow($add: none) {
 	//$sh: 0 1px 6px rgba(#000, .35), 0 0 0 1px rgba(#000, .2);
 	$sh: 0 0 0 1px rgba(#000, .2), 0 6px 0 -3px rgba(#000, .1);
@@ -142,6 +149,33 @@
 	}
 	@else {
 		@include box-shadow($sh, $add);
+	}
+}
+
+
+/*=== Scroll Bar
+==============================================================================================*/
+@mixin webkit-scrollbar {
+	::-webkit-scrollbar {
+		height: 8px;
+		width: 8px;
+	}
+
+	::-webkit-scrollbar-track {
+		background: rgba(#000, .1);
+		@include box-shadow(inset 0 0 6px rgba(#000, 0));
+		@include border-radius(4px);
+	}
+
+	::-webkit-scrollbar-thumb {
+		border: 1px solid rgba(#fff, .15);
+		background: rgba(#000, .3);
+		@include border-radius(4px);
+		@include box-shadow(inset 0 0 6px rgba(#000, 0));
+	}
+
+	::-webkit-scrollbar-thumb:window-inactive {
+		background: rgba(#000, .1);
 	}
 }
 

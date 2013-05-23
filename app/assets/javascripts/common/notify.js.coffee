@@ -86,9 +86,7 @@ define ['jquery', 'common/timeago', 'domReady!'], ($) ->
       @create()
 
     create: ->
-      return if @$notifi
-
-      @state = 'none'
+      @state = null
       @$notifi = $('<div></div>').css 'height', 0
       @$text = $('<span></span>').appendTo @$notifi
       @$close = $('<div class="close"></div>').appendTo @$notifi
@@ -98,20 +96,19 @@ define ['jquery', 'common/timeago', 'domReady!'], ($) ->
       @
 
     events: ->
+      @$notifi.on 'click', => @remove()
       @$close.on 'click', => @remove()
 
-    animate: (params, complete, $t = @$notifi) ->
-      $t
+    animate: (params, complete) ->
+      @$notifi
       .stop()
       .animate params,
         duration: config.duration
-        complete: => complete?()
+        complete: -> complete?()
 
     update: (state) -> @state = Statusbar.update state, @state
 
     active: (state, message, icon) ->
-      @create()
-
       @$text.text message
       @$timestamp.timeago new Date()
 
@@ -125,40 +122,33 @@ define ['jquery', 'common/timeago', 'domReady!'], ($) ->
         @update 'active'
 
     inactive: ->
-      return unless @$notifi
-
       @update 'inactive'
       @animate
         height: 0
       , =>
         Statusbar.append @$notifi.height config.height
 
-      setTimeout (=> @remove()), 12e4
+      clearTimeout @timer if @timer?
+      @timer = setTimeout (=> @remove()), 12e4
 
     remove: ->
-      return unless @$notifi
-
-      $n = @$notifi
-      @$notifi = null
-
+      clearTimeout @timer if @timer?
       @animate
         opacity: 0
         left: '-100%'
       , =>
         @update 'none'
-        $n.remove()
-      , $n
 
     progress: (message, icon = 'clear') ->
       @active 'progress', message, icon
 
     success: (message, icon = 'check') ->
       @active 'success', message, icon
-      setTimeout (=> @inactive()), 3e3
+      @timer = setTimeout (=> @inactive()), 3e3
 
     fail: (message, icon = 'ban') ->
       @active 'fail', message, icon
-      setTimeout (=> @inactive()), 4e3
+      @timer = setTimeout (=> @inactive()), 4e3
 
 
   -> new Notify()
