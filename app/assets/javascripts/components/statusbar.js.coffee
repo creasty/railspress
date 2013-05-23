@@ -1,7 +1,7 @@
 
 define [
   'jquery'
-  'flight/component'
+  'flight/lib/component'
 ], ($, defineComponent) ->
 
   defineComponent ->

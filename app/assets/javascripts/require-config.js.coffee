@@ -7,13 +7,11 @@
       'jquery.min'
     ]
     'ace': 'ace/lib/ace'
-    'flight': 'flight/lib'
     'hashchange': 'jquery-hashchange/jquery.ba-hashchange.min'
     'tags-input': 'tags-input/jquery.tagsinput.min'
     'jquery-autocomplete': 'jquery-autocomplete/src/jquery.autocomplete.min'
     'datepicker': 'datepicker/js/bootstrap-datepicker'
     'jcrop': 'jcrop/js/jquery.Jcrop.min'
-    'flight': 'flight/lib'
     'panzoom': 'panzoom/dist/jquery.panzoom.min'
 
   map:

@@ -1,9 +1,10 @@
 
 define [
-  'flight/component'
-  'mixin/popup'
+  'flight/lib/component'
+#  'mixin/popup'
 ], (defineComponent, Popup) ->
 
   modal = ->
 
-  defineComponent modal, Popup
+
+  defineComponent modal

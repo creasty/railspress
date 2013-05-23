@@ -1,6 +1,6 @@
 define [
   'jquery'
-  'filght/component'
+  'flight/lib/component'
 ], ($, defineComponent) ->
 
   defineComponent ->
@@ -19,11 +19,6 @@ define [
       @$text = $('<span></span>').appendTo @$notifi
       @$close = $('<div class="close"></div>').appendTo @$notifi
       @$timestamp = $('<div class="timestamp"></div>').appendTo @$notifi
-
-      @events()
-
-    @events = ->
-      @$close.on 'click', => @remove()
 
     @animate = (params, complete) ->
       @$notifi
@@ -70,17 +65,23 @@ define [
       , =>
         @update 'none'
 
-    @progress = (message, icon = 'clear') ->
+    @progress = (e, message, icon = 'clear') ->
       @active 'progress', message, icon
 
-    @success = (message, icon = 'check') ->
+    @success = (e, message, icon = 'check') ->
       @active 'success', message, icon
       @timer = setTimeout (=> @inactive()), 3e3
 
-    @fail = (message, icon = 'ban') ->
+    @fail = (e, message, icon = 'ban') ->
       @active 'fail', message, icon
       @timer = setTimeout (=> @inactive()), 4e3
 
     @after 'initialize', ->
+      @create()
+      @$close.on 'click', => @remove()
+
+      @on 'notifyProgress', @progress
+      @on 'notifySuccess', @success
+      @on 'notifyFail', @fail
 
 
