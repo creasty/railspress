@@ -1,12 +1,61 @@
 
-#main
-  %ul
-    - @media.each do |medium|
-      %li
-        = medium.title
-        %br
-        = medium.asset_file_name
-        %br
-        = link_to '[Edit]', edit_admin_medium_path(medium)
-        = link_to '[Delete]', admin_medium_path(medium), remote: true, method: :delete
+- content_for :menubar do
+  = link_to '', '#', class: 'icon-plus'
+
+
+#pocket_body
+  #main
+
+    = file_field_tag :medium_asset, class: 'hide'
+
+    %ul#media_list
+      - @media.each do |medium|
+        %li
+          /
+            = medium.title
+            %br
+            = link_to '[Edit]', edit_admin_medium_path(medium)
+            = link_to '[Delete]', admin_medium_path(medium), remote: true, method: :delete
+
+          - if medium.image?
+            .preview-image{ style: "background-image: url(#{medium.asset.url(:small)});" }
+              .title
+                = link_to '', admin_medium_path(medium), remote: true, method: :delete, class: 'icon-delete'
+                = medium.title
+
+          - else
+            .preview-image.file
+              .info
+                %i= medium.file_type
+                %span= medium.title
+
+    #dropbox{ 'data-post-url' => admin_media_path }
+      %p ファイルをドラッグ&ドロップしてアップロード
+
+
+#pocket_side
+  = form_for :medium, url: bulk_admin_media_path, html: { multipart: true, id: 'medium_form' } do |f|
+
+    %section
+      %h2
+        ファイル情報
+        = link_to '', '#', class: 'icon-crop'
+
+      %table.form.table-doubled
+        %tr
+          %td
+            %h3= f.label :title, 'タイトル'
+            = f.text_field :title, class: 'text block'
+        %tr
+          %td
+            %h3= f.label :description, '説明文'
+            = f.text_area :description, size: '30x5', class: 'textarea block'
+
+        %tr
+          %td
+            = f.submit nil, class: 'btn btn-primary block'
+
+    %section
+      %h2 ファイルを削除
+      = button_tag '削除する', class: 'btn btn-danger block'
 

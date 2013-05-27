@@ -73,6 +73,13 @@
 
 
 :coffee
+  ###
+  require ['components/modal', 'components/alert'], (Modal, Alert) ->
+    Modal.attachTo '[data-toggle="modal"]'
+    Alert.attachTo '[data-toggle="alert"]'
+  ###
+
+
   require ['jquery'], ($) ->
     #  Overlay
     #-----------------------------------------------

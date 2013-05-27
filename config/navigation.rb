@@ -3,9 +3,9 @@
 SimpleNavigation::Configuration.run do |navigation|
 
   navigation.id_generator = Proc.new { |key| nil }
+  navigation.auto_highlight = true
 
   navigation.items do |primary|
-    navigation.auto_highlight = true
     primary.dom_id = 'globalnav'
 
     #  Dashboard
@@ -107,18 +107,7 @@ SimpleNavigation::Configuration.run do |navigation|
       document_title('medium', 'index'),
       admin_media_path,
       highlights_on: :subpath,
-      link: { class: 'icon-image' } \
-    do |sub|
-      sub.item :index,
-        document_title('medium', 'index'),
-        admin_media_path,
-        link: { class: 'icon-table' }
-
-      sub.item :new,
-        document_title('medium', 'new'),
-        new_admin_medium_path,
-        link: { class: 'icon-plus' }
-    end
+      link: { class: 'icon-image' }
 
     #  Users
     #-----------------------------------------------

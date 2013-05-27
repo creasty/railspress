@@ -16,6 +16,8 @@ gem 'omniauth-twitter'
 gem 'omniauth-facebook'
 gem 'koala'
 gem 'twitter'
+gem 'rabl'
+gem 'oj'
 
 group :assets do
   gem 'sass-rails', '~> 3.2.3'

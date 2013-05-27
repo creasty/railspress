@@ -1,0 +1,136 @@
+
+#media.index {
+
+	#media_list {
+		@extend .clear-after;
+		list-style: none;
+		padding: 0;
+		width: 100%;
+		margin: 0;
+
+		> li {
+			display: block;
+			position: relative;
+			float: left;
+			width: 20%;
+			padding: 0;
+			margin-bottom: 20px;
+		}
+
+		.preview-image {
+			position: relative;
+			background-repeat: no-repeat;
+			background-position: 50% 50%;
+			@include background-size(cover);
+			@include box-sizing(border-box);
+			width: 100%;
+			margin: 0 auto;
+			@include experimental(user-select, none);
+			@include box-shadow(inset 0 0 0 1px rgba(#000, .25));
+			cursor: pointer;
+
+			&:before {
+				content: "";
+				display: block;
+				padding-top: 100%;
+			}
+
+			&.file {
+				border: 3px dashed $muted-color;
+				@include box-shadow(none);
+			}
+
+			> .info {
+				position: absolute;
+				top: 50%;
+				margin-top: -17px;
+				left: 0;
+				right: 0;
+				color: $muted-color;
+				text-align: center;
+
+				i {
+					display: block;
+					line-height: 1;
+					margin-bottom: 5px;
+					font-size: 13px;
+					font-weight: bold;
+					text-transform: uppercase;
+					letter-spacing: 2px;
+					text-align: center;
+				}
+
+				span {
+					display: block;
+					white-space: nowrap;
+					text-overflow: ellipsis;
+					overflow: hidden;
+				}
+			}
+
+			> .title {
+				position: absolute;
+				bottom: 0;
+				width: 100%;
+				padding: 50px 10px 5px;
+				@include background(linear-gradient(rgba(#000, 0), rgba(#000, .75)));
+				@include box-sizing(border-box);
+				white-space: nowrap;
+				text-overflow: ellipsis;
+				overflow: hidden;
+				color: #fff;
+				text-shadow: 0 1px 3px rgba(#000, .7);
+			}
+
+			.progressbar {
+				position: absolute;
+				top: 0;
+				width: 100%;
+				height: 5px;
+				background: #eee;
+
+				> div {
+					position: relative;
+					height: 5px;
+					background: $success-color;
+				}
+			}
+		}
+
+		> li.selected .preview-image {
+			@include box-shadow(
+				inset 0 0 0 1px rgba(#fff, .4),
+				0 0 0 3px $primary-color
+			);
+		}
+
+	}
+	#dropbox {
+		display: none;
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: $main-bg-color;
+		@include box-shadow(inset 0 0 0 10px rgba(#000, .25));
+
+		p {
+			position: relative;
+			top: 50%;
+			margin-top: -12px;
+			color: $muted-color;
+			font-size: 24px;
+			text-align: center;
+		}
+	}
+
+	#main.upload {
+		#media_list {
+			display: none;
+		}
+		#dropbox {
+			display: block;
+		}
+	}
+}

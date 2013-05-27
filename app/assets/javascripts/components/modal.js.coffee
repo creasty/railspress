@@ -5,6 +5,8 @@ define [
 ], (defineComponent, Popup) ->
 
   modal = ->
+    @defaultAttrs
+      duration: 300
 
 
   defineComponent modal

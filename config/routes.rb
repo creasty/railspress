@@ -35,7 +35,11 @@ RailsPress::Application.routes.draw do
     resources :comments
     resources :taxonomies
     resources :users
-    resources :media
+    resources :media do
+      collection do
+        put :bulk
+      end
+    end
   end
 
   # Blog

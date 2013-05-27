@@ -51,6 +51,10 @@ class Medium < ActiveRecord::Base
     %w[image/jpeg image/jpg image/png image/gif].include? asset.content_type
   end
 
+  def file_type
+    asset.content_type.split('/')[0].capitalize
+  end
+
   def to_jq_upload
     {
       name: read_attribute(:asset_file_name),

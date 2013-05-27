@@ -3,11 +3,17 @@ define ['jquery', 'domReady!'], ($) ->
   controller = $body.attr 'id'
   action = $body.attr('class').split(' ')[0]
 
-  view = (to) ->
+  _isView = (to) ->
     [ct, ac] = to.split '#'
     ct == controller && (!ac? || ac == action)
 
-  view.load = (name, req, onLoad, config) ->
-    onLoad() if view name
+  isView = (to...) ->
+    for t in to
+      return true if _isView t
 
-  view
+    false
+
+  isView.load = (name, req, onLoad, config) ->
+    onLoad() if _isView name
+
+  isView

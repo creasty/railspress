@@ -179,3 +179,36 @@
 	}
 }
 
+
+/*=== Animation
+==============================================================================================*/
+@mixin popup-animation(
+	$el: '&',
+	$selector: '.show &',
+	$duration: .3s,
+	$scale: .98,
+	$opacity: true
+) {
+	#{$el} {
+		visibility: hidden;
+		@if $opacity {
+			opacity: 0;
+		}
+		@if $scale != 1 {
+			@include transform(scale($scale));
+		}
+		@include transition(all #{$duration}, visibility 0s #{$duration});
+	}
+
+	#{$selector} {
+		visibility: visible;
+		@if $opacity {
+			opacity: 1;
+		}
+		@if $scale != 1 {
+			@include transform(scale(1));
+		}
+		@include transition-delay(0s);
+	}
+}
+

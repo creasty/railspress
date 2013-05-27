@@ -7,6 +7,8 @@
     "jquery-autocomplete": "git://github.com/dyve/jquery-autocomplete.git",
     "require-css": "git://github.com/guybedford/require-css.git",
     "grass": "git://github.com/phil-quinn/grass-framework.git",
-    "panzoom": "git://github.com/timmywil/jquery.panzoom.git"
+    "panzoom": "git://github.com/timmywil/jquery.panzoom.git",
+    "filedrop": "git://github.com/weixiyen/jquery-filedrop.git",
+    "jquery-masonry": "latest"
   }
 }

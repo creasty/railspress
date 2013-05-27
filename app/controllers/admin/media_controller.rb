@@ -3,7 +3,7 @@
 class Admin::MediaController < Admin::ApplicationController
 
   def index
-    @media = Medium.all
+    @media = Medium.order 'created_at DESC'
 
     respond_to do |format|
       format.html { render }
@@ -29,6 +29,10 @@ class Admin::MediaController < Admin::ApplicationController
       format.html { render }
       format.json { render json: @medium }
     end
+  end
+
+  def bulk
+
   end
 
   def create

@@ -128,7 +128,11 @@ $elem.panzoom("option", {
 
 Any option can be changed. See the defaults above for a list.
 
-### `reset()`
+### `reset( [animate] )`
+
+__Arguments__
+
+  1. `animate` _{Boolean}_: Whether to animate the reset (default: true)
 
 ```js
 $elem.panzoom("reset");
@@ -136,12 +140,42 @@ $elem.panzoom("reset");
 
 Reset the transform matrix to its original value. All panning and zooming is reset.
 
-### `zoom( [scale[, noSetRange]] )`
+### `resetZoom( [animate] )`
+
+__Arguments__
+
+  1. `animate` _{Boolean}_: Whether to animate the reset (default: true)
+
+```js
+$elem.panzoom("resetZoom");
+$elem.panzoom("resetZoom", false);
+```
+
+Reset the scale to its original value.
+
+### `resetPan( [animate] )`
+
+__Arguments__
+
+  1. `animate` _{Boolean}_: Whether to animate the reset (default: true)
+
+```js
+$elem.panzoom("resetPan");
+$elem.panzoom("resetPan", false);
+```
+
+Reset the pan to its original value.
+
+### `zoom( [scale[, opts]] )`
 
 __Arguments__
 
   1. `scale` _{Number|Boolean}_: The exact scale to which to zoom or a boolean indicating to transition a zoom out
-  2. `noSetRange` _{Boolean}_: Specify that the method should not set the $zoomRange value (as is the case when $zoomRange is calling zoom on change. No need to set that value. This parameter can be ignored.)
+  2. `opts` _{Object}_:
+    a. `opts.noSetRange` _{Boolean}_: Specify that the method should not set the $zoomRange value (as is the case when $zoomRange is calling zoom on change)
+    b. `opts.middle` _{Object}_: Specify a middle point towards which to gravitate when zooming
+    c. `opts.animate` _{Boolean}_: Whether to animate the zoom (defaults to true if scale is not a number, false otherwise)
+    d. `opts.silent` _{Boolean}_: Silence the zoom event
 
 ```js
 // Transition a zoom in based on the scale increment, min and max values
@@ -151,7 +185,8 @@ $elem.panzoom("zoom");
 $elem.panzoom("zoom", true);
 
 // Set the scale immediately without a transition
-$elem.panzoom("zoom", 1.2);
+// and silence the zoom event
+$elem.panzoom("zoom", 1.2, { silent: true });
 ```
 
 Transition a zoom in based on the scale increment, min and max values, and animation duration and easing. This method handles both zooming in and zooming out.<br>
@@ -181,9 +216,9 @@ These methods are _basically_ private, but could be useful under certain circums
 
 Returns a boolean indicating whether the element is currently panning.
 
-### `getMatrix()`
+### `getMatrix( [transform] )`
 
-Retrieve the current transform matrix of the panzoom element as an array of values. This is mostly for internal use.
+Retrieve an array of values for the specified transform or for the current transform on the panzoom element.
 
 ```js
 $elem.panzoom("getMatrix");
@@ -244,11 +279,37 @@ __Arguments Received__
   2. `panzoom` _(Panzoom)_: The panzoom instance
   3. `transform` _(String)_: The exact transform set during the change
 
-Fired whenever the matrix is changed by setMatrix (whether internally or externally).
+Fired whenever the matrix is changed by `setMatrix()` (whether internally or externally).
 
 _Try not to put to much in this event as it could slow down dragging._
 
 __Note__: This event can be silenced when setMatrix is called directly.
+
+### `"panzoomzoom"`
+
+__Arguments Received__
+
+  1. `e` _(jQuery.Event)_: jQuery event object
+  2. `panzoom` _(Panzoom)_: The panzoom instance
+  3. `scale` _(Number)_: The zoom scale set by the plugin
+  4. `opts` _(Object)_: Same options passed to zoom
+
+Fired whenever the zoom is changed by this plugin.
+
+__Note__: This event can be silenced when zoom is called directly.
+
+### `"panzoompan"`
+
+__Arguments Received__
+
+  1. `e` _(jQuery.Event)_: jQuery event object
+  2. `panzoom` _(Panzoom)_: The panzoom instance
+  3. `x` _(Number)_: Translate x value
+  4. `y` _(Number)_: Translate y value
+
+Fired whenever the pan is changed by this plugin.
+
+_Try not to put to much in this event as it could slow down dragging._
 
 ### `"panzoomend"`
 
@@ -259,6 +320,16 @@ __Arguments Received__
   3. `changed` _(Boolean)_: Whether the matrix changed during the panzoom event.
 
 This event is fired when the user finishes a move or finishes a pinch zoom gesture on mobile.
+
+### `"panzoomreset"`
+
+__Arguments Received__
+
+  1. `e` _(jQuery.Event)_: jQuery event object
+  2. `panzoom` _(Panzoom)_: The panzoom instance
+  3. `matrix` _(Array)_: The original matrix
+
+Fired whenever reset is called.
 
 ## Testing
 

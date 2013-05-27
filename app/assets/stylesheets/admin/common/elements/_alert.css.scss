@@ -3,7 +3,7 @@
 ==============================================================================================*/
 .alert {
 	@extend .popup-box;
-	@extend .animation-popup;
+	@include popup-animation;
 
 	position: absolute;
 	top: 50%;

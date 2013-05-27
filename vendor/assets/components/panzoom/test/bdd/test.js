@@ -225,6 +225,49 @@ describe("Panzoom", function() {
 		expect( called ).to.be.false;
 	});
 
+	it("should trigger the zoom event on zoom", function() {
+		var called = false;
+		function testZoom( e, panzoom, scale ) {
+			called = true;
+			expect( scale ).to.be.a("number");
+		}
+		$elem.on( "panzoomzoom", testZoom );
+		$elem.panzoom("zoom");
+		expect( called ).to.be.true;
+	});
+
+	it("should not trigger the zoom event when silenced", function() {
+		var called = false;
+		function testZoom() {
+			called = true;
+		}
+		$elem.on( "panzoomzoom", testZoom );
+		$elem.panzoom("zoom", { silent: true });
+		expect( called ).to.be.false;
+	});
+
+	it("should trigger the pan event on pan", function() {
+		var called = false;
+		function testPan( e, panzoom, x, y ) {
+			called = true;
+			expect( x ).to.be.a("number");
+			expect( y ).to.be.a("number");
+		}
+		$elem.on( "panzoompan", testPan );
+		fauxStart();
+		var e = jQuery.Event("mousemove", {
+			pageX: 1,
+			pageY: 1,
+			touches: [
+				{ pageX: 1, pageY: 1 }
+			]
+		});
+		var $doc = $(document).trigger( e );
+		e.type = "touchmove";
+		$doc.trigger( e ).trigger("mouseup").trigger("touchend");
+		expect( called ).to.be.true;
+	});
+
 	it("should allow string or arrays when setting the matrix", function() {
 		var panzoom = $elem.panzoom("instance");
 		var _matrix = panzoom.getMatrix();
@@ -232,6 +275,40 @@ describe("Panzoom", function() {
 		expect( panzoom._getTransform() ).to.equal("none");
 		panzoom.setMatrix( _matrix );
 		expect( panzoom.getMatrix() ).to.eql( _matrix );
+	});
+
+	it("should trigger the reset event on reset", function() {
+		var called = false;
+		function testReset( e, panzoom, matrix ) {
+			called = true;
+			expect( matrix ).to.be.an("array");
+		}
+		$elem.on("panzoomreset", testReset).panzoom("reset");
+		expect( called ).to.be.true;
+	});
+
+	it("should reset zoom only on resetZoom", function() {
+		var panzoom = $elem.panzoom("instance");
+		panzoom.setMatrix([ 2, 0, 0, 2, 1, 1 ], false);
+		$elem.panzoom("resetZoom", false);
+		var matrix = panzoom.getMatrix();
+		expect( matrix[0] ).to.equal( "1" );
+		expect( matrix[3] ).to.equal( "1" );
+		expect( matrix[4] ).to.equal( "1" );
+		expect( matrix[5] ).to.equal( "1" );
+		$elem.panzoom("reset");
+	});
+
+	it("should reset pan only on resetPan", function() {
+		var panzoom = $elem.panzoom("instance");
+		panzoom.setMatrix([ 2, 0, 0, 2, 1, 1 ], false);
+		$elem.panzoom("resetPan");
+		var matrix = panzoom.getMatrix();
+		expect( matrix[0] ).to.equal( "2" );
+		expect( matrix[3] ).to.equal( "2" );
+		expect( matrix[4] ).to.equal( "0" );
+		expect( matrix[5] ).to.equal( "0" );
+		$elem.panzoom("reset");
 	});
 
 	/**

@@ -11,7 +11,7 @@
 	background: rgba(#000, .4);
 	opacity: 0;
 	visibility: hidden;
-	@include transition(all .3s);
+	@include transition(.3s);
 
 	.show & {
 		opacity: 1;
@@ -25,7 +25,7 @@
 
 .modal {
 	@extend .popup-box;
-	@extend .animation-popup;
+	@include popup-animation;
 
 	position: fixed;
 	top: 60px;

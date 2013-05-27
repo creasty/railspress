@@ -1,24 +1,15 @@
-define ['jquery', 'hashchange'], ($) ->
+define ['jquery'], ($) ->
   supportsHistoryAPI = window.history.pushState?
   $win = $ window
 
-  changeUrl = (url, load = true) ->
-    if supportsHistoryAPI
-      history.pushState '', '', url
-      loadContent() if load
-    else
-      location.hash = '!' + url
+  changeUrl = (url) ->
+    history.pushState '', '', url
 
   loadContent = ->
-    if supportsHistoryAPI
-      $.ajax
-        url: window.location.href
-      .done (data) ->
-        $('#main').html data
-
-    else
-
-      location.hash.replace '#', ''
+    $.ajax
+      url: window.location.href
+    .done (data) ->
+      $('#main').html data
 
   handleClick = (e) ->
     link = e.currentTarget
@@ -44,19 +35,14 @@ define ['jquery', 'hashchange'], ($) ->
 
     e.preventDefault()
 
-
   events = ->
     $ ->
-      if supportsHistoryAPI
-        # because WebKit-based browser
-        # fires `popstate` as ready event fired.
-        # so delay listening
-        setTimeout ->
-          $win.on 'popstate', -> loadContent()
-        , 100
-      else
-        $win.on 'hashchange', -> loadContent()
-        $win.trigger 'hashchange' # manually fire the event
+      # because WebKit-based browser
+      # fires `popstate` as ready event fired.
+      # so delay listening
+      setTimeout ->
+        $win.on 'popstate', -> loadContent()
+      , 100
 
     $(document).on 'click', 'a', handleClick
 
