@@ -13,7 +13,7 @@
     'jcrop': 'jcrop/js/jquery.Jcrop.min'
     'panzoom': 'panzoom/dist/jquery.panzoom.min'
     'filedrop': 'filedrop/jquery.filedrop'
-    'masonry': 'masonry/jquery.masonry.min'
+    'masonry': 'jquery-masonry/jquery.masonry.min'
 
   map:
     '*':
