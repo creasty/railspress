@@ -35,9 +35,26 @@
 				padding-top: 100%;
 			}
 
+			a {
+				color: rgba(#fff, .7);
+				font-size: 20px;
+
+				&:hover {
+					color: #fff;
+				}
+			}
+
 			&.file {
 				border: 3px dashed $muted-color;
 				@include box-shadow(none);
+
+				a {
+					color: $anchor-color;
+
+					&:hover {
+						color: darken($anchor-color, 20%);
+					}
+				}
 			}
 
 			> .info {
@@ -72,8 +89,8 @@
 				position: absolute;
 				bottom: 0;
 				width: 100%;
-				padding: 50px 10px 5px;
-				@include background(linear-gradient(rgba(#000, 0), rgba(#000, .75)));
+				padding: 30px 10px 10px;
+				@include background(linear-gradient(rgba(#000, 0), rgba(#000, .8)));
 				@include box-sizing(border-box);
 				white-space: nowrap;
 				text-overflow: ellipsis;
@@ -90,9 +107,12 @@
 				background: #eee;
 
 				> div {
-					position: relative;
+					position: absolute;
+					left: 0;
+					width: 0;
 					height: 5px;
 					background: $success-color;
+					@include transition(.3s);
 				}
 			}
 		}
@@ -131,6 +151,29 @@
 		}
 		#dropbox {
 			display: block;
+		}
+	}
+
+	#pocket_side {
+		div[data-state=grid] {
+			position: absolute;
+			top: 50%;
+			margin-top: -150px;
+
+			p {
+				display: table-cell;
+				height: 300px;
+				vertical-align: middle;
+				text-align: center;
+				font-size: 16px;
+				color: rgba($body-text-color, .5);
+
+				i {
+					display: block;
+					font-size: 80px;
+					margin: -40px 0 -10px;
+				}
+			}
 		}
 	}
 }

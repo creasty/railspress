@@ -138,6 +138,24 @@
 }
 
 
+/*=== Vertical Center
+==============================================================================================*/
+@mixin vm-box {
+	&:before {
+		content: "";
+		height: 100%;
+		width: 1px;
+		margin-left: -1px;
+		@include inline-block;
+		vertical-align: middle;
+	}
+	> * {
+		@include inline-block;
+		vertical-align: middle;
+	}
+}
+
+
 /*=== Popup Box Shadow
 ==============================================================================================*/
 @mixin popup-box-shadow($add: none) {
@@ -149,33 +167,6 @@
 	}
 	@else {
 		@include box-shadow($sh, $add);
-	}
-}
-
-
-/*=== Scroll Bar
-==============================================================================================*/
-@mixin webkit-scrollbar {
-	::-webkit-scrollbar {
-		height: 8px;
-		width: 8px;
-	}
-
-	::-webkit-scrollbar-track {
-		background: rgba(#000, .1);
-		@include box-shadow(inset 0 0 6px rgba(#000, 0));
-		@include border-radius(4px);
-	}
-
-	::-webkit-scrollbar-thumb {
-		border: 1px solid rgba(#fff, .15);
-		background: rgba(#000, .3);
-		@include border-radius(4px);
-		@include box-shadow(inset 0 0 6px rgba(#000, 0));
-	}
-
-	::-webkit-scrollbar-thumb:window-inactive {
-		background: rgba(#000, .1);
 	}
 }
 
@@ -209,6 +200,33 @@
 			@include transform(scale(1));
 		}
 		@include transition-delay(0s);
+	}
+}
+
+
+/*=== Scroll Bar
+==============================================================================================*/
+@mixin webkit-scrollbar {
+	::-webkit-scrollbar {
+		height: 8px;
+		width: 8px;
+	}
+
+	::-webkit-scrollbar-track {
+		background: rgba(#000, .1);
+		@include box-shadow(inset 0 0 6px rgba(#000, 0));
+		@include border-radius(4px);
+	}
+
+	::-webkit-scrollbar-thumb {
+		border: 1px solid rgba(#fff, .15);
+		background: rgba(#000, .3);
+		@include border-radius(4px);
+		@include box-shadow(inset 0 0 6px rgba(#000, 0));
+	}
+
+	::-webkit-scrollbar-thumb:window-inactive {
+		background: rgba(#000, .1);
 	}
 }
 

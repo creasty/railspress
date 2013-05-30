@@ -5,15 +5,24 @@ define [
 ], ($, defineComponent) ->
 
   defineComponent ->
-    @change = (e, groupName, stateName) ->
-      $("[data-group]")
-      .filter ->
-        groupName == $(@).data 'group'
-      .removeClass 'show'
-      .filter ->
-        stateName == $(@).data 'state'
-      .addClass 'show'
+    $states = {}
+
+    @defaultAttrs
+      hideClass: 'hide'
+
+    @cacheStates = ->
+      @$node
+      .each ->
+        $t = $ @
+        $states[$t.data 'state'] = $t
+
+    @change = (e, state) ->
+      return unless state
+
+      @$node.addClass @attr.hideClass
+      $states[state]?.removeClass @attr.hideClass
 
     @after 'initialize', ->
-      $(document).on 'changeViewState', @change
+      @cacheStates()
+      @on 'changeViewstate', @change
 

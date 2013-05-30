@@ -137,6 +137,7 @@ define ['jquery', 'common/timeago', 'domReady!'], ($) ->
         opacity: 0
         left: '-100%'
       , =>
+        @$notifi.height 0
         @update 'none'
 
     progress: (message, icon = 'clear') ->

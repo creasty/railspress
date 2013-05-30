@@ -5,18 +5,12 @@
 
 = form_for [:admin, @medium], html: { multipart: true, id: 'medium_form' } do |f|
   #pocket_body
-    #main
+    #main.no-padding
       - if @medium.asset.present?
 
         - if @medium.image?
           #zoom
             = image_tag @medium.asset.url, id: 'cropbox'
-
-          #zoom_controller
-            = button_tag 'Zoom In', class: 'zoom-in'
-            = button_tag 'Zoom Out', class: 'zoom-out'
-            %input{ type: 'range', class: 'zoom-range' }
-            = button_tag 'Reset', class: 'reset'
 
           - %w[crop_x crop_y crop_w crop_h].each do |a|
             = f.hidden_field a, id: a, class: 'text'
@@ -53,6 +47,15 @@
             %td
               = f.button 'アップロードし直す', class: 'btn btn-success block'
 
+    /
+      %section
+      #zoom_controller
+        %input{ type: 'range', class: 'zoom-range' }
+        %br
+        = button_tag 'Zoom In', class: 'btn icon-zoomin zoom-in'
+        = button_tag 'Zoom Out', class: 'btn icon-zoomout zoom-out'
+        = button_tag 'Reset', class: 'btn btn-search reset'
+
     - if @medium.asset.present?
       %section
         %h2 ファイルを削除
@@ -88,11 +91,12 @@
       setSelect: getSelection()
       # aspectRatio: 1
 
+    ###
     $zoom_controller = $ '#zoom_contorller'
-
     $('#zoom').panzoom
       $zoomIn: $ '.zoom-in'
       $zoomOut: $ '.zoom-out'
       $zoomRange: $ '.zoom-range'
       $reset: $ '.reset'
+    ###
 
