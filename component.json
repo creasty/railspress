@@ -1,7 +1,6 @@
 {
   "dependencies": {
-    "flight": "~1.0.0",
-    "jquery-hashchange": "git://github.com/cowboy/jquery-hashchange.git",
+    "flight": "latest",
     "tags-input": "git://github.com/xoxco/jQuery-Tags-Input.git",
     "jcrop": "git://github.com/tapmodo/Jcrop.git",
     "jquery-autocomplete": "git://github.com/dyve/jquery-autocomplete.git",

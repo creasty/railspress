@@ -240,6 +240,14 @@ a.btn {
 	line-height: 35px;
 }
 
+#pocket_side .btn {
+	background: $header-bg-color;
+
+	&:hover {
+		background: darken($header-bg-color, 5%);
+	}
+}
+
 $btn-color-list:
 	primary $primary-color,
 	danger  $danger-color,
@@ -247,10 +255,10 @@ $btn-color-list:
 
 @each $btn-color in $btn-color-list {
 	.btn-#{nth($btn-color, 1)} {
-		background: nth($btn-color, 2);
+		background: nth($btn-color, 2) !important;
 
 		&:hover {
-			background: darken(nth($btn-color, 2), 5%);
+			background: darken(nth($btn-color, 2), 5%) !important;
 		}
 	}
 }

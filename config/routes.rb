@@ -1,17 +1,7 @@
 RailsPress::Application.routes.draw do
 
-  # Device
-  devise_for :users,
-    path: '',
-    path_names: {
-      sign_in: 'login',
-      sign_out: 'logout'
-    }
-
-  # OmniAuth
-  get '/auth/:provider/callback' => 'oauth#callback'
-
-  # Admin
+  #  Admin
+  #-----------------------------------------------
   namespace :admin do
     root to: 'admin#index'
 
@@ -42,18 +32,34 @@ RailsPress::Application.routes.draw do
     end
   end
 
-  # Blog
-  resources :posts, only: %w[index show] do
-    resources :comments
-  end
+  #  Device for Commenter
+  #-----------------------------------------------
+  devise_for :users,
+    path: '',
+    path_names: {
+      sign_in: 'login',
+      sign_out: 'logout'
+    }
 
-  # Commenter
+  #  OmniAuth
+  #-----------------------------------------------
+  get '/auth/:provider/callback' => 'oauth#callback'
+
+  #  Commenter
+  #-----------------------------------------------
   get '/commenter' => 'users#edit'
   put '/commenter' => 'users#update'
   delete '/commenter' => 'users#destroy'
 
-  # Page
+  #  Blog
+  #-----------------------------------------------
+  resources :posts, only: %w[index show] do
+    resources :comments
+  end
+
+  #  Pages / Static Pages
+  #-----------------------------------------------
   root to: 'pages#index'
-  resources :pages, path: '/', only: :show
+  get '/:id(/:id2)(/:id3)' => 'pages#show', as: :page
 
 end

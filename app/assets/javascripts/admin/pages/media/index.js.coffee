@@ -6,6 +6,7 @@ require ['utils/isView'], (isView) ->
     'jquery'
     'common/notify'
     'components/viewstate'
+    'ujs'
     'filedrop'
     'masonry'
   ], ($, Notify, Viewstate) ->
@@ -19,13 +20,34 @@ require ['utils/isView'], (isView) ->
     $li = $mediaList.find 'li'
 
     $view = $ '#pocket_side > form > div.view'
+    $counter = $view.find 'span.counter'
     Viewstate.attachTo $view
 
-    $(document).on 'click', '#media_list > li', ->
-      $view.trigger 'changeViewstate', 'selecting'
+    count = 0
+    $first = null
 
-    $(document).on 'click', '#pocket_side > form > div.view', ->
-      $view.trigger 'changeViewstate', 'grid'
+    $(document).on 'click', '#media_list > li', ->
+      $t = $ @
+      flag = !$t.data 'selected'
+      $t.data 'selected', flag
+
+      if flag
+        $t.addClass 'selected'
+        ++count
+      else
+        $t.removeClass 'selected'
+        --count
+
+      if count == 1
+        $mediaList.removeClass 'bulk'
+        $view.trigger 'changeViewstate', 'selecting'
+      else if count > 1
+        $mediaList.addClass 'bulk'
+        $counter.html count
+        $view.trigger 'changeViewstate', 'bulk'
+      else
+        $mediaList.removeClass 'bulk'
+        $view.trigger 'changeViewstate', 'grid'
 
     $mediaList.masonry
       itemSelector: 'li'

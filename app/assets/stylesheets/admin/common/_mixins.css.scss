@@ -174,8 +174,8 @@
 /*=== Animation
 ==============================================================================================*/
 @mixin popup-animation(
-	$el: '&',
-	$selector: '.show &',
+	$el: "&",
+	$selector: ".show &",
 	$duration: .3s,
 	$scale: .98,
 	$opacity: true

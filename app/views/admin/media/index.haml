@@ -7,7 +7,7 @@
   #main
     %ul#media_list
       - @media.each do |medium|
-        %li{ id: medium.id, data: { id: medium.id, title: medium.title, description: medium.description } }
+        %li[medium]{ data: { id: medium.id, title: medium.title, description: medium.description } }
           - if medium.image?
             .preview-image{ style: "background-image: url(#{medium.asset.url(:small)});" }
               .title
@@ -36,12 +36,12 @@
 
     %div.view{ 'data-state' => 'grid' }
       %p
-        %i.icon-image
+        %i.icon-compass
         サムネイルを選択して編集するか
         %br
         ファイルをドラッグ&ドロップして
         %br
-        アップロードして下さい。
+        アップロードできます
 
     %div.view.hide{ 'data-state' => 'selecting' }
       %section
@@ -69,3 +69,17 @@
 
 
     %div.view.hide{ 'data-state' => 'bulk' }
+      %section
+        %h2
+          %span.counter 0
+          項目を選択中
+
+        = button_tag '選択を解除する', class: 'btn block'
+
+      %section
+        %h2 一括編集
+
+      %section
+        %h2 ファイルを削除
+        = button_tag '削除する', class: 'btn btn-danger block'
+

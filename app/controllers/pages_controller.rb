@@ -5,8 +5,18 @@ class PagesController < ApplicationController
   end
 
   def show
-    @page_title = { depth: nil }
     @page = Page.find params[:id]
+  rescue ActiveRecord::RecordNotFound
+    path = "#{params[:id]}/#{params[:id2]}/#{params[:id3]}"
+    path.gsub!(/\/+/, '/')
+    path.gsub!(/\.+/, '')
+    path.chomp!('/')
+
+    begin
+      render "statics/#{path}"
+    rescue
+      error_404
+    end
   end
 
 end
