@@ -11,18 +11,20 @@
           - if medium.image?
             .preview-image{ style: "background-image: url(#{medium.asset.url(:small)});" }
               .title
-                = link_to '', admin_medium_path(medium), remote: true, method: :delete, class: 'icon-delete'
-                = link_to '', edit_admin_medium_path(medium), class: 'icon-edit'
-                %br
+                /
+                  = link_to '', admin_medium_path(medium), remote: true, method: :delete, class: 'icon-delete'
+                  = link_to '', edit_admin_medium_path(medium), class: 'icon-edit'
+                  %br
                 = medium.title
 
           - else
             .preview-image.file
+              .title= medium.title
               .info
-                %i= medium.file_type
-                %span= medium.title
-                = link_to '', admin_medium_path(medium), remote: true, method: :delete, class: 'icon-delete'
-                = link_to '', edit_admin_medium_path(medium), class: 'icon-edit'
+                %span.icon-file= medium.file_type
+                /
+                  = link_to '', admin_medium_path(medium), remote: true, method: :delete, class: 'icon-delete'
+                  = link_to '', edit_admin_medium_path(medium), class: 'icon-edit'
 
     #dropbox{ 'data-post-url' => admin_media_path }
       %p ファイルをドラッグ&ドロップしてアップロード

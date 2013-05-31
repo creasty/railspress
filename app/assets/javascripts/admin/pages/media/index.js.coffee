@@ -6,49 +6,47 @@ require ['utils/isView'], (isView) ->
     'jquery'
     'common/notify'
     'components/viewstate'
+    'components/select'
+    'utils/template'
+    'text!templates/media/index/item.html'
     'ujs'
     'filedrop'
     'masonry'
-  ], ($, Notify, Viewstate) ->
+  ], ($, Notify, Viewstate, Select, template, item_html) ->
+
+    #  Token
+    #-----------------------------------------------
     token = $('meta[name="csrf-token"]').attr 'content'
 
-    $main = $ '#main'
-    $dropbox = $ '#dropbox'
-    $message = $ '.message', $main
-    $fileField = $ '#medium_asset'
+    #  Elements
+    #-----------------------------------------------
     $mediaList = $ '#media_list'
     $li = $mediaList.find 'li'
 
     $view = $ '#pocket_side > form > div.view'
     $counter = $view.find 'span.counter'
+
+    #  Components
+    #-----------------------------------------------
     Viewstate.attachTo $view
+    Select.attachTo $mediaList, itemSelector: '> li'
 
-    count = 0
-    $first = null
-
-    $(document).on 'click', '#media_list > li', ->
-      $t = $ @
-      flag = !$t.data 'selected'
-      $t.data 'selected', flag
-
-      if flag
-        $t.addClass 'selected'
-        ++count
-      else
-        $t.removeClass 'selected'
-        --count
-
-      if count == 1
-        $mediaList.removeClass 'bulk'
-        $view.trigger 'changeViewstate', 'selecting'
-      else if count > 1
+    #  Media List
+    #-----------------------------------------------
+    $mediaList.on 'select', (e, count) ->
+      if count > 1
         $mediaList.addClass 'bulk'
         $counter.html count
         $view.trigger 'changeViewstate', 'bulk'
+      else if count == 1
+        $mediaList.removeClass 'bulk'
+        $view.trigger 'changeViewstate', 'selecting'
       else
         $mediaList.removeClass 'bulk'
         $view.trigger 'changeViewstate', 'grid'
 
+    #  Grid
+    #-----------------------------------------------
     $mediaList.masonry
       itemSelector: 'li'
       gutterWidth: 20
@@ -66,11 +64,19 @@ require ['utils/isView'], (isView) ->
         $li.width width
         width
 
+    #  File Uploader
+    #-----------------------------------------------
+    notifi_uploader = Notify()
+
+    $main = $ '#main'
+    $dropbox = $ '#dropbox'
+    $fileField = $ '#medium_asset'
+
+    ItemTmpl = template item_html
+
     $('#menubar > h1 > a.icon-plus').on 'click', (e) ->
       $fileField.trigger 'click'
       e.preventDefault()
-
-    notifi_uploader = Notify()
 
     $dropbox.filedrop
       fallback_id: 'medium_asset'
@@ -153,17 +159,15 @@ require ['utils/isView'], (isView) ->
 
       reader.readAsDataURL file
 
-      $message.hide()
       $preview.width $mediaList.data 'column-width'
       $mediaList.prepend($preview).masonry 'reload'
 
       $.data file, $preview
 
-    showMessage = (msg) ->
-      $message.html msg
-
-
+    #  Delete
+    #-----------------------------------------------
     notifi_delete = Notify()
+
     $(document)
     .on 'click', '#media_list a[data-method="delete"]', ->
       notifi_delete.progress 'ファイルを削除しています'
