@@ -11,13 +11,13 @@ module ApplicationHelper
   end
 
   def page_title_hash(
-    cn = controller_name,
-    ac = action_name,
-    ns = get_namespace
+    cn = nil,
+    ac = nil,
+    ns = nil
   )
     cn ||= controller_name
     ac ||= action_name
-    ns ||= get_namespace
+    ns ||= controller_namespace
 
     serialized = [ns, cn, ac].join '.'
 
@@ -123,7 +123,7 @@ module ApplicationHelper
   #-----------------------------------------------
   def view_require(action = true)
     module_name = [
-      get_namespace,
+      controller_namespace,
       'pages',
       controller_name,
       action && action_name

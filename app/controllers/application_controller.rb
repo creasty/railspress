@@ -38,9 +38,9 @@ class ApplicationController < ActionController::Base
 
   #  Utils
   #-----------------------------------------------
-  helper_method :get_namespace
+  helper_method :controller_namespace
 
-  def get_namespace
+  def controller_namespace
     path = self.class.name.split '::'
     name = controller_name.capitalize
 
