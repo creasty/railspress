@@ -119,4 +119,25 @@ module ApplicationHelper
     "http://gravatar.com/avatar/#{gravatar_id}.png?s=#{size}"
   end
 
+  #  Scripts Loader
+  #-----------------------------------------------
+  def view_require(action = true)
+    module_name = [
+      get_namespace,
+      'pages',
+      controller_name,
+      action && action_name
+    ].compact * '/'
+
+    file = "#{Rails.root}/app/assets/javascripts/#{module_name}.*"
+
+    module_name if Dir.glob(file).any?
+  end
+
+  def view_require_tag
+    script = view_require || view_require(false)
+
+    raw "<script>require(['#{script}']);</script>" if script
+  end
+
 end

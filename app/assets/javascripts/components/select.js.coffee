@@ -35,4 +35,3 @@ define [
 
     @after 'initialize', ->
       @$node.find(@attr.itemSelector).on @attr.eventType, @onAction.bind(@)
-

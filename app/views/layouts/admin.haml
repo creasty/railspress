@@ -7,9 +7,9 @@
 
     = stylesheet_link_tag 'http://fonts.googleapis.com/css?family=Open+Sans:400,700'
     = stylesheet_link_tag 'admin/application', media: 'all'
-
     = javascript_include_tag 'require-config'
     = javascript_include_tag 'require', data: { main: 'admin/application' }
+    = view_require_tag
 
     = render 'admin/application/flash', flash: flash
 
