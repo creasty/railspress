@@ -121,7 +121,7 @@ module ApplicationHelper
 
   #  Scripts Loader
   #-----------------------------------------------
-  def view_require(action = true)
+  def view_asset(action = true, dir = 'javascripts', ext = '.js*')
     module_name = [
       controller_namespace,
       'views',
@@ -129,13 +129,13 @@ module ApplicationHelper
       action && action_name
     ].compact * '/'
 
-    file = "#{Rails.root}/app/assets/javascripts/#{module_name}.*"
+    file = "#{Rails.root}/app/assets/#{dir}/#{module_name}#{ext}"
 
     module_name if Dir.glob(file).any?
   end
 
-  def view_require_tag
-    script = view_require || view_require(false)
+  def view_script_tag
+    script = view_asset || view_asset(false)
 
     raw "<script>require(['#{script}']);</script>" if script
   end
