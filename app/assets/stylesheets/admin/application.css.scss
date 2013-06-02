@@ -3,6 +3,7 @@
 @import "compass/css3/opacity";
 @import "compass/css3/transform";
 @import "compass/css3/pie";
+// @import "grass/scss/partials/grid";
 
 @import "common/reset";
 
@@ -10,13 +11,12 @@
 @import "common/mixins";
 @import "common/helpers";
 
-// @import "grass/scss/partials/grid";
 @import "common/grid";
 @import "common/icons";
-
 @import "common/layout";
 @import "common/global";
 @import "common/typography";
-@import "common/elements/*";
+
+@import "components/*";
 
 @import "views/**/*";
