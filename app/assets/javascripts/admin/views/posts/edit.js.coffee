@@ -1,2 +1,2 @@
 
-require ['./_form']
+define ['./_form']

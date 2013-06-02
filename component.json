@@ -1,13 +1,17 @@
 {
   "dependencies": {
+    "backbone": "latest",
     "flight": "latest",
-    "tags-input": "git://github.com/xoxco/jQuery-Tags-Input.git",
-    "jcrop": "git://github.com/tapmodo/Jcrop.git",
-    "jquery-autocomplete": "git://github.com/dyve/jquery-autocomplete.git",
-    "require-css": "git://github.com/guybedford/require-css.git",
     "grass": "git://github.com/phil-quinn/grass-framework.git",
-    "panzoom": "git://github.com/timmywil/jquery.panzoom.git",
-    "filedrop": "git://github.com/weixiyen/jquery-filedrop.git",
-    "jquery-masonry": "latest"
+    "jcrop": "latest",
+    "jquery-autocomplete": "git://github.com/dyve/jquery-autocomplete.git",
+    "jquery-filedrop": "latest",
+    "jquery-masonry": "latest",
+    "jquery.panzoom": "latest",
+    "require-css": "latest",
+    "requirejs-domready": "latest",
+    "requirejs-text": "latest",
+    "tags-input": "git://github.com/xoxco/jQuery-Tags-Input.git",
+    "underscore": "latest"
   }
 }

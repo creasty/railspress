@@ -1,0 +1,8 @@
+{
+  "name": "jquery.panzoom",
+  "version": "0.7.5",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/timmywil/jquery.panzoom.git"
+  }
+}

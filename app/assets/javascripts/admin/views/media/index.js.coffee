@@ -6,7 +6,6 @@ require [
   'components/select'
   'utils/template'
   'text!views/media/item.tpl'
-  'ujs'
   'filedrop'
   'masonry'
 ], ($, Notify, Viewstate, Select, template, item_html) ->

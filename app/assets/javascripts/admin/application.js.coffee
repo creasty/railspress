@@ -1,5 +1,5 @@
 
-require ['ujs']
+require ['jquery_ujs']
 
 #  Remove Chrome's ugly autofill highlights
 #-----------------------------------------------

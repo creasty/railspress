@@ -1,13 +1,18 @@
 require ['jquery', 'datepicker'], ($) ->
-  $('#post_date_str').datepicker(format: 'yyyy.mm.dd')
+  $('#post_date_str').datepicker format: 'yyyy.mm.dd'
+
 
 require ['jquery', 'tags-input'], ($) ->
   $('#post_tags').tagsInput
     autocomplete_url: '/admin/terms/search.txt'
-    autocomplete: {selectFirst:true,width:'100px',autoFill:true}
+    autocomplete:
+      selectFirst: true
+      width: '100px'
+      autoFill: true
     width: 260
     height: 'auto'
     defaultText: 'タグを追加'
+
 
 require [
   'jquery'
@@ -17,8 +22,7 @@ require [
   'domReady!'
 ], ($, ace) ->
   $textarea = $('#post_content').hide()
-  $('<div id="post_content_ace"></div>')
-    .insertBefore $textarea
+  $('<div id="post_content_ace"></div>').insertBefore $textarea
 
   editor = ace.edit 'post_content_ace'
   editor.setTheme 'ace/theme/solarized_light'
@@ -39,6 +43,7 @@ require [
     readOnly: false
     exec: (editor) ->
       $('#post_form').submit()
+
 
 require ['jquery', 'common/notify', 'common/transit', 'domReady!'], ($, notify, transit) ->
   st = notify()

@@ -2,39 +2,42 @@
   baseUrl: '/assets'
 
   paths:
+    # Admin
     'common': 'admin/common'
     'components': 'admin/components'
-    'views': 'admin/views'
-    'ui': 'admin/ui'
     'mixin': 'admin/mixin'
+    'ui': 'admin/ui'
     'utils': 'admin/utils'
+    'views': 'admin/views'
 
     'jquery': [
       'http://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min'
       'jquery.min'
     ]
+
     'ace': 'ace/lib/ace'
-    'tags-input': 'tags-input/jquery.tagsinput.min'
-    'jquery-autocomplete': 'jquery-autocomplete/src/jquery.autocomplete.min'
     'datepicker': 'datepicker/js/bootstrap-datepicker'
+    'filedrop': 'jquery-filedrop/jquery.filedrop'
     'jcrop': 'jcrop/js/jquery.Jcrop.min'
-    'panzoom': 'panzoom/dist/jquery.panzoom.min'
-    'filedrop': 'filedrop/jquery.filedrop'
+    'jquery-autocomplete': 'jquery-autocomplete/src/jquery.autocomplete.min'
     'masonry': 'jquery-masonry/jquery.masonry.min'
+    'panzoom': 'jquery.panzoom/dist/jquery.panzoom.min'
+    'tags-input': 'tags-input/jquery.tagsinput.min'
 
   map:
     '*':
-      'ujs': 'jquery_ujs'
       'css': 'require-css/css'
+      'domReady': 'requirejs-domready/domReady'
+      'text': 'requirejs-text/text'
 
   shim:
-    'jquery_ujs': ['jquery']
-    'hashchange': ['jquery']
-    'tags-input': ['jquery', 'jquery-autocomplete']
-    'jquery-autocomplete': ['jquery']
     'datepicker': ['jquery']
-    'jcrop': ['jquery', 'css!jcrop/../../css/jquery.Jcrop.min']
-    'panzoom': ['jquery']
     'filedrop': ['jquery']
+    'hashchange': ['jquery']
+    'jcrop': ['jquery', 'css!jcrop/../../css/jquery.Jcrop.min']
+    'jquery-autocomplete': ['jquery']
+    'jquery_ujs': ['jquery']
     'masonry': ['jquery']
+    'panzoom': ['jquery']
+    'tags-input': ['jquery', 'jquery-autocomplete']
 
