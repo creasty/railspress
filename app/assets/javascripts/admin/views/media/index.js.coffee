@@ -5,7 +5,7 @@ require [
   'components/viewstate'
   'components/select'
   'utils/template'
-  'text!templates/media/index/item.html'
+  'text!views/media/item.tpl'
   'ujs'
   'filedrop'
   'masonry'
@@ -133,20 +133,17 @@ require [
       notifi_uploader.success 'アップロード完了'
 
 
-  template =
-    """
-      <li>
-        <div class="preview-image">
-          <div class="progressbar">
-            <div></div>
-          </div>
-        </div>
-      </li>
-    """
-
-
   createImage = (file) ->
-    $preview = $ template
+    $preview = $ """
+        <li>
+          <div class="preview-image">
+            <div class="progressbar">
+              <div></div>
+            </div>
+          </div>
+        </li>
+      """
+
     $image = $ '.preview-image', $preview
 
     reader = new FileReader()

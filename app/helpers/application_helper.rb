@@ -124,7 +124,7 @@ module ApplicationHelper
   def view_require(action = true)
     module_name = [
       controller_namespace,
-      'pages',
+      'views',
       controller_name,
       action && action_name
     ].compact * '/'

@@ -2,6 +2,13 @@
   baseUrl: '/assets'
 
   paths:
+    'common': 'admin/common'
+    'components': 'admin/components'
+    'views': 'admin/views'
+    'ui': 'admin/ui'
+    'mixin': 'admin/mixin'
+    'utils': 'admin/utils'
+
     'jquery': [
       'http://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min'
       'jquery.min'

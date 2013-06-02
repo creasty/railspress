@@ -112,11 +112,12 @@ code {
 	background-color: #f7f7f7;
 	border: 1px solid rgba(0, 0, 0, .15);
 	letter-spacing: 0 !important;
+	white-space: pre;
 }
 pre {
 	display: block;
 	margin: 0 0 10px;
-	@include force-wrap;
+	// @include force-wrap;
 	@include border-radius(4px);
 
 	& + & {
@@ -126,14 +127,13 @@ pre {
 code {
 	padding: 2px 4px;
 	@include border-radius(3px);
-	white-space: normal;
 
 	pre & {
 		display: block;
 		padding: 6px;
 		background-color: transparent;
 		border: 0;
-		@include force-wrap;
+		// @include force-wrap;
 	}
 }
 
@@ -166,7 +166,7 @@ del {
 	color: #c00;
 }
 
-.txt-big {
+.txt-large {
 	font-size: 1.35em;
 }
 .txt-small {
