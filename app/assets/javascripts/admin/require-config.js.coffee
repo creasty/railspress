@@ -16,6 +16,7 @@
     ]
 
     'ace': 'ace/lib/ace'
+    'backbone': 'backbone/backbone-min'
     'datepicker': 'datepicker/js/bootstrap-datepicker'
     'filedrop': 'jquery-filedrop/jquery.filedrop'
     'jcrop': 'jcrop/js/jquery.Jcrop.min'
@@ -23,6 +24,7 @@
     'masonry': 'jquery-masonry/jquery.masonry.min'
     'panzoom': 'jquery.panzoom/dist/jquery.panzoom.min'
     'tags-input': 'tags-input/jquery.tagsinput.min'
+    'underscore': 'underscore/underscore-min'
 
   map:
     '*':
@@ -31,6 +33,9 @@
       'text': 'requirejs-text/text'
 
   shim:
+    'backbone':
+      deps: ['jquery', 'underscore']
+      exports: 'Backbone'
     'datepicker': ['jquery']
     'filedrop': ['jquery']
     'hashchange': ['jquery']
@@ -40,4 +45,5 @@
     'masonry': ['jquery']
     'panzoom': ['jquery']
     'tags-input': ['jquery', 'jquery-autocomplete']
+    'underscore': exports: '_'
 

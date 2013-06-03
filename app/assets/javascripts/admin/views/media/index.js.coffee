@@ -1,11 +1,11 @@
 
-require [
+define [
   'jquery'
   'common/notify'
   'components/viewstate'
   'components/select'
   'utils/template'
-  'text!views/media/item.tpl'
+  'text!./item.tpl'
   'filedrop'
   'masonry'
 ], ($, Notify, Viewstate, Select, template, item_html) ->
@@ -162,7 +162,7 @@ require [
   notifi_delete = Notify()
 
   $(document)
-  .on 'click', '#media_list a[data-method="delete"]', ->
+  .on 'ajax:beforeSend', '#media_list a[data-method="delete"]', ->
     notifi_delete.progress 'ファイルを削除しています'
   .on 'ajax:success', '#media_list a[data-method="delete"]', (e, res) ->
     if res.success
