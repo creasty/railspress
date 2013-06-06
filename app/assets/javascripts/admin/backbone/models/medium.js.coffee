@@ -7,11 +7,14 @@ define [
 
   class Medium extends Backbone.Model
     defualts:
-      title: ''
+      id:          ''
+      title:       ''
       description: ''
-      id: ''
-      type: ''
-      selected: false
+
+      type:        ''
+      preview:     false
+
+      selected:    false
 
     toggle: ->
       @set 'selected', !@get 'selected'
