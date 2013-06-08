@@ -35,13 +35,13 @@
 
     %h3 Modal
 
-    = button_tag 'Open', class: 'btn', data: { toggle: 'modal', target: '#sample_modal' }
+    = button_tag 'Open', class: 'btn', id: 'sample_modal'
 
   .col-ab-b
 
     %h3 Alert
 
-    = button_tag 'Open', class: 'btn', data: { toggle: 'alert', target: '#sample_alert' }, id: 'sample_alert'
+    = button_tag 'Open', class: 'btn', id: 'sample_alert'
 
 
   %br.clear
@@ -57,39 +57,40 @@
 
 
 
-= modal 'sample_modal' do
-  %header
-    %h2 dsfa
-  .content
-    asdf
-
-  %footer
+.hide
+  #sample_modal_window
+    %header.modal-header
+      %h2 dsfa
+    .modal-content
+      asdf
+    %footer.modal-footer
 
 
 :coffee
 
-  require ['jquery', 'common/alert'], ($, alert) ->
+  require [
+    'jquery'
+    'common/alert'
+    'common/modal'
+  ], ($, Alert, Modal) ->
     $('#sample_alert').on 'click', ->
-      alert title: 'Title', message: 'description', type: 'danger'
+      Alert
+        title: 'Title'
+        message: 'description'
+        type: 'danger'
+        btns: [
+          { text: 'OK', action: 'close', type: 'danger' }
+          { text: 'Cancel', action: 'cancel' }
+          { text: 'Retry', action: 'retry', type: 'success', align: 'right' }
+        ]
+        callback: (action) ->
+          if action == 'retry'
+            alert 'retry!!'
 
+    SampleModal = Modal
+      content: '#sample_modal_window'
+      callback: ($modal) ->
+        # callbacks
 
-  ###
-  require ['components/modal', 'components/alert'], (Modal, Alert) ->
-    Modal.attachTo '[data-toggle="modal"]'
-    Alert.attachTo '[data-toggle="alert"]'
-
-  require ['jquery'], ($) ->
-    #  Overlay
-    #-----------------------------------------------
-    $(document).on 'click', '.overlay', (e) ->
-      $t = $(@).parent().removeClass 'show'
-
-    #  Modal / Alert
-    #-----------------------------------------------
-    $(document).on 'click',
-      '[data-toggle="modal"], [data-toggle="alert"]',
-      (e) ->
-        $t = $ @
-        $($t.data('target')).toggleClass 'show'
-        e.preventDefault()
-  ###
+    $('#sample_modal').on 'click', ->
+      SampleModal.open()

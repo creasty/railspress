@@ -7,7 +7,7 @@ define ['jquery'], ($) ->
         title: ''
         message: ''
         type: 'normal'
-        btns: [text: 'OK', action: 'close']
+        btns: [text: 'OK', action: 'close', type: 'danger']
         callback: $.noop
         duration: 300
       , @config
@@ -33,7 +33,7 @@ define ['jquery'], ($) ->
 
     close: ->
       @$popup.removeClass 'show'
-      setTimeout @$popup.remove.bind(@), @config.duration
+      setTimeout (=> @$popup.remove()), @config.duration
 
     open: ->
       @$title.text @config.title
@@ -43,15 +43,17 @@ define ['jquery'], ($) ->
 
       @$message.html @config.message
 
-      @$btns.append @config.btns.map (v) =>
+      @config.btns.forEach (v) =>
         $btn = $ '<button class="btn"></button>'
         $btn.text v.text
-        $btn.addClass "btn-#{v.type ? @config.type}"
+        $btn.addClass "btn-#{v.type}"
+        $btn.addClass "float-#{v.align ? 'none'}"
         $btn.on 'click', => @config.callback v.action, @
         $btn.on 'click', @close.bind @ if v.action == 'close'
+        @$btns.append $btn
 
       @$alert.addClass @config.type
 
-      @$popup.addClass 'show'
+      setTimeout (=> @$popup.addClass 'show'), 1
 
   (config) -> new Alert(config).open()

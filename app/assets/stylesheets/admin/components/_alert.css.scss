@@ -29,7 +29,15 @@
 	}
 
 	footer {
+		@extend .clear-after;
 		margin-top: 20px;
+
+		.btn {
+			margin: 0 20px 0 0;
+		}
+		.btn.float-right {
+			margin: 0 0 0 20px;
+		}
 	}
 
 	&.danger {

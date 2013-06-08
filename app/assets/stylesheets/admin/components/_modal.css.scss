@@ -69,7 +69,7 @@
 		}
 	}
 
-	> header {
+	.modal-header {
 		height: 60px;
 		background: $menubar-bg-color;
 		@include border-radius(3px 3px 0 0);
@@ -83,7 +83,20 @@
 		}
 	}
 
-	> footer {
+	.modal-content {
+		position: absolute;
+		top: 60px;
+		left: 0;
+		right: 0;
+		bottom: 75px;
+		color: $main-text-color;
+		padding: 20px;
+	}
+	&.no-footer .modal-content {
+		bottom: 0;
+	}
+
+	.modal-footer {
 		position: absolute;
 		bottom: 0;
 		width: 100%;
@@ -92,19 +105,5 @@
 		padding: 20px;
 		@include box-sizing(border-box);
 		@include border-radius(0 0 3px 3px);
-	}
-
-	> .content {
-		position: absolute;
-		top: 60px;
-		left: 0;
-		right: 0;
-		bottom: 75px;
-		color: $main-text-color;
-		padding: 20px;
-
-		&.no-footer {
-			bottom: 0;
-		}
 	}
 }
