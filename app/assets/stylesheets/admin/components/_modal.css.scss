@@ -1,28 +1,6 @@
 
 /*=== Modal
 ==============================================================================================*/
-.overlay {
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	z-index: 2000;
-	background: rgba(#000, .4);
-	opacity: 0;
-	visibility: hidden;
-	@include transition(.3s);
-
-	.show & {
-		opacity: 1;
-		visibility: visible;
-	}
-
-	&.overlay-alert {
-		z-index: 3000;
-	}
-}
-
 .modal {
 	@extend .popup-box;
 	@include popup-animation;

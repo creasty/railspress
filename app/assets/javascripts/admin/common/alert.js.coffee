@@ -50,6 +50,7 @@ define ['jquery'], ($) ->
         $btn.addClass "float-#{v.align ? 'none'}"
         $btn.on 'click', => @config.callback v.action, @
         $btn.on 'click', @close.bind @ if v.action == 'close'
+        $btn.width v.width
         @$btns.append $btn
 
       @$alert.addClass @config.type
