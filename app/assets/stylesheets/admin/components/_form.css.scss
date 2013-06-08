@@ -26,6 +26,23 @@ textarea {
 	resize: none;
 }
 
+/*	Placeholder
+-----------------------------------------------*/
+::-webkit-input-placeholder {
+	height: inherit;
+	vertical-align: middle;
+}
+
+::-moz-placeholder {
+	height: inherit;
+	vertical-align: middle;
+}
+
+:-ms-input-placeholder {
+	height: inherit;
+	vertical-align: middle;
+}
+
 /*=== Form: Base
 ==============================================================================================*/
 .text,
@@ -70,7 +87,6 @@ label.radio > input,
 input.text,
 .text > input {
 	padding: 0 10px;
-	line-height: 1;
 	height: 30px;
 	width: 180px;
 }

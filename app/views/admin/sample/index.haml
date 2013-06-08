@@ -41,7 +41,7 @@
 
     %h3 Alert
 
-    = button_tag 'Open', class: 'btn', data: { toggle: 'alert', target: '#sample_alert' }
+    = button_tag 'Open', class: 'btn', data: { toggle: 'alert', target: '#sample_alert' }, id: 'sample_alert'
 
 
   %br.clear
@@ -62,23 +62,21 @@
     %h2 dsfa
   .content
     asdf
+
   %footer
-
-
-= alert 'sample_alert', 'Alert!', 'danger' do
-  %p sdfasdfa
-  %footer
-    %button.btn.btn-danger{ data: { toggle: 'modal', target: '#sample_alert' } } sdfa
-
 
 
 :coffee
+
+  require ['jquery', 'common/alert'], ($, alert) ->
+    $('#sample_alert').on 'click', ->
+      alert title: 'Title', message: 'description', type: 'danger'
+
+
   ###
   require ['components/modal', 'components/alert'], (Modal, Alert) ->
     Modal.attachTo '[data-toggle="modal"]'
     Alert.attachTo '[data-toggle="alert"]'
-  ###
-
 
   require ['jquery'], ($) ->
     #  Overlay
@@ -94,4 +92,4 @@
         $t = $ @
         $($t.data('target')).toggleClass 'show'
         e.preventDefault()
-
+  ###

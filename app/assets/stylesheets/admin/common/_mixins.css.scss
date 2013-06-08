@@ -160,7 +160,8 @@
 ==============================================================================================*/
 @mixin popup-box-shadow($add: none) {
 	//$sh: 0 1px 6px rgba(#000, .35), 0 0 0 1px rgba(#000, .2);
-	$sh: 0 0 0 1px rgba(#000, .2), 0 6px 0 -3px rgba(#000, .1);
+	// $sh: 0 0 0 1px rgba(#000, .2), 0 6px 0 -3px rgba(#000, .1);
+	$sh: 0 6px 0 -3px rgba(#000, .1);
 
 	@if $add == none {
 		@include box-shadow($sh);
@@ -178,6 +179,8 @@
 	$selector: ".show &",
 	$duration: .3s,
 	$scale: .98,
+	$y: 15px,
+	$rotate: -3deg,
 	$opacity: true
 ) {
 	#{$el} {
@@ -185,10 +188,9 @@
 		@if $opacity {
 			opacity: 0;
 		}
-		@if $scale != 1 {
-			@include transform(scale($scale));
-		}
+		@include transform(scale($scale) translateY($y) perspective(400px) rotateX($rotate));
 		@include transition(all #{$duration}, visibility 0s #{$duration});
+		@include transform-origin(50% 0 0);
 	}
 
 	#{$selector} {
@@ -196,9 +198,7 @@
 		@if $opacity {
 			opacity: 1;
 		}
-		@if $scale != 1 {
-			@include transform(scale(1));
-		}
+		@include transform(scale(1) translateY(0px) perspective(400px) rotateX(0deg));
 		@include transition-delay(0s);
 	}
 }

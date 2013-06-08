@@ -56,7 +56,7 @@ module ApplicationHelper
     @page_title_hash[serialized] = hash
   end
 
-  private
+private
 
 
   def get_page_title

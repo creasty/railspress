@@ -1,12 +1,9 @@
 
 define [
   'flight/lib/component'
-#  'mixin/popup'
+  'mixin/popup'
 ], (defineComponent, Popup) ->
 
-  modal = ->
+  defineComponent ->
     @defaultAttrs
       duration: 300
-
-
-  defineComponent modal
