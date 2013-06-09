@@ -56,6 +56,7 @@ define ['jquery'], ($) ->
         $btn.width v.width
         @$btns.append $btn
 
+      # @$alert.css 'marginTop', -(@$alert.height() >> 1)
       @$alert.addClass @config.type
 
       setTimeout (=> @$popup.addClass 'show'), 1

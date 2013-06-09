@@ -1,6 +1,6 @@
 /**
- * @license jquery.panzoom.js v0.7.5
- * Updated: Thu May 16 2013
+ * @license jquery.panzoom.js v1.0.4
+ * Updated: Thu Jun 06 2013
  * Add pan and zoom functionality to any element
  * Copyright (c) 2013 timmy willison
  * Released under the MIT license
@@ -109,8 +109,14 @@
 		// Save the original transform value
 		// Save the prefixed transform style key
 		this._buildTransform();
+		// Build the appropriately-prefixed transform style property name
+		// De-camelcase
+		this._transform = $.cssProps.transform.replace( rupper, "-$1" ).toLowerCase();
 		// Build the transition value
 		this._buildTransition();
+
+		// Build containment if necessary
+		this._buildContain();
 
 		// Add zoom and reset buttons to `this`
 		var $empty = $();
@@ -119,8 +125,7 @@
 			self[ name ] = options[ name ] || $empty;
 		});
 
-		this._initStyle();
-		this._bind();
+		this.enable();
 
 		// Save the instance
 		$.data( elem, datakey, this );
@@ -158,7 +163,11 @@
 		// Animation duration (ms)
 		duration: 200,
 		// CSS easing used for scale transition
-		easing: "ease-in-out"
+		easing: "ease-in-out",
+
+		// Indicate that the element should be contained within it's parent when panning
+		// Note: this does not affect zooming outside of the parent
+		contain: false
 	};
 
 	Panzoom.prototype = {
@@ -172,11 +181,37 @@
 		},
 
 		/**
-		 * Destroy the current minimal lightbox instances
+		 * Enable or re-enable the panzoom instance
 		 */
-		destroy: function() {
+		enable: function() {
+			// Unbind first
+			this._unbind();
+			this._initStyle();
+			this._bind();
+			this.disabled = false;
+		},
+
+		/**
+		 * Disable panzoom
+		 */
+		disable: function() {
+			this.disabled = true;
 			this._resetStyle();
 			this._unbind();
+		},
+
+		/**
+		 * @returns {Boolean} Returns whether the current panzoom instance is disabled
+		 */
+		isDisabled: function() {
+			return this.disabled;
+		},
+
+		/**
+		 * Destroy the panzoom instance
+		 */
+		destroy: function() {
+			this.disable();
 			$.removeData( this.elem, datakey );
 		},
 
@@ -186,10 +221,11 @@
 		 */
 		reset: function( animate ) {
 			// Reset the transform to its original value
-			this.setMatrix( this._origTransform, { animate: typeof animate !== "boolean" || animate });
-			var matrix = this.getMatrix();
-			// Set the zoom range's value to the original zoom level
-			this.$zoomRange.val( matrix[0] );
+			var matrix = this.setMatrix( this._origTransform, {
+				animate: typeof animate !== "boolean" || animate,
+				// Set zoomRange value
+				range: true
+			});
 			this._trigger( "reset", matrix );
 		},
 
@@ -199,8 +235,6 @@
 		 */
 		resetZoom: function( animate ) {
 			this._resetParts( [ 0, 3 ], animate );
-			// Set the zoom range's value to the original zoom level
-			this.$zoomRange.val( this.getMatrix()[0] );
 		},
 
 		/**
@@ -212,12 +246,34 @@
 		},
 
 		/**
+		 * Retrieving the transform is different for SVG (unless a style transform is already present)
+		 * @returns {String} Returns the current transform value of the element
+		 */
+		getTransform: function() {
+			var elem = this.elem;
+			// Use style rather than computed
+			// If currently transitioning, computed transform might be unchanged
+			var transform = $.style( elem, "transform" );
+
+			// SVG falls back to the transform attribute
+			if ( this.isSVG && !transform ) {
+				transform = $.attr( elem, "transform" );
+			// Convert any transforms set by the user to matrix format
+			// by setting to computed
+			} else if ( transform !== "none" && !rmatrix.test(transform) ) {
+				transform = $.style( elem, "transform", $.css(elem, "transform") );
+			}
+
+			return transform || "none";
+		},
+
+		/**
 		 * Retrieve the current transform matrix for $elem (or turn a transform into it's array values)
 		 * @param {String} [transform]
 		 * @returns {Array} Returns the current transform matrix split up into it's parts, or a default matrix
 		 */
 		getMatrix: function( transform ) {
-			var matrix = rmatrix.exec( transform || this._getTransform() );
+			var matrix = rmatrix.exec( transform || this.getTransform() );
 			if ( matrix ) {
 				matrix.shift();
 			}
@@ -230,18 +286,36 @@
 		 * @param {Boolean} [animate] Whether to animate the transform change
 		 * @param {Object} [options]
 		 * @param {Boolean} [options.animate] Whether to animate the transform change
+		 * @param {Boolean} [options.contain] Override the global contain option
+		 * @param {Boolean} [options.range] If true, $zoomRange's value will be updated.
 		 * @param {Boolean} [options.silent] If true, the change event will not be triggered
+		 * @returns {Array} Returns the matrix that was set
 		 */
 		setMatrix: function( matrix, options ) {
+			if ( this.disabled ) { return; }
 			if ( !options ) { options = {}; }
-			if ( $.type(matrix) === "array" ) {
-				matrix = "matrix(" + matrix.join(",") + ")";
+			// Convert to array
+			if ( typeof matrix === "string" ) {
+				matrix = this.getMatrix( matrix );
 			}
+			// Apply containment
+			if ( typeof options.contain === "boolean" ? options.contain : this.options.contain ) {
+				var container = this.container;
+				var dims = this.dimensions;
+				matrix[4] = Math.min( Math.max( matrix[4], -dims.left ), container.width - dims.width - dims.left );
+				matrix[5] = Math.min( Math.max( matrix[5], -dims.top ), container.height - dims.height - dims.top );
+			}
+			// Set transition
 			this.transition( !options.animate );
-			$[ this.isSVG ? "attr" : "style" ]( this.elem, "transform", matrix || "none" );
+			// Update range
+			if ( options.range ) {
+				this.$zoomRange.val( matrix[0] );
+			}
+			$[ this.isSVG ? "attr" : "style" ]( this.elem, "transform", "matrix(" + matrix.join(",") + ")" );
 			if ( !options.silent ) {
 				this._trigger( "change", matrix );
 			}
+			return matrix;
 		},
 
 		/**
@@ -282,14 +356,15 @@
 			var matrix = this.getMatrix();
 
 			// Set the middle point
-			if ( opts.middle ) {
-				matrix[4] = +matrix[4] + (opts.middle.pageX > matrix[4] ? 1 : -1);
-				matrix[5] = +matrix[5] + (opts.middle.pageY > matrix[5] ? 1 : -1);
+			var middle = opts.middle;
+			if ( middle ) {
+				matrix[4] = +matrix[4] + (middle.pageX === matrix[4] ? 0 : middle.pageX > matrix[4] ? 1 : -1);
+				matrix[5] = +matrix[5] + (middle.pageY === matrix[5] ? 0 : middle.pageY > matrix[5] ? 1 : -1);
 			}
 
 			// Calculate zoom based on increment
 			if ( typeof scale !== "number" ) {
-				scale = +matrix[0] + (this.options.increment * (scale ? -1 : 1));
+				scale = +matrix[0] + (options.increment * (scale ? -1 : 1));
 				animate = true;
 			}
 
@@ -302,12 +377,11 @@
 
 			// Set the scale
 			matrix[0] = matrix[3] = scale;
-			this.setMatrix( matrix, { animate: typeof opts.animate === "boolean" ? opts.animate : animate } );
-
-			// Set the zoomRange value
-			if ( !opts.noSetRange ) {
-				this.$zoomRange.val( scale );
-			}
+			this.setMatrix( matrix, {
+				animate: typeof opts.animate === "boolean" ? opts.animate : animate,
+				// Set the zoomRange value
+				range: !opts.noSetRange
+			});
 
 			// Trigger zoom event
 			if ( !opts.silent ) {
@@ -357,8 +431,11 @@
 					case "$zoomRange":
 					case "$reset":
 					case "onStart":
-					case "onEnd":
 					case "onChange":
+					case "onZoom":
+					case "onPan":
+					case "onEnd":
+					case "onReset":
 					case "eventNamespace":
 						self._unbind();
 				}
@@ -373,8 +450,11 @@
 					case "$zoomRange":
 					case "$reset":
 					case "onStart":
-					case "onEnd":
 					case "onChange":
+					case "onZoom":
+					case "onPan":
+					case "onEnd":
+					case "onReset":
 					case "eventNamespace":
 						self._bind();
 						break;
@@ -386,6 +466,12 @@
 						break;
 					case "maxScale":
 						self.$zoomRange.attr( "max", value );
+						break;
+					case "contain":
+						self._buildContain();
+						break;
+					case "startTransform":
+						self._buildTransform();
 						break;
 					case "duration":
 					case "easing":
@@ -435,41 +521,114 @@
 		},
 
 		/**
-		 * Retrieving the transform is different for SVG
-		 * @returns {String} Returns the current transform value of the element
+		 * Binds all necessary events
 		 */
-		_getTransform: function() {
-			var transform;
-			var elem = this.elem;
+		_bind: function() {
+			var self = this;
+			var options = this.options;
+			var ns = options.eventNamespace;
+			var str_click = (touchSupported ? "touchend" : "click") + ns;
+			var str_start = (touchSupported ? "touchstart" : "mousedown") + ns;
+			var events = {};
 
-			if ( this.isSVG ) {
-				// SVG uses the transform attribute
-				transform = $.attr( elem, "transform" );
-			} else {
-				// Use style rather than computed
-				// If currently transitioning, computed transform might be unchanged
-				transform = $.style( elem, "transform" );
-				// Convert any transforms set by the user to matrix format
-				// by setting to computed
-				if ( transform !== "none" && !rmatrix.test(transform) ) {
-					transform = $.style( elem, "transform", $.css(elem, "transform") );
+			// Bind panzoom events from options
+			$.each([ "Start", "Change", "Zoom", "Pan", "End", "Reset" ], function() {
+				var m = options[ "on" + this ];
+				if ( $.isFunction(m) ) {
+					events[ "panzoom" + this.toLowerCase() + ns ] = m;
 				}
+			});
+
+			// Bind $elem drag and click events
+			if ( touchSupported ) {
+				// Bind touchstart if either panning or zooming is enabled
+				if ( !options.disablePan || !options.disableZoom ) {
+					events[ str_start ] = function( e ) {
+						var touches = e.touches;
+						if ( touches ) {
+							if ( touches.length === 1 && !options.disablePan ) {
+								self._startMove( e.pageX, e.pageY );
+								return false;
+							}
+							if ( touches.length === 2 ) {
+								self._startMove( touches );
+								return false;
+							}
+						}
+					};
+				}
+			} else if ( !options.disablePan ) {
+				events[ str_start ] = function( e ) {
+					// Bypass right click
+					if ( e.which === 1 && e.pageX != null && e.pageY != null ) {
+						self._startMove( e.pageX, e.pageY );
+						return false;
+					}
+				};
+			}
+			this.$elem.on( events );
+
+			// No bindings if zooming is disabled
+			if ( options.disableZoom ) {
+				return;
 			}
 
-			return transform || "none";
+			var $zoomIn = this.$zoomIn;
+			var $zoomOut = this.$zoomOut;
+			var $zoomRange = this.$zoomRange;
+			var $reset = this.$reset;
+
+			// Bind zoom in/out
+			// Don't bind one without the other
+			if ( $zoomIn.length && $zoomOut.length ) {
+				$zoomIn.on( str_click, function( e ) { e.preventDefault(); self.zoom(); });
+				$zoomOut.on( str_click, function( e ) { e.preventDefault(); self.zoom( true ); });
+			}
+
+			if ( $zoomRange.length ) {
+				// Set default attributes
+				$zoomRange.attr({
+					min: options.minScale,
+					max: options.maxScale,
+					step: 0.05
+				}).prop({
+					value: this.getMatrix()[0]
+				});
+				events = {};
+				events[ str_start ] = function() {
+					self.transition( true );
+				};
+				events[ "change" + ns ] = function() {
+					self.zoom( +this.value, { noSetRange: true } );
+				};
+				$zoomRange.on( events );
+			}
+
+			// Bind reset
+			if ( $reset.length ) {
+				$reset.on( str_click, function( e ) { e.preventDefault(); self.reset(); });
+			}
 		},
 
 		/**
-		 * Builds the prefixed transform property name
-		 * and tracks the original transform value
+		 * Unbind all events
+		 */
+		_unbind: function() {
+			this.$elem
+				.add( this.$zoomIn )
+				.add( this.$zoomOut )
+				.add( this.$reset )
+				.off( this.options.eventNamespace );
+		},
+
+		/**
+		 * Builds the original transform value
 		 */
 		_buildTransform: function() {
 			// Save the original transform
 			// Retrieving this also adds the correct prefixed style name
 			// to jQuery's internal $.cssProps
-			this._origTransform = this._getTransform();
-			// De-camelcase
-			this._transform = $.cssProps.transform.replace( rupper, "-$1" ).toLowerCase();
+			this._origTransform = this.options.startTransform || this.getTransform();
 		},
 
 		/**
@@ -484,6 +643,33 @@
 		},
 
 		/**
+		 * Builds the restricing dimensions from the containment element
+		 */
+		_buildContain: function() {
+			// Reset container properties
+			if ( this.options.contain ) {
+				var $parent = this.$parent;
+				this.container = {
+					width: $parent.width(),
+					height: $parent.height()
+				};
+				var elem = this.elem;
+				var $elem = this.$elem;
+				this.dimensions = this.isSVG ? {
+					left: elem.getAttribute("x") || 0,
+					top: elem.getAttribute("y") || 0,
+					width: elem.getAttribute("width") || $elem.width(),
+					height: elem.getAttribute("height") || $elem.height()
+				} : {
+					left: $.css( elem, "left", true ) || 0,
+					top: $.css( elem, "top", true ) || 0,
+					width: $elem.width(),
+					height: $elem.height()
+				};
+			}
+		},
+
+		/**
 		 * Reset certain parts of the transform
 		 */
 		_resetParts: function( indices, animate ) {
@@ -493,7 +679,11 @@
 			while( i-- ) {
 				cur[ indices[i] ] = origMatrix[ indices[i] ];
 			}
-			this.setMatrix(cur, { animate: typeof animate !== "boolean" || animate });
+			this.setMatrix(cur, {
+				animate: typeof animate !== "boolean" || animate,
+				// Set zoomRange value
+				range: true
+			});
 		},
 
 		/**
@@ -516,8 +706,8 @@
 			var touch1 = touches[0];
 			var touch2 = touches[1];
 			return {
-				pageX: Math.abs( touch2.pageX - touch1.pageX ) / 2 + touch1.pageX,
-				pageY: Math.abs( touch2.pageY - touch1.pageY ) / 2 + touch1.pageY
+				pageX: ((touch2.pageX - touch1.pageX) / 2) + touch1.pageX,
+				pageY: ((touch2.pageY - touch1.pageY) / 2) + touch1.pageY
 			};
 		},
 
@@ -600,112 +790,9 @@
 					self.panning = false;
 					// Trigger our end event
 					// jQuery's not is used here to compare Array equality
-					self._trigger( "end", !!$(original).not(matrix).length );
+					self._trigger( "end", matrix, !!$(original).not(matrix).length );
 				})
 				.on( (touchSupported ? "touchmove" : "mousemove") + ns, move );
-		},
-
-		/**
-		 * Bind all necessary events
-		 */
-		_bind: function() {
-			var self = this;
-			var ns = this.options.eventNamespace;
-			var str_click = (touchSupported ? "touchend" : "click") + ns;
-			var str_start = (touchSupported ? "touchstart" : "mousedown") + ns;
-			var options = this.options;
-			var events = {};
-
-			// Bind panzoom events from options
-			$.each([ "Start", "End", "Change" ], function() {
-				var m = options[ "on" + this ];
-				if ( $.isFunction(m) ) {
-					events[ "panzoom" + this.toLowerCase() + ns ] = m;
-				}
-			});
-
-			// Bind $elem drag and click events
-			if ( touchSupported ) {
-				// Bind touchstart if either panning or zooming is enabled
-				if ( !options.disablePan || !options.disableZoom ) {
-					events[ str_start ] = function( e ) {
-						var touches = e.touches;
-						if ( touches ) {
-							if ( touches.length === 1 && !options.disablePan ) {
-								self._startMove( e.pageX, e.pageY );
-								return false;
-							}
-							if ( touches.length === 2 ) {
-								self._startMove( touches );
-								return false;
-							}
-						}
-					};
-				}
-			} else if ( !options.disablePan ) {
-				events[ str_start ] = function( e ) {
-					// Bypass right click
-					if ( e.which === 1 && e.pageX != null && e.pageY != null ) {
-						self._startMove( e.pageX, e.pageY );
-						return false;
-					}
-				};
-			}
-			if ( !$.isEmptyObject(events) ) {
-				this.$elem.on( events );
-			}
-
-			// No bindings if zooming is disabled
-			if ( options.disableZoom ) {
-				return;
-			}
-
-			var $zoomIn = this.$zoomIn;
-			var $zoomOut = this.$zoomOut;
-			var $zoomRange = this.$zoomRange;
-			var $reset = this.$reset;
-
-			// Bind zoom in/out
-			// Don't bind one without the other
-			if ( $zoomIn.length && $zoomOut.length ) {
-				$zoomIn.on( str_click, function( e ) { e.preventDefault(); self.zoom(); });
-				$zoomOut.on( str_click, function( e ) { e.preventDefault(); self.zoom( true ); });
-			}
-
-			if ( $zoomRange.length ) {
-				// Set default attributes
-				$zoomRange.attr({
-					min: options.minScale,
-					max: options.maxScale,
-					step: 0.05
-				}).prop({
-					value: this.getMatrix()[0]
-				});
-				events = {};
-				events[ str_start ] = function() {
-					self.transition( true );
-				};
-				events[ "change" + ns ] = function() {
-					self.zoom( +this.value, { noSetRange: true } );
-				};
-				$zoomRange.on( events );
-			}
-
-			// Bind reset
-			if ( $reset.length ) {
-				$reset.on( str_click, function( e ) { e.preventDefault(); self.reset(); });
-			}
-		},
-
-		/**
-		 * Unbind all minimal lightbox clicks
-		 */
-		_unbind: function() {
-			this.$elem
-				.add( this.$zoomIn )
-				.add( this.$zoomOut )
-				.add( this.$reset )
-				.off( this.options.eventNamespace );
 		}
 	};
 

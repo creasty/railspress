@@ -58,8 +58,8 @@ require [
     return true if $t.data 'dependent_destroy'
 
     Alert
-      title: '記事を削除してもいいですか？'
-      message: '一度削除した記事はもとに戻すことはできません'
+      title: '削除しますか？'
+      message: '一度削除した記事はもとに戻すことはできません。'
       type: 'danger'
       btns: [
         { text: '削除', action: 'destroy', type: 'danger' }
@@ -84,6 +84,7 @@ require [
     .animate
       opacity: 0
     ,
+      duration: 300
       complete: ->
         st.success res.msg
         $post.remove()

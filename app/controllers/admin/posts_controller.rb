@@ -15,6 +15,7 @@ class Admin::PostsController < Admin::ApplicationController
       format.json do
         if params[:only_table]
           params.delete :only_table
+
           render json: {
             pager: view_context.paginate(
               @posts,
@@ -60,7 +61,8 @@ class Admin::PostsController < Admin::ApplicationController
           }
         end
         format.html do
-          redirect_to edit_admin_post_path(@post), notice: '作成されました'
+          redirect_to edit_admin_post_path(@post),
+            notice: '作成されました'
         end
       else
         format.json do
@@ -72,7 +74,8 @@ class Admin::PostsController < Admin::ApplicationController
         end
         format.html do
           save_current_params
-          redirect_to new_admin_post_path, alert: '保存に失敗しました'
+          redirect_to new_admin_post_path,
+            alert: '保存に失敗しました'
         end
       end
     end
@@ -116,7 +119,8 @@ class Admin::PostsController < Admin::ApplicationController
       end
 
       format.html do
-        redirect_to admin_posts_path, notice: '記事を削除しました'
+        redirect_to admin_posts_path,
+          notice: '記事を削除しました'
       end
     end
   end

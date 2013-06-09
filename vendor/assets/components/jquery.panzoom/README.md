@@ -4,17 +4,20 @@ Panzoom is a progressive plugin to create panning and zooming functionality for 
 Rather than setting width and height on an image tag, Panzoom uses CSS transforms and matrix functions to take advantage of hardware/GPU acceleration in the browser, which means the element can be _anything_: an image, a video, an iframe, a canvas, text, WHATEVER.
 And although IE<=8 is not supported, this plugin is future-proof.
 
-jquery.panzoom.min.js (6.9kb/2.7kb gzip), included in this repo, is compressed with [uglifyjs](https://github.com/mishoo/UglifyJS).
+jquery.panzoom.min.js (8.5kb/3.2kb gzip), included in this repo, is compressed with [uglifyjs](https://github.com/mishoo/UglifyJS).
+
+[Download version 1.0.2](https://raw.github.com/timmywil/jquery.panzoom/v1.0.2/dist/jquery.panzoom.min.js)  
+[Development version](https://raw.github.com/timmywil/jquery.panzoom/v1.0.2/dist/jquery.panzoom.js)
 
 ## Mobile support
 
 Panzoom includes support for touch gestures and even supports __pinch gestures__ for zooming. It is perfectly suited for both mobile and desktop browsers. You'll be amazed at how well this performs on your mobile device.
 
-iOS has always been supported. Android is supported as of v0.6.0.
+iOS and Android are supported.
 
 ## SVG support
 
-As of v0.2.0, Panzoom supports panning and zooming SVG elements directly, in browsers that support SVG.
+Panzoom supports panning and zooming SVG elements directly, in browsers that support SVG.
 
 ## Dependencies
 
@@ -28,7 +31,7 @@ Panzoom can obviously be included with your scripts at the end of the body, but 
 With script tags:
 
 ```html
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
 <script src="/js/plugins/jquery.panzoom.js"></script>
 ```
 
@@ -64,7 +67,7 @@ Panzoom.defaults = {
   // Should always be non-empty
   // Used to bind jQuery events without collisions
   // A guid is not added here as different instantiations/versions of panzoom
-  // on the same element is not supported, so don't do it.
+  // on the same element is not supported.
   eventNamespace: ".panzoom",
 
   // Whether or not to transition the scale
@@ -89,6 +92,14 @@ Panzoom.defaults = {
   // CSS easing used for scale transition
   easing: "ease-in-out",
 
+  // Indicate that the element should be contained within it's parent when panning
+  // Note: this does not affect zooming outside of the parent
+  contain: false,
+
+  // Transform value to which to always reset (string)
+  // Defaults to the original transform on the element when panzoom is initialized
+  startTransform: undefined,
+
   // Zoom buttons/links collection (you can also bind these yourself - e.g. `$button.on("click", function( e ) { e.preventDefault(); $elem.panzooom("zoomIn"); });` )
   $zoomIn: $(),
   $zoomOut: $(),
@@ -101,7 +112,10 @@ Panzoom.defaults = {
   // e.g. `$elem.on("panzoomend", function( e, panzoom ) { console.log( panzoom.getMatrix() ); });`
   onStart: undefined,
   onChange: undefined,
-  onEnd: undefined
+  onZoom: undefined,
+  onPan: undefined,
+  onEnd: undefined,
+  onReset: undefined
 };
 ```
 
@@ -172,10 +186,11 @@ __Arguments__
 
   1. `scale` _{Number|Boolean}_: The exact scale to which to zoom or a boolean indicating to transition a zoom out
   2. `opts` _{Object}_:
-    a. `opts.noSetRange` _{Boolean}_: Specify that the method should not set the $zoomRange value (as is the case when $zoomRange is calling zoom on change)
-    b. `opts.middle` _{Object}_: Specify a middle point towards which to gravitate when zooming
-    c. `opts.animate` _{Boolean}_: Whether to animate the zoom (defaults to true if scale is not a number, false otherwise)
-    d. `opts.silent` _{Boolean}_: Silence the zoom event
+
+    1. `opts.noSetRange` _{Boolean}_: Specify that the method should not set the $zoomRange value (as is the case when $zoomRange is calling zoom on change)
+    2. `opts.middle` _{Object}_: Specify a middle point towards which to gravitate when zooming
+    3. `opts.animate` _{Boolean}_: Whether to animate the zoom (defaults to true if scale is not a number, false otherwise)
+    4. `opts.silent` _{Boolean}_: Silence the zoom event
 
 ```js
 // Transition a zoom in based on the scale increment, min and max values
@@ -190,7 +205,43 @@ $elem.panzoom("zoom", 1.2, { silent: true });
 ```
 
 Transition a zoom in based on the scale increment, min and max values, and animation duration and easing. This method handles both zooming in and zooming out.<br>
-If the method is passed a number, `zoom()` will immediately set that scale without transitioning. This is mostly useful for the range input and pinch gestures.
+If the method is passed a number, `zoom()` will immediately set that scale without transitioning. This is mostly useful for the range input and pinch gestures.<br>
+If the method is passed a boolean, true will indicate to perform a zoom-out based on the increment specified in options. If false (or omitted), a zoom-in will be performed.
+
+### `disable()`
+
+```js
+$elem.panzoom("disable");
+```
+
+Quickly disable panzoom on the element.
+
+### `enable()`
+
+```js
+$elem.panzoom("enable");
+```
+
+Re-enable panzoom on the element (re-binds all events).
+
+### `isDisabled()`
+
+```js
+$elem.panzoom("isDisabled");
+// => true
+```
+
+Returns a boolean indicating whether the current Panzoom instance is disabled.
+
+### `isPanning()`
+
+Returns a boolean indicating whether the element is currently panning.
+
+### `destroy()`
+
+```js
+$elem.panzoom("destroy");
+```
 
 ### `instance()`
 
@@ -200,21 +251,17 @@ var panzoom = $elem.panzoom("instance");
 
 Retrieves the Panzoom instance(s) from the set. If there are multiple elements in the set, you will get an array of instances. If there is only one, you will just get that instance of Panzoom.
 
-### `destroy()`
-
-```js
-$elem.panzoom("destroy");
-```
-
 Unbinds all events and removes all data, including the Panzoom instance on the element.
 
 ## Internal
 
 These methods are _basically_ private, but could be useful under certain circumstances.
 
-### `isPanning()`
+### `getTransform()`
 
-Returns a boolean indicating whether the element is currently panning.
+Returns the string transform value used by panzoom for the element.
+
+__Note__: The transform attribute is used for SVG. Otherwise, the appropriately prefixed transform style property is used.
 
 ### `getMatrix( [transform] )`
 
@@ -231,8 +278,12 @@ __Arguments__
 
   1. `matrix` _{Array}_: Matrix to set
   2. `options` _{Object}_
-  3. `options.animate` _{Boolean}_: If true, a transitionw will be set to animate the transform change
-  4. `options.silent` _{Boolean}_: If true, the change event will not be triggered
+
+    1. `options.animate` _{Boolean}_: If true, a transitionw will be set to animate the transform change
+    2. `options.contain` _{Boolean}_: Override the global contain option
+    3. `options.range` _{Boolean}_: If true, $zoomRange's value will be updated.
+    4. `options.silent` _{Boolean}_: If true, the change event will not be triggered
+
 
 ```js
 // Flip the element upside down
@@ -277,7 +328,7 @@ __Arguments Received__
 
   1. `e` _(jQuery.Event)_: jQuery event object
   2. `panzoom` _(Panzoom)_: The panzoom instance
-  3. `transform` _(String)_: The exact transform set during the change
+  3. `transform` _(Array)_: The transform matrix set during the change as an array of values
 
 Fired whenever the matrix is changed by `setMatrix()` (whether internally or externally).
 
@@ -317,7 +368,8 @@ __Arguments Received__
 
   1. `e` _(jQuery.Event)_: jQuery event object
   2. `panzoom` _(Panzoom)_: The panzoom instance
-  3. `changed` _(Boolean)_: Whether the matrix changed during the panzoom event.
+  3. `matrix` _(Array)_: The final transform matrix
+  4. `changed` _(Boolean)_: Whether the matrix changed during the panzoom event
 
 This event is fired when the user finishes a move or finishes a pinch zoom gesture on mobile.
 
