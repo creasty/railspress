@@ -1,0 +1,8 @@
+{
+  "name": "backbone.syphon",
+  "version": "0.4.1",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/derickbailey/backbone.syphon.git"
+  }
+}

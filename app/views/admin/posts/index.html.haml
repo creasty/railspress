@@ -1,0 +1,88 @@
+- content_for :menubar do
+  = link_to '', new_admin_post_path, class: 'icon-plus', title: 'ブログ記事を作成'
+
+#pocket_body
+  #main.no-padding
+    %table.table.table-hover
+      %thead
+        %tr
+          %th{ width: '10px' }
+            %i.icon-check
+          %th.sortable タイトル
+          %th.sortable 作成者
+          %th.sortable.desc{ width: '130px' } 作成日
+          %th{ width: '94px' } サムネイル
+          %th
+            %i.icon-play
+
+      %tbody
+        = render 'table_tbody'
+
+
+#pocket_side
+  %div{ data: { toggle: 'bulk-action', state: 'normal' } }
+    %section
+      %h2 ページ
+
+      %table.form
+        %tr
+          %td= label_tag :page_num, 'ページ'
+          %td
+            = text_field_tag :page_num, '1', class: 'text block'
+        %tr
+          %td= label_tag :per_page, '表示数件'
+          %td
+            = text_field_tag :per_page, '1', class: 'text block'
+
+        %tr
+          %td{ colspan: 2 }
+            = paginate @posts, window: 4, outer_window: 2, theme: 'admin_table'
+
+    %section
+      %h2 検索
+
+      = form_tag admin_posts_path, method: :get do
+        %table.form
+          %tr
+            %td
+              .text.icon-search
+                = text_field :post, :title, placeholder: 'タイトル で検索'
+          %tr
+            %td
+              %div.select
+                = collection_select :post, :user_id, User.all, :id, :name, prompt: '作成者 で絞り込み'
+
+          %tr.doubled
+            %td{ colspan: 2 }
+              = button_tag '検索する', class: 'btn btn-primary block'
+
+  %div.hide{ data: { toggle: 'bulk-action', state: 'selecting' } }
+    %section
+      %h2
+        %span.counter 0
+        項目を選択中
+
+      = button_tag '選択を解除する', class: 'btn block'
+
+    %section
+      %h2 一括編集
+
+      = form_tag admin_posts_path, method: :get do
+        %table.form.table-doubled
+          %tr
+            %td{ colspan: 2 }
+              %h3= label_tag :bulk_status,'公開状況'
+              %div.select
+                = select :bulk_status, nil, { '非公開' => 0, '公開' => 1 }, prompt: '変更なし'
+          %tr
+            %td{ colspan: 2 }
+              %h3= label_tag :bulk_user,'作成者'
+              %div.select
+                = collection_select :bulk_user, :user_id, User.all, :id, :name, prompt: '変更なし'
+
+          %tr
+            %td
+              = button_tag '変更を適応する', class: 'btn btn-success block'
+            %td
+              = button_tag '削除する', class: 'btn btn-danger block'
+

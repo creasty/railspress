@@ -11,21 +11,28 @@ class Admin::PostsController < Admin::ApplicationController
 
     @posts = @posts.where get_search_where
 
-    if ajax_request? && params[:only_table]
-      params.delete :only_table
-      render json: {
-        pager: view_context.paginate(
-          @posts,
-          window: 4,
-          outer_window: 2,
-          theme: 'admin_table'
-        ),
-        html: render_to_string(
-          partial: 'table_tbody',
-          layout: false
-        )
-      }
+    respond_to do |format|
+      format.json do
+        if params[:only_table]
+          params.delete :only_table
+
+          render json: {
+            pager: view_context.paginate(
+              @posts,
+              window: 4,
+              outer_window: 2,
+              theme: 'admin_table'
+            ),
+            html: render_to_string(
+              partial: 'table_tbody',
+              layout: false
+            )
+          }
+        end
+      end
+      format.html { render }
     end
+
   end
 
   def search
@@ -44,49 +51,81 @@ class Admin::PostsController < Admin::ApplicationController
   def create
     @post = Post.new params[:post]
 
-    if @post.save
-      redirect_to edit_admin_post_path(@post), notice: '作成されました'
-    else
-      save_current_params
-      redirect_to new_admin_post_path, alert: '保存に失敗しました'
+    respond_to do |format|
+      if @post.save
+        format.json do
+          render json: {
+            success: true,
+            msg: '作成されました',
+            url: edit_admin_post_path(@post)
+          }
+        end
+        format.html do
+          redirect_to edit_admin_post_path(@post),
+            notice: '作成されました'
+        end
+      else
+        format.json do
+          render json: {
+            success: false,
+            msg: '保存に失敗しました',
+            errors: @post.errors.full_messages
+          }
+        end
+        format.html do
+          save_current_params
+          redirect_to new_admin_post_path,
+            alert: '保存に失敗しました'
+        end
+      end
     end
   end
 
   def update
     @post = Post.find params[:id]
 
-    if @post.update_attributes params[:post]
-      render json: {
-        success: true,
-        msg: '更新されました'
-      }
-    else
-      render json: {
-        success: false,
-        msg: '保存に失敗しました',
-        errors: @post.errors.full_messages
-      }
+    respond_to do |format|
+      if @post.update_attributes params[:post]
+        format.json do
+          render json: {
+            success: true,
+            msg: '更新されました'
+          }
+        end
+      else
+        format.json do
+          render json: {
+            success: false,
+            msg: '保存に失敗しました',
+            errors: @post.errors.full_messages
+          }
+        end
+      end
     end
+
   end
 
   def destroy
     @post = Post.find params[:id]
     @post.destroy
 
-    if ajax_request?
-      render json: {
-        success: true,
-        msg: '記事を削除しました',
-        id: @post.id
-      }
-    else
-      redirect_to admin_posts_path
+    respond_to do |format|
+      format.json do
+        render json: {
+          success: true,
+          msg: '記事を削除しました',
+          id: @post.id
+        }
+      end
+
+      format.html do
+        redirect_to admin_posts_path,
+          notice: '記事を削除しました'
+      end
     end
   end
 
-
-
-  private
+private
 
   def get_search_where
     where = ['1 = 1']

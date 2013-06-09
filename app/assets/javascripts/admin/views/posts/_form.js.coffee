@@ -1,5 +1,8 @@
-require ['jquery', 'datepicker'], ($) ->
-  $('#post_date_str').datepicker format: 'yyyy.mm.dd'
+require ['jquery', 'datepicker', 'domReady!'], ($) ->
+  $date = $ '#post_date_str'
+
+  $date.datepicker format: 'yyyy.mm.dd'
+  $('#pocket_side').on 'scroll', -> $date.datepicker 'hide'
 
 
 require ['jquery', 'tags-input'], ($) ->
@@ -45,7 +48,13 @@ require [
       $('#post_form').submit()
 
 
-require ['jquery', 'common/notify', 'common/transit', 'domReady!'], ($, notify, transit) ->
+require [
+  'jquery'
+  'common/notify'
+  'common/transit'
+  'common/alert'
+  'domReady!'
+], ($, notify, transit, Alert) ->
   st = notify()
 
   $form = $ 'form'
@@ -84,5 +93,16 @@ require ['jquery', 'common/notify', 'common/transit', 'domReady!'], ($, notify, 
     else
       st.fail res.msg
 
-      $form.prepend '<p>' + e + '</p>' for e in res.errors ? []
+      Alert
+        title: res.msg
+        message: res.errors
+        type: 'danger'
+        btns: [
+          { text: '修正する', action: 'close', type: 'danger' }
+          { text: 'もう一度保存する', action: 'retry', type: 'success', align: 'right' }
+        ]
+        callback: (action, al) ->
+          if action == 'retry'
+            $form.submit()
+            al.close()
 

@@ -33,6 +33,27 @@ describe("Panzoom", function() {
 		$elem.trigger( e );
 	}
 
+	/**
+	 * Simulate a move to the specified x and y
+	 * @param {Number} x
+	 * @param {Number} y
+	 */
+	function fauxMove( x, y ) {
+		fauxStart();
+		var e = jQuery.Event("mousemove", {
+			pageX: x,
+			pageY: y,
+			touches: [
+				{ pageX: x, pageY: y }
+			]
+		});
+		var $doc = $(document).trigger( e );
+		e.type = "touchmove";
+		$doc.trigger( e ).trigger("mouseup").trigger("touchend");
+	}
+
+	var rnoneMatrix = /^matrix\(1\,?\s*0\,?\s*0\,?\s*1\,?\s*0\,?\s*0\)/;
+
 	it("should have elements available", function() {
 		expect( $elem ).to.have.length( 1 );
 		expect( $zoomIn ).to.have.length( 1 );
@@ -54,7 +75,7 @@ describe("Panzoom", function() {
 	it("should allow different starting values for zoom than 1", function() {
 		$elem.css( "transform", "scale(2)" );
 		var panzoom = $elem.panzoom({ $zoomRange: $zoomRange }).panzoom("instance");
-		expect( panzoom._getTransform() ).to.contain("matrix");
+		expect( panzoom.getTransform() ).to.contain("matrix");
 		expect( $zoomRange.val() ).to.equal("2");
 		// Clean-up
 		$elem.css( "transform", "" );
@@ -104,7 +125,7 @@ describe("Panzoom", function() {
 	it("should not transition if transition is set to false", function() {
 		$elem.panzoom( "option", "transition", false );
 		$elem.panzoom("reset");
-		expect( $elem.css("transform") ).to.equal("none");
+		expect( $elem.css("transform") ).to.match( rnoneMatrix );
 		// Clean-up
 		$elem.panzoom( "option", "transition", true );
 	});
@@ -117,7 +138,7 @@ describe("Panzoom", function() {
 		panzoom.setMatrix = function() {
 			called = true;
 		};
-		fauxStart();
+		fauxMove( 1, 1 );
 		expect( called ).to.be.false;
 
 		// Clean-up
@@ -204,7 +225,7 @@ describe("Panzoom", function() {
 		function testChange( e, panzoom, transform ) {
 			called = true;
 			expect( panzoom ).to.eql( instance );
-			expect( transform ).to.be.a("string");
+			expect( transform ).to.be.an("array");
 			expect( panzoom.panning ).to.be.false;
 		}
 		$elem.panzoom( "option", "onChange", testChange );
@@ -254,17 +275,7 @@ describe("Panzoom", function() {
 			expect( y ).to.be.a("number");
 		}
 		$elem.on( "panzoompan", testPan );
-		fauxStart();
-		var e = jQuery.Event("mousemove", {
-			pageX: 1,
-			pageY: 1,
-			touches: [
-				{ pageX: 1, pageY: 1 }
-			]
-		});
-		var $doc = $(document).trigger( e );
-		e.type = "touchmove";
-		$doc.trigger( e ).trigger("mouseup").trigger("touchend");
+		fauxMove( 1, 1 );
 		expect( called ).to.be.true;
 	});
 
@@ -272,7 +283,7 @@ describe("Panzoom", function() {
 		var panzoom = $elem.panzoom("instance");
 		var _matrix = panzoom.getMatrix();
 		panzoom.setMatrix("none");
-		expect( panzoom._getTransform() ).to.equal("none");
+		expect( panzoom.getTransform() ).to.match( rnoneMatrix );
 		panzoom.setMatrix( _matrix );
 		expect( panzoom.getMatrix() ).to.eql( _matrix );
 	});
@@ -309,6 +320,48 @@ describe("Panzoom", function() {
 		expect( matrix[4] ).to.equal( "0" );
 		expect( matrix[5] ).to.equal( "0" );
 		$elem.panzoom("reset");
+	});
+
+	it("should reset to the specified transform on reset", function() {
+		var transform = "matrix(1, 0, 0, -1, 0, 0)";
+		// Reset to upside-down
+		$elem.panzoom( "option", "startTransform", transform );
+		var panzoom = $elem.panzoom("instance");
+		panzoom.reset();
+		expect( panzoom.getTransform() ).to.equal( transform );
+		$elem.css("transform", "none");
+		$elem.panzoom( "option", "startTransform", undefined );
+		panzoom.reset();
+	});
+
+	it("should disable/enable panzoom when disable/enable is called", function() {
+		// Disable
+		$elem.panzoom("disable");
+		var panzoom = $elem.panzoom("instance");
+		expect( panzoom ).to.be.an("object");
+		var events = $._data( panzoom.elem, "events" ) || {};
+		expect( events.mousedown || events.touchstart ).to.be.undefined;
+
+		// Enable
+		$elem.panzoom("enable");
+		events = $._data( panzoom.elem, "events" );
+		expect( events.mousedown || events.touchstart ).to.not.be.undefined;
+	});
+
+	it("should reset styles when disabling", function() {
+		$elem.panzoom("zoom").panzoom("disable");
+		expect( $elem.css("cursor") ).to.equal("auto");
+		expect( $elem.css("transition") ).to.not.contain("transform");
+		$elem.panzoom("enable").panzoom( "reset", false );
+	});
+
+	it("should contain the panzoom element within its parent when the contain option is true", function() {
+		$elem.panzoom( "option", "contain", true );
+		fauxMove( -2, -2 );
+		var matrix = $elem.panzoom("getMatrix");
+		expect( +matrix[4] ).to.not.equal( -2 );
+		expect( +matrix[5] ).to.not.equal( -2 );
+		$elem.panzoom("option", "contain", false).panzoom("reset");
 	});
 
 	/**
@@ -393,7 +446,8 @@ describe("Panzoom", function() {
 			$zoomIn: $zoomIn,
 			$zoomOut: $zoomOut,
 			$zoomRange: $zoomRange,
-			$reset: $reset
+			$reset: $reset,
+			eventNamespace: ".svg"
 		});
 		var panzoom = $rect.panzoom("instance");
 		expect( panzoom.isSVG ).to.be.true;

@@ -4,8 +4,9 @@ require [
   'common/notify'
   'components/viewstate'
   'common/transit'
+  'common/alert'
   'domReady!'
-], ($, Notify, Viewstate, transit) ->
+], ($, Notify, Viewstate, transit, Alert) ->
 
   $tbody = $ '#main > table > tbody'
 
@@ -50,25 +51,48 @@ require [
     else
       $view.trigger 'changeViewstate', 'normal'
 
-  $(document)
-  .on 'click', 'tr.post a[data-method="delete"]', ->
-    st.progress '記事を削除しています'
-  .on 'ajax:success','tr.post a[data-method="delete"]', (e, res) ->
-    if res.success
-      $post = $ '#post_' + res.id
+  $(document).on 'ajax:beforeSend.rails', 'tr.post a[data-method="delete"]', (e) ->
 
-      $post
-      .animate
-        opacity: 0
-      ,
-        complete: ->
-          st.success res.msg
-          $post.remove()
+    $t = $ @
 
-          $.ajax
-            url: window.location.href
-            data: only_table: true
-          .done (json) ->
-            $('ul.pagination').replaceWith json.pager
-            $('table > tbody').html json.html
+    return true if $t.data 'dependent_destroy'
+
+    Alert
+      title: '削除しますか？'
+      message: '一度削除した記事はもとに戻すことはできません。'
+      type: 'danger'
+      btns: [
+        { text: '削除', action: 'destroy', type: 'danger' }
+        { text: 'キャンセル', action: 'close', align: 'right' }
+      ]
+      callback: (action, al) =>
+        if action == 'destroy'
+          st.progress '記事を削除しています'
+          $t.data 'dependent_destroy', true
+          $t.trigger 'click.rails'
+          al.close()
+
+    e.preventDefault()
+    false
+
+  $(document).on 'ajax:success', 'tr.post a[data-method="delete"]', (e, res) ->
+    return unless res.success
+
+    $post = $ '#post_' + res.id
+
+    $post
+    .animate
+      opacity: 0
+    ,
+      duration: 300
+      complete: ->
+        st.success res.msg
+        $post.remove()
+
+        $.ajax
+          url: window.location.href
+          data: only_table: true
+        .done (json) ->
+          $('ul.pagination').replaceWith json.pager
+          $('table > tbody').html json.html
 

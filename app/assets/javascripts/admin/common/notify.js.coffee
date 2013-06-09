@@ -87,7 +87,7 @@ define ['jquery', 'common/timeago', 'domReady!'], ($) ->
 
     create: ->
       @state = null
-      @$notifi = $('<div></div>').css 'height', 0
+      @$notifi = $('<div></div>').height 0
       @$text = $('<span></span>').appendTo @$notifi
       @$close = $('<div class="close"></div>').appendTo @$notifi
       @$timestamp = $('<div class="timestamp"></div>').appendTo @$notifi

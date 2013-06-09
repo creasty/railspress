@@ -95,7 +95,7 @@ body {
 	position: absolute;
 	top: 115px;
 	bottom: 0;
-	overflow: scroll;
+	overflow-x: hidden;
 	@include box-sizing(border-box);
 }
 

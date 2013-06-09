@@ -18,16 +18,17 @@
 /*	Dropdown Panel
 -----------------------------------------------*/
 %dropdown-panel {
-	@include popup-animation('ul', '&:hover ul');
+	@include popup-animation("ul", "&:hover ul", $y: -10px, $rotate: 0);
 
 	ul {
 		background: $header-bg-color;
 		position: absolute;
-		top: 55px - 10px;
+		top: 55px;
 		margin-left: -15px;
 		width: 180px;
 		padding: 0;
 		list-style: none;
+		z-index: 1001;
 		@include box-shadow(0 5px 0 -2px rgba(#000, .1));
 
 		li {
@@ -47,10 +48,6 @@
 				}
 			}
 		}
-	}
-
-	&:hover ul {
-		top: 55px;
 	}
 }
 
@@ -112,7 +109,7 @@
 		height: 32px;
 
 		img {
-			@include border-radius(3px);
+			@include border-radius(2px);
 			@include box-shadow(0 0 0 1px rgba(#000, .3));
 		}
 	}
@@ -120,11 +117,8 @@
 	@extend %dropdown-panel;
 
 	ul {
-		top: 31px - 10px;
+		top: 32px;
 		right: -15px;
-	}
-	&:hover ul {
-		top: 31px;
 	}
 }
 

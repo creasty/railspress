@@ -1,9 +1,0 @@
-{
-  "name": "grass",
-  "version": "0.0.0",
-  "commit": "35a91689aa1e28861e0dfbb916097842e726cc66",
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/phil-quinn/grass-framework.git"
-  }
-}

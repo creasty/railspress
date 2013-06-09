@@ -35,7 +35,10 @@ body#posts {
 		.ace_selection {
 			background: #eee8d5;
 		}
-
+		.ace_cursor {
+			border-left: 1px solid $body-bg-color;
+			@include transition(.3s opacity);
+		}
 	}
 
 	.post-thumbnail {
