@@ -5,6 +5,7 @@ module Admin
     layout 'admin'
 
     before_filter :authenticate_admin!, except: [:login, :logout]
+    before_filter :json_for_ajax_request!
 
     def authenticate_admin!
       if !user_signed_in?
@@ -12,6 +13,10 @@ module Admin
       elsif !current_user.try(:admin?)
         redirect_to root_path
       end
+    end
+
+    def json_for_ajax_request!
+      params[:format] = 'json' if ajax_request?
     end
 
   end

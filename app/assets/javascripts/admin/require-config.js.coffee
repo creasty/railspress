@@ -23,6 +23,7 @@
     'jquery-autocomplete': 'jquery-autocomplete/src/jquery.autocomplete.min'
     'masonry': 'jquery-masonry/jquery.masonry.min'
     'panzoom': 'jquery.panzoom/dist/jquery.panzoom.min'
+    'powertip': 'powertip/jquery.powertip.min'
     'tags-input': 'tags-input/jquery.tagsinput.min'
     'underscore': 'underscore/underscore-min'
 
@@ -44,6 +45,7 @@
     'jquery_ujs': ['jquery']
     'masonry': ['jquery']
     'panzoom': ['jquery']
+    'powertip': ['jquery']
     'tags-input': ['jquery', 'jquery-autocomplete']
     'underscore': exports: '_'
 

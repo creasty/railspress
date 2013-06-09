@@ -1,28 +1,26 @@
 
 /*=== Grid and Columns
 ==============================================================================================*/
-/*	< Column Layout Balance >
+/*
 
-	col-ab-{a,b}			balanced
-	col-Ab-{A,b}			left-weighted 1
-	col-AAb-{AA,b}			left-weighted 2
-	col-aB-{a,B}			right-weighted 1
-	col-aBB-{a,BB}			right-weighted 2
+	col-ab-{a,b}       6 : 6
+	col-Ab-{A,b}       8 : 4
+	col-AAb-{AA,b}     9 : 3
+	col-aB-{a,B}       4 : 8
+	col-aBB-{a,BB}     3 : 9
 
-	col-abc-{a,b,c}			balanced
-	col-Abc-{A,b,c}			left-weighted
-	col-aBc-{a,B,c}			center-weighted
-	col-abC-{a,b,C}			right-weighted
-
-	col-abcd-{a,b,c,d}		balanced
+	col-abc-{a,b,c}    4 : 4 : 4
+	col-Abc-{A,b,c}    6 : 3 : 3
+	col-aBc-{a,B,c}    3 : 6 : 3
+	col-abC-{a,b,C}    3 : 3 : 6
 
 */
-
-@include column-classes("span");
 
 .row {
 	@include row;
 }
+
+@include column-classes("span");
 
 .col-AAb-AA, .col-aBB-BB {
 	@include column(9);
@@ -43,5 +41,4 @@
 .col-abcd-a, .col-abcd-b, .col-abcd-c, .col-abcd-d {
 	@include column(3);
 }
-
 

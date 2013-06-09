@@ -1,5 +1,8 @@
-require ['jquery', 'datepicker'], ($) ->
-  $('#post_date_str').datepicker format: 'yyyy.mm.dd'
+require ['jquery', 'datepicker', 'domReady!'], ($) ->
+  $date = $ '#post_date_str'
+
+  $date.datepicker format: 'yyyy.mm.dd'
+  $('#pocket_side').on 'scroll', -> $date.datepicker 'hide'
 
 
 require ['jquery', 'tags-input'], ($) ->

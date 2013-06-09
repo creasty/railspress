@@ -37,11 +37,17 @@
 
       = button_tag 'Open', class: 'btn', id: 'sample_modal'
 
-    .col-ab-b
-
       %h3 Alert
 
       = button_tag 'Open', class: 'btn', id: 'sample_alert'
+
+    .col-ab-b
+
+      %h3 Tooltip
+
+      %p
+        this is example of
+        %abbr{ title: 'Tooltip' } TT
 
 
   %h2 Form
@@ -87,7 +93,7 @@
             when 'retry'
               Alert
                 title: 'Are you sure?'
-                message: (t) ->
+                message: ->
                   "Retry \#{al1.config.title}"
                 btns: [
                   { text: 'OK', action: 'okay', type: 'danger' }

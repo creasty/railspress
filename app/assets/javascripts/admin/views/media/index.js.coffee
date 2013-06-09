@@ -8,6 +8,7 @@ define [
   'text!./item.tpl'
   'filedrop'
   'masonry'
+  'domReady!'
 ], ($, Notify, Viewstate, Select, template, item_html) ->
 
   #  Token

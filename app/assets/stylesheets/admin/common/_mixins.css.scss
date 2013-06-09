@@ -2,7 +2,12 @@
 /*=== Grid
 ==============================================================================================*/
 @function column-width($n) {
-	@return calc(100% / #{$grid-columns / $n} - #{$grid-gutter});
+	@if unit($grid-width) == "px" {
+		@return floor($grid-width * $n / $grid-columns - $grid-gutter);
+	}
+	@else {
+		@return calc(#{percentage($n / $grid-columns)} - #{$grid-gutter});
+	}
 }
 
 @mixin row {

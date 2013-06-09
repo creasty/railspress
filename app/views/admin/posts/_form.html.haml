@@ -1,42 +1,42 @@
 
-= form_for [:admin, @post], html: { multipart: true, id: 'post_form' }, remote: (action_name == 'edit') do |f|
+= form_for [:admin, @post], html: { multipart: true, id: 'post_form' }, remote: true do |f|
 
   #pocket_body
     #main.no-padding
-      = f.text_field :title, placeholder: 'タイトルを入力してください', class: 'panel-title', autocomplete: 'off'
+      = f.text_field :title, placeholder: 'タイトルを入力してください', autocomplete: 'off'
 
       .menubar
         %ul
           %li
-            %a.icon-link{ href: '#' }
+            %a.tooltip.icon-link{ href: '#', title: 'リンク挿入' }
           %li
-            %a.icon-image{ href: '#' }
+            %a.tooltip.icon-image{ href: '#', title: 'メディア挿入' }
           %li.divide
-            %a.icon-bold{ href: '#' }
+            %a.tooltip.icon-bold{ href: '#', title: '太字' }
           %li
-            %a.icon-italic{ href: '#' }
+            %a.tooltip.icon-italic{ href: '#', title: '斜字' }
           %li
-            %a.icon-underline{ href: '#' }
+            %a.tooltip.icon-underline{ href: '#', title: '下線' }
           %li
-            %a.icon-emphasis{ href: '#' }
+            %a.tooltip.icon-emphasis{ href: '#', title: '強調' }
           %li
-            %a.icon-strike{ href: '#' }
+            %a.tooltip.icon-strike{ href: '#', title: '打消' }
           %li
-            %a.icon-quote{ href: '#' }
+            %a.tooltip.icon-quote{ href: '#', title: '引用' }
           %li.divide
-            %a.icon-alignleft{ href: '#' }
+            %a.tooltip.icon-alignleft{ href: '#', title: '左揃え' }
           %li
-            %a.icon-aligncenter{ href: '#' }
+            %a.tooltip.icon-aligncenter{ href: '#', title: '中央揃え' }
           %li
-            %a.icon-alignright{ href: '#' }
+            %a.tooltip.icon-alignright{ href: '#', title: '右揃え' }
 
         %ul.right
           %li
-            %a.icon-tile{ href: '#' }
+            %a.tooltip.icon-tile{ href: '#', title: 'デザイン' }
           %li.selected
-            %a.icon-code{ href: '#' }
+            %a.tooltip.icon-code{ href: '#', title: 'コード' }
 
-      = f.text_area :content, rows: 5, class: 'hide'
+      = f.text_area :content, class: 'hide'
 
 
   #pocket_side
