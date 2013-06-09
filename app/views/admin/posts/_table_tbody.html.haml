@@ -14,7 +14,7 @@
     %td.controller
       = link_to edit_admin_post_path(post) do
         %i.icon-edit
-      = link_to admin_post_path(post), confirm: 'Sure?', method: :delete, remote: true do
+      = link_to admin_post_path(post), method: :delete, remote: true do
         %i.icon-delete
       = link_to post_path(post), target: '_blank' do
         %i.icon-view
