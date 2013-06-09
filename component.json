@@ -2,7 +2,6 @@
   "dependencies": {
     "backbone": "latest",
     "flight": "latest",
-    "grass": "git://github.com/phil-quinn/grass-framework.git",
     "jcrop": "latest",
     "jquery-autocomplete": "git://github.com/dyve/jquery-autocomplete.git",
     "jquery-filedrop": "latest",

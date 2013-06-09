@@ -7,7 +7,7 @@ define ['jquery'], ($) ->
         title: ''
         message: ''
         type: 'normal'
-        btns: [text: 'OK', action: 'close', type: 'danger']
+        btns: [text: 'Close', action: 'close']
         callback: $.noop
         duration: 300
       , @config
@@ -41,7 +41,10 @@ define ['jquery'], ($) ->
       if $.isArray @config.message
         @config.message = "<ul><li>#{@config.message.join('</li><li>')}</li></ul>"
 
-      @$message.html @config.message
+      if $.isFunction @config.message
+        @$message.append @config.message @
+      else
+        @$message.html @config.message
 
       @config.btns.forEach (v) =>
         $btn = $ '<button class="btn"></button>'

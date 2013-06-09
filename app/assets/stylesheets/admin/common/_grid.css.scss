@@ -18,41 +18,30 @@
 
 */
 
-@for $n from 1 through $grid-columns {
-	.span-#{$n} {
-		width: grid-span($n);
-	}
+@include column-classes("span");
+
+.row {
+	@include row;
 }
 
 .col-AAb-AA, .col-aBB-BB {
-	width: grid-span(9);
+	@include column(9);
 }
 .col-Ab-A, .col-aB-B {
-	width: grid-span(8);
+	@include column(8);
 }
 .col-ab-a, .col-ab-b,
 .col-Abc-A, .col-aBc-B, .col-abC-C {
-	width: grid-span(6);
+	@include column(6);
 }
 .col-Ab-b, .col-aB-a,
 .col-abc-a, .col-abc-b, .col-abc-c {
-	width: grid-span(4);
+	@include column(4);
 }
 .col-AAb-b, .col-aBB-a, .col-Abc-b,
 .col-Abc-c, .col-aBc-a, .col-aBc-c, .col-abC-a, .col-abC-b,
 .col-abcd-a, .col-abcd-b, .col-abcd-c, .col-abcd-d {
-	width: grid-span(3);
+	@include column(3);
 }
 
-.col-abcde-a, .col-abcde-b, .col-abcde-c, .col-abcde-d, .col-abcde-e {
-	width: (100% - $grid-gutter * 4) / 5;
-}
 
-[class*="span-"],
-[class*="col-"] {
-	float: left;
-
-	& + & {
-		margin-left: $grid-gutter;
-	}
-}
