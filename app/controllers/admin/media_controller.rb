@@ -68,9 +68,9 @@ class Admin::MediaController < Admin::ApplicationController
         format.html do
           redirect_to edit_admin_medium_path(@medium), notice: 'Updated!'
           end
-          format.json { head :no_content }
+          format.json { render json: { message: 'メディアを更新しました' } }
       else
-        format.htl do
+        format.html do
           flash.now[:alert] = 'Failed!'
           render :edit
         end
@@ -88,7 +88,7 @@ class Admin::MediaController < Admin::ApplicationController
     if ajax_request?
       render json: {
         success: true,
-        msg: '削除しました',
+        message: 'メディアを削除しました',
         id: @medium.id
       }
     else

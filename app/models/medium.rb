@@ -57,12 +57,14 @@ class Medium < ActiveRecord::Base
 
   def to_backbone_json
     {
-      id: self.id,
+      id: id,
+      title: title,
+      description: description,
       name: read_attribute(:asset_file_name),
       size: read_attribute(:asset_file_size),
-      file_type: self.file_type,
+      file_type: file_type,
       thumbnail: asset.url(:small),
-      is_image: self.image?,
+      is_image: image?,
       # delete_url: admin_medium_path(self),
     }
   end

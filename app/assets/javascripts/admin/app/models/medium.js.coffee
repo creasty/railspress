@@ -16,7 +16,6 @@ define [
       type:        ''
       preview:     false
 
-      selected:    false
+    selected: false
 
-    toggle: ->
-      @set selected: !@get 'selected'
+    toggle: -> @selected = !@selected

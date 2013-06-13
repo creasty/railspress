@@ -15,7 +15,7 @@ define [
       @filter (medium) -> type == medium.get 'type'
 
     selected: ->
-      @filter (medium) -> medium.get 'selected'
+      @filter (medium) -> medium.selected
 
     nextOrder: ->
       return 1 unless @length

@@ -6,25 +6,21 @@
 #pocket_body
   #main
     %ul#media_list
-      - @media.each do |medium|
-        %li[medium]{ data: { id: medium.id, title: medium.title, description: medium.description } }
-          - if medium.image?
-            .preview-image{ style: "background-image: url(#{medium.asset.url(:small)});" }
-              .title
-                /
+      /
+        - @media.each do |medium|
+          %li[medium]{ data: { id: medium.id, title: medium.title, description: medium.description } }
+            - if medium.image?
+              .preview-image{ style: "background-image: url(#{medium.asset.url(:small)});" }
+                .title
                   = link_to '', admin_medium_path(medium), remote: true, method: :delete, class: 'icon-delete'
-                  = link_to '', edit_admin_medium_path(medium), class: 'icon-edit'
-                  %br
-                = medium.title
+                  = medium.title
 
-          - else
-            .preview-image.file
-              .title= medium.title
-              .info
-                %span.icon-file= medium.file_type
-                /
-                  = link_to '', admin_medium_path(medium), remote: true, method: :delete, class: 'icon-delete'
-                  = link_to '', edit_admin_medium_path(medium), class: 'icon-edit'
+            - else
+              .preview-image.file
+                .title= medium.title
+                .info
+                  %span.icon-file= medium.file_type
+
 
     #dropbox{ 'data-post-url' => admin_media_path }
       %p ファイルをドラッグ&ドロップしてアップロード
@@ -32,51 +28,49 @@
 
 
 #pocket_side
-  = form_for :medium, html: { id: 'medium_form' } do |f|
+  %div.view{ 'data-state' => 'grid' }
+    %p
+      %i.icon-compass
+      サムネイルを選択して編集するか
+      %br
+      ファイルをドラッグ&ドロップして
+      %br
+      アップロードできます
 
-    %div.view{ 'data-state' => 'grid' }
-      %p
-        %i.icon-compass
-        サムネイルを選択して編集するか
-        %br
-        ファイルをドラッグ&ドロップして
-        %br
-        アップロードできます
+  %div.view.hide{ 'data-state' => 'selecting' }
+    %section
+      %h2
+        ファイル情報
+        = link_to '', '#', class: 'icon-crop'
 
-    %div.view.hide{ 'data-state' => 'selecting' }
-      %section
-        %h2
-          ファイル情報
-          = link_to '', '#', class: 'icon-crop'
+      %table.form.table-doubled
+        %tr
+          %td
+            %h3= label_tag :medium_title, 'タイトル'
+            = text_field_tag :medium_title, '', class: 'text block'
+        %tr
+          %td
+            %h3= label_tag :medium_description, '説明文'
+            = text_area_tag :medium_description, '', size: '30x5', class: 'textarea block'
 
-        %table.form.table-doubled
-          %tr
-            %td
-              %h3= f.label :title, 'タイトル'
-              = f.text_field :title, class: 'text block'
-          %tr
-            %td
-              %h3= f.label :description, '説明文'
-              = f.text_area :description, size: '30x5', class: 'textarea block'
+        %tr
+          %td
+            = button_tag '更新する', id: 'btn_update', class: 'btn btn-primary block'
 
-          %tr
-            %td
-              = f.submit nil, class: 'btn btn-primary block'
-
-      %section
-        %h2 ファイルを削除
-        = button_tag '削除する', id: 'medium_delete', class: 'btn btn-danger block'
+    %section
+      %h2 ファイルを削除
+      = button_tag '削除する', id: 'btn_delete', class: 'btn btn-danger block'
 
 
-    %div.view.hide{ 'data-state' => 'bulk' }
-      %section
-        %h2
-          %span.counter 0
-          項目を選択中
+  %div.view.hide{ 'data-state' => 'bulk' }
+    %section
+      %h2
+        %span.counter 0
+        項目を選択中
 
-        = button_tag '選択を解除する', class: 'btn block'
+      = button_tag '選択を解除する', id: 'btn_disselect', class: 'btn block'
 
-      %section
-        %h2 一括削除
-        = button_tag '削除する', class: 'btn btn-danger block'
+    %section
+      %h2 一括削除
+      = button_tag '全て削除する', id: 'btn_delete_all', class: 'btn btn-danger block'
 

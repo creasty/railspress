@@ -18,13 +18,15 @@ define [
     initialize: ->
       @listenTo @model, 'change', @render
       @listenTo @model, 'destroy', @remove
+      @listenTo @model, 'toggle', @toggleSelected
 
     render: ->
       @$el.html @template @model.toJSON()
       @
 
-    toggleSelected: -> @model.toggle()
+    toggleSelected: ->
+      @$el.toggleClass 'selected'
+      @model.toggle()
+      true
 
     clear: -> @model.destroy()
-
-
