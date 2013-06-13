@@ -1,15 +1,88 @@
 
 define [
   'jquery'
+  'underscore'
+  'backbone'
+  'app/collections/media'
+  'app/views/media/thumb_view'
   'common/notify'
-  'components/viewstate'
   'components/select'
-  'utils/template'
-  'text!./item.tpl'
+  'components/viewstate'
   'filedrop'
   'masonry'
   'domReady!'
-], ($, Notify, Viewstate, Select, template, item_html) ->
+], ($, _, Backbone, Media, ThumbView, Notify, Select, Viewstate) ->
+
+  class AppView extends Backbone.View
+
+    el: 'body'
+
+    events:
+      'submit #medium_form':    'formSubmit'
+      'keypress #new-todo':     'createOnEnter',
+      'click #clear-completed': 'clearCompleted',
+      'click #toggle-all':      'toggleAllComplete'
+
+    initialize: ->
+      @$allCheckbox = $ '#toggle-all'
+      @$input = $ '#new-todo'
+      @$footer = $ '#footer'
+      @$main = $ '#main'
+
+      @listenTo Media, 'add', @addOne
+      @listenTo Media, 'change', @filterOne
+
+      Media.fetch()
+
+    render: ->
+      completed = Media.completed().length
+      remaining = Media.remaining().length
+
+      if Media.length
+        # some
+      else
+        # nothing
+
+      @$allCheckbox.attr 'checked', !remaining
+
+    addOne: (todo) ->
+      view = new ThumbView model: todo
+      $('#todo-list').append view.render().el
+
+    addAll: ->
+      $('#todo-list').html ''
+      Media.each @addOne, @
+
+    newAttributes: ->
+      {
+        title: @$input.val().trim()
+        order: Media.nextOrder()
+        completed: false
+      }
+
+    createOnEnter: (e) ->
+      Media.create @newAttributes()
+      @$input.val ''
+
+    clearCompleted: (e) ->
+      _.invoke Media.completed(), 'destroy'
+      false
+
+    toggleAllComplete: (e) ->
+      completed = @allCheckbox.checked
+
+      Media.each (todo) ->
+        todo.save completed: completed
+
+    formSubmit: (e) ->
+      e.preventDefault()
+      data = Backbone.Syphon.serialize @
+      console.log data
+      # data = data.map (field) -> field
+
+
+  new AppView()
+
 
   #  Token
   #-----------------------------------------------
@@ -68,8 +141,6 @@ define [
   $main = $ '#main'
   $dropbox = $ '#dropbox'
   $fileField = $ '#medium_asset'
-
-  ItemTmpl = template item_html
 
   $('#menubar > h1 > a.icon-plus').on 'click', (e) ->
     $fileField.trigger 'click'

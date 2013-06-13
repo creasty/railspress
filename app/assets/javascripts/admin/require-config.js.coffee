@@ -3,6 +3,7 @@
 
   paths:
     # Admin
+    'app': 'admin/app'
     'common': 'admin/common'
     'components': 'admin/components'
     'mixin': 'admin/mixin'

@@ -1,11 +1,13 @@
 
 define [
-  'jquery'
   'underscore'
   'backbone'
-], ($, _, Backbone) ->
+], (_, Backbone) ->
 
   class Medium extends Backbone.Model
+
+    urlRoot: '/admin/media'
+
     defualts:
       id:          ''
       title:       ''
@@ -17,5 +19,4 @@ define [
       selected:    false
 
     toggle: ->
-      @set 'selected', !@get 'selected'
-
+      @set selected: !@get 'selected'

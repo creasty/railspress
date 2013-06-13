@@ -1,0 +1,15 @@
+<% if (is_image) { %>
+	<div class="preview-image" style="background-image: url(<%= thumbnail %>)">
+		<div class="title"><%- name %></div>
+		<div class="progressbar">
+			<div></div>
+		</div>
+	</div>
+<% } else { %>
+	<div class="preview-image file">
+		<div class="info">
+			<i><%- file_type %></i>
+			<span><%- name %></span>
+		</div>
+	</div>
+<% } %>

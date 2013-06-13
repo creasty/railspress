@@ -8,7 +8,7 @@ class Admin::MediaController < Admin::ApplicationController
     respond_to do |format|
       format.html { render }
       format.json do
-        render json: @media.map { |m| m.to_jq_upload }
+        render json: @media.map { |m| m.to_backbone_json }
       end
     end
   end
@@ -18,7 +18,7 @@ class Admin::MediaController < Admin::ApplicationController
 
     respond_to do |format|
       format.html { render }
-      format.json { render json: @medium }
+      format.json { render json: @medium.to_backbone_json }
     end
   end
 
@@ -27,7 +27,7 @@ class Admin::MediaController < Admin::ApplicationController
 
     respond_to do |format|
       format.html { render }
-      format.json { render json: @medium }
+      format.json { render json: @medium.to_backbone_json }
     end
   end
 
