@@ -7,6 +7,7 @@
 		padding: 0;
 		width: 100%;
 		margin: 0;
+		overflow: visible !important;
 
 		li {
 			display: block;
@@ -149,7 +150,8 @@
 		}
 
 	}
-	#dropbox {
+
+	#dropzone {
 		display: none;
 		position: absolute;
 		top: 0;
@@ -173,7 +175,7 @@
 		#media_list {
 			display: none;
 		}
-		#dropbox {
+		#dropzone {
 			display: block;
 		}
 	}

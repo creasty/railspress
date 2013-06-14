@@ -55,13 +55,17 @@ class Medium < ActiveRecord::Base
     asset.content_type.split('/')[0].capitalize
   end
 
-  def to_jq_upload
+  def to_backbone_json
     {
+      id: id,
+      title: title,
+      description: description,
       name: read_attribute(:asset_file_name),
       size: read_attribute(:asset_file_size),
-      url: asset.url(:small),
-      delete_url: admin_medium_path(self),
-      delete_type: :delete
+      file_type: file_type,
+      thumbnail: asset.url(:small),
+      is_image: image?,
+      # delete_url: admin_medium_path(self),
     }
   end
 

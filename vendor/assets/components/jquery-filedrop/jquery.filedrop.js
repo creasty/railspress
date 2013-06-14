@@ -282,7 +282,7 @@
             reader.onloadend = !opts.beforeSend ? send : function (e) {
               opts.beforeSend(files[fileIndex], fileIndex, function () { send(e); });
             };
-            
+
             reader.readAsBinaryString(files[fileIndex]);
 
           } else {
@@ -351,7 +351,7 @@
 	    } else {
 	    	xhr.open("POST", opts.url, true);
 	    }
-	    
+
         xhr.setRequestHeader('content-type', 'multipart/form-data; boundary=' + boundary);
 
         // Add headers
@@ -403,7 +403,7 @@
             if (result === false) {
               stop_loop = true;
             }
-          
+
 
           // Pass any errors to the error option
           if (xhr.status < 200 || xhr.status > 299) {
@@ -500,7 +500,7 @@
       }
       var ords = Array.prototype.map.call(datastr, byteValue);
       var ui8a = new Uint8Array(ords);
-      this.send(ui8a.buffer);
+      this.send(ui8a);
     };
   } catch (e) {}
 

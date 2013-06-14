@@ -3,6 +3,7 @@
 
   paths:
     # Admin
+    'app': 'admin/app'
     'common': 'admin/common'
     'components': 'admin/components'
     'mixin': 'admin/mixin'
@@ -17,6 +18,8 @@
 
     'ace': 'ace/lib/ace'
     'backbone': 'backbone/backbone-min'
+    'backbone.pageable': 'backbone-pageable/lib/backbone-pageable.min'
+    'backbone.syphon': 'backbone.syphon/lib/backbone.syphon.min'
     'datepicker': 'datepicker/js/bootstrap-datepicker'
     'filedrop': 'jquery-filedrop/jquery.filedrop'
     'jcrop': 'jcrop/js/jquery.Jcrop.min'
@@ -37,6 +40,8 @@
     'backbone':
       deps: ['jquery', 'underscore']
       exports: 'Backbone'
+    'backbone.pageable': ['backbone']
+    'backbone.syphon': ['backbone']
     'datepicker': ['jquery']
     'filedrop': ['jquery']
     'hashchange': ['jquery']

@@ -3,12 +3,12 @@
 class Admin::MediaController < Admin::ApplicationController
 
   def index
-    @media = Medium.order 'created_at DESC'
+    @media = Medium.all
 
     respond_to do |format|
       format.html { render }
       format.json do
-        render json: @media.map { |m| m.to_jq_upload }
+        render json: @media.map { |m| m.to_backbone_json }
       end
     end
   end
@@ -18,7 +18,7 @@ class Admin::MediaController < Admin::ApplicationController
 
     respond_to do |format|
       format.html { render }
-      format.json { render json: @medium }
+      format.json { render json: @medium.to_backbone_json }
     end
   end
 
@@ -27,7 +27,7 @@ class Admin::MediaController < Admin::ApplicationController
 
     respond_to do |format|
       format.html { render }
-      format.json { render json: @medium }
+      format.json { render json: @medium.to_backbone_json }
     end
   end
 
@@ -44,9 +44,7 @@ class Admin::MediaController < Admin::ApplicationController
           redirect_to edit_admin_medium_path(@medium), notice: 'Created!'
         end
         format.json do
-          render json: {
-            files: [@medium.to_jq_upload]
-          }, status: :created#, location: [:admin, @medium]
+          render json: @medium.to_backbone_json
         end
       else
         format.html do
@@ -68,9 +66,9 @@ class Admin::MediaController < Admin::ApplicationController
         format.html do
           redirect_to edit_admin_medium_path(@medium), notice: 'Updated!'
           end
-          format.json { head :no_content }
+          format.json { render json: { message: 'メディアを更新しました' } }
       else
-        format.htl do
+        format.html do
           flash.now[:alert] = 'Failed!'
           render :edit
         end
@@ -88,7 +86,7 @@ class Admin::MediaController < Admin::ApplicationController
     if ajax_request?
       render json: {
         success: true,
-        msg: '削除しました',
+        message: 'メディアを削除しました',
         id: @medium.id
       }
     else
