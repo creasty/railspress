@@ -22,7 +22,7 @@
                   %span.icon-file= medium.file_type
 
 
-    #dropbox{ 'data-post-url' => admin_media_path }
+    #dropzone{ 'data-post-url' => admin_media_path }
       %p ファイルをドラッグ&ドロップしてアップロード
       = file_field_tag :medium_asset, multiple: true, class: 'hide'
 

@@ -3,7 +3,7 @@
 class Admin::MediaController < Admin::ApplicationController
 
   def index
-    @media = Medium.order 'created_at DESC'
+    @media = Medium.all
 
     respond_to do |format|
       format.html { render }
@@ -44,9 +44,7 @@ class Admin::MediaController < Admin::ApplicationController
           redirect_to edit_admin_medium_path(@medium), notice: 'Created!'
         end
         format.json do
-          render json: {
-            files: [@medium.to_jq_upload]
-          }, status: :created#, location: [:admin, @medium]
+          render json: @medium.to_backbone_json
         end
       else
         format.html do

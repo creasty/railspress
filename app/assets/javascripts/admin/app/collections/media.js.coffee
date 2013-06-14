@@ -17,12 +17,4 @@ define [
     selected: ->
       @filter (medium) -> medium.selected
 
-    nextOrder: ->
-      return 1 unless @length
-
-      @last().get('order') + 1
-
-    comparator: (medium) -> medium.get 'order'
-
-
   new MediaCollection()

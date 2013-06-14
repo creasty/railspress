@@ -35,7 +35,7 @@ define [
   UploaderNotify = Notify()
 
   $main = $ '#main'
-  $dropbox = $ '#dropbox'
+  $dropzone = $ '#dropzone'
   $fileField = $ '#medium_asset'
 
   $('#menubar > h1 > a.icon-plus').on 'click', (e) ->
@@ -50,8 +50,7 @@ define [
     el: '#media_list'
 
     events:
-      'click': 'onClick'
-      'changeSidebar': 'changeSidebar'
+      'click li': 'onClick'
 
     initialize: ->
       @listenTo Media, 'add', @addOne
@@ -87,6 +86,7 @@ define [
     changeSidebar: ->
       selected = Media.selected()
       count = selected.length
+      console.log selected
 
       if count > 1
         @$el.addClass 'bulk'
@@ -107,7 +107,7 @@ define [
 
     addOne: (medium) ->
       view = new ThumbView model: medium
-      @$el.append(view.render().$el).masonry 'reload'
+      @$el.prepend(view.render().$el).masonry 'reload'
 
     addAll: ->
       @$el.html ''
@@ -126,9 +126,13 @@ define [
 
       @changeSidebar()
 
-    createOnEnter: (e) ->
-      Media.create @newAttributes()
-      @$input.val ''
+    addLoader: (op) ->
+      medium = new Media.model
+      medium.set op
+      Media.models.unshift medium
+
+      $el: @addOne medium
+      model: medium
 
     delete: =>
       selected = Media.selected()
@@ -175,16 +179,14 @@ define [
 
   App = new AppView()
 
-  console.log App
 
-->
 
-  $dropbox.filedrop
+  $dropzone.filedrop
     fallback_id: 'medium_asset'
     paramname: 'medium[asset]'
     maxfiles: 10
     maxfilesize: 20
-    url: $dropbox.data 'post-url'
+    url: $dropzone.data('post-url') + '.json'
 
     data: do ->
       h = {}
@@ -209,16 +211,16 @@ define [
     error: (err, file) ->
       switch err
         when 'BrowserNotSupported'
-          notifi_uploader.fail 'このブラウザではアップロードできません'
+          UploaderNotify.fail 'このブラウザではアップロードできません'
         when 'TooManyFiles'
-          notifi_uploader.fail '一度にアップロードできるのは10個までです'
+          UploaderNotify.fail '一度にアップロードできるのは10個までです'
         when 'FileTooLarge'
-          notifi_uploader.fail "#{file.name} はファイルサイズが大きすぎます"
+          UploaderNotify.fail "#{file.name} はファイルサイズが大きすぎます"
 
     # Called before each upload is started
     beforeEach: (file) ->
       if !file.type.match /^image\//
-        notifi_uploader.fail "#{file.name} はアップロードできないファイル形式です"
+        UploaderNotify.fail "#{file.name} はアップロードできないファイル形式です"
         false
       else
         true
@@ -226,42 +228,32 @@ define [
     uploadStarted: (i, file, len) ->
       createImage file
 
-    uploadFinished: (i, file, response) ->
-      $.data(file).addClass 'done'
-      $.data(file).find('.progressbar').fadeOut()
+    uploadFinished: (i, file, res) ->
+      console.log res
+      $.data(file).model.set res
+      $.data(file).$el
+      .removeClass('progress')
+      .find('.progressbar').fadeOut()
 
     progressUpdated: (i, file, progress) ->
-      $.data(file).find('.progressbar > div').width progress + '%'
+      $.data(file).$el.find('.progressbar > div').width progress + '%'
 
     globalProgressUpdated: (progress) ->
-      notifi_uploader.progress "アップロード中...#{progress}%"
+      UploaderNotify.progress "アップロード中...#{progress}%"
 
     afterAll: ->
-      notifi_uploader.success 'アップロード完了'
+      UploaderNotify.success 'アップロード完了'
 
 
   createImage = (file) ->
-    $preview = $ """
-        <li>
-          <div class="preview-image">
-            <div class="progressbar">
-              <div></div>
-            </div>
-          </div>
-        </li>
-      """
-
-    $image = $ '.preview-image', $preview
-
     reader = new FileReader()
+
     reader.onload = (e) ->
-      $image.attr # .css() won't work!
-        style: "background-image: url(#{e.target.result});"
+      $.data file, App.addLoader
+        title: null
+        file_type: null
+        is_image: true
+        thumbnail: e.target.result
 
     reader.readAsDataURL file
-
-    $preview.width $mediaList.data 'column-width'
-    $mediaList.prepend($preview).masonry 'reload'
-
-    $.data file, $preview
 
