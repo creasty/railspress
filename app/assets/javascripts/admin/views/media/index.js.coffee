@@ -86,7 +86,6 @@ define [
     changeSidebar: ->
       selected = Media.selected()
       count = selected.length
-      console.log selected
 
       if count > 1
         @$el.addClass 'bulk'
@@ -137,13 +136,14 @@ define [
     delete: =>
       selected = Media.selected()
 
-      if selected.length == 1
-        medium = selected[0]
-        UpdateNotify.progress 'ファイルを削除しています'
-        medium.destroy
-          success: (model, res) =>
-            UpdateNotify.success res.message
-            @changeSidebar()
+      return unless selected.length == 1
+
+      UpdateNotify.progress 'ファイルを削除しています'
+
+      selected[0].destroy
+        success: do (that = @) -> (model, res) ->
+          UpdateNotify.success res.message
+          that.changeSidebar()
 
     deleteAll: =>
       selected = Media.selected()
@@ -177,10 +177,43 @@ define [
           success: (model, res) ->
             UpdateNotify.success res.message
 
+  #  Initialize Backbone App
+  #-----------------------------------------------
   App = new AppView()
 
+  #  File uploader
+  #-----------------------------------------------
+  $('#medium_asset').on 'change', (e) ->
+    sendFile @files[0]
 
+  $dropzone.on 'drop', (e) ->
+    e.preventDefault()
+    sendFile e.dataTransfer.files[0]
 
+  sendFile = (file) ->
+    console.log file
+    return
+    $.ajax
+      type: 'post'
+      url: $dropzone.data('post-url') + '.json'
+      data: do ->
+        h = {}
+        h[csrf_param] = csrf_token
+        h['medium[asset]'] = file
+        h
+
+      success: ->
+        ;
+      xhrFields:
+        onprogress: (e) ->
+          if e.lengthComputable
+            percentage = Math.round e.loaded * 100 / e.total
+            console.log percentage
+
+      processData: false
+      contentType: file.type
+
+  ###
   $dropzone.filedrop
     fallback_id: 'medium_asset'
     paramname: 'medium[asset]'
@@ -217,7 +250,6 @@ define [
         when 'FileTooLarge'
           UploaderNotify.fail "#{file.name} はファイルサイズが大きすぎます"
 
-    # Called before each upload is started
     beforeEach: (file) ->
       if !file.type.match /^image\//
         UploaderNotify.fail "#{file.name} はアップロードできないファイル形式です"
@@ -229,21 +261,20 @@ define [
       createImage file
 
     uploadFinished: (i, file, res) ->
-      console.log res
-      $.data(file).model.set res
-      $.data(file).$el
-      .removeClass('progress')
-      .find('.progressbar').fadeOut()
+      fo = $.data(file)
+
+      fo.$el.find('.progressbar').fadeOut()
+
+      fo.model.set res
 
     progressUpdated: (i, file, progress) ->
       $.data(file).$el.find('.progressbar > div').width progress + '%'
 
     globalProgressUpdated: (progress) ->
-      UploaderNotify.progress "アップロード中...#{progress}%"
+      UploaderNotify.progress "アップロード中... #{progress}%"
 
     afterAll: ->
       UploaderNotify.success 'アップロード完了'
-
 
   createImage = (file) ->
     reader = new FileReader()
@@ -256,4 +287,4 @@ define [
         thumbnail: e.target.result
 
     reader.readAsDataURL file
-
+  ###

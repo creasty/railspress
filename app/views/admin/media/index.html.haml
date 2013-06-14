@@ -6,21 +6,6 @@
 #pocket_body
   #main
     %ul#media_list
-      /
-        - @media.each do |medium|
-          %li[medium]{ data: { id: medium.id, title: medium.title, description: medium.description } }
-            - if medium.image?
-              .preview-image{ style: "background-image: url(#{medium.asset.url(:small)});" }
-                .title
-                  = link_to '', admin_medium_path(medium), remote: true, method: :delete, class: 'icon-delete'
-                  = medium.title
-
-            - else
-              .preview-image.file
-                .title= medium.title
-                .info
-                  %span.icon-file= medium.file_type
-
 
     #dropzone{ 'data-post-url' => admin_media_path }
       %p ファイルをドラッグ&ドロップしてアップロード
