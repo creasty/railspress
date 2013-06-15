@@ -18,9 +18,9 @@ define [
     initialize: ->
       @model.view = @
 
-      @listenTo @model, 'change:title', @render
-      @listenTo @model, 'change:thumbnail', @render
       @listenTo @model, 'change:is_image', @render
+      @listenTo @model, 'change:thumbnail', @render
+      @listenTo @model, 'change:title', @renderTitle
       @listenTo @model, 'change:selected', @renderSelected
 
       @listenTo @model, 'destroy', @remove
@@ -32,7 +32,8 @@ define [
     renderSelected: ->
       @$el.toggleClass 'selected'
 
+    renderTitle: ->
+      @$el.find('.title').text @model.get 'title'
+
     toggle: ->
       @model.toggle()
-
-    clear: -> @model.destroy()
