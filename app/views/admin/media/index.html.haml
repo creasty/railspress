@@ -7,7 +7,7 @@
   #main
     %ul#media_list
 
-    #dropzone{ 'data-post-url' => admin_media_path }
+    #dropzone
       %p ファイルをドラッグ&ドロップしてアップロード
       = file_field_tag :medium_asset, multiple: true, class: 'hide'
 
@@ -66,6 +66,10 @@
     %header.modal-header
       %h2 切り抜き
     .modal-content
+      #cropbox
 
     %footer.modal-footer
+      - %w[crop_x crop_y crop_w crop_h].each do |a|
+        = text_field_tag a, nil, id: a, class: 'text'
+
 

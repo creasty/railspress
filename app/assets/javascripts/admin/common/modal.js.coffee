@@ -36,6 +36,15 @@ define ['jquery'], ($) ->
       if @config.destroy
         setTimeout (=> @$popup.remove()), @config.duration
         @isloaded = false
+        @$node = null
+      else
+        setTimeout =>
+          @trigger 'modalClose', [@$body, @$modal]
+        , @config.duration
+
+    trigger: (type, args) ->
+      return unless @$node
+      @$node.trigger type, args
 
     getContent: (onload) ->
       return onload() if @isloaded
@@ -43,13 +52,16 @@ define ['jquery'], ($) ->
 
       @$modal.removeClass 'error'
 
-      if @config.content.match /^#[\w\-]+$/
-        @$body.append $ @config.content
+      if @config.content instanceof $
+        @$body.append @$node = @config.content
+        onload()
+      else if @config.content.match /^#[\w\-]+$/
+        @$body.append @$node = $ @config.content
         onload()
       else if @config.iframe
         $iframe = $ '<iframe frameborder="0"></iframe>'
         $iframe.attr 'src', @config.content
-        @$body.append $iframe
+        @$body.append @$node = $iframe
         $iframe.on 'load', onload
       else
         $.ajax
@@ -69,7 +81,7 @@ define ['jquery'], ($) ->
       @$modal.addClass @config.type
 
       @getContent =>
-        @config.callback @$body, @$modal
+        @trigger 'modalOpen', [@$body, @$modal]
         setTimeout (=> @$popup.addClass 'show'), 1
 
   (config) -> new Modal config

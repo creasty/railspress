@@ -164,7 +164,7 @@
 		}
 
 		li.selected .preview-image {
-			@include box-shadow(0 0 0 4px $primary-color !important);
+			@include box-shadow(inset 0 0 0 3px $primary-color !important);
 			.title {
 				background: $primary-color;
 				&:after {
@@ -173,7 +173,7 @@
 			}
 		}
 		&.bulk li.selected .preview-image {
-			@include box-shadow(0 0 0 4px $success-color !important);
+			@include box-shadow(inset 0 0 0 3px $success-color !important);
 			.title {
 				background: $success-color;
 				&:after {
@@ -239,7 +239,8 @@
 
 	#edit_medium {
 		.modal-content {
-			background: url(media/checkered.png) repeat;
+			// background: url(media/checkered.png) repeat;
+			overflow: scroll;
 		}
 	}
 

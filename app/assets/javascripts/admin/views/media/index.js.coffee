@@ -13,6 +13,7 @@ define [
 
   'backbone.syphon'
   'masonry'
+  'jcrop'
   'domReady!'
 ], (
   $
@@ -52,49 +53,21 @@ define [
   $dropzone = $ '#dropzone'
   $fileField = $ '#medium_asset'
 
-  $('#menubar > h1 > a.icon-plus').on 'click', (e) ->
-    $fileField.trigger 'click'
-    e.preventDefault()
-
-
-  #  Backbone
+  #  Sidebar
   #-----------------------------------------------
-  class AppView extends Backbone.View
+  class SidebarView extends Backbone.View
 
-    el: '#media_list'
+    el: '#pocket_side'
+
+    events:
+      'click #btn_update': 'update'
+      'click #btn_delete': 'delete'
+      'click #btn_delete_all': 'deleteAll'
+      'click #btn_disselect': 'disselect'
 
     initialize: ->
-      @listenTo Media, 'add', @addOne
-      @listenTo Media, 'reset', @addAll
-      @listenTo Media, 'all', @render
       @listenTo Media, 'change', @changeSidebar
       @listenTo Media, 'destroy', @changeSidebar
-
-      $('#btn_update').on 'click', @update
-      $('#btn_delete').on 'click', @delete
-      $('#btn_delete_all').on 'click', @deleteAll
-      $('#btn_disselect').on 'click', @disselect
-
-      Media.fetch()
-
-    render: ->
-      @$el.masonry
-        itemSelector: 'li'
-        gutterWidth: 20
-        columns: 5
-        minWidth: 170
-        isAnimated: false
-        isFitWidth: true
-        isResizable: true
-
-        columnWidth: do ($el = @$el) -> (cw) ->
-          col = Math.max 1, Math.min(@columns, (cw + @gutterWidth) / (@minWidth + @gutterWidth) | 0)
-          width = (cw + @gutterWidth) / col - @gutterWidth
-
-          $el.find('li').width width
-          width
-
-      @
 
     changeSidebar: ->
       selected = Media.selected()
@@ -111,34 +84,17 @@ define [
         $formLink.attr 'href', selected[0].get 'link'
 
         if selected[0].get 'is_image'
-          $btn_crop.show()
+          $btn_crop.show().data 'model', selected[0]
         else
-          $btn_crop.hide()
+          $btn_crop.hide().data 'model', null
 
         $view.trigger 'changeViewstate', 'selecting'
       else
         @$el.removeClass 'bulk'
         $view.trigger 'changeViewstate', 'grid'
 
-    addOne: (medium) ->
-      view = new ThumbView model: medium
-      $el = view.render().$el
-      @$el.prepend($el).masonry 'reload'
-
-    addAll: ->
-      @$el.html ''
-      Media.each @addOne, @
-
     disselect: =>
       _.invoke Media.selected(), 'toggle'
-
-    addLoader: (op) ->
-      medium = new Media.model
-      medium.set op
-      Media.add medium
-
-      $el: medium.view.$el
-      model: medium
 
     delete: =>
       selected = Media.selected()
@@ -210,16 +166,153 @@ define [
           success: (model, res) ->
             UpdateNotify.success res.message
 
+  #  App View
+  #-----------------------------------------------
+  class AppView extends Backbone.View
+
+    el: '#media_list'
+
+    initialize: ->
+      @listenTo Media, 'add', @addOne
+      @listenTo Media, 'reset', @addAll
+      @listenTo Media, 'all', @render
+
+      Media.fetch()
+
+    render: ->
+      @$el.masonry
+        itemSelector: 'li'
+        gutterWidth: 20
+        columns: 5
+        minWidth: 170
+        isAnimated: false
+        isFitWidth: true
+        isResizable: true
+
+        columnWidth: do ($el = @$el) -> (cw) ->
+          col = Math.max 1, Math.min(@columns, (cw + @gutterWidth) / (@minWidth + @gutterWidth) | 0)
+          width = (cw + @gutterWidth) / col - @gutterWidth
+
+          $el.find('li').width width
+          width
+
+      @
+
+    addOne: (medium) ->
+      view = new ThumbView model: medium
+      $el = view.render().$el
+      @$el.prepend($el).masonry 'reload'
+
+    addAll: ->
+      @$el.html ''
+      Media.each @addOne, @
+
+    addLoader: (op) ->
+      medium = new Media.model
+      medium.set op
+      Media.add medium
+
+      $el: medium.view.$el
+      model: medium
+
+
+  #  Modal
+  #-----------------------------------------------
+  class ImageEditorView extends Backbone.View
+
+    el: '#edit_medium'
+
+    events:
+      'modalOpen': 'open'
+      'modalClose': 'close'
+
+    initialize: ->
+      @coords = {}
+      @$cropbox = $ '#cropbox'
+
+      @modal = Modal content: @$el
+
+      $btn_crop.on 'click', @openModal.bind(@)
+
+    openModal: (e) ->
+      e.preventDefault()
+      @modal.open()
+
+    open: ->
+      @model = $btn_crop.data 'model'
+      src = @model.get 'link'
+
+      @coords = [
+        @model.get 'crop_x'
+        @model.get 'crop_y'
+        @model.get 'crop_w'
+        @model.get 'crop_h'
+      ]
+      @prev = @coords.join ':'
+
+      img = new Image()
+      img.src = src
+      img.onload = =>
+        $image = $ "<img src=\"#{src}\" alt=\"\" />"
+
+        $image.appendTo @$cropbox
+
+        $image.Jcrop
+          onChange: (coords) => @updateCrop coords
+          onSelect: (coords) => @updateCrop coords
+          setSelect: @getSelection()
+          # aspectRatio: 1
+
+    close: ->
+      if @prev != @coords.join ':'
+        notify = Notify()
+
+        notify.progress '画像を切り抜いています...'
+
+        @model.save
+          crop_x: @coords[0]
+          crop_y: @coords[1]
+          crop_w: @coords[2]
+          crop_h: @coords[3]
+        ,
+          success: ->
+            notify.success '画像の切り抜き処理が完了しました'
+          error: ->
+            notify.fail '画像の切り抜きに失敗しました'
+
+      @$cropbox.html ''
+
+    updateCrop: (coords) ->
+      @coords = [coords.x, coords.y, coords.w, coords.h]
+
+    getSelection: ->
+      x = @coords[0]
+      y = @coords[1]
+      w = @coords[2]
+      h = @coords[3]
+
+      return if isNaN x + y + w + h
+
+      [x, y, x + w, y + h]
+
+
   #  Initialize Backbone App
   #-----------------------------------------------
-  App = new AppView()
+  SidebarView = new SidebarView()
+  ImageEditorView = new ImageEditorView()
+  AppView = new AppView()
+
 
   #  File uploader
   #-----------------------------------------------
+  $('#menubar > h1 > a.icon-plus').on 'click', (e) ->
+    $fileField.trigger 'click'
+    e.preventDefault()
+
   FileUploader.attachTo $dropzone,
     fileInputSelector: '#medium_asset'
 
-    url: $dropzone.data('post-url') + '.json'
+    url: '/admin/media.json'
 
     params:
       file: 'medium[asset]'
@@ -234,7 +327,7 @@ define [
   .on 'startUploading', (e, total) ->
     UploaderNotify.progress "#{total} つのメディアをアップロード中..."
   .on 'onCreate', (e, data, d) ->
-    view = App.addLoader
+    view = AppView.addLoader
       title:     ''
       file_type: ''
       is_image:  true
@@ -256,11 +349,4 @@ define [
   .on 'uploadError', (e, failed, total) ->
     UploaderNotify.fail 'アップロードに失敗しました'
 
-
-  EditorModal = Modal
-    content: '#edit_medium'
-    callback: ($modal) ->
-
-  $btn_crop.on 'click', ->
-    EditorModal.open()
 

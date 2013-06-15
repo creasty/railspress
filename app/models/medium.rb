@@ -72,14 +72,20 @@ class Medium < ActiveRecord::Base
       file_type: file_type,
       thumbnail: asset.url(:small),
       link: asset.url,
-      is_image: image?
+      is_image: image?,
+      crop_x: crop_x,
+      crop_y: crop_y,
+      crop_w: crop_w,
+      crop_h: crop_h,
     }
   end
 
-  #  Private Methods
-  #-----------------------------------------------
+
 private
 
+
+  #  Private Methods
+  #-----------------------------------------------
   def generate_title
     unless self.title.present?
       title = file_name || asset_file_name.dup
