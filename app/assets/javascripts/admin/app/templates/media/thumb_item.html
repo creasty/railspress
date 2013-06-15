@@ -13,7 +13,19 @@
 		<% if (title) { %>
 			<div class="title"><%- title %></div>
 			<div class="info">
-				<span class="icon-file"><%- file_type %></span>
+				<%
+					var icon = 'file';
+
+					switch (file_type) {
+						case 'video':
+							icon = 'video';
+							break;
+						case 'audio':
+							icon = 'music';
+							break;
+					}
+				%>
+				<span class="icon-<%= icon %>"><%- file_type %></span>
 			</div>
 		<% } else { %>
 			<div class="progressbar">

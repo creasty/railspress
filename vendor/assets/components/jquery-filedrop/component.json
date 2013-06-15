@@ -1,9 +1,0 @@
-{
-  "name": "jquery-filedrop",
-  "version": "0.0.0",
-  "commit": "b6315b7be74f4785f1106b4c9f622397c3824df3",
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/weixiyen/jquery-filedrop.git"
-  }
-}

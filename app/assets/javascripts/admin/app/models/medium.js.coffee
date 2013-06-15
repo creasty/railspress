@@ -9,13 +9,13 @@ define [
     urlRoot: '/admin/media'
 
     defualts:
-      id:          ''
+      id:          0
       title:       ''
       description: ''
+      file_name:   ''
+      file_size:   0
+      file_type:   ''
 
-      type:        ''
-      preview:     false
+      selected:    false
 
-    selected: false
-
-    toggle: -> @selected = !@selected
+    toggle: -> @set 'selected', !@get 'selected'

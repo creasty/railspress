@@ -13,20 +13,27 @@ define [
     template: _.template itemTemplate
 
     events:
-      'click':  'toggleSelected'
+      'click':  'toggle'
 
     initialize: ->
-      @listenTo @model, 'change', @render
+      @model.view = @
+
+      @listenTo @model, 'change:is_image', @render
+      @listenTo @model, 'change:thumbnail', @render
+      @listenTo @model, 'change:title', @renderTitle
+      @listenTo @model, 'change:selected', @renderSelected
+
       @listenTo @model, 'destroy', @remove
-      @listenTo @model, 'toggle', @toggleSelected
 
     render: ->
       @$el.html @template @model.toJSON()
       @
 
-    toggleSelected: ->
+    renderSelected: ->
       @$el.toggleClass 'selected'
-      @model.toggle()
-      true
 
-    clear: -> @model.destroy()
+    renderTitle: ->
+      @$el.find('.title').text @model.get 'title'
+
+    toggle: ->
+      @model.toggle()

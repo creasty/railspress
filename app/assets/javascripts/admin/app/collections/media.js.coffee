@@ -15,6 +15,6 @@ define [
       @filter (medium) -> type == medium.get 'type'
 
     selected: ->
-      @filter (medium) -> medium.selected
+      @filter (medium) -> medium.get 'selected'
 
   new MediaCollection()

@@ -8,12 +8,12 @@ define [
   'common/notify'
   'common/alert'
   'components/viewstate'
+  'components/file_uploader'
 
   'backbone.syphon'
-  'filedrop'
   'masonry'
   'domReady!'
-], ($, _, Backbone, Media, ThumbView, Notify, Alert, Viewstate) ->
+], ($, _, Backbone, Media, ThumbView, Notify, Alert, Viewstate, FileUploader) ->
 
   #  Token
   #-----------------------------------------------
@@ -50,12 +50,14 @@ define [
     el: '#media_list'
 
     events:
-      'click li': 'onClick'
+      {}# 'click li': 'onClick'
 
     initialize: ->
       @listenTo Media, 'add', @addOne
       @listenTo Media, 'reset', @addAll
       @listenTo Media, 'all', @render
+      @listenTo Media, 'change', @changeSidebar
+      @listenTo Media, 'destroy', @changeSidebar
 
       $('#btn_update').on 'click', @update
       $('#btn_delete').on 'click', @delete
@@ -70,7 +72,7 @@ define [
         gutterWidth: 20
         columns: 5
         minWidth: 170
-        isAnimated: true
+        isAnimated: false
         isFitWidth: true
         isResizable: true
 
@@ -100,37 +102,24 @@ define [
         @$el.removeClass 'bulk'
         $view.trigger 'changeViewstate', 'grid'
 
-    onClick: (e) ->
-      e.preventDefault()
-      @changeSidebar()
-
     addOne: (medium) ->
       view = new ThumbView model: medium
-      @$el.prepend(view.render().$el).masonry 'reload'
+      $el = view.render().$el
+      @$el.prepend($el).masonry 'reload'
 
     addAll: ->
       @$el.html ''
       Media.each @addOne, @
 
-    newAttributes: ->
-      {
-        title: @$input.val().trim()
-        order: Media.nextOrder()
-        completed: false
-      }
-
     disselect: =>
-      Media.selected().forEach (medium) ->
-        medium.trigger 'toggle'
-
-      @changeSidebar()
+      _.invoke Media.selected(), 'toggle'
 
     addLoader: (op) ->
       medium = new Media.model
       medium.set op
-      Media.models.unshift medium
+      Media.add medium
 
-      $el: @addOne medium
+      $el: medium.view.$el
       model: medium
 
     delete: =>
@@ -138,31 +127,57 @@ define [
 
       return unless selected.length == 1
 
-      UpdateNotify.progress 'ファイルを削除しています'
+      Alert
+        title: 'このメディアを削除しますか？'
+        message: '一度削除したメディアはもとに戻すことはできません。'
+        type: 'danger'
+        btns: [
+          { text: '削除', action: 'destroy', type: 'danger' }
+          { text: 'キャンセル', action: 'close', align: 'right' }
+        ]
+        callback: (action, al) =>
+          if action == 'destroy'
+            UpdateNotify.progress 'メディアを削除しています'
+            al.close()
 
-      selected[0].destroy
-        success: do (that = @) -> (model, res) ->
-          UpdateNotify.success res.message
-          that.changeSidebar()
+            selected[0].destroy
+              success: (model, res) ->
+                UpdateNotify.success res.message
 
     deleteAll: =>
       selected = Media.selected()
       count = selected.length
 
-      UpdateNotify.progress 'ファイルを削除しています'
+      success = error = 0
 
-      flag = true
+      notify = ->
+        return if count < success + error
 
-      _.invoke selected, 'destroy',
-          success: (model, res) -> flag &&= true
-          error: -> flag &&= false
+        if error > 0
+          UpdateNotify.fail "メディアの削除に失敗しました (#{error}件)"
+        else
+          UpdateNotify.success "全 #{count} 件を削除しました"
 
-      if flag
-        UpdateNotify.success '削除しました'
-      else
-        UpdateNotify.fail '削除に失敗しました'
+      Alert
+        title: "#{count} 件のメディアを削除しますか？"
+        message: '一度削除したメディアはもとに戻すことはできません。'
+        type: 'danger'
+        btns: [
+          { text: '削除', action: 'destroy', type: 'danger' }
+          { text: 'キャンセル', action: 'close', align: 'right' }
+        ]
+        callback: (action, al) =>
+          if action == 'destroy'
+            UpdateNotify.progress 'メディアを削除しています'
+            al.close()
 
-      @changeSidebar()
+            _.invoke selected, 'destroy',
+              success: (model, res) ->
+                ++success
+                notify()
+              error: ->
+                ++error
+                notify()
 
     update: ->
       selected = Media.selected()
@@ -183,108 +198,43 @@ define [
 
   #  File uploader
   #-----------------------------------------------
-  $('#medium_asset').on 'change', (e) ->
-    sendFile @files[0]
+  FileUploader.attachTo $dropzone,
+    fileInputSelector: '#medium_asset'
 
-  $dropzone.on 'drop', (e) ->
-    e.preventDefault()
-    sendFile e.dataTransfer.files[0]
-
-  sendFile = (file) ->
-    console.log file
-    return
-    $.ajax
-      type: 'post'
-      url: $dropzone.data('post-url') + '.json'
-      data: do ->
-        h = {}
-        h[csrf_param] = csrf_token
-        h['medium[asset]'] = file
-        h
-
-      success: ->
-        ;
-      xhrFields:
-        onprogress: (e) ->
-          if e.lengthComputable
-            percentage = Math.round e.loaded * 100 / e.total
-            console.log percentage
-
-      processData: false
-      contentType: file.type
-
-  ###
-  $dropzone.filedrop
-    fallback_id: 'medium_asset'
-    paramname: 'medium[asset]'
-    maxfiles: 10
-    maxfilesize: 20
     url: $dropzone.data('post-url') + '.json'
 
-    data: do ->
-      h = {}
-      h[csrf_param] = csrf_token
-      h
+    params:
+      file: 'medium[asset]'
+      type: 'medium[content_type]'
+      name: 'medium[file_name]'
 
-    docOver: ->
-      $main.addClass 'upload'
+  $dropzone
+  .on 'fileDragOver', ->
+    $main.addClass 'upload'
+  .on 'fileDragLeave fileDropped', ->
+    $main.removeClass 'upload'
+  .on 'startUploading', (e, total) ->
+    UploaderNotify.progress "メディアをアップロード中... 0/#{total}"
+  .on 'onCreate', (e, data, d) ->
+    view = App.addLoader
+      title:     ''
+      file_type: ''
+      is_image:  true
+      thumbnail: data
 
-    docLeave: ->
-      $main.removeClass 'upload'
+    d.$progressbar = view.$el.find '.progressbar > div'
+    d.model = view.model
+  .on 'eachProgress', (e, percent, d) ->
+    d.$progressbar.width percent + '%'
+  .on 'eachSuccess', (e, res, d) ->
+    d.model.set res
+    d.$progressbar.fadeOut()
+  .on 'eachError', (e, res, d) ->
+    d.model.destroy()
+  .on 'uploadProgress', (e, progress, uploaded, total) ->
+    UploaderNotify.progress "メディアをアップロード中... #{uploaded} / #{total} 完了"
+  .on 'uploadSuccess', (e, total) ->
+    UploaderNotify.success "#{total} のメディアをアップロードしました"
+  .on 'uploadError', (e, failed, total) ->
+    UploaderNotify.fail 'アップロードに失敗しました'
 
-    dragOver: ->
-      $main.addClass 'upload'
-
-    dragLeave: ->
-      $main.removeClass 'upload'
-
-    drop: ->
-      $main.removeClass 'upload'
-
-    error: (err, file) ->
-      switch err
-        when 'BrowserNotSupported'
-          UploaderNotify.fail 'このブラウザではアップロードできません'
-        when 'TooManyFiles'
-          UploaderNotify.fail '一度にアップロードできるのは10個までです'
-        when 'FileTooLarge'
-          UploaderNotify.fail "#{file.name} はファイルサイズが大きすぎます"
-
-    beforeEach: (file) ->
-      if !file.type.match /^image\//
-        UploaderNotify.fail "#{file.name} はアップロードできないファイル形式です"
-        false
-      else
-        true
-
-    uploadStarted: (i, file, len) ->
-      createImage file
-
-    uploadFinished: (i, file, res) ->
-      fo = $.data(file)
-
-      fo.$el.find('.progressbar').fadeOut()
-
-      fo.model.set res
-
-    progressUpdated: (i, file, progress) ->
-      $.data(file).$el.find('.progressbar > div').width progress + '%'
-
-    globalProgressUpdated: (progress) ->
-      UploaderNotify.progress "アップロード中... #{progress}%"
-
-    afterAll: ->
-      UploaderNotify.success 'アップロード完了'
-
-  createImage = (file) ->
-    reader = new FileReader()
-
-    reader.onload = (e) ->
-      $.data file, App.addLoader
-        title: null
-        file_type: null
-        is_image: true
-        thumbnail: e.target.result
-
-    reader.readAsDataURL file
-  ###

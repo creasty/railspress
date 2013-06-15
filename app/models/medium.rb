@@ -2,14 +2,17 @@ class Medium < ActiveRecord::Base
 
   include Rails.application.routes.url_helpers
 
-  attr_accessor :asset_delete, :processing
-  attr_accessible :title, :description, :asset, :asset_delete
-  attr_accessible :crop_x, :crop_y, :crop_w, :crop_h
+  attr_accessor :asset_delete, :processing, :content_type, :file_name
+  attr_accessible :title, :description, :asset
+  attr_accessible :asset_delete, :content_type, :file_name,
+    :crop_x, :crop_y, :crop_w, :crop_h
 
   #  Validation
   #-----------------------------------------------
   validate :title, presence: true
-  validate :asset, presence: true
+  validate :asset,
+    presence: true,
+    attachment_size: { less_than: 20.megabyte }
 
   #  General Callbacks
   #-----------------------------------------------
@@ -48,11 +51,15 @@ class Medium < ActiveRecord::Base
   end
 
   def image?
-    %w[image/jpeg image/jpg image/png image/gif].include? asset.content_type
+    %w[image/jpeg image/jpg image/png image/gif].include?(content_type || asset.content_type)
   end
 
   def file_type
-    asset.content_type.split('/')[0].capitalize
+    type = content_type || asset.content_type
+
+    return 'pdf' if type == 'application/pdf'
+
+    type.split('/')[0]
   end
 
   def to_backbone_json
@@ -60,15 +67,13 @@ class Medium < ActiveRecord::Base
       id: id,
       title: title,
       description: description,
-      name: read_attribute(:asset_file_name),
-      size: read_attribute(:asset_file_size),
+      file_name: read_attribute(:asset_file_name),
+      file_size: read_attribute(:asset_file_size),
       file_type: file_type,
       thumbnail: asset.url(:small),
-      is_image: image?,
-      # delete_url: admin_medium_path(self),
+      is_image: image?
     }
   end
-
 
   #  Private Methods
   #-----------------------------------------------
@@ -76,7 +81,7 @@ class Medium < ActiveRecord::Base
 
   def generate_title
     unless self.title.present?
-      title = self.asset_file_name.dup
+      title = file_name || asset_file_name.dup
       title.gsub!(/\.\w+$/, '')
       title.gsub!(/[\']/, '')
       title.gsub!('&', ' and ')
@@ -85,7 +90,6 @@ class Medium < ActiveRecord::Base
       title.gsub!(/\s+/, ' ')
       title.strip!
       title.capitalize!
-
       self.title = title
     end
   end

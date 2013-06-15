@@ -6,7 +6,6 @@
     "flight": "latest",
     "jcrop": "latest",
     "jquery-autocomplete": "git://github.com/dyve/jquery-autocomplete.git",
-    "jquery-filedrop": "latest",
     "jquery-masonry": "latest",
     "jquery.panzoom": "latest",
     "require-css": "latest",
