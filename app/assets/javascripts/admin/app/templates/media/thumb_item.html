@@ -1,28 +1,24 @@
 <% if (is_image) { %>
-	<div class="preview-image <%= title ? '' : 'loading' %>" style="background-image: url(<%= thumbnail %>)">
-		<% if (title) { %>
-			<div class="title"><span><%- title %></span></div>
-		<% } %>
+	<div class="preview-image" style="background-image: url(<%= thumbnail %>)">
+		<div class="title"><span><%- title %></span></div>
 	</div>
 <% } else { %>
-	<div class="preview-image file <%= title ? '' : 'loading' %>">
-		<% if (title) { %>
-			<div class="title"><span><%- title %></span></div>
-			<div class="info">
-				<%
-					var icon = 'file';
+	<div class="preview-image file">
+		<div class="title"><span><%- title %></span></div>
+		<div class="info">
+			<%
+				var icon = 'file';
 
-					switch (file_type) {
-						case 'video':
-							icon = 'video';
-							break;
-						case 'audio':
-							icon = 'music';
-							break;
-					}
-				%>
-				<span class="icon-<%= icon %>"><%- file_type %></span>
-			</div>
-		<% } %>
+				switch (file_type) {
+					case 'video':
+						icon = 'video';
+						break;
+					case 'audio':
+						icon = 'music';
+						break;
+				}
+			%>
+			<span class="icon-<%= icon %>"><%- file_type %></span>
+		</div>
 	</div>
 <% } %>

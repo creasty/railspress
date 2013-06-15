@@ -334,13 +334,16 @@ define [
     UploaderNotify.progress "#{total} つのメディアをアップロード中..."
   .on 'onCreate', (e, data, d) ->
     view = AppView.addLoader
-      title:     ''
-      file_type: ''
-      is_image:  true
+      title:     d.fileName
+      file_type: d.fileType
+      is_image:  d.fileType.split('/')[0] == 'image'
       thumbnail: data
+      loading:   true
 
+    d.loader = view.$el.find('.preview-image').addClass 'loading'
     d.model = view.model
   .on 'eachSuccess', (e, res, d) ->
+    d.loader.removeClass 'loading'
     d.model.set res
   .on 'eachError', (e, res, d) ->
     d.model.destroy()
