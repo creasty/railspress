@@ -33,7 +33,7 @@ define [
       @$el.toggleClass 'selected'
 
     renderTitle: ->
-      @$el.find('.title').text @model.get 'title'
+      @$el.find('.title > span').text @model.get 'title'
 
     toggle: ->
       @model.toggle()

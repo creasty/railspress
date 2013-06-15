@@ -31,10 +31,6 @@ class Admin::MediaController < Admin::ApplicationController
     end
   end
 
-  def bulk
-
-  end
-
   def create
     @medium = Medium.new params[:medium]
 

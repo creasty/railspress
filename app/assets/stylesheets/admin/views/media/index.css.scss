@@ -51,7 +51,7 @@
 				position: absolute;
 				top: 50%;
 				left: 50%;
-				margin: -50px 0 0 -50px;
+				margin: -37px 0 0 -50px;
 				color: $muted-color;
 
 				span {
@@ -81,21 +81,39 @@
 
 			.title {
 				position: absolute;
-				bottom: 0;
+				top: 0;
 				width: 100%;
-				padding: 30px 10px 7px;
-				@include background(linear-gradient(transparent, rgba(#000, .8)));
-				@include box-sizing(border-box);
-				white-space: nowrap;
-				text-overflow: ellipsis;
-				overflow: hidden;
-				color: #fff;
-				text-shadow: 0 1px 3px rgba(#000, .7);
+				background: rgba(#000, .6);
+
+				span {
+					display: block;
+					height: 37px;
+					padding: 10px 15px;
+					font-size: 11px;
+					@include box-sizing(border-box);
+					white-space: nowrap;
+					text-overflow: ellipsis;
+					overflow: hidden;
+					color: #fff;
+				}
+
+				&:after {
+					content: "";
+					display: block;
+					position: absolute;
+					bottom: -12px;
+					left: 15px;
+					width: 0;
+					height: 0;
+					border: 6px solid transparent;
+					border-top-color: rgba(#000, .6);
+				}
+
 			}
 
 
 			&.file {
-				@include box-shadow(inset 0 0 0 3px rgba(#000, .25));
+				@include box-shadow(inset 0 0 0 3px $muted-color);
 
 				a {
 					color: $anchor-color;
@@ -106,15 +124,17 @@
 				}
 
 				.title {
-					background: none;
-					text-shadow: none;
-					color: $main-text-color;
+					background: $muted-color;
+
+					&:after {
+						border-top-color: $muted-color;
+					}
 				}
 			}
 
 			.progressbar {
 				position: absolute;
-				top: 0;
+				bottom: 0;
 				width: 100%;
 				height: 5px;
 				background: #eee;
@@ -135,19 +155,31 @@
 				inset 0 0 0 1px rgba(#000, .25),
 				0 0 0 4px rgba(#000, .05)
 			);
+			&.file {
+				@include box-shadow(
+					inset 0 0 0 3px $muted-color,
+					0 0 0 4px rgba(#000, .05)
+				);
+			}
 		}
 
 		li.selected .preview-image {
-			@include box-shadow(
-				inset 0 0 0 1px rgba(#fff, .8),
-				0 0 0 4px $primary-color
-			);
+			@include box-shadow(0 0 0 4px $primary-color !important);
+			.title {
+				background: $primary-color;
+				&:after {
+					border-top-color: $primary-color;
+				}
+			}
 		}
 		&.bulk li.selected .preview-image {
-			@include box-shadow(
-				inset 0 0 0 1px rgba(#fff, .8),
-				0 0 0 4px $success-color
-			);
+			@include box-shadow(0 0 0 4px $success-color !important);
+			.title {
+				background: $success-color;
+				&:after {
+					border-top-color: $success-color;
+				}
+			}
 		}
 
 	}
@@ -204,4 +236,11 @@
 			}
 		}
 	}
+
+	#edit_medium {
+		.modal-content {
+			background: url(media/checkered.png) repeat;
+		}
+	}
+
 }

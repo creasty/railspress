@@ -20,7 +20,7 @@ require [
 
   #  Smooth Scrolling
   #-----------------------------------------------
-  $('a[href^=#]').click (e) ->
+  $(document).on 'click', 'a[href^=#]', (e) ->
     e.preventDefault()
 
     $t = $ @
@@ -35,15 +35,6 @@ require [
       duration: 600
       # easing: 'easeInCubic'
       complete: -> window.location.hash = id
-
-  #  Link Block
-  #-----------------------------------------------
-  $('.link-block').each ->
-    $t = $ @
-    link = $t.find('a').attr 'href'
-
-    if link then $t.css('cursor', 'pointer'). on 'click tap', ->
-      window.location.href = link
 
   #  Tooltip
   #-----------------------------------------------

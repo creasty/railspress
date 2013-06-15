@@ -69,6 +69,30 @@
 		bottom: 75px;
 		color: $main-text-color;
 		padding: 20px;
+
+		.modal-body,
+		.modal-side {
+			position: absolute;
+			top: 0;
+			bottom: 0;
+			overflow-x: hidden;
+			@include box-sizing(border-box);
+		}
+
+		.modal-body {
+			left: 0;
+			right: 300px;
+			padding: 20px;
+		}
+		.modal-side {
+			@extend .pocket_side;
+
+			right: 0;
+			width: 300px;
+			padding: 20px;
+			background: $body-bg-color;
+			color: $body-text-color;
+		}
 	}
 	&.no-footer .modal-content {
 		bottom: 0;

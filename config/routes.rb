@@ -25,11 +25,7 @@ RailsPress::Application.routes.draw do
     resources :comments
     resources :taxonomies
     resources :users
-    resources :media do
-      collection do
-        put :bulk
-      end
-    end
+    resources :media
   end
 
   #  Device for Commenter

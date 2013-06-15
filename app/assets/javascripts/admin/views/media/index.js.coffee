@@ -7,13 +7,25 @@ define [
   'app/views/media/thumb_view'
   'common/notify'
   'common/alert'
+  'common/modal'
   'components/viewstate'
   'components/file_uploader'
 
   'backbone.syphon'
   'masonry'
   'domReady!'
-], ($, _, Backbone, Media, ThumbView, Notify, Alert, Viewstate, FileUploader) ->
+], (
+  $
+  _
+  Backbone
+  Media
+  ThumbView
+  Notify
+  Alert
+  Modal
+  Viewstate
+  FileUploader
+) ->
 
   #  Token
   #-----------------------------------------------
@@ -27,6 +39,8 @@ define [
 
   $formTitle = $ '#medium_title'
   $formDescription = $ '#medium_description'
+  $formLink = $ '#medium_link'
+  $btn_crop = $ '#btn_crop'
 
   #  Components
   #-----------------------------------------------
@@ -48,9 +62,6 @@ define [
   class AppView extends Backbone.View
 
     el: '#media_list'
-
-    events:
-      {}# 'click li': 'onClick'
 
     initialize: ->
       @listenTo Media, 'add', @addOne
@@ -97,6 +108,13 @@ define [
         @$el.removeClass 'bulk'
         $formTitle.val selected[0].get 'title'
         $formDescription.val selected[0].get 'description'
+        $formLink.attr 'href', selected[0].get 'link'
+
+        if selected[0].get 'is_image'
+          $btn_crop.show()
+        else
+          $btn_crop.hide()
+
         $view.trigger 'changeViewstate', 'selecting'
       else
         @$el.removeClass 'bulk'
@@ -156,7 +174,7 @@ define [
         if error > 0
           UpdateNotify.fail "メディアの削除に失敗しました (#{error}件)"
         else
-          UpdateNotify.success "全 #{count} 件を削除しました"
+          UpdateNotify.success "全 #{count} つのメディアを削除しました"
 
       Alert
         title: "#{count} 件のメディアを削除しますか？"
@@ -214,7 +232,7 @@ define [
   .on 'fileDragLeave fileDropped', ->
     $main.removeClass 'upload'
   .on 'startUploading', (e, total) ->
-    UploaderNotify.progress "メディアをアップロード中... 0/#{total}"
+    UploaderNotify.progress "#{total} つのメディアをアップロード中..."
   .on 'onCreate', (e, data, d) ->
     view = App.addLoader
       title:     ''
@@ -234,7 +252,15 @@ define [
   .on 'uploadProgress', (e, progress, uploaded, total) ->
     UploaderNotify.progress "メディアをアップロード中... #{uploaded} / #{total} 完了"
   .on 'uploadSuccess', (e, total) ->
-    UploaderNotify.success "#{total} のメディアをアップロードしました"
+    UploaderNotify.success "#{total} つのメディアをアップロードしました"
   .on 'uploadError', (e, failed, total) ->
     UploaderNotify.fail 'アップロードに失敗しました'
+
+
+  EditorModal = Modal
+    content: '#edit_medium'
+    callback: ($modal) ->
+
+  $btn_crop.on 'click', ->
+    EditorModal.open()
 

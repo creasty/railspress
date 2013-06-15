@@ -71,13 +71,14 @@ class Medium < ActiveRecord::Base
       file_size: read_attribute(:asset_file_size),
       file_type: file_type,
       thumbnail: asset.url(:small),
+      link: asset.url,
       is_image: image?
     }
   end
 
   #  Private Methods
   #-----------------------------------------------
-  private
+private
 
   def generate_title
     unless self.title.present?
@@ -115,12 +116,6 @@ class Medium < ActiveRecord::Base
     self.crop_y = (self.crop_y * ratio).truncate
     self.crop_w = (self.crop_w * ratio).truncate
     self.crop_h = (self.crop_h * ratio).truncate
-  end
-
-  def rename_image
-    hash = Digest::SHA1.hexdigest "#{Time.now.to_i.to_s}#{SecureRandom.hex(10)}"
-    ext = File.extname(asset_file_name).downcase
-    self.asset.instance_write :file_name, "#{hash}#{ext}"
   end
 
   def destroy?

@@ -230,7 +230,7 @@ label.checkbox > input:checked:after {
 	@include inline-block;
 	position: relative;
 	border: 0;
-	background: #666;
+	background: $body-bg-color;
 	height: 35px;
 	font-size: 12px;
 	color: #fff !important;
@@ -244,7 +244,7 @@ label.checkbox > input:checked:after {
 
 	&:hover {
 		color: #fff;
-		background: darken(#666, 5%);
+		background: darken($body-bg-color, 5%);
 	}
 
 	&:active {
@@ -256,7 +256,8 @@ a.btn {
 	line-height: 35px;
 }
 
-#pocket_side .btn {
+#pocket_side .btn,
+.pocket_side .btn {
 	background: $header-bg-color;
 
 	&:hover {

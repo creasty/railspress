@@ -26,7 +26,8 @@
     %section
       %h2
         ファイル情報
-        = link_to '', '#', class: 'icon-crop'
+        = link_to '', '#', id: 'btn_crop', class: 'icon-crop'
+        = link_to '', '#', id: 'medium_link', target: '_blank', class: 'icon-link'
 
       %table.form.table-doubled
         %tr
@@ -58,4 +59,13 @@
     %section
       %h2 一括削除
       = button_tag '全て削除する', id: 'btn_delete_all', class: 'btn btn-danger block'
+
+
+.hide
+  #edit_medium
+    %header.modal-header
+      %h2 切り抜き
+    .modal-content
+
+    %footer.modal-footer
 

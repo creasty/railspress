@@ -3,13 +3,12 @@
 	top: 0;
 	width: 100%;
 	overflow: hidden;
-	background-color: $header-bg-color;
 	z-index: 1001;
 	@include transition(box-shadow .3s);
 	@include opacity(0);
 
 	&.show {
-		@include box-shadow(0 3px 0 rgba(#000, .4));
+		// @include box-shadow(0 3px 0 rgba(#000, .4));
 	}
 
 	> div {
@@ -20,6 +19,7 @@
 		@include spacing(0, 0 20px);
 		overflow: hidden;
 		cursor: default;
+		background-color: $primary-color;
 		@include box-shadow(
 			0 1px 0 rgba(#000, .1),
 			inset 0 1px 0 rgba(#000, .1)
