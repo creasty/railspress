@@ -1,9 +1,0 @@
-/= render 'form'
-
-#main{ 'data-post-url' => admin_media_path }
-  %p.message Drop images here to upload.
-
-  = form_for [:admin, @medium], :html => { :multipart => true, :id => 'fileupload'  } do |f|
-
-    = f.file_field :asset, class: 'hide'
-

@@ -177,7 +177,9 @@ define [
       @listenTo Media, 'reset', @addAll
       @listenTo Media, 'all', @render
 
-      Media.fetch()
+      Media.fetch
+        success: ->
+          $main.removeClass 'loaded'
 
     render: ->
       @$el.masonry
@@ -250,6 +252,8 @@ define [
       ]
       @prev = @coords.join ':'
 
+      @$el.addClass 'loading'
+
       img = new Image()
       img.src = src
       img.onload = =>
@@ -262,6 +266,8 @@ define [
           onSelect: (coords) => @updateCrop coords
           setSelect: @getSelection()
           # aspectRatio: 1
+
+        @$el.removeClass 'loading'
 
     close: ->
       if @prev != @coords.join ':'
@@ -286,10 +292,10 @@ define [
       @coords = [coords.x, coords.y, coords.w, coords.h]
 
     getSelection: ->
-      x = @coords[0]
-      y = @coords[1]
-      w = @coords[2]
-      h = @coords[3]
+      x = parseInt @coords[0], 10
+      y = parseInt @coords[1], 10
+      w = parseInt @coords[2], 10
+      h = parseInt @coords[3], 10
 
       return if isNaN x + y + w + h
 
@@ -298,9 +304,9 @@ define [
 
   #  Initialize Backbone App
   #-----------------------------------------------
+  AppView = new AppView()
   SidebarView = new SidebarView()
   ImageEditorView = new ImageEditorView()
-  AppView = new AppView()
 
 
   #  File uploader
@@ -333,13 +339,9 @@ define [
       is_image:  true
       thumbnail: data
 
-    d.$progressbar = view.$el.find '.progressbar > div'
     d.model = view.model
-  .on 'eachProgress', (e, percent, d) ->
-    d.$progressbar.width percent + '%'
   .on 'eachSuccess', (e, res, d) ->
     d.model.set res
-    d.$progressbar.fadeOut()
   .on 'eachError', (e, res, d) ->
     d.model.destroy()
   .on 'uploadProgress', (e, progress, uploaded, total) ->
@@ -348,5 +350,4 @@ define [
     UploaderNotify.success "#{total} つのメディアをアップロードしました"
   .on 'uploadError', (e, failed, total) ->
     UploaderNotify.fail 'アップロードに失敗しました'
-
 

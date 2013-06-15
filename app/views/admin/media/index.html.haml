@@ -62,14 +62,9 @@
 
 
 .hide
-  #edit_medium
+  #edit_medium.no-footer
     %header.modal-header
-      %h2 切り抜き
+      %h2 画像の切り抜き
     .modal-content
       #cropbox
-
-    %footer.modal-footer
-      - %w[crop_x crop_y crop_w crop_h].each do |a|
-        = text_field_tag a, nil, id: a, class: 'text'
-
 

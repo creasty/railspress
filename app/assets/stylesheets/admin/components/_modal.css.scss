@@ -94,8 +94,8 @@
 			color: $body-text-color;
 		}
 	}
-	&.no-footer .modal-content {
-		bottom: 0;
+	.no-footer .modal-content {
+		bottom: 0 !important;
 	}
 
 	.modal-footer {

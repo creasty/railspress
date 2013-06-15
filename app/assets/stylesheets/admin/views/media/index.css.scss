@@ -1,6 +1,14 @@
 
 #media.index {
 
+	#main:before {
+		content: "";
+		@include loading-cube;
+	}
+	#main.loaded:before {
+		display: none;
+	}
+
 	#media_list {
 		@extend .clear-after;
 		list-style: none;
@@ -36,6 +44,12 @@
 				content: "";
 				display: block;
 				padding-top: 100%;
+			}
+
+			&.loading:after {
+				content: "";
+				z-index: 10;
+				@include loading-cube;
 			}
 
 			a {
@@ -110,7 +124,6 @@
 				}
 
 			}
-
 
 			&.file {
 				@include box-shadow(inset 0 0 0 3px $muted-color);
@@ -239,8 +252,23 @@
 
 	#edit_medium {
 		.modal-content {
-			// background: url(media/checkered.png) repeat;
+			background: url(media/checkered.png) repeat;
 			overflow: scroll;
+		}
+
+		&.loading {
+			#cropbox {
+				display: none;
+			}
+
+			.modal-content {
+				background-image: none;
+
+				&:before {
+					content: "";
+					@include loading-cube;
+				}
+			}
 		}
 	}
 
