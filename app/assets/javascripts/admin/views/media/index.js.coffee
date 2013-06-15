@@ -11,7 +11,6 @@ define [
   'components/file_uploader'
 
   'backbone.syphon'
-  'filedrop'
   'masonry'
   'domReady!'
 ], ($, _, Backbone, Media, ThumbView, Notify, Alert, Viewstate, FileUploader) ->

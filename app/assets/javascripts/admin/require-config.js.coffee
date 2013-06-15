@@ -21,7 +21,6 @@
     'backbone.pageable': 'backbone-pageable/lib/backbone-pageable.min'
     'backbone.syphon': 'backbone.syphon/lib/backbone.syphon.min'
     'datepicker': 'datepicker/js/bootstrap-datepicker'
-    'filedrop': 'jquery-filedrop/jquery.filedrop'
     'jcrop': 'jcrop/js/jquery.Jcrop.min'
     'jquery-autocomplete': 'jquery-autocomplete/src/jquery.autocomplete.min'
     'masonry': 'jquery-masonry/jquery.masonry.min'
@@ -43,7 +42,6 @@
     'backbone.pageable': ['backbone']
     'backbone.syphon': ['backbone']
     'datepicker': ['jquery']
-    'filedrop': ['jquery']
     'hashchange': ['jquery']
     'jcrop': ['jquery', 'css!jcrop/../../css/jquery.Jcrop.min']
     'jquery-autocomplete': ['jquery']
