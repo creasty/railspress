@@ -50,12 +50,14 @@ define [
     el: '#media_list'
 
     events:
-      'click li': 'onClick'
+      {}# 'click li': 'onClick'
 
     initialize: ->
       @listenTo Media, 'add', @addOne
       @listenTo Media, 'reset', @addAll
       @listenTo Media, 'all', @render
+      @listenTo Media, 'change', @changeSidebar
+      @listenTo Media, 'destroy', @changeSidebar
 
       $('#btn_update').on 'click', @update
       $('#btn_delete').on 'click', @delete
@@ -70,7 +72,7 @@ define [
         gutterWidth: 20
         columns: 5
         minWidth: 170
-        isAnimated: true
+        isAnimated: false
         isFitWidth: true
         isResizable: true
 
@@ -100,37 +102,24 @@ define [
         @$el.removeClass 'bulk'
         $view.trigger 'changeViewstate', 'grid'
 
-    onClick: (e) ->
-      e.preventDefault()
-      @changeSidebar()
-
     addOne: (medium) ->
       view = new ThumbView model: medium
-      @$el.prepend(view.render().$el).masonry 'reload'
+      $el = view.render().$el
+      @$el.prepend($el).masonry 'reload'
 
     addAll: ->
       @$el.html ''
       Media.each @addOne, @
 
-    newAttributes: ->
-      {
-        title: @$input.val().trim()
-        order: Media.nextOrder()
-        completed: false
-      }
-
     disselect: =>
-      Media.selected().forEach (medium) ->
-        medium.trigger 'toggle'
-
-      @changeSidebar()
+      _.invoke Media.selected(), 'toggle'
 
     addLoader: (op) ->
       medium = new Media.model
       medium.set op
-      Media.models.unshift medium
+      Media.add medium
 
-      $el: @addOne medium
+      $el: medium.view.$el
       model: medium
 
     delete: =>
@@ -143,7 +132,6 @@ define [
       selected[0].destroy
         success: do (that = @) -> (model, res) ->
           UpdateNotify.success res.message
-          that.changeSidebar()
 
     deleteAll: =>
       selected = Media.selected()
@@ -151,18 +139,23 @@ define [
 
       UpdateNotify.progress 'ファイルを削除しています'
 
-      flag = true
+      success = error = 0
+
+      notify = ->
+        return if count < success + error
+
+        if error > 0
+          UpdateNotify.fail "メディアの削除に失敗しました (#{error}件)"
+        else
+          UpdateNotify.success "全 #{count} 件を削除しました"
 
       _.invoke selected, 'destroy',
-          success: (model, res) -> flag &&= true
-          error: -> flag &&= false
-
-      if flag
-        UpdateNotify.success '削除しました'
-      else
-        UpdateNotify.fail '削除に失敗しました'
-
-      @changeSidebar()
+        success: (model, res) ->
+          ++success
+          notify()
+        error: ->
+          ++error
+          notify()
 
     update: ->
       selected = Media.selected()
@@ -183,108 +176,87 @@ define [
 
   #  File uploader
   #-----------------------------------------------
-  $('#medium_asset').on 'change', (e) ->
-    sendFile @files[0]
+  $(document)
+  .on 'dragover', (e) ->
+    e.preventDefault()
+    $main.addClass 'upload'
+    false
+  .on 'dragleave', (e) ->
+    e.preventDefault()
+    return false unless window.event.pageX == 0 || window.event.pageY == 0
+    $main.removeClass 'upload'
+    false
+  .on 'drop', (e) ->
+    e.preventDefault()
+    $main.removeClass 'upload'
+    false
 
   $dropzone.on 'drop', (e) ->
     e.preventDefault()
-    sendFile e.dataTransfer.files[0]
+    $main.removeClass 'upload'
+    files = e.originalEvent.dataTransfer.files
+    _.each files, (file) -> uploadFile file
+    false
 
-  sendFile = (file) ->
-    console.log file
-    return
-    $.ajax
-      type: 'post'
-      url: $dropzone.data('post-url') + '.json'
-      data: do ->
-        h = {}
-        h[csrf_param] = csrf_token
-        h['medium[asset]'] = file
-        h
+  $('#medium_asset').on 'change', (e) ->
+    e.preventDefault()
+    _.each @files, (file) -> uploadFile file
 
-      success: ->
-        ;
-      xhrFields:
-        onprogress: (e) ->
-          if e.lengthComputable
-            percentage = Math.round e.loaded * 100 / e.total
-            console.log percentage
-
-      processData: false
-      contentType: file.type
-
-  ###
-  $dropzone.filedrop
-    fallback_id: 'medium_asset'
-    paramname: 'medium[asset]'
-    maxfiles: 10
-    maxfilesize: 20
-    url: $dropzone.data('post-url') + '.json'
-
-    data: do ->
-      h = {}
-      h[csrf_param] = csrf_token
-      h
-
-    docOver: ->
-      $main.addClass 'upload'
-
-    docLeave: ->
-      $main.removeClass 'upload'
-
-    dragOver: ->
-      $main.addClass 'upload'
-
-    dragLeave: ->
-      $main.removeClass 'upload'
-
-    drop: ->
-      $main.removeClass 'upload'
-
-    error: (err, file) ->
-      switch err
-        when 'BrowserNotSupported'
-          UploaderNotify.fail 'このブラウザではアップロードできません'
-        when 'TooManyFiles'
-          UploaderNotify.fail '一度にアップロードできるのは10個までです'
-        when 'FileTooLarge'
-          UploaderNotify.fail "#{file.name} はファイルサイズが大きすぎます"
-
-    beforeEach: (file) ->
-      if !file.type.match /^image\//
-        UploaderNotify.fail "#{file.name} はアップロードできないファイル形式です"
-        false
-      else
-        true
-
-    uploadStarted: (i, file, len) ->
-      createImage file
-
-    uploadFinished: (i, file, res) ->
-      fo = $.data(file)
-
-      fo.$el.find('.progressbar').fadeOut()
-
-      fo.model.set res
-
-    progressUpdated: (i, file, progress) ->
-      $.data(file).$el.find('.progressbar > div').width progress + '%'
-
-    globalProgressUpdated: (progress) ->
-      UploaderNotify.progress "アップロード中... #{progress}%"
-
-    afterAll: ->
-      UploaderNotify.success 'アップロード完了'
-
-  createImage = (file) ->
+  uploadFile = (file) ->
     reader = new FileReader()
+    form = new FormData()
+
+    percent = 0
+
+    $progressbar = null
+    model = null
 
     reader.onload = (e) ->
-      $.data file, App.addLoader
-        title: null
-        file_type: null
-        is_image: true
+      form.append 'csrf_param', csrf_token
+      form.append 'medium[asset]', file
+      form.append 'medium[content_type]', file.type
+      form.append 'medium[file_name]', file.name
+
+      view = App.addLoader
+        title:     ''
+        file_type: ''
+        is_image:  true
         thumbnail: e.target.result
 
+      $progressbar = view.$el.find '.progressbar > div'
+      model = view.model
+
+    reader.onloadend = ->
+      $.ajax
+        url: $dropzone.data('post-url') + '.json'
+        dataType: 'json'
+        data: form
+        cache: false
+        contentType: false
+        processData: false
+        type: 'post'
+
+        xhr: ->
+          xhr = $.ajaxSettings.xhr()
+
+          xhr.upload.addEventListener 'progress', progressHandler, false
+
+          xhr.addEventListener 'progress', progressHandler, false
+
+          xhr
+
+        success: (data) ->
+          model.set data
+          $progressbar.fadeOut()
+
+        error: ->
+          model.destroy()
+          UploaderNotify.fail 'アップロードに失敗しました'
+
+    progressHandler = (e) ->
+      if e.lengthComputable
+        percent = 100 * e.loaded / e.total / 2
+        $progressbar.width percent + '%'
+
     reader.readAsDataURL file
-  ###
+
