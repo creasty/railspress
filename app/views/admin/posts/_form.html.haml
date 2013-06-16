@@ -77,7 +77,7 @@
 
       #post_thumbnail_preview.post-thumbnail
         - if @post.thumbnail.present?
-          = image_tag @post.thumbnail.asset.url(:small)
+          = image_tag @post.thumbnail.asset.url(:thumbnail)
 
           .edit.has-two
             %i.icon-image

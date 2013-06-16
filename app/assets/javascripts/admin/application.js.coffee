@@ -21,13 +21,16 @@ require [
   #  Smooth Scrolling
   #-----------------------------------------------
   $(document).on 'click', 'a[href^=#]', (e) ->
-    e.preventDefault()
-
     $t = $ @
     id = $t.attr 'href'
+
+    return unless id[1..].length > 1
+
     $target = $ id
 
     return if $target.length == 0
+
+    e.preventDefault()
 
     $('html, body').animate
       scrollTop: $target.offset().top
@@ -38,7 +41,7 @@ require [
 
   #  Tooltip
   #-----------------------------------------------
-  $('.tooltip, abbr[title]').powerTip
+  $('.tooltip, abbr[title], a[title]').powerTip
     placement: 'n'
     smartPlacement: true
 

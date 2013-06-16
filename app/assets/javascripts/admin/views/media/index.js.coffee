@@ -74,11 +74,9 @@ define [
       count = selected.length
 
       if count > 1
-        @$el.addClass 'bulk'
         $counter.html count
         $view.trigger 'changeViewstate', 'bulk'
       else if count == 1
-        @$el.removeClass 'bulk'
         $formTitle.val selected[0].get 'title'
         $formDescription.val selected[0].get 'description'
         $formLink.attr 'href', selected[0].get 'link'
@@ -90,7 +88,6 @@ define [
 
         $view.trigger 'changeViewstate', 'selecting'
       else
-        @$el.removeClass 'bulk'
         $view.trigger 'changeViewstate', 'grid'
 
     disselect: =>
@@ -176,6 +173,7 @@ define [
       @listenTo Media, 'add', @addOne
       @listenTo Media, 'reset', @addAll
       @listenTo Media, 'all', @render
+      @listenTo Media, 'change', @bulk
 
       Media.fetch
         success: ->
@@ -199,6 +197,14 @@ define [
           width
 
       @
+
+    bulk: ->
+      count = Media.selected().length
+
+      if count > 1
+        @$el.addClass 'bulk'
+      else
+        @$el.removeClass 'bulk'
 
     addOne: (medium) ->
       view = new ThumbView model: medium

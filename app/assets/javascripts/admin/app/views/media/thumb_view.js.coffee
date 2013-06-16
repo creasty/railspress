@@ -14,6 +14,8 @@ define [
 
     events:
       'click':  'toggle'
+      'mousemove': 'mouseMove'
+      'mouseleave': 'mouseLeave'
 
     initialize: ->
       @model.view = @
@@ -27,13 +29,26 @@ define [
 
     render: ->
       @$el.html @template @model.toJSON()
+      @$preview = @$el.find '.preview-image'
+      @$title = @$el.find '.title > span'
       @
 
     renderSelected: ->
       @$el.toggleClass 'selected'
 
     renderTitle: ->
-      @$el.find('.title > span').text @model.get 'title'
+      @$title.text @model.get 'title'
 
-    toggle: ->
-      @model.toggle()
+    mouseMove: (e) ->
+      offset = @$preview.offset()
+      w = @$preview.width()
+      h = @$preview.height()
+      x = (e.pageX - offset.left) / w * 100
+      y = (e.pageY - offset.top) / h * 100
+
+      @$preview.css backgroundPosition: "#{x}% #{y}%"
+
+    mouseLeave: ->
+      @$preview.css backgroundPosition: '50% 50%'
+
+    toggle: -> @model.toggle()

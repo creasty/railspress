@@ -8,7 +8,7 @@
     %td
       .post-thumbnail
         - if post.thumbnail.present?
-          = image_tag post.thumbnail.asset.url(:small), size: '80x57'
+          = image_tag post.thumbnail.asset.url(:thumbnail), size: '80x57'
         - else
           = image_tag 'http://placehold.it/243x172', size: '80x57'
     %td.controller

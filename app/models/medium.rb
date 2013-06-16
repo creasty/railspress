@@ -23,13 +23,14 @@ class Medium < ActiveRecord::Base
   has_attached_file :asset,
     styles: {
       large: '1020>',
-      small: '243x172#',
+      thumbnail: '243x172#',
+      small: '300x300>',
       facebook: '300x300#',
-      cropped: { geometry: '', processors: [:cropper] }
+      cropped: { geometry: '', processors: [:cropper] },
     },
     convert_options: {
       large: '-strip',
-      small: '-quality 75 -strip'
+      thumbnail: '-quality 75 -strip',
     },
     default_url: 'http://placehold.it/243x172',
     url: '/system/:class/:id_partition/:style.:extension',
@@ -39,6 +40,7 @@ class Medium < ActiveRecord::Base
   # before_validation :fix_crop_coord
   # before_post_process :rename_image
   before_post_process :image?
+  after_save :check_file
   after_update :reprocess_image
 
   #  Public Methods
@@ -98,6 +100,12 @@ private
       title.strip!
       title.capitalize!
       self.title = title
+    end
+  end
+
+  def check_file
+    if read_attribute(:asset_file_name).nil?
+      self.destroy
     end
   end
 
