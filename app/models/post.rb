@@ -47,6 +47,21 @@ class Post < ActiveRecord::Base
     self.status == 1
   end
 
+  def to_backbone_json
+    {
+      id: id,
+      title: title,
+      content: content,
+      status: status,
+      thumbnail: thumbnail.asset.url(:thumbnail),
+      edit_link: edit_admin_post_path(self),
+      link: post_url(self),
+      user_id: user_id,
+      date_str: date_str,
+      time_str: time_str,
+    }
+  end
+
   #  Attributes
   #-----------------------------------------------
   def date_str

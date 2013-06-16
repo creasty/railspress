@@ -164,7 +164,11 @@ body {
 			float: right;
 			font-size: 22px;
 			line-height: 1;
-			margin: -4px 0 -8px;
+			margin: -5px 0 -7px 10px;
+
+			&:before {
+				padding: 0;
+			}
 
 			&:hover {
 				color: $primary-color;

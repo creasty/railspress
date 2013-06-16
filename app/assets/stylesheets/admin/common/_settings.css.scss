@@ -21,17 +21,19 @@ $body-text-color: #ebe8e1;
 
 $header-bg-color: #29323a; // rgba(#000, .4) on $body-bg-color
 
-$primary-color: #d36d43;
-$danger-color: #d34343;
-$success-color: #9eaf2f;
-$muted-color: #aaa;
-
 $main-bg-color: #f5f5f5;
 $main-text-color: #666;
 $main-rule-color: #d0d0d0;
 
 $menubar-bg-color: #ebe8e1;
 $menubar-text-color: #95938f; // rgba(#000, .4);
+
+$primary-color: #d36d43;
+$success-color: #9eaf2f;
+$danger-color: #d34343;
+$warning-color: #dcba00;
+$info-color: #439bbb;
+$muted-color: #aaa;
 
 $anchor-color: $primary-color;
 $anchor-active-color: darken($anchor-color, 20%);
