@@ -1,0 +1,18 @@
+<td><input class="selecting" type="checkbox"></td>
+<td class="<%= ['privated', 'published', 'trashed'][status] %>"><a href="<%= link %>"><%= title %></a></td>
+<td><%= user_name %></td>
+<td><%= created_at %></td>
+<td>
+	<div class="thumbnail">
+		<% if (is_image) { %>
+			<img src="<%= thumbnail %>" alt="" width="80" height="57">
+		<% } else { %>
+			<img src="//placehold.it/243x172" alt="" width="80" height="57">
+		<% } %>
+	</div>
+</td>
+<td class="controller">
+	<a class="icon-edit"></a>
+	<a class="icon-delete"></a>
+	<a class="icon-view"></a>
+</td>
