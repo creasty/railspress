@@ -67,30 +67,35 @@ table.table {
 			color: rgba(#000, .5);
 		}
 
-		th:after {
-			font-family: "LigatureSymbols";
-			padding-left: .5em;
-		}
+		th {
+			cursor: default;
 
-		th[data-sort] {
-			cursor: pointer;
-			@include transition(color .3s);
-
-			&:hover {
-				color: $primary-color;
-			}
 			&:after {
-				content: "\E120";
-				opacity: .6;
+				font-family: "LigatureSymbols";
+				padding-left: .5em;
 			}
 
-			&.desc:after {
-				content: "\E03e";
-			}
-			&.asce:after {
-				content: "\E135";
+			&[data-sort] {
+				cursor: pointer;
+				@include transition(color .3s);
+
+				&:hover {
+					color: $primary-color;
+				}
+				&:after {
+					content: "\E120";
+					opacity: .6;
+				}
+
+				&.desc:after {
+					content: "\E03e";
+				}
+				&.asce:after {
+					content: "\E135";
+				}
 			}
 		}
+
 
 	}
 	tbody {
@@ -100,7 +105,13 @@ table.table {
 
 			&.selected,
 			&.selected:hover {
-				background-color: rgba($success-color, .1);
+				background-color: rgba($primary-color, .05);
+			}
+		}
+		&.bulk {
+			tr.selected,
+			tr.selected:hover {
+				background-color: rgba($success-color, .05);
 			}
 		}
 

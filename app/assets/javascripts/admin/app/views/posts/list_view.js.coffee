@@ -23,11 +23,14 @@ define [
     initialize: ->
       @model.view = @
 
-      @listenTo @model, 'change:thumbnail', @render
-      @listenTo @model, 'change:title', @render
+      @listenTo @model, 'change', @onChange
       @listenTo @model, 'change:selected', @renderSelected
 
       @listenTo @model, 'destroy', @remove
+
+    onChange: ->
+      return if @model.hasChanged 'selected'
+      @render()
 
     render: ->
       @$el.html @template @model.toJSON()
@@ -35,12 +38,16 @@ define [
       @$el.find('.btn').powerTip
         placement: 'n'
         smartPlacement: true
-
+      @renderSelected()
       @
 
     renderSelected: ->
       @$checkbox.attr 'checked', @model.get 'selected'
-      @$el.toggleClass 'selected'
+
+      if @model.get 'selected'
+        @$el.addClass 'selected'
+      else
+        @$el.removeClass 'selected'
 
     toggle: -> @model.toggle()
 

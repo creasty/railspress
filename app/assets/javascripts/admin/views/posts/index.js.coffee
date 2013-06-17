@@ -9,7 +9,7 @@ define [
   'common/alert'
   'components/viewstate'
 
-  'backbone.syphon'
+  'powertip'
   'domReady!'
 ], (
   $
@@ -45,12 +45,13 @@ define [
       'click #btn_update': 'update'
       'click #btn_delete_all': 'deleteAll'
       'click #btn_disselect': 'disselect'
-      'keyup #page_num': 'pageGoto'
-      'keyup #per_page': 'setPerPage'
+      'change #page_num': 'pageGoto'
+      'change #per_page': 'setPerPage'
 
     initialize: ->
       @listenTo Posts, 'change', @changeSidebar
       @listenTo Posts, 'destroy', @changeSidebar
+      @listenTo Posts, 'sync', @updatePager
 
       @$state = @$el.find '> div'
       @$counter = @$state.find 'span.counter'
@@ -58,8 +59,14 @@ define [
 
       @$pageNum = $ '#page_num'
       @$perPage = $ '#per_page'
+      @$postStatus = $ '#post_status'
+      @$postUser = $ '#post_user_id'
 
-      @changeSidebar()
+    updatePager: ->
+      @$pageNum.val Posts.state.currentPage
+      @$perPage.val Posts.state.pageSize
+
+      @$pageNum.data 'powertip', "#{Posts.state.firstPage} - #{Posts.state.totalPages} の範囲を入力して下さい"
 
     changeSidebar: ->
       selected = Posts.selected()
@@ -69,8 +76,7 @@ define [
         @$counter.html count
         @$state.trigger 'changeViewstate', 'selecting'
       else
-        @$pageNum.val Posts.state.currentPage
-        @$perPage.val Posts.state.pageSize
+        @updatePager()
         @$state.trigger 'changeViewstate', 'normal'
 
     disselect: =>
@@ -114,16 +120,47 @@ define [
 
     update: ->
       selected = Posts.selected()
+      count = selected.length
 
-      if selected.length == 1
-        data =
-          title: $formTitle.val()
-          description: $formDescription.val()
+      success = error = 0
 
-        post = selected[0]
-        post.save data,
-          success: (model, res) ->
-            UpdateNotify.success res.message
+      notify = ->
+        return if count < success + error
+
+        if error > 0
+          UpdateNotify.fail "記事の更新に失敗しました (#{error}件)"
+        else
+          UpdateNotify.success "全 #{count} つの記事を更新しました"
+
+      data = {}
+
+      if @$postStatus.val()
+        data.status = @$postStatus.val()
+
+      if @$postUser.val()
+        data.user_id = @$postUser.val()
+
+      Alert
+        title: "#{count} 件の記事を更新しますか？"
+        message: '選択ミスがないか十分に確認してください。'
+        type: 'danger'
+        btns: [
+          { text: '更新', action: 'update', type: 'danger' }
+          { text: 'キャンセル', action: 'close', align: 'right' }
+        ]
+        callback: (action, al) =>
+          if action == 'update'
+            UpdateNotify.progress '記事を更新しています...'
+            al.close()
+
+            _.each selected, (post) ->
+              post.save data,
+                success: (model, res) ->
+                  ++success
+                  notify()
+                error: ->
+                  ++error
+                  notify()
 
     pageNext: (e) ->
       e.preventDefault()
@@ -143,14 +180,13 @@ define [
 
     pageGoto: (e) ->
       e.preventDefault()
-      page = $(e.target).val() >>> 0
+      page = Posts.normalizePageNum $(e.target).val()
       Posts.getPage page
 
     setPerPage: (e) ->
       e.preventDefault()
-      per = $(e.target).val() >>> 0
+      per = Posts.normalizePageNum $(e.target).val()
       Posts.setPageSize per
-
 
   #  App View
   #-----------------------------------------------

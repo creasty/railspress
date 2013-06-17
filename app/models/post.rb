@@ -29,7 +29,6 @@ class Post < ActiveRecord::Base
   # default_scope where('status < ?', 2)
   scope :privated, where(status: 0)
   scope :published, where(status: 1)
-  scope :trashed, where(status: 2)
 
   #  FriendlyId
   #-----------------------------------------------

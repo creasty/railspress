@@ -144,9 +144,17 @@ body#posts {
 /*=== Index
 ==============================================================================================*/
 body#posts.index {
-	table tbody {
+	tbody#posts_list {
 		td.controller .btn {
 			margin-right: 10px;
+		}
+
+		td.privated a:after {
+			@extend %icon;
+			content: "\E086";
+			font-size: 18px;
+			padding: 0 0 0 5px;
+			color: $warning-color;
 		}
 
 		.post-thumbnail {

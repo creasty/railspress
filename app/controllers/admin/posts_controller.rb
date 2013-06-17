@@ -69,7 +69,7 @@ class Admin::PostsController < Admin::ApplicationController
         format.json { render json: @post.to_backbone_json }
       else
         format.json do
-          render json: @posts.errors.full_messages,
+          render json: @post.errors.full_messages,
             status: :unprocessable_entity
         end
       end

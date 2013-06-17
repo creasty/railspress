@@ -8,18 +8,18 @@
         %tr
           %th{ width: '24px' }
             %i.icon-check
+          %th{ width: '80px' } サムネイル
           %th{ 'data-sort' => 'title' } タイトル
+          %th{ 'data-sort' => 'status' } 公開状況
           %th{ 'data-sort' => 'user_name' } 作成者
           %th{ 'data-sort' => 'created_at', width: '130px' } 作成日
-          %th{ width: '94px' } サムネイル
-          %th
-            %i.icon-play
+          %th アクション
 
       %tbody#posts_list
 
 
 #pocket_side
-  %div.hide{ 'data-state' => 'normal' }
+  %div{ 'data-state' => 'normal' }
     %section
       %h2 ページ
 
@@ -28,29 +28,28 @@
           %td{ width: '50px' }= label_tag :page_num, 'ページ'
           %td
             .text
-              = button_tag '', id: 'page_first', class: 'btn-first'
-              = button_tag '', id: 'page_prev', class: 'btn-prev'
-              = text_field_tag :page_num, ''
-              = button_tag '', id: 'page_next', class: 'btn-next'
-              = button_tag '', id: 'page_last', class: 'btn-last'
+              = button_tag '', id: 'page_first', class: 'btn-first tooltip', title: '最初のページ'
+              = button_tag '', id: 'page_prev', class: 'btn-prev tooltip', title: '前のページ'
+              = text_field_tag :page_num, '0', class: 'tooltip'
+              = button_tag '', id: 'page_next', class: 'btn-next tooltip', title: '次のページ'
+              = button_tag '', id: 'page_last', class: 'btn-last tooltip', title: '最後のページ'
         %tr
           %td= label_tag :per_page, '表示数件'
           %td
-            = text_field_tag :per_page, ' ', class: 'text block'
+            = text_field_tag :per_page, '0', class: 'text block'
 
     %section
       %h2 検索
 
-      = form_tag admin_posts_path, method: :get do
-        %table.form
-          %tr
-            %td
-              .text.icon-search
-                = text_field :post, :title, placeholder: 'タイトル で検索'
-          %tr
-            %td
-              %div.select
-                = collection_select :post, :user_id, User.all, :id, :name, prompt: '作成者 で絞り込み'
+      %table.form
+        %tr
+          %td
+            .text.icon-search
+              = text_field :search, :title, placeholder: 'タイトル で検索'
+        %tr
+          %td
+            %div.select
+              = collection_select :search, :user_id, User.all, :id, :name, prompt: '作成者 で絞り込み'
 
           %tr.doubled
             %td{ colspan: 2 }
@@ -67,22 +66,21 @@
     %section
       %h2 一括編集
 
-      = form_tag admin_posts_path, method: :get do
-        %table.form.table-doubled
-          %tr
-            %td{ colspan: 2 }
-              %h3= label_tag :bulk_status,'公開状況'
-              %div.select
-                = select :bulk_status, nil, { '非公開' => 0, '公開' => 1 }, prompt: '変更なし'
-          %tr
-            %td{ colspan: 2 }
-              %h3= label_tag :bulk_user,'作成者'
-              %div.select
-                = collection_select :bulk_user, :user_id, User.all, :id, :name, prompt: '変更なし'
+      %table.form.table-doubled
+        %tr
+          %td{ colspan: 2 }
+            %h3= label_tag :post_status, '公開状況'
+            %div.select
+              = select :post, :status, { '非公開' => 0, '公開' => 1 }, prompt: '変更なし'
+        %tr
+          %td{ colspan: 2 }
+            %h3= label_tag :post_user_id, '作成者'
+            %div.select
+              = collection_select :post, :user_id, User.all, :id, :name, prompt: '変更なし'
 
-          %tr
-            %td
-              = button_tag '変更を適応する', id: 'btn_update', class: 'btn btn-success block'
-            %td
-              = button_tag '削除する', id: 'btn_delete_all', class: 'btn btn-danger block'
+        %tr
+          %td
+            = button_tag '変更を適応する', id: 'btn_update', class: 'btn btn-success block'
+          %td
+            = button_tag '削除する', id: 'btn_delete_all', class: 'btn btn-danger block'
 

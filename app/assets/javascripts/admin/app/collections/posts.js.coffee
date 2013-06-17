@@ -22,4 +22,9 @@ define [
     selected: ->
       @filter (post) -> post.get 'selected'
 
+    normalizePageNum: (n) ->
+      min = @state.firstPage
+      max = @state.totalPages
+      Math.max min, Math.min(max, n >>> 0)
+
   new PostsCollection()
