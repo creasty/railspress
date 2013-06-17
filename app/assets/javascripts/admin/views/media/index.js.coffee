@@ -35,7 +35,7 @@ define [
 
   #  Elements
   #-----------------------------------------------
-  $view = $ '#pocket_side > div.view'
+  $view = $ '#pocket_side > div'
   $counter = $view.find 'span.counter'
 
   $formTitle = $ '#medium_title'

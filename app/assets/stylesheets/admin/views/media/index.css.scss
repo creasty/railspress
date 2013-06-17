@@ -1,14 +1,6 @@
 
 #media.index {
 
-	#main:before {
-		content: "";
-		@include loading-cube;
-	}
-	#main.loaded:before {
-		display: none;
-	}
-
 	#media_list {
 		@extend .clear-after;
 		list-style: none;
