@@ -1,98 +1,192 @@
 
-require [
+define [
   'jquery'
+  'underscore'
+  'backbone'
+  'app/collections/posts'
+  'app/views/posts/list_view'
   'common/notify'
-  'components/viewstate'
-  'common/transit'
   'common/alert'
+  'components/viewstate'
+
+  'backbone.syphon'
   'domReady!'
-], ($, Notify, Viewstate, transit, Alert) ->
+], (
+  $
+  _
+  Backbone
+  Posts
+  ListView
+  Notify
+  Alert
+  Viewstate
+) ->
 
-  $tbody = $ '#main > table > tbody'
+  #  Elements
+  #-----------------------------------------------
+  $main = $ '#main'
 
-  $(document).on 'click', 'ul.pagination a', (e) ->
-    $t = $ @
-    link = $t.get(0).href
-    $.ajax
-      url: link
-      data: only_table: true
-    .done (json) ->
-      $('ul.pagination').replaceWith json.pager
-      $tbody.html json.html
-      transit.changeUrl link, false
+  #  Components
+  #-----------------------------------------------
+  UpdateNotify = Notify()
 
-    e.preventDefault()
+  #  Sidebar
+  #-----------------------------------------------
+  class SidebarView extends Backbone.View
+
+    el: '#pocket_side'
+
+    events:
+      'click #page_prev': 'pagePrev'
+      'click #page_next': 'pageNext'
+      'click #btn_update': 'update'
+      'click #btn_delete_all': 'deleteAll'
+      'click #btn_disselect': 'disselect'
+
+    initialize: ->
+      @listenTo Posts, 'change', @changeSidebar
+      @listenTo Posts, 'destroy', @changeSidebar
+
+      @$state = @$el.find '> div'
+      @$counter = @$state.find 'span.counter'
+      Viewstate.attachTo @$state
+
+    changeSidebar: ->
+      selected = Posts.selected()
+      count = selected.length
+
+      if count > 1
+        @$counter.html count
+        @$state.trigger 'changeViewstate', 'selecting'
+      else
+        @$state.trigger 'changeViewstate', 'normal'
+
+    disselect: =>
+      _.invoke Posts.selected(), 'toggle'
+
+    deleteAll: =>
+      selected = Posts.selected()
+      count = selected.length
+
+      success = error = 0
+
+      notify = ->
+        return if count < success + error
+
+        if error > 0
+          UpdateNotify.fail "メディアの削除に失敗しました (#{error}件)"
+        else
+          UpdateNotify.success "全 #{count} つのメディアを削除しました"
+
+      Alert
+        title: "#{count} 件のメディアを削除しますか？"
+        message: '一度削除したメディアはもとに戻すことはできません。'
+        type: 'danger'
+        btns: [
+          { text: '削除', action: 'destroy', type: 'danger' }
+          { text: 'キャンセル', action: 'close', align: 'right' }
+        ]
+        callback: (action, al) =>
+          if action == 'destroy'
+            UpdateNotify.progress 'メディアを削除しています'
+            al.close()
+
+            _.invoke selected, 'destroy',
+              success: (model, res) ->
+                ++success
+                notify()
+              error: ->
+                ++error
+                notify()
+
+    update: ->
+      selected = Posts.selected()
+
+      if selected.length == 1
+        data =
+          title: $formTitle.val()
+          description: $formDescription.val()
+
+        post = selected[0]
+        post.save data,
+          success: (model, res) ->
+            UpdateNotify.success res.message
+
+    pageNext: (e) ->
+      e.preventDefault()
+      Posts.hasNext() && Posts.getNextPage()
+
+    pagePrev: (e) ->
+      e.preventDefault()
+      Posts.hasPrevious() && Posts.getPreviousPage()
+
+    gotoFirst: (e) ->
+      e.preventDefault()
+      Posts.goTo Posts.information.firstPage
+
+    gotoLast: (e) ->
+      e.preventDefault()
+      Posts.goTo Posts.information.lastPage
+
+    gotoPage: (e) ->
+      e.preventDefault()
+      page = $(e.target).text()
+      Posts.goTo page
+
+    changeCount: (e) ->
+      e.preventDefault()
+      per = $(e.target).text()
+      Posts.howManyPer per
 
 
-  st = Notify()
-  bulk_count = 0
-  $view = $ 'div[data-toggle="bulk-action"]'
-  Viewstate.attachTo $view
+  #  App View
+  #-----------------------------------------------
+  class AppView extends Backbone.View
 
-  $selecting = $view.filter '[data-state=selecting]'
-  $counter = $selecting.find 'span.counter'
+    el: '#posts_list'
 
-  $(document)
-  .on 'change', 'tr.post td.bulk input', ->
-    $t = $ @
-    $t_tr = $t.closest('tr')
-    checked = $t.is(':checked')
+    initialize: ->
+      @listenTo Posts, 'add', @addOne
+      @listenTo Posts, 'reset', @addAll
+      @listenTo Posts, 'all', @render
+      @listenTo Posts, 'destroy', @refresh
+      @listenTo Posts, 'change', @bulk
 
-    if checked
-      $t_tr.addClass 'hover'
-      ++bulk_count
-    else
-      $t_tr.removeClass 'hover'
-      --bulk_count
+      @refresh()
 
-    if bulk_count > 1
-      $view.trigger 'changeViewstate', 'selecting'
-      $counter.text bulk_count
-    else
-      $view.trigger 'changeViewstate', 'normal'
+    refresh: ->
+      $main.removeClass 'loaded'
 
-  $(document).on 'ajax:beforeSend.rails', 'tr.post a[data-method="delete"]', (e) ->
+      Posts.fetch
+        success: (_, res) ->
+          $main.addClass 'loaded'
 
-    $t = $ @
+    render: -> @
 
-    return true if $t.data 'dependent_destroy'
+    bulk: ->
+      count = Posts.selected().length
 
-    Alert
-      title: '削除しますか？'
-      message: '一度削除した記事はもとに戻すことはできません。'
-      type: 'danger'
-      btns: [
-        { text: '削除', action: 'destroy', type: 'danger' }
-        { text: 'キャンセル', action: 'close', align: 'right' }
-      ]
-      callback: (action, al) =>
-        if action == 'destroy'
-          st.progress '記事を削除しています'
-          $t.data 'dependent_destroy', true
-          $t.trigger 'click.rails'
-          al.close()
+      if count > 1
+        @$el.addClass 'bulk'
+      else
+        @$el.removeClass 'bulk'
 
-    e.preventDefault()
-    false
+    addOne: (post) ->
+      view = new ListView model: post
+      @$el.append view.render().$el
 
-  $(document).on 'ajax:success', 'tr.post a[data-method="delete"]', (e, res) ->
-    return unless res.success
+    addAll: ->
+      @$el.html ''
+      Posts.each @addOne, @
 
-    $post = $ '#post_' + res.id
+    updateSortBy: (e) ->
+      e.preventDefault()
+      currentSort = $('#sortByField').val()
+      Posts.updateOrder currentSort
 
-    $post
-    .animate
-      opacity: 0
-    ,
-      duration: 300
-      complete: ->
-        st.success res.msg
-        $post.remove()
 
-        $.ajax
-          url: window.location.href
-          data: only_table: true
-        .done (json) ->
-          $('ul.pagination').replaceWith json.pager
-          $('table > tbody').html json.html
+  #  Initialize Backbone App
+  #-----------------------------------------------
+  AppView = new AppView()
+  SidebarView = new SidebarView()
 

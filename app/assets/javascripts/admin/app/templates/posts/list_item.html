@@ -1,18 +1,14 @@
-<td><input class="selecting" type="checkbox"></td>
-<td class="<%= ['privated', 'published', 'trashed'][status] %>"><a href="<%= link %>"><%= title %></a></td>
+<td><input type="checkbox" class="checkbox size-large"></td>
+<td class="<%= ['privated', 'published', 'trashed'][status] %>"><a href="<%= edit_link %>"><%= title %></a></td>
 <td><%= user_name %></td>
-<td><%= created_at %></td>
+<td><%= date_str %> <%= time_str %></td>
 <td>
-	<div class="thumbnail">
-		<% if (is_image) { %>
-			<img src="<%= thumbnail %>" alt="" width="80" height="57">
-		<% } else { %>
-			<img src="//placehold.it/243x172" alt="" width="80" height="57">
-		<% } %>
+	<div class="post-thumbnail">
+		<img src="<%= thumbnail %>" alt="" width="80" height="57">
 	</div>
 </td>
 <td class="controller">
-	<a class="icon-edit"></a>
-	<a class="icon-delete"></a>
-	<a class="icon-view"></a>
+	<a href="<%= edit_link %>" class="icon-edit"></a>
+	<a href="#" class="icon-delete"></a>
+	<a href="<%= link %>" class="icon-link"></a>
 </td>

@@ -6,7 +6,7 @@
     %table.table.table-hover
       %thead
         %tr
-          %th{ width: '10px' }
+          %th{ width: '24px' }
             %i.icon-check
           %th.sortable タイトル
           %th.sortable 作成者
@@ -15,20 +15,19 @@
           %th
             %i.icon-play
 
-      %tbody
-        = render 'table_tbody'
+      %tbody#posts_list
 
 
 #pocket_side
-  %div{ data: { toggle: 'bulk-action', state: 'normal' } }
+  %div{ 'data-state' => 'normal' }
     %section
       %h2 ページ
 
       %table.form
         %tr
-          %td= label_tag :page_num, 'ページ'
+          %td= label_tag :page_num_1, 'ページ'
           %td
-            = text_field_tag :page_num, '1', class: 'text block'
+            = text_field_tag :page_num_1, '1', class: 'text block'
         %tr
           %td= label_tag :per_page, '表示数件'
           %td
@@ -36,7 +35,10 @@
 
         %tr
           %td{ colspan: 2 }
-            = paginate @posts, window: 4, outer_window: 2, theme: 'admin_table'
+            = link_to 'Prev', '#', id: 'page_prev'
+            = link_to 'Next', '#', id: 'page_next'
+
+            = text_field_tag :page_num, ''
 
     %section
       %h2 検索
@@ -56,13 +58,13 @@
             %td{ colspan: 2 }
               = button_tag '検索する', class: 'btn btn-primary block'
 
-  %div.hide{ data: { toggle: 'bulk-action', state: 'selecting' } }
+  %div.hide{ 'data-state' => 'selecting' }
     %section
       %h2
         %span.counter 0
         項目を選択中
 
-      = button_tag '選択を解除する', class: 'btn block'
+      = button_tag '選択を解除する', id: 'btn_disselect', class: 'btn block'
 
     %section
       %h2 一括編集
@@ -82,7 +84,7 @@
 
           %tr
             %td
-              = button_tag '変更を適応する', class: 'btn btn-success block'
+              = button_tag '変更を適応する', id: 'btn_update', class: 'btn btn-success block'
             %td
-              = button_tag '削除する', class: 'btn btn-danger block'
+              = button_tag '削除する', id: 'btn_delete_all', class: 'btn btn-danger block'
 

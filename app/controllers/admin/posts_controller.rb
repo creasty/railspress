@@ -7,35 +7,24 @@ class Admin::PostsController < Admin::ApplicationController
       .order('created_at DESC')
       .page(params[:page])
       .per(params[:per_page])
-      .includes(:user)
+      .includes(:user, :thumbnail)
 
     @posts = @posts.where get_search_where
 
+    paginate_headers_for @posts
+
     respond_to do |format|
       format.json do
-        if params[:only_table]
-          params.delete :only_table
-
-          render json: {
-            pager: view_context.paginate(
-              @posts,
-              window: 4,
-              outer_window: 2,
-              theme: 'admin_table'
-            ),
-            html: render_to_string(
-              partial: 'table_tbody',
-              layout: false
-            )
-          }
-        end
+        render json: [
+          {
+            total_entries: @posts.total_count,
+            total_pages: @posts.total_pages
+          },
+          @posts.map { |post| post.to_backbone_json }
+        ]
       end
       format.html { render }
     end
-
-  end
-
-  def search
 
   end
 
@@ -53,24 +42,15 @@ class Admin::PostsController < Admin::ApplicationController
 
     respond_to do |format|
       if @post.save
-        format.json do
-          render json: {
-            success: true,
-            msg: '作成されました',
-            url: edit_admin_post_path(@post)
-          }
-        end
+        format.json { render json: @post.to_backbone_json }
         format.html do
           redirect_to edit_admin_post_path(@post),
             notice: '作成されました'
         end
       else
         format.json do
-          render json: {
-            success: false,
-            msg: '保存に失敗しました',
-            errors: @post.errors.full_messages
-          }
+          redner json: @post.errors.full_messages,
+            status: :unprocessable_entity
         end
         format.html do
           save_current_params
@@ -86,19 +66,11 @@ class Admin::PostsController < Admin::ApplicationController
 
     respond_to do |format|
       if @post.update_attributes params[:post]
-        format.json do
-          render json: {
-            success: true,
-            msg: '更新されました'
-          }
-        end
+        format.json { render json: @post.to_backbone_json }
       else
         format.json do
-          render json: {
-            success: false,
-            msg: '保存に失敗しました',
-            errors: @post.errors.full_messages
-          }
+          render json: @posts.errors.full_messages,
+            status: :unprocessable_entity
         end
       end
     end
@@ -110,13 +82,7 @@ class Admin::PostsController < Admin::ApplicationController
     @post.destroy
 
     respond_to do |format|
-      format.json do
-        render json: {
-          success: true,
-          msg: '記事を削除しました',
-          id: @post.id
-        }
-      end
+      format.json { render json: @post.to_backbone_json }
 
       format.html do
         redirect_to admin_posts_path,
@@ -125,7 +91,9 @@ class Admin::PostsController < Admin::ApplicationController
     end
   end
 
+
 private
+
 
   def get_search_where
     where = ['1 = 1']

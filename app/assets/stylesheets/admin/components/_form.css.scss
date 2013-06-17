@@ -312,6 +312,30 @@ a.btn.size-large {
 	line-height: 42px;
 }
 
+input.radio.size-large,
+input.checkbox.size-large,
+label.radio.size-large > input,
+label.checkbox.size-large > input {
+	width: 24px;
+	height: 24px;
+}
+input.radio.size-large,
+label.radio.size-large > input {
+	&:checked:after {
+		height: 12px;
+		width: 12px;
+		top: 4px;
+		left: 4px;
+	}
+}
+
+input.checkbox.size-large:checked:after,
+label.checkbox.size-large > input:checked:after {
+	left: 3px;
+	top: -6px;
+	font-size: 20px;
+}
+
 /*	Block Level
 -----------------------------------------------*/
 .text.block,

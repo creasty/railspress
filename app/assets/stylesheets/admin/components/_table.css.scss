@@ -86,6 +86,11 @@ table.table {
 		tr {
 			@include transition(background-color .3s);
 			border-bottom: 1px solid $main-rule-color;
+
+			&.selected,
+			&.selected:hover {
+				background-color: rgba($success-color, .1);
+			}
 		}
 
 		td {
@@ -105,9 +110,8 @@ table.table {
 
 table.table-hover {
 	tbody tr {
-		&:hover,
-		&.hover {
-			background-color: rgba($success-color, .05);
+		&:hover {
+			background-color: lighten($menubar-bg-color, 5%);
 		}
 	}
 }

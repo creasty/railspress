@@ -19,6 +19,12 @@ module Admin
       params[:format] = 'json' if ajax_request?
     end
 
+    def paginate_headers_for(models)
+      response.headers[:total_pages] = models.total_pages.to_s
+      response.headers[:per_page] = models.num_pages.to_s
+      response.headers[:page] = models.current_page.to_s
+    end
+
   end
 
 end

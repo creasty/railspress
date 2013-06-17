@@ -2,6 +2,8 @@
 
 class Post < ActiveRecord::Base
 
+  include Rails.application.routes.url_helpers
+
   attr_accessor :date_str, :time_str, :tags
   attr_accessible :content, :excerpt, :status, :title, :thumbnail_id, :user_id, :created_at, :date_str, :time_str, :tags
 
@@ -53,10 +55,14 @@ class Post < ActiveRecord::Base
       title: title,
       content: content,
       status: status,
-      thumbnail: thumbnail.asset.url(:thumbnail),
+      thumbnail:
+        thumbnail \
+        ? thumbnail.asset.url(:thumbnail)
+        : '//placehold.it/243x172',
       edit_link: edit_admin_post_path(self),
-      link: post_url(self),
-      user_id: user_id,
+      link: post_path(self),
+      user_name: user.name,
+      user_id: user.id,
       date_str: date_str,
       time_str: time_str,
     }

@@ -198,6 +198,37 @@
             %span.select.size-large
               = select '', '', [['オプション', 0], ['オプション', 1], ['オプション', 2]], { prompt: '選択して下さい' }
 
+    %table.table
+      %thead
+        %tr
+          %th サイズ
+          %th ラジオボタン
+          %th チェックボックス
+
+      %tbody
+        %tr
+          %td
+            普通
+          %td
+            = label_tag '', class: 'radio' do
+              = radio_button_tag 'smaple-label-radio', '1', true
+              ラジオボタン
+          %td
+            = label_tag '', class: 'checkbox' do
+              = check_box_tag '', '', true
+              チェックボックス
+
+        %tr
+          %td
+            %code .size-large
+          %td
+            = label_tag '', class: 'radio size-large' do
+              = radio_button_tag 'smaple-label-radio', '1', true
+              ラジオボタン
+          %td
+            = label_tag '', class: 'checkbox size-large' do
+              = check_box_tag '', '', true
+              チェックボックス
 
     %h3
       ブロック
