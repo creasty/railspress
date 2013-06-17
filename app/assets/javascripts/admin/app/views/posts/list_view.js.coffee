@@ -6,6 +6,8 @@ define [
   'text!app/templates/posts/list_item.html'
   'common/alert'
   'common/notify'
+
+  'powertip'
 ], ($, _, Backbone, itemTemplate, Alert, Notify) ->
 
   class PostView extends Backbone.View
@@ -30,6 +32,10 @@ define [
     render: ->
       @$el.html @template @model.toJSON()
       @$checkbox = @$el.find '.checkbox'
+      @$el.find('.btn').powerTip
+        placement: 'n'
+        smartPlacement: true
+
       @
 
     renderSelected: ->

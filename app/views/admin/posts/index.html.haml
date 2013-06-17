@@ -2,15 +2,15 @@
   = link_to '', new_admin_post_path, class: 'icon-plus', title: 'ブログ記事を作成'
 
 #pocket_body
-  #main.no-padding
+  #main.no-padding.loader
     %table.table.table-hover
       %thead
         %tr
           %th{ width: '24px' }
             %i.icon-check
-          %th.sortable タイトル
-          %th.sortable 作成者
-          %th.sortable.desc{ width: '130px' } 作成日
+          %th{ 'data-sort' => 'title' } タイトル
+          %th{ 'data-sort' => 'user_name' } 作成者
+          %th{ 'data-sort' => 'created_at', width: '130px' } 作成日
           %th{ width: '94px' } サムネイル
           %th
             %i.icon-play
@@ -19,26 +19,24 @@
 
 
 #pocket_side
-  %div{ 'data-state' => 'normal' }
+  %div.hide{ 'data-state' => 'normal' }
     %section
       %h2 ページ
 
       %table.form
         %tr
-          %td= label_tag :page_num_1, 'ページ'
+          %td{ width: '50px' }= label_tag :page_num, 'ページ'
           %td
-            = text_field_tag :page_num_1, '1', class: 'text block'
+            .text
+              = button_tag '', id: 'page_first', class: 'btn-first'
+              = button_tag '', id: 'page_prev', class: 'btn-prev'
+              = text_field_tag :page_num, ''
+              = button_tag '', id: 'page_next', class: 'btn-next'
+              = button_tag '', id: 'page_last', class: 'btn-last'
         %tr
           %td= label_tag :per_page, '表示数件'
           %td
-            = text_field_tag :per_page, '1', class: 'text block'
-
-        %tr
-          %td{ colspan: 2 }
-            = link_to 'Prev', '#', id: 'page_prev'
-            = link_to 'Next', '#', id: 'page_next'
-
-            = text_field_tag :page_num, ''
+            = text_field_tag :per_page, ' ', class: 'text block'
 
     %section
       %h2 検索

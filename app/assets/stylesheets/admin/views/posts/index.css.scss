@@ -145,9 +145,8 @@ body#posts {
 ==============================================================================================*/
 body#posts.index {
 	table tbody {
-		td.controller a {
-			font-size: 26px;
-			vertical-align: -.2ex;
+		td.controller .btn {
+			margin-right: 10px;
 		}
 
 		.post-thumbnail {

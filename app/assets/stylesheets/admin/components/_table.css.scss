@@ -71,16 +71,27 @@ table.table {
 			font-family: "LigatureSymbols";
 			padding-left: .5em;
 		}
-		th.sortable:after {
-			content: "\E120";
-			opacity: .6;
+
+		th[data-sort] {
+			cursor: pointer;
+			@include transition(color .3s);
+
+			&:hover {
+				color: $primary-color;
+			}
+			&:after {
+				content: "\E120";
+				opacity: .6;
+			}
+
+			&.desc:after {
+				content: "\E03e";
+			}
+			&.asce:after {
+				content: "\E135";
+			}
 		}
-		th.desc:after {
-			content: "\E03e";
-		}
-		th.asce:after {
-			content: "\E135";
-		}
+
 	}
 	tbody {
 		tr {

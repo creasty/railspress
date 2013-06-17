@@ -37,11 +37,16 @@ define [
     el: '#pocket_side'
 
     events:
-      'click #page_prev': 'pagePrev'
-      'click #page_next': 'pageNext'
+      'click #page_first': 'pageFirst'
+      'click #page_prev':  'pagePrev'
+      'click #page_next':  'pageNext'
+      'click #page_last':  'pageLast'
+
       'click #btn_update': 'update'
       'click #btn_delete_all': 'deleteAll'
       'click #btn_disselect': 'disselect'
+      'keyup #page_num': 'pageGoto'
+      'keyup #per_page': 'setPerPage'
 
     initialize: ->
       @listenTo Posts, 'change', @changeSidebar
@@ -51,6 +56,11 @@ define [
       @$counter = @$state.find 'span.counter'
       Viewstate.attachTo @$state
 
+      @$pageNum = $ '#page_num'
+      @$perPage = $ '#per_page'
+
+      @changeSidebar()
+
     changeSidebar: ->
       selected = Posts.selected()
       count = selected.length
@@ -59,12 +69,15 @@ define [
         @$counter.html count
         @$state.trigger 'changeViewstate', 'selecting'
       else
+        @$pageNum.val Posts.state.currentPage
+        @$perPage.val Posts.state.pageSize
         @$state.trigger 'changeViewstate', 'normal'
 
     disselect: =>
       _.invoke Posts.selected(), 'toggle'
 
-    deleteAll: =>
+    deleteAll: (e) =>
+      e.preventDefault()
       selected = Posts.selected()
       count = selected.length
 
@@ -74,13 +87,13 @@ define [
         return if count < success + error
 
         if error > 0
-          UpdateNotify.fail "メディアの削除に失敗しました (#{error}件)"
+          UpdateNotify.fail "記事の削除に失敗しました (#{error}件)"
         else
-          UpdateNotify.success "全 #{count} つのメディアを削除しました"
+          UpdateNotify.success "全 #{count} つの記事を削除しました"
 
       Alert
-        title: "#{count} 件のメディアを削除しますか？"
-        message: '一度削除したメディアはもとに戻すことはできません。'
+        title: "#{count} 件の記事を削除しますか？"
+        message: '一度削除するともとに戻すことはできません。'
         type: 'danger'
         btns: [
           { text: '削除', action: 'destroy', type: 'danger' }
@@ -88,7 +101,7 @@ define [
         ]
         callback: (action, al) =>
           if action == 'destroy'
-            UpdateNotify.progress 'メディアを削除しています'
+            UpdateNotify.progress '記事を削除しています...'
             al.close()
 
             _.invoke selected, 'destroy',
@@ -120,23 +133,23 @@ define [
       e.preventDefault()
       Posts.hasPrevious() && Posts.getPreviousPage()
 
-    gotoFirst: (e) ->
+    pageFirst: (e) ->
       e.preventDefault()
-      Posts.goTo Posts.information.firstPage
+      Posts.getFirstPage()
 
-    gotoLast: (e) ->
+    pageLast: (e) ->
       e.preventDefault()
-      Posts.goTo Posts.information.lastPage
+      Posts.getLastPage()
 
-    gotoPage: (e) ->
+    pageGoto: (e) ->
       e.preventDefault()
-      page = $(e.target).text()
-      Posts.goTo page
+      page = $(e.target).val() >>> 0
+      Posts.getPage page
 
-    changeCount: (e) ->
+    setPerPage: (e) ->
       e.preventDefault()
-      per = $(e.target).text()
-      Posts.howManyPer per
+      per = $(e.target).val() >>> 0
+      Posts.setPageSize per
 
 
   #  App View
