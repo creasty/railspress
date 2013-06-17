@@ -4,7 +4,7 @@ class Admin::PostsController < Admin::ApplicationController
 
   def index
     @posts = Post
-      .order('created_at DESC')
+      .order("#{params[:sort_by] || 'created_at'} #{params[:order] || 'desc'}")
       .page(params[:page])
       .per(params[:per_page])
       .includes(:user, :thumbnail)

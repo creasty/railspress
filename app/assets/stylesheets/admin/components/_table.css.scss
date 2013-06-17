@@ -75,7 +75,7 @@ table.table {
 				padding-left: .5em;
 			}
 
-			&[data-sort] {
+			&[data-sortby] {
 				cursor: pointer;
 				@include transition(color .3s);
 
@@ -90,7 +90,7 @@ table.table {
 				&.desc:after {
 					content: "\E03e";
 				}
-				&.asce:after {
+				&.asc:after {
 					content: "\E135";
 				}
 			}

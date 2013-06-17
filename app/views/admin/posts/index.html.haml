@@ -3,19 +3,19 @@
 
 #pocket_body
   #main.no-padding.loader
-    %table.table.table-hover
+    %table.table.table-hover#posts_list
       %thead
         %tr
           %th{ width: '24px' }
             %i.icon-check
           %th{ width: '80px' } サムネイル
-          %th{ 'data-sort' => 'title' } タイトル
-          %th{ 'data-sort' => 'status' } 公開状況
-          %th{ 'data-sort' => 'user_name' } 作成者
-          %th{ 'data-sort' => 'created_at', width: '130px' } 作成日
+          %th{ 'data-sortby' => 'title' } タイトル
+          %th{ 'data-sortby' => 'status' } 公開状況
+          %th{ 'data-sortby' => 'user_name' } 作成者
+          %th{ 'data-sortby' => 'created_at', width: '130px' } 作成日
           %th アクション
 
-      %tbody#posts_list
+      %tbody
 
 
 #pocket_side
@@ -36,7 +36,8 @@
         %tr
           %td= label_tag :per_page, '表示数件'
           %td
-            = text_field_tag :per_page, '0', class: 'text block'
+            .select
+              = select :per, :page, { '10件' => 10, '20件' => 20, '50件' => 50, '100件' => 100, '200件' => 200 }
 
     %section
       %h2 検索

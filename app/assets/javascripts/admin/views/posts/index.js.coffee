@@ -180,25 +180,55 @@ define [
 
     pageGoto: (e) ->
       e.preventDefault()
-      page = Posts.normalizePageNum $(e.target).val()
+      min = Posts.state.firstPage
+      max = Posts.state.totalPages
+      page = @$pageNum.val() >>> 0
+      page = Math.max min, Math.min(max, page)
       Posts.getPage page
 
     setPerPage: (e) ->
       e.preventDefault()
-      per = Posts.normalizePageNum $(e.target).val()
-      Posts.setPageSize per
+      Posts.setPageSize @$perPage.val() >>> 0
+
+  #  Table Head View
+  #-----------------------------------------------
+  class TableView extends Backbone.View
+
+    el: '#posts_list thead [data-sortby]'
+
+    events:
+      'click': 'sort'
+
+    sort: (e) ->
+      e.preventDefault()
+      $t = $ e.currentTarget
+
+      sort = (1 + ($t.data('sort') >>> 0)) % 3
+      $t.data 'sort', sort
+
+      @$el.removeClass 'desc asc'
+      $t.addClass ['', 'desc', 'asc'][sort]
+
+      if sort
+        Posts.setSorting $t.data('sortby'), [1, -1][sort - 1]
+        Posts.trigger 'sort'
+      else
+        Posts.setSorting null
+        Posts.trigger 'sort'
+
 
   #  App View
   #-----------------------------------------------
   class AppView extends Backbone.View
 
-    el: '#posts_list'
+    el: '#posts_list tbody'
 
     initialize: ->
       @listenTo Posts, 'add', @addOne
       @listenTo Posts, 'reset', @addAll
       @listenTo Posts, 'all', @render
       @listenTo Posts, 'destroy', @refresh
+      @listenTo Posts, 'sort', @refresh
       @listenTo Posts, 'change', @bulk
 
       @refresh()
@@ -228,14 +258,10 @@ define [
       @$el.html ''
       Posts.each @addOne, @
 
-    updateSortBy: (e) ->
-      e.preventDefault()
-      currentSort = $('#sortByField').val()
-      Posts.updateOrder currentSort
-
 
   #  Initialize Backbone App
   #-----------------------------------------------
-  AppView = new AppView()
-  SidebarView = new SidebarView()
+  new AppView()
+  new SidebarView()
+  new TableView()
 
