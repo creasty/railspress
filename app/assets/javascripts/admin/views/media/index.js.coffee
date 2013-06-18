@@ -169,6 +169,9 @@ define [
 
     el: '#media_list'
 
+    events:
+      'click li': 'toggle'
+
     initialize: ->
       @listenTo Media, 'add', @addOne
       @listenTo Media, 'reset', @addAll
@@ -223,6 +226,15 @@ define [
       $el: medium.view.$el
       model: medium
 
+    toggle: (e) ->
+      $t = $ e.currentTarget
+      model = $t.data 'model'
+
+      unless e.shiftKey
+        Media.selected().forEach (medium) ->
+          medium.toggle() if medium.id != model.id
+
+      model.toggle()
 
   #  Modal
   #-----------------------------------------------
