@@ -67,25 +67,52 @@ table.table {
 			color: rgba(#000, .5);
 		}
 
-		th:after {
-			font-family: "LigatureSymbols";
-			padding-left: .5em;
+		th {
+			cursor: default;
+
+			&:after {
+				font-family: "LigatureSymbols";
+				padding-left: .5em;
+			}
+
+			&[data-sortby] {
+				cursor: pointer;
+				@include transition(color .3s);
+
+				&:hover {
+					color: $primary-color;
+				}
+				&:after {
+					content: "\E120";
+					opacity: .6;
+				}
+
+				&.desc:after {
+					content: "\E03e";
+				}
+				&.asc:after {
+					content: "\E135";
+				}
+			}
 		}
-		th.sortable:after {
-			content: "\E120";
-			opacity: .6;
-		}
-		th.desc:after {
-			content: "\E03e";
-		}
-		th.asce:after {
-			content: "\E135";
-		}
+
+
 	}
 	tbody {
 		tr {
 			@include transition(background-color .3s);
 			border-bottom: 1px solid $main-rule-color;
+
+			&.selected,
+			&.selected:hover {
+				background-color: rgba($primary-color, .05);
+			}
+		}
+		&.bulk {
+			tr.selected,
+			tr.selected:hover {
+				background-color: rgba($success-color, .05);
+			}
 		}
 
 		td {
@@ -105,9 +132,8 @@ table.table {
 
 table.table-hover {
 	tbody tr {
-		&:hover,
-		&.hover {
-			background-color: rgba($success-color, .05);
+		&:hover {
+			background-color: lighten($menubar-bg-color, 5%);
 		}
 	}
 }

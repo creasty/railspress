@@ -2,6 +2,8 @@
 
 class Post < ActiveRecord::Base
 
+  include Rails.application.routes.url_helpers
+
   attr_accessor :date_str, :time_str, :tags
   attr_accessible :content, :excerpt, :status, :title, :thumbnail_id, :user_id, :created_at, :date_str, :time_str, :tags
 
@@ -27,7 +29,6 @@ class Post < ActiveRecord::Base
   # default_scope where('status < ?', 2)
   scope :privated, where(status: 0)
   scope :published, where(status: 1)
-  scope :trashed, where(status: 2)
 
   #  FriendlyId
   #-----------------------------------------------
@@ -53,13 +54,32 @@ class Post < ActiveRecord::Base
       title: title,
       content: content,
       status: status,
-      thumbnail: thumbnail.asset.url(:thumbnail),
+      thumbnail:
+        thumbnail \
+        ? thumbnail.asset.url(:thumbnail)
+        : '//placehold.it/243x172',
       edit_link: edit_admin_post_path(self),
-      link: post_url(self),
-      user_id: user_id,
+      link: post_path(self),
+      user_name: user.name,
+      user_id: user.id,
       date_str: date_str,
       time_str: time_str,
     }
+  end
+
+  def self.search(params)
+    q = ['1 = 1']
+
+    if params.try(:[], :user_id).present?
+      q[0] << ' and user_id = ?'
+      q << params[:user_id]
+    end
+    if params.try(:[], :title).present?
+      q[0] << ' and title like ?'
+      q << "%#{params[:title]}%"
+    end
+
+    where q
   end
 
   #  Attributes

@@ -144,15 +144,24 @@ body#posts {
 /*=== Index
 ==============================================================================================*/
 body#posts.index {
-	table tbody {
-		td.controller i[class*="icon-"] {
-			font-size: 26px;
-			vertical-align: -.2ex;
-		}
+	#posts_list {
+		tbody {
+			td.controller .btn {
+				margin-right: 10px;
+			}
 
-		.post-thumbnail {
-			width: 80px;
-			height: 57px;
+			td.privated a:after {
+				@extend %icon;
+				content: "\E086";
+				font-size: 18px;
+				padding: 0 0 0 5px;
+				color: $warning-color;
+			}
+
+			.post-thumbnail {
+				width: 80px;
+				height: 57px;
+			}
 		}
 	}
 }

@@ -11,17 +11,8 @@ RailsPress::Application.routes.draw do
     end
 
     resources :pages
-    resources :posts do
-      collection do
-        get :search
-      end
-    end
-    resources :terms do
-      collection do
-        get :search
-      end
-    end
-
+    resources :posts
+    resources :terms
     resources :comments
     resources :taxonomies
     resources :users
@@ -50,7 +41,7 @@ RailsPress::Application.routes.draw do
   #  Blog
   #-----------------------------------------------
   resources :posts, only: %w[index show] do
-    resources :comments
+    resources :comments, only: %w[edit]
   end
 
   #  Pages / Static Pages
