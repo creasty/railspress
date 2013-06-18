@@ -16,6 +16,10 @@ define [
       currentPage: 1
       pageSize: 10
 
+    queryParams:
+      'search[title]': null
+      'search[user_id]': null
+
     filterByUser: (user_id) ->
       @filter (post) -> user_id == post.get 'user_id'
 

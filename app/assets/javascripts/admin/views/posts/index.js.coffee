@@ -45,6 +45,11 @@ define [
       'click #btn_update': 'update'
       'click #btn_delete_all': 'deleteAll'
       'click #btn_disselect': 'disselect'
+
+      'click #btn_search': 'search'
+
+      'click #btn_refresh': 'refresh'
+
       'change #page_num': 'pageGoto'
       'change #per_page': 'setPerPage'
 
@@ -61,6 +66,9 @@ define [
       @$perPage = $ '#per_page'
       @$postStatus = $ '#post_status'
       @$postUser = $ '#post_user_id'
+
+      @$searchTitle = $ '#search_title'
+      @$searchUserId = $ '#search_user_id'
 
     updatePager: ->
       @$pageNum.val Posts.state.currentPage
@@ -190,6 +198,21 @@ define [
       e.preventDefault()
       Posts.setPageSize @$perPage.val() >>> 0
 
+    search: ->
+      q = Posts.queryParams
+
+      q['search[title]'] = @$searchTitle.val()
+      q['search[user_id]'] = @$searchUserId.val()
+
+      Posts.fetch
+        success: (_, res) ->
+          q['search[title]'] = null
+          q['search[user_id]'] = null
+
+    refresh: ->
+      Posts.fetch()
+
+
   #  Table Head View
   #-----------------------------------------------
   class TableView extends Backbone.View
@@ -230,8 +253,12 @@ define [
       @listenTo Posts, 'destroy', @refresh
       @listenTo Posts, 'sort', @refresh
       @listenTo Posts, 'change', @bulk
+      @listenTo Posts, 'sync', @onSync
 
       @refresh()
+
+    onSync: ->
+      console.log arguments
 
     refresh: ->
       $main.removeClass 'loaded'

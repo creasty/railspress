@@ -67,6 +67,21 @@ class Post < ActiveRecord::Base
     }
   end
 
+  def self.search(params)
+    q = ['1 = 1']
+
+    if params.try(:[], :user_id).present?
+      q[0] << ' and user_id = ?'
+      q << params[:user_id]
+    end
+    if params.try(:[], :title).present?
+      q[0] << ' and title like ?'
+      q << "%#{params[:title]}%"
+    end
+
+    where q
+  end
+
   #  Attributes
   #-----------------------------------------------
   def date_str

@@ -54,7 +54,12 @@
 
           %tr.doubled
             %td{ colspan: 2 }
-              = button_tag '検索する', class: 'btn btn-primary block'
+              = button_tag '検索する', id: 'btn_search', class: 'btn btn-primary block'
+
+    %section
+      %h2 更新
+
+      = button_tag '最新の状態に更新する', id: 'btn_refresh', class: 'btn btn-success block'
 
   %div.hide{ 'data-state' => 'selecting' }
     %section
