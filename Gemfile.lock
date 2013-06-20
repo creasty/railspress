@@ -155,6 +155,8 @@ GEM
       multi_json (~> 1.3)
       omniauth-oauth (~> 1.0)
     orm_adapter (0.4.0)
+    paginate-responder (1.3.0)
+      rack-link_headers (>= 2.2)
     paperclip (3.4.1)
       activemodel (>= 3.0.0)
       activerecord (>= 3.0.0)
@@ -169,6 +171,8 @@ GEM
       rack (>= 0.4)
     rack-contrib (1.1.0)
       rack (>= 0.9.1)
+    rack-link_headers (2.2.1)
+      rack
     rack-ssl (1.3.3)
       rack
     rack-test (0.6.2)
@@ -194,6 +198,8 @@ GEM
     remotipart (1.0.5)
     requirejs-rails (0.9.1)
       railties (>= 3.1.1, < 3.3)
+    responders (0.9.3)
+      railties (~> 3.1)
     rspec-core (2.13.1)
     rspec-expectations (2.13.0)
       diff-lcs (>= 1.1.3, < 2.0)
@@ -268,11 +274,13 @@ DEPENDENCIES
   omniauth
   omniauth-facebook
   omniauth-twitter
+  paginate-responder
   paperclip
   rabl
   rails (= 3.2.13)
   remotipart
   requirejs-rails
+  responders
   rspec-rails
   sass-rails (~> 3.2.3)
   simple-navigation

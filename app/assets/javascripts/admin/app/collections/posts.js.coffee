@@ -8,9 +8,9 @@ define [
 
   class PostsCollection extends PageableCollection
 
-    url: '/admin/posts.json'
-
     model: Post
+
+    url: '/admin/posts.json'
 
     state:
       currentPage: 1

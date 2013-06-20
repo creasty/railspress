@@ -43,7 +43,7 @@ define [
       'click li': 'toggle'
 
     initialize: ->
-      @listenTo Media, 'add', @addOne
+      @listenTo Media.fullCollection, 'add', @addOne
       @listenTo Media, 'reset', @addAll
       @listenTo Media, 'all', @render
       @listenTo Media, 'change', @bulk
@@ -51,10 +51,15 @@ define [
       @listenTo Media, 'addLoader', @addLoader
 
       @$main = $ '#main'
+      @$pocketBody = $ '#pocket_body'
+      @$bottomOfList = $ '#bottom_of_list'
+
+      @$pocketBody.on 'scroll', @loadMore.bind(@)
 
       Media.fetch
         success: =>
-          @$main.removeClass 'loaded'
+          @$main.addClass 'loaded'
+          @loadMore()
 
     render: ->
       @$el.masonry
@@ -86,10 +91,13 @@ define [
     addOne: (medium) ->
       view = new ThumbView model: medium
       $el = view.render().$el
-      @$el.prepend($el).masonry 'reload'
+      if medium.get('id')?
+        @$el.append($el.addClass('appended')).masonry 'reload'
+      else
+        @$el.prepend($el).masonry 'reload'
 
     addAll: ->
-      @$el.html ''
+      @$el.empty()
       Media.each @addOne, @
 
     addLoader: (op, callback) ->
@@ -111,6 +119,23 @@ define [
 
       model.toggle()
 
+    loadMore: (e) ->
+      @isLoading = false
+
+      buffer = 200
+
+      bottomOfViewport = @$pocketBody.scrollTop() + @$pocketBody.height()
+
+      bottomOfCollectionView = @$el.offset().top + @$el.height() - buffer
+
+      unless !Media.hasNext() || @isLoading || bottomOfViewport <= bottomOfCollectionView
+
+        @isLoading = true
+
+        Media
+        .getNextPage()
+        .success (data) =>
+          @isLoading = false
 
   #  Sidebar
   #-----------------------------------------------

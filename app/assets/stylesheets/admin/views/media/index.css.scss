@@ -17,6 +17,10 @@
 			padding: 0;
 			margin-bottom: 20px;
 			@include transition(top .2s, left .2s);
+
+			&.appended {
+				top: 100%;
+			}
 		}
 
 		.preview-image {
@@ -160,6 +164,11 @@
 			}
 		}
 
+	}
+
+	#bottom_of_list {
+		height: 1px;
+		width: 100%;
 	}
 
 	#dropzone {
