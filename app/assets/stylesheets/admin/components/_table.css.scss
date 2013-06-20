@@ -87,6 +87,11 @@ table.table {
 					opacity: .6;
 				}
 
+				&.desc,
+				&.asc {
+					color: $success-color;
+				}
+
 				&.desc:after {
 					content: "\E03e";
 				}

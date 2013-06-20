@@ -182,6 +182,11 @@ body {
 				color: $primary-color;
 			}
 		}
+
+		small {
+			opacity: .5;
+			font-weight: normal;
+		}
 	}
 
 	h2 + .btn {

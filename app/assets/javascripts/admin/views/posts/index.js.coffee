@@ -56,25 +56,39 @@ define [
     initialize: ->
       @listenTo Posts, 'change', @changeSidebar
       @listenTo Posts, 'destroy', @changeSidebar
-      @listenTo Posts, 'sync', @updatePager
+      @listenTo Posts, 'sync', @updateSidebar
 
       @$state = @$el.find '> div'
       @$counter = @$state.find 'span.counter'
       Viewstate.attachTo @$state
 
-      @$pageNum = $ '#page_num'
-      @$perPage = $ '#per_page'
-      @$postStatus = $ '#post_status'
-      @$postUser = $ '#post_user_id'
+      @$page =
+        num: $ '#page_num'
+        size: $ '#page_size'
+        display: $ '#page_display'
 
-      @$searchTitle = $ '#search_title'
-      @$searchUserId = $ '#search_user_id'
+      @$post =
+        status: $ '#post_status'
+        user: $ '#post_user_id'
 
-    updatePager: ->
-      @$pageNum.val Posts.state.currentPage
-      @$perPage.val Posts.state.pageSize
+      @$search =
+        title: $ '#search_title'
+        status: $ '#search_status'
+        userId: $ '#search_user_id'
 
-      @$pageNum.data 'powertip', "#{Posts.state.firstPage} - #{Posts.state.totalPages} の範囲を入力して下さい"
+    updateSidebar: ->
+      q = Posts.queryParams
+      s = Posts.state
+
+      @$search.title.val q['search[title]']
+      @$search.status.val q['search[status]']
+      @$search.userId.val q['search[user_id]']
+
+      @$page.num.val s.currentPage
+      @$page.size.val s.pageSize
+      @$page.display.html "全#{s.totalRecords}件"
+
+      @$page.num.data 'powertip', "#{s.firstPage} - #{s.totalPages} の範囲を入力して下さい"
 
     changeSidebar: ->
       selected = Posts.selected()
@@ -142,11 +156,11 @@ define [
 
       data = {}
 
-      if @$postStatus.val()
-        data.status = @$postStatus.val()
+      if @$post.status.val()
+        data.status = @$post.status.val()
 
-      if @$postUser.val()
-        data.user_id = @$postUser.val()
+      if @$post.user.val()
+        data.user_id = @$post.user.val()
 
       Alert
         title: "#{count} 件の記事を更新しますか？"
@@ -190,26 +204,28 @@ define [
       e.preventDefault()
       min = Posts.state.firstPage
       max = Posts.state.totalPages
-      page = @$pageNum.val() >>> 0
+      page = @$page.num.val() >>> 0
       page = Math.max min, Math.min(max, page)
       Posts.getPage page
 
     setPerPage: (e) ->
       e.preventDefault()
-      Posts.setPageSize @$perPage.val() >>> 0
+      Posts.setPageSize @$page.size.val() >>> 0
 
     search: ->
       q = Posts.queryParams
+      q['search[title]'] = @$search.title.val()
+      q['search[status]'] = @$search.status.val()
+      q['search[user_id]'] = @$search.userId.val()
 
-      q['search[title]'] = @$searchTitle.val()
-      q['search[user_id]'] = @$searchUserId.val()
-
-      Posts.fetch
-        success: (_, res) ->
-          q['search[title]'] = null
-          q['search[user_id]'] = null
+      Posts.fetch()
 
     refresh: ->
+      q = Posts.queryParams
+      q['search[title]'] = null
+      q['search[status]'] = null
+      q['search[user_id]'] = null
+
       Posts.fetch()
 
 
@@ -253,12 +269,8 @@ define [
       @listenTo Posts, 'destroy', @refresh
       @listenTo Posts, 'sort', @refresh
       @listenTo Posts, 'change', @bulk
-      @listenTo Posts, 'sync', @onSync
 
       @refresh()
-
-    onSync: ->
-      console.log arguments
 
     refresh: ->
       $main.removeClass 'loaded'
