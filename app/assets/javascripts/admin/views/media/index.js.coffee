@@ -227,7 +227,7 @@ define [
       if selected.length == 1
         data =
           title: @$form.title.val()
-          description: $formDescription.val()
+          description: @$form.description.val()
 
         medium = selected[0]
         medium.save data,
@@ -257,7 +257,7 @@ define [
       @modal.open()
 
     open: ->
-      @model = $btn_crop.data 'model'
+      @model = @$btn_crop.data 'model'
       src = @model.get 'link'
 
       @coords = [
