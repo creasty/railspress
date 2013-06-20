@@ -18,6 +18,8 @@ gem 'koala'
 gem 'twitter'
 gem 'rabl'
 gem 'oj'
+gem 'browsernizer'
+gem 'strong_parameters'
 
 group :assets do
   gem 'sass-rails', '~> 3.2.3'
