@@ -69,6 +69,7 @@ table.table {
 
 		th {
 			cursor: default;
+			@include experimental(user-select, none);
 
 			&:after {
 				font-family: "LigatureSymbols";

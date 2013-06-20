@@ -22,13 +22,81 @@ define [
   Viewstate
 ) ->
 
-  #  Elements
-  #-----------------------------------------------
-  $main = $ '#main'
-
   #  Components
   #-----------------------------------------------
   UpdateNotify = Notify()
+
+
+  #  App View
+  #-----------------------------------------------
+  class AppView extends Backbone.View
+
+    el: '#posts_list tbody'
+
+    initialize: ->
+      @listenTo Posts, 'add', @addOne
+      @listenTo Posts, 'reset', @addAll
+      @listenTo Posts, 'all', @render
+      @listenTo Posts, 'destroy', @refresh
+      @listenTo Posts, 'sort', @refresh
+      @listenTo Posts, 'change', @bulk
+
+      @$main = $ '#main'
+
+      @refresh()
+
+    refresh: ->
+      @$main.removeClass 'loaded'
+
+      Posts.fetch
+        success: (_, res) =>
+          @$main.addClass 'loaded'
+
+    render: -> @
+
+    bulk: ->
+      count = Posts.selected().length
+
+      if count > 1
+        @$el.addClass 'bulk'
+      else
+        @$el.removeClass 'bulk'
+
+    addOne: (post) ->
+      view = new ListView model: post
+      @$el.append view.render().$el
+
+    addAll: ->
+      @$el.html ''
+      Posts.each @addOne, @
+
+
+  #  Table Head View
+  #-----------------------------------------------
+  class TableView extends Backbone.View
+
+    el: '#posts_list thead [data-sortby]'
+
+    events:
+      'click': 'sort'
+
+    sort: (e) ->
+      e.preventDefault()
+      $t = $ e.currentTarget
+
+      sort = (1 + ($t.data('sort') >>> 0)) % 3
+      $t.data 'sort', sort
+
+      @$el.removeClass 'desc asc'
+      $t.addClass ['', 'desc', 'asc'][sort]
+
+      if sort
+        Posts.setSorting $t.data('sortby'), [1, -1][sort - 1]
+        Posts.trigger 'sort'
+      else
+        Posts.setSorting null
+        Posts.trigger 'sort'
+
 
   #  Sidebar
   #-----------------------------------------------
@@ -51,7 +119,7 @@ define [
       'click #btn_refresh': 'refresh'
 
       'change #page_num': 'pageGoto'
-      'change #per_page': 'setPerPage'
+      'change #page_size': 'setPerPage'
 
     initialize: ->
       @listenTo Posts, 'change', @changeSidebar
@@ -98,7 +166,7 @@ define [
         @$counter.html count
         @$state.trigger 'changeViewstate', 'selecting'
       else
-        @updatePager()
+        @updateSidebar()
         @$state.trigger 'changeViewstate', 'normal'
 
     disselect: =>
@@ -227,75 +295,6 @@ define [
       q['search[user_id]'] = null
 
       Posts.fetch()
-
-
-  #  Table Head View
-  #-----------------------------------------------
-  class TableView extends Backbone.View
-
-    el: '#posts_list thead [data-sortby]'
-
-    events:
-      'click': 'sort'
-
-    sort: (e) ->
-      e.preventDefault()
-      $t = $ e.currentTarget
-
-      sort = (1 + ($t.data('sort') >>> 0)) % 3
-      $t.data 'sort', sort
-
-      @$el.removeClass 'desc asc'
-      $t.addClass ['', 'desc', 'asc'][sort]
-
-      if sort
-        Posts.setSorting $t.data('sortby'), [1, -1][sort - 1]
-        Posts.trigger 'sort'
-      else
-        Posts.setSorting null
-        Posts.trigger 'sort'
-
-
-  #  App View
-  #-----------------------------------------------
-  class AppView extends Backbone.View
-
-    el: '#posts_list tbody'
-
-    initialize: ->
-      @listenTo Posts, 'add', @addOne
-      @listenTo Posts, 'reset', @addAll
-      @listenTo Posts, 'all', @render
-      @listenTo Posts, 'destroy', @refresh
-      @listenTo Posts, 'sort', @refresh
-      @listenTo Posts, 'change', @bulk
-
-      @refresh()
-
-    refresh: ->
-      $main.removeClass 'loaded'
-
-      Posts.fetch
-        success: (_, res) ->
-          $main.addClass 'loaded'
-
-    render: -> @
-
-    bulk: ->
-      count = Posts.selected().length
-
-      if count > 1
-        @$el.addClass 'bulk'
-      else
-        @$el.removeClass 'bulk'
-
-    addOne: (post) ->
-      view = new ListView model: post
-      @$el.append view.render().$el
-
-    addAll: ->
-      @$el.html ''
-      Posts.each @addOne, @
 
 
   #  Initialize Backbone App
