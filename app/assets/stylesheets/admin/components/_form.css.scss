@@ -45,19 +45,7 @@ textarea {
 
 /*=== Form: Base
 ==============================================================================================*/
-.text,
-.select {
-	position: relative;
-	@include inline-block;
-}
-input.text,
-.text > input,
-.textarea,
-input.checkbox,
-label.checkbox > input,
-input.radio,
-label.radio > input,
-.select > select {
+%form-base {
 	position: relative;
 	border: 2px solid rgba(#000, .4);
 	@include inline-block;
@@ -79,6 +67,21 @@ label.radio > input,
 	&.success {
 		background: rgba($success-color, .2);
 	}
+}
+.text,
+.select {
+	position: relative;
+	@include inline-block;
+}
+input.text,
+.text > input,
+.textarea,
+input.checkbox,
+label.checkbox > input,
+input.radio,
+label.radio > input,
+.select > select {
+	@extend %form-base;
 }
 
 
@@ -183,6 +186,7 @@ input.text,
 		z-index: 5;
 	}
 }
+
 
 /*=== Textarea
 ==============================================================================================*/

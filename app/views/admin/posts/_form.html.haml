@@ -31,9 +31,9 @@
             %a.tooltip.icon-alignright{ href: '#', title: '右揃え' }
 
         %ul.right
-          %li
-            %a.tooltip.icon-tile{ href: '#', title: 'デザイン' }
           %li.selected
+            %a.tooltip.icon-arrowdown{ href: '#', title: 'Markdown' }
+          %li
             %a.tooltip.icon-code{ href: '#', title: 'コード' }
 
       = f.text_area :content, class: 'hide'
@@ -93,7 +93,7 @@
 
     %section
       %h2 タグ
-      = text_field_tag 'post[tags]', 'foo,bar,baz', class: 'hide'
+      = text_field_tag 'post[tags]', 'apple'
 
       - @post.terms.map do |v|
         %p

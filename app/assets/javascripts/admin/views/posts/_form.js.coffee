@@ -1,4 +1,4 @@
-
+###
 require [
   'jquery'
   'underscore'
@@ -25,7 +25,7 @@ require [
   Alert
   ACE
 ) ->
-
+###
 
 require ['jquery', 'datepicker', 'domReady!'], ($) ->
   $date = $ '#post_date_str'
@@ -34,16 +34,20 @@ require ['jquery', 'datepicker', 'domReady!'], ($) ->
   $('#pocket_side').on 'scroll', -> $date.datepicker 'hide'
 
 
-require ['jquery', 'tags-input'], ($) ->
-  $('#post_tags').tagsInput
-    autocomplete_url: '/admin/terms/search.txt'
-    autocomplete:
-      selectFirst: true
-      width: '100px'
-      autoFill: true
-    width: 260
-    height: 'auto'
-    defaultText: 'タグを追加'
+require ['jquery', 'selectize'], ($) ->
+  $('#post_tags').selectize
+    plugins: []
+    delimiter: ','
+    persist: false
+    valueField: 'value',
+    labelField: 'text',
+    searchField: ['text'],
+    options: [
+      { value: 'foo', text: 'foo' }
+      { value: 'bar', text: 'bar' }
+      { value: 'baz', text: 'baz' }
+    ]
+    create: (input) -> { value: input, text: input }
 
 
 require [
@@ -51,6 +55,7 @@ require [
   'ace/ace'
   'ace/theme/solarized_light'
   'ace/mode/html'
+  'ace/mode/markdown'
   'domReady!'
 ], ($, ace) ->
   $textarea = $('#post_content').hide()
@@ -58,7 +63,7 @@ require [
 
   editor = ace.edit 'post_content_ace'
   editor.setTheme 'ace/theme/solarized_light'
-  editor.getSession().setMode 'ace/mode/html'
+  editor.getSession().setMode 'ace/mode/markdown'
 
   editor.getSession().setTabSize 2
   editor.getSession().setUseWrapMode true

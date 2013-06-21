@@ -6,12 +6,12 @@
     "flight": "latest",
     "jcrop": "latest",
     "jquery-autocomplete": "git://github.com/dyve/jquery-autocomplete.git",
-    "jquery-knob": "latest",
     "jquery-masonry": "latest",
     "jquery.panzoom": "latest",
     "require-css": "latest",
     "requirejs-domready": "latest",
     "requirejs-text": "latest",
+    "selectize": "latest",
     "tags-input": "git://github.com/xoxco/jQuery-Tags-Input.git",
     "underscore": "latest"
   }

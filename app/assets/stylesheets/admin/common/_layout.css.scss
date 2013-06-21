@@ -56,7 +56,7 @@ body {
 		}
 
 		&:hover {
-			color: $success-color;
+			color: $primary-color;
 		}
 	}
 
@@ -72,7 +72,7 @@ body {
 		@include border-radius(3px);
 
 		&:hover {
-			border-color: $success-color;
+			border-color: $primary-color;
 		}
 
 		&:before {
