@@ -43,7 +43,7 @@ define [
       'click li': 'toggle'
 
     initialize: ->
-      @listenTo Media.fullCollection, 'add', @addOne
+      @listenTo Media, 'add', @addOne
       @listenTo Media, 'reset', @addAll
       @listenTo Media, 'all', @render
       @listenTo Media, 'change', @bulk
@@ -96,9 +96,9 @@ define [
       else
         @$el.prepend($el).masonry 'reload'
 
-    addAll: ->
-      @$el.empty()
+    addAll: (_, ob) ->
       Media.each @addOne, @
+      Media.add ob.previousModels, at: 0, silent: true
 
     addLoader: (op, callback) ->
       medium = new Media.model
@@ -132,10 +132,10 @@ define [
 
         @isLoading = true
 
-        Media
-        .getNextPage()
-        .success (data) =>
-          @isLoading = false
+        Media.getNextPage
+          success: =>
+            @isLoading = false
+
 
   #  Sidebar
   #-----------------------------------------------
