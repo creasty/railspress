@@ -45,7 +45,7 @@ class Medium < ActiveRecord::Base
 
   #  Kaminari
   #-----------------------------------------------
-  paginates_per 10
+  paginates_per 20
 
   #  Public Methods
   #-----------------------------------------------
