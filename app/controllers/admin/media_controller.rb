@@ -3,13 +3,19 @@
 class Admin::MediaController < Admin::ApplicationController
 
   def index
-    @media = Medium.all
-
     respond_to do |format|
-      format.html { render }
       format.json do
+        @media = Medium
+          .order('created_at desc')
+          .page(params[:page])
+          .per(params[:per_page])
+
+        paginate_headers_for @media
+
         render json: @media.map { |m| m.to_backbone_json }
       end
+
+      format.html { render }
     end
   end
 

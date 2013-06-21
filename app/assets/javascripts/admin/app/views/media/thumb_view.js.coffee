@@ -13,7 +13,6 @@ define [
     template: _.template itemTemplate
 
     events:
-      'click':  'toggle'
       'mousemove': 'mouseMove'
       'mouseleave': 'mouseLeave'
 
@@ -31,6 +30,7 @@ define [
       @$el.html @template @model.toJSON()
       @$preview = @$el.find '.preview-image'
       @$title = @$el.find '.title > span'
+      @$el.data 'model', @model
       @
 
     renderSelected: ->
@@ -51,4 +51,3 @@ define [
     mouseLeave: ->
       @$preview.css backgroundPosition: '50% 50%'
 
-    toggle: -> @model.toggle()

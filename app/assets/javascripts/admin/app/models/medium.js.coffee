@@ -9,7 +9,7 @@ define [
     urlRoot: '/admin/media'
 
     defualts:
-      id:          0
+      id:          null
       title:       ''
       description: ''
       file_name:   ''

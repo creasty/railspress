@@ -28,30 +28,114 @@ define [
   FileUploader
 ) ->
 
-  #  Token
-  #-----------------------------------------------
-  csrf_param = $('meta[name="csrf-param"]').attr 'content'
-  csrf_token = $('meta[name="csrf-token"]').attr 'content'
-
-  #  Elements
-  #-----------------------------------------------
-  $view = $ '#pocket_side > div.view'
-  $counter = $view.find 'span.counter'
-
-  $formTitle = $ '#medium_title'
-  $formDescription = $ '#medium_description'
-  $formLink = $ '#medium_link'
-  $btn_crop = $ '#btn_crop'
-
   #  Components
   #-----------------------------------------------
-  Viewstate.attachTo $view
   UpdateNotify = Notify()
   UploaderNotify = Notify()
 
-  $main = $ '#main'
-  $dropzone = $ '#dropzone'
-  $fileField = $ '#medium_asset'
+  #  App View
+  #-----------------------------------------------
+  class AppView extends Backbone.View
+
+    el: '#media_list'
+
+    events:
+      'click li': 'toggle'
+
+    initialize: ->
+      @listenTo Media, 'add', @addOne
+      @listenTo Media, 'reset', @addAll
+      @listenTo Media, 'all', @render
+      @listenTo Media, 'change', @bulk
+
+      @listenTo Media, 'addLoader', @addLoader
+
+      @$main = $ '#main'
+      @$pocketBody = $ '#pocket_body'
+      @$bottomOfList = $ '#bottom_of_list'
+
+      @$pocketBody.on 'scroll', @loadMore.bind(@)
+
+      Media.fetch
+        success: =>
+          @$main.addClass 'loaded'
+          @loadMore()
+
+    render: ->
+      @$el.masonry
+        itemSelector: 'li'
+        gutterWidth: 20
+        columns: 5
+        minWidth: 170
+        isAnimated: false
+        isFitWidth: true
+        isResizable: true
+
+        columnWidth: do ($el = @$el) -> (cw) ->
+          col = Math.max 1, Math.min(@columns, (cw + @gutterWidth) / (@minWidth + @gutterWidth) | 0)
+          width = (cw + @gutterWidth) / col - @gutterWidth
+
+          $el.find('li').width width
+          width
+
+      @
+
+    bulk: ->
+      count = Media.selected().length
+
+      if count > 1
+        @$el.addClass 'bulk'
+      else
+        @$el.removeClass 'bulk'
+
+    addOne: (medium) ->
+      view = new ThumbView model: medium
+      $el = view.render().$el
+      if medium.get('id')?
+        @$el.append($el.addClass('appended')).masonry 'reload'
+      else
+        @$el.prepend($el).masonry 'reload'
+
+    addAll: (_, ob) ->
+      Media.each @addOne, @
+      Media.add ob.previousModels, at: 0, silent: true
+
+    addLoader: (op, callback) ->
+      medium = new Media.model
+      medium.set op
+      Media.add medium
+
+      callback && callback
+        $el: medium.view.$el
+        model: medium
+
+    toggle: (e) ->
+      $t = $ e.currentTarget
+      model = $t.data 'model'
+
+      unless e.shiftKey
+        Media.selected().forEach (medium) ->
+          medium.toggle() if medium.id != model.id
+
+      model.toggle()
+
+    loadMore: (e) ->
+      @isLoading = false
+
+      buffer = 200
+
+      bottomOfViewport = @$pocketBody.scrollTop() + @$pocketBody.height()
+
+      bottomOfCollectionView = @$el.offset().top + @$el.height() - buffer
+
+      unless !Media.hasNext() || @isLoading || bottomOfViewport <= bottomOfCollectionView
+
+        @isLoading = true
+
+        Media.getNextPage
+          success: =>
+            @isLoading = false
+
 
   #  Sidebar
   #-----------------------------------------------
@@ -69,26 +153,38 @@ define [
       @listenTo Media, 'change', @changeSidebar
       @listenTo Media, 'destroy', @changeSidebar
 
+      @$view = $ '#pocket_side > div'
+      @$counter = @$view.find 'span.counter'
+      Viewstate.attachTo @$view
+
+      @$btn =
+        crop: $ '#btn_crop'
+        link: $ '#btn_link'
+
+      @$form =
+        title: $ '#medium_title'
+        description: $ '#medium_description'
+
     changeSidebar: ->
       selected = Media.selected()
       count = selected.length
 
       if count > 1
-        $counter.html count
-        $view.trigger 'changeViewstate', 'bulk'
+        @$counter.html count
+        @$view.trigger 'changeViewstate', 'bulk'
       else if count == 1
-        $formTitle.val selected[0].get 'title'
-        $formDescription.val selected[0].get 'description'
-        $formLink.attr 'href', selected[0].get 'link'
+        @$form.title.val selected[0].get 'title'
+        @$form.description.val selected[0].get 'description'
+        @$btn.link.attr 'href', selected[0].get 'link'
 
         if selected[0].get 'is_image'
-          $btn_crop.show().data 'model', selected[0]
+          @$btn.crop.show().data 'model', selected[0]
         else
-          $btn_crop.hide().data 'model', null
+          @$btn.crop.hide().data 'model', null
 
-        $view.trigger 'changeViewstate', 'selecting'
+        @$view.trigger 'changeViewstate', 'selecting'
       else
-        $view.trigger 'changeViewstate', 'grid'
+        @$view.trigger 'changeViewstate', 'grid'
 
     disselect: =>
       _.invoke Media.selected(), 'toggle'
@@ -155,74 +251,13 @@ define [
 
       if selected.length == 1
         data =
-          title: $formTitle.val()
-          description: $formDescription.val()
+          title: @$form.title.val()
+          description: @$form.description.val()
 
         medium = selected[0]
         medium.save data,
           success: (model, res) ->
             UpdateNotify.success res.message
-
-  #  App View
-  #-----------------------------------------------
-  class AppView extends Backbone.View
-
-    el: '#media_list'
-
-    initialize: ->
-      @listenTo Media, 'add', @addOne
-      @listenTo Media, 'reset', @addAll
-      @listenTo Media, 'all', @render
-      @listenTo Media, 'change', @bulk
-
-      Media.fetch
-        success: ->
-          $main.removeClass 'loaded'
-
-    render: ->
-      @$el.masonry
-        itemSelector: 'li'
-        gutterWidth: 20
-        columns: 5
-        minWidth: 170
-        isAnimated: false
-        isFitWidth: true
-        isResizable: true
-
-        columnWidth: do ($el = @$el) -> (cw) ->
-          col = Math.max 1, Math.min(@columns, (cw + @gutterWidth) / (@minWidth + @gutterWidth) | 0)
-          width = (cw + @gutterWidth) / col - @gutterWidth
-
-          $el.find('li').width width
-          width
-
-      @
-
-    bulk: ->
-      count = Media.selected().length
-
-      if count > 1
-        @$el.addClass 'bulk'
-      else
-        @$el.removeClass 'bulk'
-
-    addOne: (medium) ->
-      view = new ThumbView model: medium
-      $el = view.render().$el
-      @$el.prepend($el).masonry 'reload'
-
-    addAll: ->
-      @$el.html ''
-      Media.each @addOne, @
-
-    addLoader: (op) ->
-      medium = new Media.model
-      medium.set op
-      Media.add medium
-
-      $el: medium.view.$el
-      model: medium
-
 
   #  Modal
   #-----------------------------------------------
@@ -236,18 +271,18 @@ define [
 
     initialize: ->
       @coords = {}
-      @$cropbox = $ '#cropbox'
-
       @modal = Modal content: @$el
 
-      $btn_crop.on 'click', @openModal.bind(@)
+      @$cropbox = $ '#cropbox'
+      @$btn_crop = $ '#btn_crop'
+      @$btn_crop.on 'click', @openModal.bind(@)
 
     openModal: (e) ->
       e.preventDefault()
       @modal.open()
 
     open: ->
-      @model = $btn_crop.data 'model'
+      @model = @$btn_crop.data 'model'
       src = @model.get 'link'
 
       @coords = [
@@ -308,55 +343,88 @@ define [
       [x, y, x + w, y + h]
 
 
+  #  File Uploader
+  #-----------------------------------------------
+  class FileUploaderView extends Backbone.View
+
+    el: '#dropzone'
+
+    events:
+      'fileDragOver': 'over'
+      'fileDragLeave': 'leave'
+      'fileDropped': 'leave'
+
+      'startUploading': 'startUploading'
+      'onCreate': 'onCreate'
+      'eachSuccess': 'eachSuccess'
+      'eachError': 'eachError'
+      'uploadProgress': 'uploadProgress'
+      'uploadSuccess': 'uploadSuccess'
+      'uploadError': 'uploadError'
+
+    initialize: ->
+      @$main = $ '#main'
+      @$fileField = $ '#medium_asset'
+      @$btnAdd = $ '#menubar > h1 > a.icon-plus'
+
+      FileUploader.attachTo @$el,
+        fileInputSelector: '#medium_asset'
+
+        url: '/admin/media.json'
+
+        params:
+          file: 'medium[asset]'
+          type: 'medium[content_type]'
+          name: 'medium[file_name]'
+
+    aa: ->
+      @$btnAdd.on 'click', (e) =>
+        e.preventDefault()
+        @$fileField.trigger 'click'
+
+    over: ->
+      @$main.addClass 'upload'
+
+    leave: ->
+      @$main.removeClass 'upload'
+
+    startUploading: (e, total) ->
+      UploaderNotify.progress "#{total} つのメディアをアップロード中..."
+
+    onCreate: (e, data, d) ->
+      Media.trigger 'addLoader',
+        {
+          title:     d.fileName
+          file_type: d.fileType
+          is_image:  d.fileType.split('/')[0] == 'image'
+          thumbnail: data
+          loading:   true
+        },
+        (view) ->
+          d.loader = view.$el.find('.preview-image').addClass 'loading'
+          d.model = view.model
+
+    eachSuccess: (e, res, d) ->
+      d.loader.removeClass 'loading'
+      d.model.set res
+
+    eachError: (e, res, d) ->
+      d.model.destroy()
+
+    uploadProgress: (e, progress, uploaded, total) ->
+      UploaderNotify.progress "メディアをアップロード中... #{uploaded} / #{total} 完了"
+
+    uploadSuccess: (e, total) ->
+      UploaderNotify.success "#{total} つのメディアをアップロードしました"
+
+    uploadError: (e, failed, total) ->
+      UploaderNotify.fail 'アップロードに失敗しました'
+
+
   #  Initialize Backbone App
   #-----------------------------------------------
-  AppView = new AppView()
-  SidebarView = new SidebarView()
-  ImageEditorView = new ImageEditorView()
-
-
-  #  File uploader
-  #-----------------------------------------------
-  $('#menubar > h1 > a.icon-plus').on 'click', (e) ->
-    $fileField.trigger 'click'
-    e.preventDefault()
-
-  FileUploader.attachTo $dropzone,
-    fileInputSelector: '#medium_asset'
-
-    url: '/admin/media.json'
-
-    params:
-      file: 'medium[asset]'
-      type: 'medium[content_type]'
-      name: 'medium[file_name]'
-
-  $dropzone
-  .on 'fileDragOver', ->
-    $main.addClass 'upload'
-  .on 'fileDragLeave fileDropped', ->
-    $main.removeClass 'upload'
-  .on 'startUploading', (e, total) ->
-    UploaderNotify.progress "#{total} つのメディアをアップロード中..."
-  .on 'onCreate', (e, data, d) ->
-    view = AppView.addLoader
-      title:     d.fileName
-      file_type: d.fileType
-      is_image:  d.fileType.split('/')[0] == 'image'
-      thumbnail: data
-      loading:   true
-
-    d.loader = view.$el.find('.preview-image').addClass 'loading'
-    d.model = view.model
-  .on 'eachSuccess', (e, res, d) ->
-    d.loader.removeClass 'loading'
-    d.model.set res
-  .on 'eachError', (e, res, d) ->
-    d.model.destroy()
-  .on 'uploadProgress', (e, progress, uploaded, total) ->
-    UploaderNotify.progress "メディアをアップロード中... #{uploaded} / #{total} 完了"
-  .on 'uploadSuccess', (e, total) ->
-    UploaderNotify.success "#{total} つのメディアをアップロードしました"
-  .on 'uploadError', (e, failed, total) ->
-    UploaderNotify.fail 'アップロードに失敗しました'
+  new AppView()
+  new SidebarView()
+  new ImageEditorView()
+  new FileUploaderView()
 

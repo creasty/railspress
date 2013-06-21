@@ -107,6 +107,14 @@ body {
 	color: $main-text-color;
 	padding: 20px;
 
+	&.loader:before {
+		content: "";
+		@include loading-cube;
+	}
+	&.loader.loaded:before {
+		display: none;
+	}
+
 	*:last-child {
 		margin-bottom: 0;
 	}
@@ -173,6 +181,10 @@ body {
 			&:hover {
 				color: $primary-color;
 			}
+		}
+
+		small {
+			opacity: .5;
 		}
 	}
 

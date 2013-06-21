@@ -1,14 +1,6 @@
 
 #media.index {
 
-	#main:before {
-		content: "";
-		@include loading-cube;
-	}
-	#main.loaded:before {
-		display: none;
-	}
-
 	#media_list {
 		@extend .clear-after;
 		list-style: none;
@@ -25,6 +17,10 @@
 			padding: 0;
 			margin-bottom: 20px;
 			@include transition(top .2s, left .2s);
+
+			&.appended {
+				top: 100%;
+			}
 		}
 
 		.preview-image {
@@ -48,12 +44,6 @@
 				content: "";
 				display: block;
 				padding-top: 100%;
-			}
-
-			&.loading:after {
-				content: "";
-				z-index: 10;
-				@include loading-cube;
 			}
 
 			.info {
@@ -168,6 +158,11 @@
 			}
 		}
 
+	}
+
+	#bottom_of_list {
+		height: 1px;
+		width: 100%;
 	}
 
 	#dropzone {

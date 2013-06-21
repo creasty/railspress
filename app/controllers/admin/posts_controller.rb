@@ -3,18 +3,15 @@
 class Admin::PostsController < Admin::ApplicationController
 
   def index
-    @posts = Post
-      .order("#{params[:sort_by] || 'created_at'} #{params[:order] || 'desc'}")
-      .page(params[:page])
-      .per(params[:per_page])
-      .includes(:user, :thumbnail)
-
-    @posts = @posts.search params[:search]
-
-    paginate_headers_for @posts
-
     respond_to do |format|
       format.json do
+        @posts = Post
+          .sort(params[:sort_by], params[:order])
+          .search(params[:search])
+          .page(params[:page])
+          .per(params[:per_page])
+          .includes(:user, :thumbnail)
+
         render json: [
           {
             total_entries: @posts.total_count,

@@ -19,10 +19,30 @@ module Admin
       params[:format] = 'json' if ajax_request?
     end
 
-    def paginate_headers_for(models)
-      response.headers[:total_pages] = models.total_pages.to_s
-      response.headers[:per_page] = models.num_pages.to_s
-      response.headers[:page] = models.current_page.to_s
+  protected
+
+    def paginate_headers_for(model)
+      rp = request.query_parameters
+
+      offset = request.original_url.index('?') - 1
+      url = request.original_url.slice(0..offset) unless rp.empty?
+      url ||= request.original_url
+
+      page = {}
+
+      page[:first] = 1 if model.total_pages > 1 && !model.first_page?
+      page[:last] = model.total_pages if model.total_pages > 1 && !model.last_page?
+      page[:next] = model.current_page + 1 unless model.last_page?
+      page[:prev] = model.current_page - 1 unless model.first_page?
+
+      links = []
+
+      page.each do |k,v|
+        new_request_hash= rp.merge({:page => v})
+        links << "<#{url}?#{new_request_hash.to_param}>;rel=\"#{k}\""
+      end
+
+      headers[:Link] = links.join ','
     end
 
   end

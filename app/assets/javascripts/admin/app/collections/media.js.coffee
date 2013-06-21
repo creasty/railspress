@@ -2,17 +2,24 @@
 define [
   'underscore'
   'backbone'
+  'backbone.pageable'
   'app/models/medium'
-], (_, Backbone, Medium) ->
+], (_, Backbone, PageableCollection, Medium) ->
 
-  class MediaCollection extends Backbone.Collection
-
-    url: '/admin/media'
+  class MediaCollection extends PageableCollection
 
     model: Medium
 
-    filterByType: (type) ->
-      @filter (medium) -> type == medium.get 'type'
+    url: '/admin/media.json'
+    mode: 'infinite'
+
+    state:
+      currentPage: 1
+      pageSize: 10
+
+    queryParams:
+      totalPages: null
+      totalRecords: null
 
     selected: ->
       @filter (medium) -> medium.get 'selected'

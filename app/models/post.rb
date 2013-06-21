@@ -30,6 +30,31 @@ class Post < ActiveRecord::Base
   scope :privated, where(status: 0)
   scope :published, where(status: 1)
 
+  def self.sort(order_by, dir)
+    order_by = order_by.present? ? order_by.gsub(/\W/, '') : 'created_at'
+    dir = (dir == 'asc') ? dir : 'desc'
+    order "#{order_by} #{dir}"
+  end
+
+  def self.search(params)
+    q = ['1 = 1']
+
+    if params.try(:[], :user_id).present?
+      q[0] << ' and user_id = ?'
+      q << params[:user_id]
+    end
+    if params.try(:[], :status).present?
+      q[0] << ' and status = ?'
+      q << params[:status]
+    end
+    if params.try(:[], :title).present?
+      q[0] << ' and title like ?'
+      q << "%#{params[:title]}%"
+    end
+
+    where q
+  end
+
   #  FriendlyId
   #-----------------------------------------------
   # extend FriendlyId
@@ -67,20 +92,6 @@ class Post < ActiveRecord::Base
     }
   end
 
-  def self.search(params)
-    q = ['1 = 1']
-
-    if params.try(:[], :user_id).present?
-      q[0] << ' and user_id = ?'
-      q << params[:user_id]
-    end
-    if params.try(:[], :title).present?
-      q[0] << ' and title like ?'
-      q << "%#{params[:title]}%"
-    end
-
-    where q
-  end
 
   #  Attributes
   #-----------------------------------------------

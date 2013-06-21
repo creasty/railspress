@@ -21,7 +21,9 @@
 #pocket_side
   %div{ 'data-state' => 'normal' }
     %section
-      %h2 ページ
+      %h2
+        ページ
+        %small#page_display
 
       %table.form
         %tr
@@ -33,11 +35,13 @@
               = text_field_tag :page_num, '0', class: 'tooltip'
               = button_tag '', id: 'page_next', class: 'btn-next tooltip', title: '次のページ'
               = button_tag '', id: 'page_last', class: 'btn-last tooltip', title: '最後のページ'
+
         %tr
-          %td= label_tag :per_page, '表示数件'
+          %td= label_tag :page_size, '表示数件'
           %td
             .select
-              = select :per, :page, { '10件' => 10, '20件' => 20, '50件' => 50, '100件' => 100, '200件' => 200 }
+              = select :page, :size, { '10件' => 10, '20件' => 20, '50件' => 50, '100件' => 100, '200件' => 200 }
+
 
     %section
       %h2 検索
@@ -47,14 +51,20 @@
           %td
             .text.icon-search
               = text_field :search, :title, placeholder: 'タイトル で検索'
+
+        %tr
+          %td
+            %div.select
+              = select :search, :status, { '非公開' => 0, '公開' => 1 }, prompt: '公開状況 で絞り込み'
+
         %tr
           %td
             %div.select
               = collection_select :search, :user_id, User.all, :id, :name, prompt: '作成者 で絞り込み'
 
-          %tr.doubled
-            %td{ colspan: 2 }
-              = button_tag '検索する', id: 'btn_search', class: 'btn btn-primary block'
+        %tr.doubled
+          %td{ colspan: 2 }
+            = button_tag '検索する', id: 'btn_search', class: 'btn btn-primary block'
 
     %section
       %h2 更新

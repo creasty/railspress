@@ -43,6 +43,10 @@ class Medium < ActiveRecord::Base
   after_save :check_file
   after_update :reprocess_image
 
+  #  Kaminari
+  #-----------------------------------------------
+  paginates_per 20
+
   #  Public Methods
   #-----------------------------------------------
   def cropping?
