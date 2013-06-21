@@ -1,3 +1,32 @@
+
+require [
+  'jquery'
+  'underscore'
+  'backbone'
+  'app/models/post'
+  'app/views/posts/edit_view'
+  'common/notify'
+  'common/alert'
+  'ace/ace'
+
+  'powertip'
+  'datepicker'
+  'tags-input'
+  'ace/theme/solarized_light'
+  'ace/mode/html'
+  'domReady!'
+], (
+  $
+  _
+  Backbone
+  Post
+  EditView
+  Notify
+  Alert
+  ACE
+) ->
+
+
 require ['jquery', 'datepicker', 'domReady!'], ($) ->
   $date = $ '#post_date_str'
 
