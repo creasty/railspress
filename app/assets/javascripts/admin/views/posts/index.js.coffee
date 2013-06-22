@@ -122,10 +122,6 @@ define [
       'change #page_size': 'setPerPage'
 
     initialize: ->
-      @listenTo Posts, 'change', @changeSidebar
-      @listenTo Posts, 'destroy', @changeSidebar
-      @listenTo Posts, 'sync', @updateSidebar
-
       @$state = @$el.find '> div'
       @$counter = @$state.find 'span.counter'
       Viewstate.attachTo @$state
@@ -143,6 +139,10 @@ define [
         title: $ '#search_title'
         status: $ '#search_status'
         userId: $ '#search_user_id'
+
+      @listenTo Posts, 'change', @changeSidebar
+      @listenTo Posts, 'destroy', @changeSidebar
+      @listenTo Posts, 'sync', @updateSidebar
 
     updateSidebar: ->
       q = Posts.queryParams

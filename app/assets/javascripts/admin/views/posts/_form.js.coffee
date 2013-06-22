@@ -1,142 +1,235 @@
-###
 require [
   'jquery'
   'underscore'
   'backbone'
   'app/models/post'
-  'app/views/posts/edit_view'
   'common/notify'
   'common/alert'
   'ace/ace'
 
+  'backbone.syphon'
   'powertip'
   'datepicker'
-  'tags-input'
+  'selectize'
   'ace/theme/solarized_light'
   'ace/mode/html'
+  'ace/mode/markdown'
   'domReady!'
 ], (
   $
   _
   Backbone
   Post
-  EditView
   Notify
   Alert
   ACE
+  Markdown
 ) ->
-###
 
-require ['jquery', 'datepicker', 'domReady!'], ($) ->
-  $date = $ '#post_date_str'
-
-  $date.datepicker format: 'yyyy.mm.dd'
-  $('#pocket_side').on 'scroll', -> $date.datepicker 'hide'
-
-
-require ['jquery', 'selectize'], ($) ->
-  $('#post_tags').selectize
-    plugins: []
-    delimiter: ','
-    persist: false
-    valueField: 'value',
-    labelField: 'text',
-    searchField: ['text'],
-    options: [
-      { value: 'foo', text: 'foo' }
-      { value: 'bar', text: 'bar' }
-      { value: 'baz', text: 'baz' }
-    ]
-    create: (input) -> { value: input, text: input }
+  ###
+  post = new Post()
+  new Post({ title: 'sdfa', status: 1, user_id: 1 }).save()
+  post.fetch
+    data: id: 75
+    success: ->
+      console.log post
+      post.save title: post.get('title') + 2
+  ###
 
 
-require [
-  'jquery'
-  'ace/ace'
-  'ace/theme/solarized_light'
-  'ace/mode/html'
-  'ace/mode/markdown'
-  'domReady!'
-], ($, ace) ->
-  $textarea = $('#post_content').hide()
-  $('<div id="post_content_ace"></div>').insertBefore $textarea
-
-  editor = ace.edit 'post_content_ace'
-  editor.setTheme 'ace/theme/solarized_light'
-  editor.getSession().setMode 'ace/mode/markdown'
-
-  editor.getSession().setTabSize 2
-  editor.getSession().setUseWrapMode true
-  editor.setShowPrintMargin false
-  editor.focus();
-
-  editor.getSession().setValue $textarea.val()
-  editor.getSession().on 'change', ->
-    $textarea.val editor.getSession().getValue()
-
-  editor.commands.addCommand
-    name: 'Save'
-    bindKey: win: 'Ctrl-S', mac: 'Command-S'
-    readOnly: false
-    exec: (editor) ->
-      $('#post_form').submit()
+  #  Componets
+  #-----------------------------------------------
+  UpdateNotify = Notify()
 
 
-require [
-  'jquery'
-  'common/notify'
-  'common/transit'
-  'common/alert'
-  'domReady!'
-], ($, notify, transit, Alert) ->
-  st = notify()
+  #  Model
+  #-----------------------------------------------
+  Post = new Post()
 
-  $form = $ 'form'
+  #  App View
+  #-----------------------------------------------
+  class AppView extends Backbone.View
 
-  $post_thumbnail = $ '#post_thumbnail'
-  $post_thumbnail_preview = $ '#post_thumbnail_preview'
+    el: '#post_form'
 
-  $post_thumbnail_preview.find('i').on 'click', ->
-    $post_thumbnail.click()
+    events:
+      'submit': 'prevent'
+      'click #btn_save': 'save'
 
-  $post_thumbnail.on 'change', (e) ->
-    file = e.target.files[0]
+    initialize: ->
+      @load()
+      @render()
+      @
 
-    $post_thumbnail_preview.addClass('post-thumbnail').empty() if file
+    load: ->
+      id = $('#post_form').data 'id'
+      Post.fetch data: { id }
 
-    $img = $('<img/>').appendTo $post_thumbnail_preview
+    refresh: ->
+      Backbone.Syphon.deserialize @, post: Post.attributes
 
-    reader = new FileReader()
+    render: ->
+      @
 
-    reader.onload = (e) ->
-      $img.attr 'src', e.target.result
+    save: (e) ->
+      data = Backbone.Syphon.serialize @
 
-    reader.readAsDataURL file
+      Post.save data.post,
+        success: ->
+          UpdateNotify.success 'success'
+        error: (model, xhr) =>
+          Alert
+            title: '保存に失敗しました'
+            message: $.parseJSON xhr.responseText
+            type: 'danger'
+            btns: [
+              { text: '修正する', action: 'close', type: 'danger' }
+              { text: 'もう一度保存する', action: 'retry', type: 'success', align: 'right' }
+            ]
+            callback: (action, al) =>
+              if action == 'retry'
+                @save()
+                al.close()
 
-  $form
-  .on 'submit', ->
-    st.progress '変更を保存中'
-  .on 'ajax:success', (_, res) ->
-    if res.success
-      st.success res.msg, 'save'
-      $form.attr 'action', res.action
+    prevent: (e) ->
+      e.preventDefault()
+      false
 
-      if $form.find('input[name="_method"]').length == 0
-        $form.append '<input type="hidden" name="_method" value="put">'
-        transit.changeUrl res.redirect, false
-    else
-      st.fail res.msg
 
+  #  Editor View
+  #-----------------------------------------------
+  class EditorView extends Backbone.View
+
+    el: '#main'
+
+    events:
+      'click .menubar .icon-link': 'insertLink'
+      'click #editor_mode_md': 'switchToMarkdown'
+      'click #editor_mode_html': 'switchToHtml'
+
+    initialize: ->
+      @$textarea = $ '#post_content'
+      @editor = ACE.edit 'post_content_ace'
+      @session = @editor.getSession()
+
+      @$mode =
+        markdown: $ '#editor_mode_md'
+        html: $ '#editor_mode_html'
+
+      @render()
+      @$el.addClass 'loaded'
+
+    setMode: (mode) ->
+      return if mode == @mode
+      @mode = mode
+      @session.setMode "ace/mode/#{@mode}"
+      @$mode.markdown.removeClass 'selected'
+      @$mode.html.removeClass 'selected'
+      @$mode[@mode].addClass 'selected'
+
+    render: ->
+      @editor.setTheme 'ace/theme/solarized_light'
+      @setMode 'html'
+      @session.setTabSize 2
+      @session.setUseWrapMode true
+      @session.setValue @$textarea.val()
+
+      @session.on 'change', =>
+        @$textarea.val @session.getValue()
+
+      @editor.setShowPrintMargin false
+      @editor.focus()
+
+      @editor.commands.addCommand
+        name: 'Save'
+        bindKey:
+          win: 'Ctrl-S'
+          mac: 'Command-S'
+        readOnly: false
+        exec: (editor) -> Post.save()
+
+      @
+
+    insertLink: ->
+
+    switchToHtml: (e) ->
+      e.preventDefault()
+      @setMode 'html'
+
+    switchToMarkdown: (e) ->
+      e.preventDefault()
+      @setMode 'markdown'
+
+
+  #  Sidebar View
+  #-----------------------------------------------
+  class SidebarView extends Backbone.View
+
+    el: '#pocket_side'
+
+    events:
+      'scroll': 'hideDatepicker'
+      'click #btn_delete': 'destroy'
+
+    initialize: ->
+      @$form =
+        date: $ '#post_date_str'
+        tags: $ '#post_tags'
+
+      @render()
+
+    hideDatepicker: ->
+      @$form.date.datepicker 'hide'
+
+    render: ->
+      @$form.date.datepicker format: 'yyyy.mm.dd'
+
+      @$form.tags.selectize
+        plugins: ['remove_button']
+        delimiter: ','
+        persist: false
+        valueField: 'value'
+        labelField: 'text'
+        searchField: ['text']
+        options: [
+          { value: 'apple', text: 'apple' }
+          { value: 'banana', text: 'banana' }
+          { value: 'car', text: 'car' }
+          { value: 'desk', text: 'desk' }
+          { value: 'egg', text: 'egg' }
+          { value: 'flower', text: 'flower' }
+          { value: 'glove', text: 'glove' }
+          { value: 'hat', text: 'hat' }
+          { value: 'ink', text: 'ink' }
+          { value: 'jam', text: 'jam' }
+        ]
+        create: (input) -> { value: input, text: input }
+
+      @
+
+    destroy: ->
       Alert
-        title: res.msg
-        message: res.errors
+        title: "記事を削除しますか？"
+        message: '一度削除するともとに戻すことはできません。'
         type: 'danger'
         btns: [
-          { text: '修正する', action: 'close', type: 'danger' }
-          { text: 'もう一度保存する', action: 'retry', type: 'success', align: 'right' }
+          { text: '削除', action: 'destroy', type: 'danger' }
+          { text: 'キャンセル', action: 'close', align: 'right' }
         ]
-        callback: (action, al) ->
-          if action == 'retry'
-            $form.submit()
+        callback: (action, al) =>
+          if action == 'destroy'
+            UpdateNotify.progress '記事を削除しています...'
             al.close()
 
+            Post.destroy
+              success: ->
+                UpdateNotify.success '記事を削除しました'
+              error: ->
+                UpdateNotify.fail '記事の削除に失敗しました'
+
+
+  #  Initialize Backbone App
+  #-----------------------------------------------
+  new AppView()
+  new EditorView()
+  new SidebarView()

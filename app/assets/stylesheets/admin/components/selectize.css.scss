@@ -81,7 +81,7 @@
 }
 
 .selectize-control.single .selectize-input.disabled {
-	opacity: 0.5;
+	opacity: .5;
 }
 
 /**********************************************************
@@ -127,10 +127,6 @@
 	padding: 0 !important;
 	margin: 0;
 	line-height: inherit !important;
-	-webkit-user-select: auto !important;
-	-webkit-box-shadow: none !important;
-	-moz-box-shadow: none !important;
-	box-shadow: none !important;
 }
 .selectize-input > input:focus {
 	outline: none !important;
@@ -144,35 +140,28 @@
 	overflow: hidden;
 }
 .selectize-input, .selectize-dropdown {
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	box-sizing: border-box;
+	@include box-sizing(border-box);
 }
 
 
-
-.selectize-control.plugin-remove_button .item {
+.selectize-control .selectize-input > div {
 	position: relative;
-	padding-right: 24px !important;
+	padding-right: 21px !important;
 }
-.selectize-control.plugin-remove_button .item .remove {
+
+.selectize-control .item a.remove {
 	position: absolute;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	width: 17px;
-	-moz-sizing: border-box;
-	-webkit-sizing: border-box;
-	box-sizing: border-box;
-	text-align: center;
-	font-size: 12px;
-	font-weight: bold;
-	color: inherit;
-	vertical-align: middle;
-	display: inline-block;
-	padding: 7px 0 0 0;
-	line-height: 8px;
-}
-.selectize-control.plugin-remove_button .item .remove:hover {
-	background: rgba(50,90,0,0.15);
+	@include inline-block;
+	color: inherit !important;
+	font-size: 16px;
+	top: 3px;
+	right: 3px;
+	width: 1em;
+	height: 1em;
+	overflow: hidden;
+
+	&:before {
+		@extend %icon;
+	}
+	@extend .icon-remove;
 }

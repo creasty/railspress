@@ -21,6 +21,7 @@ class Post < ActiveRecord::Base
 
   #  Validation
   #-----------------------------------------------
+  validates :user_id, numericality: true
   validates :title, presence: true
   validates :status, numericality: { only_integer: true }
 
@@ -96,12 +97,10 @@ class Post < ActiveRecord::Base
   #  Attributes
   #-----------------------------------------------
   def date_str
-    self.created_at ||= Time.now
-    self.created_at.strftime '%Y.%m.%d'
+    self.created_at.strftime '%Y.%m.%d' if self.created_at.present?
   end
   def time_str
-    self.created_at ||= Time.now
-    self.created_at.strftime '%H:%M'
+    self.created_at.strftime '%H:%M' if self.created_at.present?
   end
   def date_str=(date)
     self.created_at = "#{date} #{time_str}"

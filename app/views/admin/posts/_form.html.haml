@@ -1,8 +1,8 @@
 
-= form_for [:admin, @post], html: { multipart: true, id: 'post_form' }, remote: true do |f|
+= form_for [:admin, @post], html: { id: 'post_form', 'data-id' => params[:id] } do |f|
 
   #pocket_body
-    #main.no-padding
+    #main.no-padding.loader
       = f.text_field :title, placeholder: 'タイトルを入力してください', autocomplete: 'off'
 
       .menubar
@@ -11,6 +11,7 @@
             %a.tooltip.icon-link{ href: '#', title: 'リンク挿入' }
           %li
             %a.tooltip.icon-image{ href: '#', title: 'メディア挿入' }
+
           %li.divide
             %a.tooltip.icon-bold{ href: '#', title: '太字' }
           %li
@@ -23,6 +24,9 @@
             %a.tooltip.icon-strike{ href: '#', title: '打消' }
           %li
             %a.tooltip.icon-quote{ href: '#', title: '引用' }
+          %li
+            %a.tooltip.icon-code{ href: '#', title: 'コード' }
+
           %li.divide
             %a.tooltip.icon-alignleft{ href: '#', title: '左揃え' }
           %li
@@ -31,12 +35,15 @@
             %a.tooltip.icon-alignright{ href: '#', title: '右揃え' }
 
         %ul.right
-          %li.selected
-            %a.tooltip.icon-arrowdown{ href: '#', title: 'Markdown' }
-          %li
-            %a.tooltip.icon-code{ href: '#', title: 'コード' }
+          %li#editor_mode_md
+            %a.tooltip{ href: '#', title: 'Markdown' }
+              MD
+          %li#editor_mode_html
+            %a.tooltip{ href: '#', title: 'ソースコード' }
+              HTML
 
       = f.text_area :content, class: 'hide'
+      #post_content_ace
 
 
   #pocket_side
@@ -60,24 +67,24 @@
 
         %tr
           %td
-            = f.label :date_str, '作成日時'
+            = f.label :date_str, '公開日時'
           %td{ width: '110px' }
             .text.icon-dailycalendar
-              = f.text_field :date_str
+              = f.text_field :date_str, placeholder: '保存時'
           %td
             .text.icon-time
-              = f.text_field :time_str
+              = f.text_field :time_str, placeholder: '保存時'
 
         %tr.doubled
           %td{ colspan: 3 }
-            = f.submit class: 'btn btn-primary block'
+            = button_tag '保存する', id: 'btn_save', class: 'btn btn-primary block'
 
     %section
       %h2 サムネイル
 
       #post_thumbnail_preview.post-thumbnail
-        - if @post.thumbnail.present?
-          = image_tag @post.thumbnail.asset.url(:thumbnail)
+        - if false
+          =# image_tag @post.thumbnail.asset.url(:thumbnail)
 
           .edit.has-two
             %i.icon-image
@@ -93,14 +100,10 @@
 
     %section
       %h2 タグ
-      = text_field_tag 'post[tags]', 'apple'
+      = f.text_field :tags, class: 'text block', placeholder: 'タグを入力...'
 
-      - @post.terms.map do |v|
-        %p
-          = v.name
-          = v.taxonomy.name
+    %section
+      %h2 記事を削除
 
-    - unless @post.new_record?
-      %section
-        %h2 記事を削除
-        = link_to '削除する', admin_post_path(@post), method: :delete, confirm: true, class: 'btn btn-danger block'
+      = button_tag '削除する', id: 'btn_delete', class: 'btn btn-danger block'
+

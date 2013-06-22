@@ -256,7 +256,7 @@ label.checkbox > input:checked:after {
 .select {
 	> select {
 		position: relative;
-		padding: 0 38px 0 10px;
+		padding: 0 44px 0 10px;
 		line-height: 26px;
 		cursor: pointer;
 		width: 100%;
@@ -267,10 +267,10 @@ label.checkbox > input:checked:after {
 		content: "";
 		position: absolute;
 		display: block;
-		height: 20px;
+		height: 26px;
 		border-left: 2px solid rgba(#000, .4);
-		right: 26px;
-		top: 5px;
+		right: 32px;
+		top: 2px;
 		z-index: 1;
 	}
 
@@ -278,7 +278,7 @@ label.checkbox > input:checked:after {
 		content: "";
 		@include arrow(bottom, 5px, $body-text-color, none, 50%);
 		margin-top: -2px;
-		right: 9px;
+		right: 12px;
 		z-index: 1;
 	}
 
@@ -377,7 +377,7 @@ input.text.size-large,
 }
 
 .select.size-large:before {
-	height: 25px;
+	height: 31px;
 }
 
 .btn.size-small {

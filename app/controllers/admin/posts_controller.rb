@@ -5,20 +5,25 @@ class Admin::PostsController < Admin::ApplicationController
   def index
     respond_to do |format|
       format.json do
-        @posts = Post
-          .sort(params[:sort_by], params[:order])
-          .search(params[:search])
-          .page(params[:page])
-          .per(params[:per_page])
-          .includes(:user, :thumbnail)
+        if params[:id]
+          @post = Post.find params[:id]
+          render json: @post.to_backbone_json
+        else
+          @posts = Post
+            .sort(params[:sort_by], params[:order])
+            .search(params[:search])
+            .page(params[:page])
+            .per(params[:per_page])
+            .includes(:user, :thumbnail)
 
-        render json: [
-          {
-            total_entries: @posts.total_count,
-            total_pages: @posts.total_pages
-          },
-          @posts.map { |post| post.to_backbone_json }
-        ]
+          render json: [
+            {
+              total_entries: @posts.total_count,
+              total_pages: @posts.total_pages
+            },
+            @posts.map { |post| post.to_backbone_json }
+          ]
+        end
       end
       format.html { render }
     end
@@ -26,8 +31,7 @@ class Admin::PostsController < Admin::ApplicationController
   end
 
   def new
-    @post = Post.new previous_params[:post]
-    @post.created_at = Time.now unless previous_params[:post]
+    @post = Post.new
   end
 
   def edit
@@ -46,7 +50,7 @@ class Admin::PostsController < Admin::ApplicationController
         end
       else
         format.json do
-          redner json: @post.errors.full_messages,
+          render json: @post.errors.full_messages,
             status: :unprocessable_entity
         end
         format.html do

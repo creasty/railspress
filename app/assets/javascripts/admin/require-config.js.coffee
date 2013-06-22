@@ -22,6 +22,7 @@
     'backbone.syphon': 'backbone.syphon/lib/backbone.syphon.min'
     'datepicker': 'datepicker/js/bootstrap-datepicker'
     'jcrop': 'jcrop/js/jquery.Jcrop.min'
+    'markdown': 'markdown/lib/markdown'
     'masonry': 'jquery-masonry/jquery.masonry.min'
     'powertip': 'powertip/jquery.powertip.min'
     'selectize': 'selectize/selectize.min'

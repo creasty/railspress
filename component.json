@@ -8,6 +8,7 @@
     "jquery-autocomplete": "git://github.com/dyve/jquery-autocomplete.git",
     "jquery-masonry": "latest",
     "jquery.panzoom": "latest",
+    "markdown": "latest",
     "require-css": "latest",
     "requirejs-domready": "latest",
     "requirejs-text": "latest",
