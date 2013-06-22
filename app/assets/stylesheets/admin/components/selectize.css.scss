@@ -46,7 +46,7 @@
 }
 .selectize-dropdown {
 	@extend .popup-box;
-	max-height: 200px;
+	max-height: 32px * 3 + 3px * 2;
 	overflow-y: auto;
 	overflow-x: hidden;
 	margin-top: 8px;

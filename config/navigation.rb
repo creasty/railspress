@@ -47,6 +47,11 @@ SimpleNavigation::Configuration.run do |navigation|
         admin_posts_path,
         link: { class: 'icon-table' }
 
+      sub.item :tags,
+        document_title('post', 'tags'),
+        tags_admin_posts_path,
+        link: { class: 'icon-tag' }
+
       sub.item :new,
         document_title('post', 'new'),
         new_admin_post_path,
@@ -69,35 +74,6 @@ SimpleNavigation::Configuration.run do |navigation|
       sub.item :new,
         document_title('comment', 'new'),
         new_admin_comment_path,
-        link: { class: 'icon-plus' }
-    end
-
-    #  Terms
-    #-----------------------------------------------
-    primary.item :terms,
-      document_title('term', 'index'),
-      admin_terms_path,
-      highlights_on: :subpath,
-      link: { class: 'icon-tag' } \
-    do |sub|
-      sub.item :index,
-        document_title('term', 'index'),
-        admin_terms_path,
-        link: { class: 'icon-table' }
-
-      sub.item :new,
-        document_title('term', 'new'),
-        new_admin_term_path,
-        link: { class: 'icon-plus' }
-
-      sub.item :index,
-        document_title('taxonomy', 'index'),
-        admin_taxonomies_path,
-        link: { class: 'icon-album' }
-
-      sub.item :new,
-        document_title('taxonomy', 'new'),
-        new_admin_taxonomy_path,
         link: { class: 'icon-plus' }
     end
 

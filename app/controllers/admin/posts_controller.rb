@@ -94,4 +94,18 @@ class Admin::PostsController < Admin::ApplicationController
     end
   end
 
+  def tags
+    @tags = Post.tag_counts_on :tags
+
+    respond_to do |format|
+      format.json do
+        @tags = @tags.map do |tag|
+          { value: tag.name, text: tag.name }
+        end
+        render json: @tags
+      end
+      format.html { render }
+    end
+  end
+
 end
