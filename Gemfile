@@ -8,7 +8,6 @@ gem 'friendly_id'
 gem 'kaminari'
 gem 'simple-navigation'
 gem 'paperclip'
-gem 'remotipart'
 
 gem 'devise'
 gem 'omniauth'
@@ -20,6 +19,8 @@ gem 'rabl'
 gem 'oj'
 gem 'browsernizer'
 gem 'strong_parameters'
+gem 'acts-as-taggable-on'
+
 
 group :assets do
   gem 'sass-rails', '~> 3.2.3'

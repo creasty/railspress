@@ -6,8 +6,4 @@
     %li<
       = link_to post.title, post_path(post)
 
-/
-  = awesome 'Awesome Title' do
-    %p Awesome Content
-
 = paginate @posts, window: 4, outer_window: 2

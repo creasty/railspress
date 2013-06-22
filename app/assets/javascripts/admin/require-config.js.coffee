@@ -22,11 +22,10 @@
     'backbone.syphon': 'backbone.syphon/lib/backbone.syphon.min'
     'datepicker': 'datepicker/js/bootstrap-datepicker'
     'jcrop': 'jcrop/js/jquery.Jcrop.min'
-    'jquery-autocomplete': 'jquery-autocomplete/src/jquery.autocomplete.min'
+    'markdown': 'markdown/lib/markdown'
     'masonry': 'jquery-masonry/jquery.masonry.min'
-    'panzoom': 'jquery.panzoom/dist/jquery.panzoom.min'
     'powertip': 'powertip/jquery.powertip.min'
-    'tags-input': 'tags-input/jquery.tagsinput.min'
+    'selectize': 'selectize/selectize.min'
     'underscore': 'underscore/underscore-min'
 
   map:
@@ -44,11 +43,9 @@
     'datepicker': ['jquery']
     'hashchange': ['jquery']
     'jcrop': ['jquery', 'css!jcrop/../../css/jquery.Jcrop.min']
-    'jquery-autocomplete': ['jquery']
     'jquery_ujs': ['jquery']
     'masonry': ['jquery']
-    'panzoom': ['jquery']
     'powertip': ['jquery']
-    'tags-input': ['jquery', 'jquery-autocomplete']
+    'selectize': ['jquery']
     'underscore': exports: '_'
 

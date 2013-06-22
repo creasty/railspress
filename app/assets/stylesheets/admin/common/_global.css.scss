@@ -39,12 +39,17 @@
 				padding: 15px;
 				color: $body-text-color;
 
-				&:hover {
-					background: rgba(#000, .2);
-				}
-
 				&:before {
 					font-size: 14px;
+					color: rgba($body-text-color, .5);
+				}
+
+				&:hover {
+					background: rgba(#000, .2);
+
+					&:before {
+						color: $primary-color;
+					}
 				}
 			}
 		}
@@ -76,6 +81,7 @@
 			&:before {
 				font-size: 24px;
 				vertical-align: -3px;
+				opacity: .5;
 			}
 		}
 

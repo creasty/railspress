@@ -41,7 +41,7 @@ RailsPress::Application.routes.draw do
   #  Blog
   #-----------------------------------------------
   resources :posts, only: %w[index show] do
-    resources :comments, only: %w[edit]
+    resources :comments
   end
 
   #  Pages / Static Pages

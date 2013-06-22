@@ -1,0 +1,167 @@
+
+.selectize-control {
+	@extend %form-base;
+	display: block !important;
+}
+
+
+.selectize-control.default.multi .selectize-input > div.active {
+	color: #fff;
+	background: $primary-color;
+}
+
+.selectize-input, .selectize-control.single .selectize-input.focus {
+	padding: 10px;
+	cursor: text;
+	display: block;
+	width: 100%;
+}
+.selectize-input.focus {
+}
+.selectize-input.dropdown-active {
+}
+.selectize-input.full {
+	background-color: #f2f2f2;
+}
+.selectize-control.multi .selectize-input.has-items {
+	padding-bottom: 5px !important;
+}
+.selectize-control.multi .selectize-input > div {
+	margin: 0 5px 5px 0;
+	padding: 6px;
+	background: $body-text-color;
+	line-height: 1;
+	color: $body-bg-color;
+	cursor: pointer;
+	@include border-radius(2px);
+}
+.selectize-input > div:last-child {
+	margin-right: 5px;
+}
+.selectize-input > input {
+	margin-right: 2px !important;
+}
+.selectize-dropdown, .selectize-input, .selectize-control.single .selectize-input.dropdown-active {
+
+}
+.selectize-dropdown {
+	@extend .popup-box;
+	max-height: 200px;
+	overflow-y: auto;
+	overflow-x: hidden;
+	margin-top: 8px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+.selectize-dropdown > * {
+	padding: 10px;
+	line-height: 1;
+}
+.selectize-dropdown > *.create {
+	color: $muted-color;
+}
+.selectize-dropdown > *.active {
+	color: #fff;
+	background-color: $primary-color;
+}
+.selectize-dropdown, .selectize-input, .selectize-input input {
+	font-size: 12px;
+	line-height: 24px;
+}
+.selectize-input.disabled, .selectize-input.disabled * {
+	cursor: default !important;
+}
+
+/**********************************************************
+* BASIC AESTHETIC STYLES (single)                        *
+**********************************************************/
+
+.selectize-control.single .selectize-input {
+	cursor: pointer;
+}
+
+.selectize-control.single .selectize-input.disabled {
+	opacity: .5;
+}
+
+/**********************************************************
+* BASIC AESTHETIC STYLES (multi)                         *
+**********************************************************/
+
+.selectize-control.multi .selectize-input.disabled {
+	background-color: #fafafa;
+}
+
+/**********************************************************
+* LAYOUT STYLES (mandatory)                              *
+**********************************************************/
+
+.selectize-control {
+	position: relative;
+}
+.selectize-input {
+	overflow: hidden;
+	position: relative;
+	z-index: 1;
+}
+.selectize-input:after {
+	content: ' ';
+	display: block;
+	clear: left;
+}
+.selectize-input .items {
+	display: inline;
+}
+.selectize-input > * {
+	vertical-align: baseline;
+	display: -moz-inline-stack;
+	display: inline-block;
+	zoom: 1;
+	*display: inline;
+}
+.selectize-input > input {
+	max-width: 100% !important;
+	text-indent: 0 !important;
+	border: 0 none !important;
+	background: none !important;
+	padding: 0 !important;
+	margin: 0;
+	line-height: inherit !important;
+}
+.selectize-input > input:focus {
+	outline: none !important;
+}
+.selectize-dropdown {
+	position: absolute;
+	z-index: 2;
+}
+.selectize-dropdown > * {
+	cursor: pointer;
+	overflow: hidden;
+}
+.selectize-input, .selectize-dropdown {
+	@include box-sizing(border-box);
+}
+
+
+.selectize-control .selectize-input > div {
+	position: relative;
+	padding-right: 21px !important;
+}
+
+.selectize-control .item a.remove {
+	position: absolute;
+	@include inline-block;
+	color: inherit !important;
+	font-size: 16px;
+	top: 3px;
+	right: 3px;
+	width: 1em;
+	height: 1em;
+	overflow: hidden;
+
+	&:before {
+		@extend %icon;
+	}
+	@extend .icon-remove;
+}

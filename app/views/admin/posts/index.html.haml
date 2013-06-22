@@ -60,7 +60,7 @@
         %tr
           %td
             %div.select
-              = collection_select :search, :user_id, User.all, :id, :name, prompt: '作成者 で絞り込み'
+              = collection_select :search, :user_id, User.admin, :id, :name, prompt: '作成者 で絞り込み'
 
         %tr.doubled
           %td{ colspan: 2 }
