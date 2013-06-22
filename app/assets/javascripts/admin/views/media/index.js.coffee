@@ -98,7 +98,7 @@ define [
 
     addAll: (_, ob) ->
       Media.each @addOne, @
-      Media.add ob.previousModels, at: 0, silent: true
+      Media.add ob.previousModels, silent: true
 
     addLoader: (op, callback) ->
       medium = new Media.model
@@ -133,6 +133,8 @@ define [
         @isLoading = true
 
         Media.getNextPage
+          remove: false
+          update: true
           success: =>
             @isLoading = false
 
