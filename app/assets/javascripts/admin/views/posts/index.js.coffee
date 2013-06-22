@@ -201,6 +201,7 @@ define [
             al.close()
 
             _.invoke selected, 'destroy',
+              wait: true
               success: (model, res) ->
                 ++success
                 notify()

@@ -83,7 +83,9 @@ class Admin::PostsController < Admin::ApplicationController
     @post.destroy
 
     respond_to do |format|
-      format.json { render json: @post.to_backbone_json }
+      format.json do
+        render json: {}
+      end
 
       format.html do
         redirect_to admin_posts_path,

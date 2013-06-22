@@ -22,3 +22,5 @@ define [
       selected:     false
 
     toggle: -> @set 'selected', !@get 'selected'
+
+    isSynced: -> @get('id')?

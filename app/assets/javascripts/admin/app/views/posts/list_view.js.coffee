@@ -70,6 +70,7 @@ define [
             al.close()
 
             @model.destroy
+              wait: true
               success: (model, res) ->
                 notify.success '記事を削除しました'
 

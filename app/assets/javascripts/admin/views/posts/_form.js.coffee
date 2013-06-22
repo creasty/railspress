@@ -26,20 +26,10 @@ require [
   Markdown
 ) ->
 
-  ###
-  post = new Post()
-  new Post({ title: 'sdfa', status: 1, user_id: 1 }).save()
-  post.fetch
-    data: id: 75
-    success: ->
-      console.log post
-      post.save title: post.get('title') + 2
-  ###
-
-
   #  Componets
   #-----------------------------------------------
   UpdateNotify = Notify()
+  Backbone.history.start pushState: true
 
 
   #  Model
@@ -63,7 +53,14 @@ require [
 
     load: ->
       id = $('#post_form').data 'id'
-      Post.fetch data: { id }
+
+      if id?
+        id >>>= 0
+        # Post.fetch data: { id }, success: -> console.log Post
+        model = Backbone.Syphon.serialize(@).post
+        model.id = id
+        Post.id = id
+        Post.set model
 
     refresh: ->
       Backbone.Syphon.deserialize @, post: Post.attributes
@@ -74,9 +71,15 @@ require [
     save: (e) ->
       data = Backbone.Syphon.serialize @
 
+      isSynced = Post.isSynced()
+
       Post.save data.post,
         success: ->
-          UpdateNotify.success 'success'
+          if isSynced
+            UpdateNotify.success 'success'
+          else
+            window.location.href = Post.get 'edit_link'
+            # Backbone.history.navigate Post.get('edit_link'), true
         error: (model, xhr) =>
           Alert
             title: '保存に失敗しました'
@@ -223,7 +226,7 @@ require [
 
             Post.destroy
               success: ->
-                UpdateNotify.success '記事を削除しました'
+                window.location.href = Post.urlRoot
               error: ->
                 UpdateNotify.fail '記事の削除に失敗しました'
 
