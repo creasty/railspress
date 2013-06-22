@@ -1,11 +1,56 @@
+
 #main
-  %ul
-    - @comments.each do |comment|
-      %li
-        - if comment.user.present?
-          = comment.user.name
-        %br
-        = comment.content
-        %br
-        = link_to '[edit]', edit_admin_comment_path(comment)
-        = link_to '[delete]', admin_comment_path(comment), remote: true, method: :delete
+  %ul#comments_list
+    - 10.times do |i|
+      %li{ class: (i == 2 && 'selected') }
+        %div
+          %strong Post Title #{i + 1}
+          %time 20 分前
+        %div
+          %b Username
+          %span the quick brown fox jumps over the lazy dog the quick brown fox jumps over the lazy dog
+
+    /
+      - @comments.each do |comment|
+        %li
+          %p= comment.post.title
+          %p= comment.created_at
+          %p= comment.user.name
+          %p= comment.content
+
+  #converstaions
+    #new_comment
+      = text_area :comment, :content, placeholder: '新しいコメントを追加', rows: 1
+      = button_tag '送信', class: 'btn btn-primary'
+
+    #converstaions_list
+      - 10.times do |i|
+        .converstaion
+          .inner{ class: %w[left right][((i + 2) + (i % 3) + (i % 5)) % 2] }
+            .user
+              = image_tag '//placehold.it/64x64'
+              %span Username
+            .box
+              .comment
+                %p hey what's up
+                %p
+                  - (i % 2 + 1).times do
+                    the quick brown fox jumps over the lazy dog
+
+              .menu
+                %i.icon-delete
+
+:coffee
+  require ['jquery'], ($) -> $ ->
+    $new = $ '#new_comment'
+    $content = $ '#comment_content'
+    $new.on 'click', -> $content.focus()
+
+    $content.on 'focus', -> $new.addClass 'active'
+    $content.on 'blur', -> $new.removeClass 'active'
+
+    $content.on 'keyup', ->
+      @rows = 1
+      ++@rows while @scrollHeight > @clientHeight && @rows < 10
+      ++@rows
+

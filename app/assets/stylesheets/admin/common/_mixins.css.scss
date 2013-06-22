@@ -33,7 +33,7 @@
 }
 
 
-/*=== Font
+/*=== Basic
 ==============================================================================================*/
 @mixin font($color: null, $size: null, $line: null) {
 	@if $color {
@@ -47,9 +47,6 @@
 	}
 }
 
-
-/*=== Spacing
-==============================================================================================*/
 @mixin spacing($margin: null, $padding: null) {
 	@if $margin {
 		margin: $margin;
@@ -59,9 +56,6 @@
 	}
 }
 
-
-/*=== Size
-==============================================================================================*/
 @mixin size($width: null, $height: null) {
 	@if $width {
 		width: $width;
@@ -69,6 +63,13 @@
 	@if $height {
 		height: $height;
 	}
+}
+
+@mixin truncate-line {
+	white-space: nowrap;
+	width: 100%;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 
@@ -107,17 +108,23 @@
 
 /*=== Arrow
 ==============================================================================================*/
-@mixin arrow($side, $size, $color, $left: 0, $top: 0) {
+@mixin arrow($side, $size, $color, $x: 0, $y: 0) {
 	$side: opposite($side);
 
 	display: block;
 	position: absolute;
-	@if $left != none {
-		margin-left: -$size;
-		left: $left;
+	@if $x != none {
+		@if $side == left {
+			margin-right: -$size;
+			right: $x;
+		}
+		@else {
+			margin-left: -$size;
+			left: $x;
+		}
 	}
-	@if $top != none {
-		top: $top;
+	@if $y != none {
+		top: $y;
 	}
 	@include size(0, 0);
 	border: $size solid transparent;
