@@ -4,9 +4,10 @@ class Page < ActiveRecord::Base
 
   #  Association
   #-----------------------------------------------
+  acts_as_taggable
+
   belongs_to :user
   has_many :metas, as: :object
-  has_many :terms, as: :object, through: :term_rels
 
   #  Validation
   #-----------------------------------------------

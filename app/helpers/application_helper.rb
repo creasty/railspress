@@ -29,24 +29,31 @@ module ApplicationHelper
     s = I18n.t ['title', ns, cn.singularize].join('.'), default: ''
     p = I18n.t ['title', ns, cn.pluralize].join('.'), default: ''
 
-    case ac
-      when 'index'
-        auto[:main] =
-          if s.empty?
-            nil
-          elsif p.empty?
-            sprintf(I18n.t('title._index', default: '%s'), s)
-          else
-            p
-          end
-      when 'show'
-        auto[:depth] = s
-      when 'new', 'create'
-        auto[:main] = sprintf I18n.t('title._new'), s
-        auto[:depth] = s
-      when 'edit', 'update'
-        auto[:main] = sprintf I18n.t('title._edit'), s
-        auto[:depth] = s
+    at = I18n.t ['title', ns, "#{cn.singularize}_#{ac}"].join('.'), default: ''
+
+    if !at.empty?
+      auto[:main] = at
+      auto[:depth] = s
+    else
+      case ac
+        when 'index'
+          auto[:main] =
+            if s.empty?
+              nil
+            elsif p.empty?
+              sprintf(I18n.t('title._index', default: '%s'), s)
+            else
+              p
+            end
+        when 'show'
+          auto[:depth] = s
+        when 'new', 'create'
+          auto[:main] = sprintf I18n.t('title._new'), s
+          auto[:depth] = s
+        when 'edit', 'update'
+          auto[:main] = sprintf I18n.t('title._edit'), s
+          auto[:depth] = s
+      end
     end
 
     hash = (cn == controller_name) ? get_page_title : {}
@@ -55,6 +62,7 @@ module ApplicationHelper
 
     @page_title_hash[serialized] = hash
   end
+
 
 private
 

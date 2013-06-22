@@ -177,7 +177,7 @@ require [
     initialize: ->
       @$form =
         date: $ '#post_date_str'
-        tags: $ '#post_tags'
+        tags: $ '#post_tag_list'
 
       @render()
 
@@ -187,26 +187,19 @@ require [
     render: ->
       @$form.date.datepicker format: 'yyyy.mm.dd'
 
-      @$form.tags.selectize
-        plugins: ['remove_button']
-        delimiter: ','
-        persist: false
-        valueField: 'value'
-        labelField: 'text'
-        searchField: ['text']
-        options: [
-          { value: 'apple', text: 'apple' }
-          { value: 'banana', text: 'banana' }
-          { value: 'car', text: 'car' }
-          { value: 'desk', text: 'desk' }
-          { value: 'egg', text: 'egg' }
-          { value: 'flower', text: 'flower' }
-          { value: 'glove', text: 'glove' }
-          { value: 'hat', text: 'hat' }
-          { value: 'ink', text: 'ink' }
-          { value: 'jam', text: 'jam' }
-        ]
-        create: (input) -> { value: input, text: input }
+      $.ajax
+        url: "#{Post.urlRoot}/tags"
+        format: 'json'
+        success: (tags) =>
+          @$form.tags.selectize
+            plugins: ['remove_button']
+            delimiter: ', '
+            persist: false
+            valueField: 'value'
+            labelField: 'text'
+            searchField: ['text']
+            options: tags
+            create: (input) -> { value: input, text: input }
 
       @
 

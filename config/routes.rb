@@ -11,10 +11,10 @@ RailsPress::Application.routes.draw do
     end
 
     resources :pages
-    resources :posts
-    resources :terms
+    resources :posts do
+      get :tags, on: :collection
+    end
     resources :comments
-    resources :taxonomies
     resources :users
     resources :media
   end
