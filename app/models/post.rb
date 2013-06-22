@@ -4,20 +4,20 @@ class Post < ActiveRecord::Base
 
   include Rails.application.routes.url_helpers
 
-  attr_accessor :date_str, :time_str, :tags
-  attr_accessible :content, :excerpt, :status, :title, :thumbnail_id, :user_id, :created_at, :date_str, :time_str, :tags
+  attr_accessor :date_str, :time_str
+  attr_accessible :content, :excerpt, :status, :title, :thumbnail_id, :user_id, :created_at, :date_str, :time_str, :tag_list
 
   #  Association
   #-----------------------------------------------
+  acts_as_taggable
+
   belongs_to :user
   has_many :comments
   has_many :metas, as: :object
-  has_many :term_rels, as: :object
-  has_many :terms, through: :term_rels, include: :taxonomy
   belongs_to :thumbnail, class_name: '::Medium'
 
   accepts_nested_attributes_for :user, allow_destroy: true
-  accepts_nested_attributes_for :terms
+  # accepts_nested_attributes_for :tag_list
 
   #  Validation
   #-----------------------------------------------

@@ -177,7 +177,7 @@ require [
     initialize: ->
       @$form =
         date: $ '#post_date_str'
-        tags: $ '#post_tags'
+        tags: $ '#post_tag_list'
 
       @render()
 
@@ -189,7 +189,7 @@ require [
 
       @$form.tags.selectize
         plugins: ['remove_button']
-        delimiter: ','
+        delimiter: ', '
         persist: false
         valueField: 'value'
         labelField: 'text'
