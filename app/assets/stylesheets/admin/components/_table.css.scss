@@ -2,13 +2,23 @@
 /*=== Table
 ==============================================================================================*/
 table.form {
-	width: 100%;
+	width: 60%;
+
+	#main & td.label {
+		width: 200px;
+	}
 
 	tr + tr > td {
 		padding-top: 10px;
 	}
-	td + td {
-		padding-left: 10px;
+	td {
+		& + td {
+			padding-left: 10px;
+		}
+
+		> img {
+			vertical-align: middle;
+		}
 	}
 
 	tr.doubled > td {
@@ -47,6 +57,10 @@ table.table {
 
 	td {
 		line-height: 1.35;
+
+		> img {
+			vertical-align: middle;
+		}
 	}
 	td,
 	th {
@@ -125,10 +139,6 @@ table.table {
 			> input[type=checkbox] {
 				margin: 0;
 			}
-			> img {
-				vertical-align: middle;
-			}
-
 			&.controller .btn {
 				margin-right: 10px;
 			}
