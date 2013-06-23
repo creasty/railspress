@@ -3,6 +3,7 @@ body#comments {
 
 	#main {
 		padding: 0 0 0 280px;
+		background: $menubar-bg-color;
 	}
 
 	#comments_list {
@@ -13,6 +14,7 @@ body#comments {
 		padding: 0;
 		overflow: hidden;
 		overflow-y: scroll;
+		background: $main-bg-color;
 
 		li {
 			padding: 20px;
@@ -22,6 +24,10 @@ body#comments {
 
 			& + li {
 				border-top: 1px solid $main-rule-color;
+			}
+
+			&.unread {
+				@include box-shadow(inset 3px 0 0 0 $success-color);
 			}
 
 			> div {
@@ -53,15 +59,6 @@ body#comments {
 
 			&.selected {
 				background: rgba($primary-color, .05);
-/* 				color: #fff;
-				background: $primary-color;
-
-				time {
-					color: #fff;
-				}
-				span {
-					color: rgba(#fff, .5);
-				} */
 			}
 		}
 	}
@@ -74,7 +71,6 @@ body#comments {
 		overflow-y: scroll;
 		@include box-sizing(border-box);
 		padding: 20px;
-		background: $menubar-bg-color;
 
 		#converstaions_list {
 			margin-top: 100px;
@@ -109,12 +105,21 @@ body#comments {
 						position: relative;
 						padding: 20px;
 
-						.menu {
-							position: absolute;
-							display: none;
+						.controller {
+							height: 0;
+							opacity: 0;
+							overflow: hidden;
+							@include transition(height .3s, opacity .3s, margin .3s);
+
+							> .btn {
+								margin-right: 10px;
+							}
 						}
-						&:hover .menu {
-							display: block;
+						&:hover .controller {
+							margin-top: 15px;
+							margin-bottom: -5px;
+							height: 30px;
+							opacity: 1;
 						}
 					}
 
@@ -151,6 +156,7 @@ body#comments {
 				}
 			}
 		}
+
 		#new_comment {
 			@extend .popup-box;
 
