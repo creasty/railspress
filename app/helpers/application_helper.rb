@@ -119,14 +119,6 @@ private
     title.join ' '
   end
 
-  #  Avatar
-  #-----------------------------------------------
-  def avatar_url(user, size = 48)
-    gravatar_id = Digest::MD5.hexdigest user.email.downcase
-
-    "http://gravatar.com/avatar/#{gravatar_id}.png?s=#{size}"
-  end
-
   #  Scripts Loader
   #-----------------------------------------------
   def view_asset(action = true, dir = 'javascripts', ext = '.js*')
@@ -146,6 +138,14 @@ private
     script = view_asset || view_asset(false)
 
     raw "<script>require(['#{script}']);</script>" if script
+  end
+
+  #  Avatar
+  #-----------------------------------------------
+  def avatar_url(user, size = 48)
+    gravatar_id = Digest::MD5.hexdigest user.email.downcase
+
+    "http://gravatar.com/avatar/#{gravatar_id}.png?s=#{size}"
   end
 
 end

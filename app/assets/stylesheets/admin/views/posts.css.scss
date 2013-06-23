@@ -1,0 +1,141 @@
+body#posts.new,
+body#posts.edit {
+
+	#post_form {
+		#post_title {
+			font-size: 20px;
+			height: 60px;
+			padding: 0 20px;
+			width: 100%;
+		}
+	}
+
+	#post_content_ace {
+		position: absolute;
+		top: 112px;
+		left: 0;
+		bottom: 0;
+		right: 0;
+
+		.ace_scroller {
+			background: none;
+		}
+		.ace_gutter {
+			background: none;
+		}
+		.ace_gutter-cell {
+			color: #bbb;
+		}
+		.ace_gutter-active-line {
+			background: #f1f0ee;
+		}
+		.ace_active-line {
+			background: #f1f0ee;
+		}
+		.ace_selection {
+			background: #eee8d5;
+		}
+		.ace_cursor {
+			border-left: 1px solid $body-bg-color;
+			@include transition(.3s opacity);
+		}
+	}
+
+	.post-thumbnail {
+		position: relative;
+		// @include box-shadow(0 1px 4px rgba(#000, .1));
+		@include inline-block;
+		overflow: hidden;
+
+		&:before {
+			content: "";
+			display: block;
+			position: absolute;
+			z-index: 2;
+			width: 100%;
+			height: 100%;
+			@include box-shadow(inset 0 0 0 1px rgba(#000, .25));
+		}
+
+		img {
+			max-width: 100%;
+			height: auto;
+		}
+
+		.edit {
+			visibility: hidden;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			margin-top: -18px;
+			background: rgba(#fff, .8);
+			height: 36px;
+			@include border-radius(18px);
+			@include transition(linear .2s);
+			@include transform(scale(1.05));
+			opacity: 0;
+			z-index: 3;
+
+			> * {
+				@include inline-block;
+				height: 36px;
+				text-align: center;
+				color: rgba(#000, .7);
+				cursor: pointer;
+
+				&:before {
+					padding-right: 0;
+					font-size: 26px;
+					line-height: 36px;
+					height: 36px;
+					width: auto;
+				}
+			}
+			> * + * {
+				border-left: 1px solid rgba(#000, .2);
+			}
+
+			&.has-one {
+				margin-left: -18px;
+
+				> * {
+					width: 36px;
+				}
+			}
+			&.has-two {
+				margin-left: -55px;
+				padding: 0 5px;
+
+				> * {
+					width: 50px;
+				}
+			}
+		}
+
+		&:hover .edit {
+			visibility: visible;
+			opacity: 1;
+			@include transform(scale(1));
+		}
+	}
+
+	#post_thumbnail_preview {
+		margin: 0;
+
+		&:before {
+			@include box-shadow(inset 0 0 0 1px rgba(#000, .5));
+		}
+
+		img,
+		.sample {
+			width: 260px;
+			height: 184px;
+		}
+
+		.sample {
+			@include background-image(linear-gradient(-45deg, rgba(#fff, .05) 25%, transparent 25%, transparent 50%, rgba(#fff, .05) 50%, rgba(#fff, .05) 75%, transparent 75%, transparent));
+			@include background-size(20px 20px);
+		}
+	}
+
+}

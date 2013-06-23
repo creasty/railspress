@@ -1,0 +1,9 @@
+<td><input type="checkbox" class="checkbox size-large"></td>
+<td><img src="<%= avatar %>" alt="" width="48" height="48" /></td>
+<td class="<%= ['admin', 'commenter'][+!admin] %>"><a href="<%= edit_link %>"><%= name %></a></td>
+<td><%= ['管理者', 'コメンター'][+!admin] %></td>
+<td><%= date %></td>
+<td class="controller">
+	<a href="<%= edit_link %>" class="btn btn-primary icon-edit size-small" title="編集"></a>
+	<button class="btn btn-danger icon-delete size-small" title="削除"></button>
+</td>

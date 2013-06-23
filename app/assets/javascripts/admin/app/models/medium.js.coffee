@@ -16,6 +16,6 @@ define [
       file_size:   0
       file_type:   ''
 
-      selected:    false
+      selected: false
 
     toggle: -> @set 'selected', !@get 'selected'

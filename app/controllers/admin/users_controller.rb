@@ -1,8 +1,31 @@
+# coding: utf-8
 
 class Admin::UsersController < Admin::ApplicationController
 
   def index
-    @users = User.all
+    respond_to do |format|
+      format.json do
+        if params[:id]
+          @user = User.find params[:id]
+          render json: @user.to_backbone_json
+        else
+          @users = User
+            .sort(params[:sort_by], params[:order])
+            .search(params[:search])
+            .page(params[:page])
+            .per(params[:per_page])
+
+          render json: [
+            {
+              total_entries: @users.total_count,
+              total_pages: @users.total_pages
+            },
+            @users.map { |user| user.to_backbone_json }
+          ]
+        end
+      end
+      format.html { render }
+    end
   end
 
   def new
@@ -16,14 +39,25 @@ class Admin::UsersController < Admin::ApplicationController
   def create
     @user = User.new params[:user]
 
-    if @user.save
-      flash.now[:notice] = 'Created!'
-      render :edit
-    else
-      flash.now[:alert] = 'Failed!'
-      render :new
+    respond_to do |format|
+      if @user.save
+        format.json { render json: @user.to_backbone_json }
+        format.html do
+          redirect_to edit_admin_post_path(@user),
+            notice: '作成されました'
+        end
+      else
+        format.json do
+          render json: @user.errors.full_messages,
+            status: :unprocessable_entity
+        end
+        format.html do
+          save_current_params
+          redirect_to new_admin_post_path,
+            alert: '保存に失敗しました'
+        end
+      end
     end
-
   end
 
   def update
@@ -33,22 +67,32 @@ class Admin::UsersController < Admin::ApplicationController
 
     @user.attributes = params[:user]
 
-    if @user.save
-      flash.now[:notice] = 'Updated!'
-      render :edit
-    else
-      flash.now[:alert] = 'Failed!'
-      render :edit
+    respond_to do |format|
+      if @user.save
+        format.json { render json: @user.to_backbone_json }
+      else
+        format.json do
+          render json: @user.errors.full_messages,
+            status: :unprocessable_entity
+        end
+      end
     end
   end
 
   def destroy
-
     @user = User.find params[:id]
     @user.destroy
 
-    render :index
+    respond_to do |format|
+      format.json do
+        render json: {}
+      end
 
+      format.html do
+        redirect_to admin_users_path,
+          notice: 'ユーザを削除しました'
+      end
+    end
   end
 
 end
