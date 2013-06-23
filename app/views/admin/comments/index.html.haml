@@ -1,11 +1,62 @@
+
 #main
-  %ul
-    - @comments.each do |comment|
-      %li
-        - if comment.user.present?
-          = comment.user.name
-        %br
-        = comment.content
-        %br
-        = link_to '[edit]', edit_admin_comment_path(comment)
-        = link_to '[delete]', admin_comment_path(comment), remote: true, method: :delete
+  %ul#comments_list
+    - 10.times do |i|
+      %li{ class: [(i == 2 && 'selected'), (i % 5 == 0) && 'unread'] }
+        %div
+          %strong Post Title #{i + 1}
+          %time 20 分前
+        %div
+          %b Username
+          %span the quick brown fox jumps over the lazy dog the quick brown fox jumps over the lazy dog
+
+
+  #converstaions
+    #new_comment
+      = text_area :comment, :content, placeholder: '新しいコメントを追加', rows: 1
+      = button_tag '送信', class: 'btn btn-primary'
+
+    #converstaions_list
+      - 10.times do |i|
+        .converstaion
+          .inner{ class: %w[left right][((i + 2) + (i % 3) + (i % 5)) % 2] }
+            = link_to '#', class: 'user', target: '_blank' do
+              = image_tag '//placehold.it/64x64'
+              %span Username
+
+            .box
+              .comment
+                %p
+                  hey what's up
+                  - if (i + 1) % 3 > 0
+                    %br
+                  - ((i + 1) % 3).times do
+                    the quick brown fox jumps over the lazy dog
+
+              .controller
+                = link_to '', '#', class: 'btn btn-success icon-reply size-small', title: '返信'
+                = link_to '', '#', class: 'btn btn-primary icon-edit size-small', title: '編集'
+                = link_to '', '#', class: 'btn btn-danger icon-delete size-small', title: '削除'
+              </td>
+
+:coffee
+  require ['jquery'], ($) -> $ ->
+    $new = $ '#new_comment'
+    $content = $ '#comment_content'
+    $new.on 'click', -> $content.focus()
+
+    update = (el) ->
+      el.rows = 2
+      ++el.rows while el.scrollHeight > el.clientHeight && el.rows < 10
+
+    $content.on 'keyup', ->
+      update @
+      ++@rows
+
+    $content.on 'focus', ->
+      $new.addClass 'active'
+
+    $content.on 'blur', ->
+      $new.removeClass 'active'
+      update @
+

@@ -10,4 +10,10 @@ class Comment < ActiveRecord::Base
   #-----------------------------------------------
   validates :content, presence: true
 
+  #  Public Methods
+  #-----------------------------------------------
+  def to_backbone_json
+    {}
+  end
+
 end

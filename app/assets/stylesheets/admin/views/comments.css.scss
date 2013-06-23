@@ -1,0 +1,193 @@
+
+body#comments {
+
+	#main {
+		padding: 0 0 0 280px;
+		background: $menubar-bg-color;
+	}
+
+	#comments_list {
+		float: left;
+		width: 280px;
+		height: 100%;
+		margin: 0 0 0 -280px;
+		padding: 0;
+		overflow: hidden;
+		overflow-y: scroll;
+		background: $main-bg-color;
+
+		li {
+			padding: 20px;
+			list-style: none;
+			margin: 0;
+			cursor: pointer;
+
+			& + li {
+				border-top: 1px solid $main-rule-color;
+			}
+
+			&.unread {
+				@include box-shadow(inset 3px 0 0 0 $success-color);
+			}
+
+			> div {
+				@extend .clear-after;
+
+				+ div {
+					margin-top: 5px;
+				}
+			}
+
+			strong {
+				@include truncate-line;
+				width: 190px;
+				display: block;
+				float: left;
+			}
+			time {
+				float: right;
+				color: $primary-color;
+			}
+			b {
+				display: block;
+			}
+			span {
+				color: $muted-color;
+				display: block;
+				@include truncate-line;
+			}
+
+			&.selected {
+				background: rgba($primary-color, .05);
+			}
+		}
+	}
+
+	#converstaions {
+		float: left;
+		width: 100%;
+		height: 100%;
+		overflow: hidden;
+		overflow-y: scroll;
+		@include box-sizing(border-box);
+		padding: 20px;
+
+		#converstaions_list {
+			margin-top: 100px;
+			.converstaion {
+				@extend .clear-after;
+				margin-bottom: 20px;
+
+				.inner {
+					display: inline-block;
+					max-width: 50%;
+
+					.user {
+						width: 80px;
+						color: $menubar-text-color;
+						text-align: center;
+
+						img {
+							display: inline-block;
+							width: 64px;
+							height: 64px;
+							@include border-radius(50%);
+						}
+
+						span {
+							display: block;
+							margin-top: 10px;
+							font-size: 11px;
+						}
+					}
+					.box {
+						@extend .popup-box;
+						position: relative;
+						padding: 20px;
+
+						.controller {
+							height: 0;
+							opacity: 0;
+							overflow: hidden;
+							@include transition(height .3s, opacity .3s, margin .3s);
+
+							> .btn {
+								margin-right: 10px;
+							}
+						}
+						&:hover .controller {
+							margin-top: 15px;
+							margin-bottom: -5px;
+							height: 30px;
+							opacity: 1;
+						}
+					}
+
+					&.left {
+						float: left;
+						padding-left: 100px;
+
+						.user {
+							float: left;
+							margin-left: -100px;
+						}
+						.box {
+							&:before {
+								content: "";
+								@include arrow(left, 10px, $main-bg-color, -10px, 15px);
+							}
+						}
+					}
+					&.right {
+						float: right;
+						padding-right: 100px;
+
+						.user {
+							float: right;
+							margin-right: -100px;
+						}
+						.box {
+							&:before {
+								content: "";
+								@include arrow(right, 10px, $main-bg-color, -10px, 15px);
+							}
+						}
+					}
+				}
+			}
+		}
+
+		#new_comment {
+			@extend .popup-box;
+
+			position: fixed;
+			left: 280px + 20px;
+			right: 20px;
+			z-index: 100;
+			min-height: 35px;
+			padding: 20px;
+			padding-right: 100px;
+			cursor: text;
+			opacity: .7;
+			@include transition(opacity .3s);
+
+			&:hover,
+			&.active {
+				opacity: 1;
+			}
+
+			textarea {
+				display: block;
+				width: 100%;
+				@include box-sizing(border-box);
+			}
+
+			button {
+				position: absolute;
+				top: 20px;
+				right: 20px;
+			}
+		}
+	}
+
+}

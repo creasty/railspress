@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# coding: utf-8
 
 SimpleNavigation::Configuration.run do |navigation|
 
@@ -64,18 +64,7 @@ SimpleNavigation::Configuration.run do |navigation|
       document_title('comment', 'index'),
       admin_comments_path,
       highlights_on: :subpath,
-      link: { class: 'icon-comment' } \
-    do |sub|
-      sub.item :index,
-        document_title('comment', 'index'),
-        admin_comments_path,
-        link: { class: 'icon-table' }
-
-      sub.item :new,
-        document_title('comment', 'new'),
-        new_admin_comment_path,
-        link: { class: 'icon-plus' }
-    end
+      link: { class: 'icon-comment' }
 
     #  Media
     #-----------------------------------------------

@@ -120,8 +120,6 @@ define [
       model.toggle()
 
     loadMore: (e) ->
-      @isLoading = false
-
       buffer = 200
 
       bottomOfViewport = @$pocketBody.scrollTop() + @$pocketBody.height()
@@ -379,10 +377,12 @@ define [
           type: 'medium[content_type]'
           name: 'medium[file_name]'
 
-    aa: ->
       @$btnAdd.on 'click', (e) =>
         e.preventDefault()
-        @$fileField.trigger 'click'
+        @addNew()
+
+    addNew: ->
+      @$fileField.trigger 'click'
 
     over: ->
       @$main.addClass 'upload'
