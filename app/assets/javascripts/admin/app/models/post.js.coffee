@@ -19,7 +19,7 @@ define [
       tags:      ''
       link:      ''
 
-      selected:     false
+      selected: false
 
     toggle: -> @set 'selected', !@get 'selected'
 

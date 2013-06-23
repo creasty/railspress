@@ -1,13 +1,92 @@
+- content_for :menubar do
+  = link_to '', new_admin_user_path, class: 'icon-plus', title: 'ユーザを追加'
 
-#main
-  %ul
-    - @users.each do |user|
-      %li
-        = user.name
-        %br
-        = user.email
-        %br
-        = link_to 'Edit', edit_admin_user_path(user)
-        = link_to 'Delete', admin_user_path(user), remote: true, method: :delete
+#pocket_body
+  #main.no-padding.loader
+    %table.table.table-hover#users_list
+      %thead
+        %tr
+          %th{ width: '24px' }
+            %i.icon-check
+          %th{ width: '80px' } アバター
+          %th{ 'data-sortby' => 'name' } 名前
+          %th{ 'data-sortby' => 'admin' } ユーザ権限
+          %th{ 'data-sortby' => 'created_at', width: '130px' } 作成日
+          %th アクション
 
+      %tbody
+
+
+#pocket_side
+  %div{ 'data-state' => 'normal' }
+    %section
+      %h2
+        ページ
+        %small#page_display
+
+      %table.form
+        %tr
+          %td{ width: '50px' }= label_tag :page_num, 'ページ'
+          %td
+            .text
+              = button_tag '', id: 'page_first', class: 'btn-first tooltip', title: '最初のページ'
+              = button_tag '', id: 'page_prev', class: 'btn-prev tooltip', title: '前のページ'
+              = text_field_tag :page_num, '0', class: 'tooltip'
+              = button_tag '', id: 'page_next', class: 'btn-next tooltip', title: '次のページ'
+              = button_tag '', id: 'page_last', class: 'btn-last tooltip', title: '最後のページ'
+
+        %tr
+          %td= label_tag :page_size, '表示数件'
+          %td
+            .select
+              = select :page, :size, { '10件' => 10, '20件' => 20, '50件' => 50, '100件' => 100, '200件' => 200 }
+
+
+    %section
+      %h2 検索
+
+      %table.form
+        %tr
+          %td
+            .text.icon-search
+              = text_field :search, :name, placeholder: '名前 で検索'
+
+        %tr
+          %td
+            %div.select
+              = select :search, :admin, { 'コメンター' => 0, '管理者' => 1 }, prompt: 'ユーザ権限 で絞り込み'
+
+        %tr.doubled
+          %td{ colspan: 2 }
+            = button_tag '検索する', id: 'btn_search', class: 'btn btn-primary block'
+
+    %section
+      %h2 更新
+
+      = button_tag '最新の状態に更新する', id: 'btn_refresh', class: 'btn btn-success block'
+
+  %div.hide{ 'data-state' => 'selecting' }
+    %section
+      %h2
+        %span.counter 0
+        項目を選択中
+
+      = button_tag '選択を解除する', id: 'btn_disselect', class: 'btn block'
+
+    %section
+      %h2 一括編集
+
+      %table.form.table-doubled
+        %tr
+          %td{ colspan: 2 }
+            %h3= label_tag :user_admin, 'ユーザ権限'
+            %div.select
+              = select :user, :admin, { 'コメンター' => 0, '管理者' => 1 }, prompt: '変更なし'
+
+        %tr
+          %td
+            = button_tag '変更を適応する', id: 'btn_update', class: 'btn btn-success block'
+
+          %td
+            = button_tag '削除する', id: 'btn_delete_all', class: 'btn btn-danger block'
 

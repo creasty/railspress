@@ -54,7 +54,7 @@ class ApplicationController < ActionController::Base
   end
 
 
-  protected
+protected
 
 
   #  Rescue
@@ -65,7 +65,7 @@ class ApplicationController < ActionController::Base
   end
 
 
-  private
+private
 
 
   #  Ajax
