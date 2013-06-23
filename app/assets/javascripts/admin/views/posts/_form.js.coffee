@@ -23,7 +23,6 @@ require [
   Notify
   Alert
   ACE
-  Markdown
 ) ->
 
   #  Componets
@@ -76,7 +75,7 @@ require [
       Post.save data.post,
         success: ->
           if isSynced
-            UpdateNotify.success 'success'
+            UpdateNotify.success '記事を保存しました'
           else
             window.location.href = Post.get 'edit_link'
             # Backbone.history.navigate Post.get('edit_link'), true

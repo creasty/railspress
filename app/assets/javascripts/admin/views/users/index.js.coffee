@@ -180,12 +180,12 @@ define [
         return if count < success + error
 
         if error > 0
-          UpdateNotify.fail "記事の削除に失敗しました (#{error}件)"
+          UpdateNotify.fail "ユーザの削除に失敗しました (#{error}件)"
         else
-          UpdateNotify.success "全 #{count} つの記事を削除しました"
+          UpdateNotify.success "全 #{count} ユーザを削除しました"
 
       Alert
-        title: "#{count} 件の記事を削除しますか？"
+        title: "#{count} 件のユーザを削除しますか？"
         message: '一度削除するともとに戻すことはできません。'
         type: 'danger'
         btns: [
@@ -194,7 +194,7 @@ define [
         ]
         callback: (action, al) =>
           if action == 'destroy'
-            UpdateNotify.progress '記事を削除しています...'
+            UpdateNotify.progress 'ユーザを削除しています...'
             al.close()
 
             _.invoke selected, 'destroy',
@@ -216,9 +216,9 @@ define [
         return if count < success + error
 
         if error > 0
-          UpdateNotify.fail "記事の更新に失敗しました (#{error}件)"
+          UpdateNotify.fail "ユーザの更新に失敗しました (#{error}件)"
         else
-          UpdateNotify.success "全 #{count} つの記事を更新しました"
+          UpdateNotify.success "全 #{count} ユーザを更新しました"
 
       data = {}
 
@@ -226,7 +226,7 @@ define [
         data.admin = @$user.admin.val()
 
       Alert
-        title: "#{count} 件の記事を更新しますか？"
+        title: "#{count} 件のユーザを更新しますか？"
         message: '選択ミスがないか十分に確認してください。'
         type: 'danger'
         btns: [
@@ -235,7 +235,7 @@ define [
         ]
         callback: (action, al) =>
           if action == 'update'
-            UpdateNotify.progress '記事を更新しています...'
+            UpdateNotify.progress 'ユーザを更新しています...'
             al.close()
 
             _.each selected, (user) ->

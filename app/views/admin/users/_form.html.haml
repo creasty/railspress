@@ -3,20 +3,20 @@
   #main
     = form_for [:admin, @user], html: { id: 'user_form', 'data-id' => params[:id] } do |f|
 
-      %h2.top-title プロフィール情報
+      %h2.top-title プロフィール
 
       %table.form
         %tr
+          %td.label
+            アバター
           %td
-            = f.label :name, 'アバター'
-          %td
-            = image_tag avatar_url(current_user, 64), alt: '', size: '64x64'
+            = image_tag avatar_url(@user, 64), alt: '', size: '64x64'
 
         %tr
-          %td.label
+          %td
             = f.label :name, '名前'
           %td
-            = f.text_field :name, class: 'text block'
+            = f.text_field :name, placeholder: '名前を入力', class: 'text block'
 
 
       %h2 アカウント情報
@@ -26,7 +26,7 @@
           %td.label
             = f.label :email, 'メールアドレス'
           %td
-            = f.text_field :email, class: 'text block'
+            = f.text_field :email, placeholder: 'メールアドレスを入力', class: 'text block'
 
         %tr
           %td

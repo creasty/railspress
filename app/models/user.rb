@@ -2,7 +2,7 @@ class User < ActiveRecord::Base
 
   include Rails.application.routes.url_helpers
 
-  attr_accessible :email, :password, :password_confirmation, :remember_me, :admin
+  attr_accessible :email, :password, :password_confirmation, :remember_me, :admin, :name
 
   #  Association
   #-----------------------------------------------
