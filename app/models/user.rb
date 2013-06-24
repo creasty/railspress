@@ -4,12 +4,14 @@ class User < ActiveRecord::Base
 
   attr_accessible :email, :password, :password_confirmation, :remember_me, :admin, :name
 
+  attr_readonly :sign_in_count, :current_sign_in_at, :current_sign_in_ip, :last_sign_in_at, :last_sign_in_ip
+
   #  Association
   #-----------------------------------------------
   has_many :posts, dependent: :destroy
   has_many :pages, dependent: :destroy
-  has_one :oauth, dependent: :destroy
-  accepts_nested_attributes_for :oauth
+  has_many :oauths, dependent: :destroy
+  accepts_nested_attributes_for :oauths
 
   #  Scope
   #-----------------------------------------------
@@ -60,6 +62,22 @@ class User < ActiveRecord::Base
   def avatar_url(size = 48)
     gravatar_id = Digest::MD5.hexdigest self.email.downcase
     "http://gravatar.com/avatar/#{gravatar_id}.png?s=#{size}"
+  end
+
+  def facebook?
+    oauths.exists? provider: 'facebook'
+  end
+
+  def twitter?
+    oauths.exists? provider: 'twitter'
+  end
+
+  def facebook
+    oauths.where(provider: 'facebook').first
+  end
+
+  def twitter
+    oauths.where(provider: 'twitter').first
   end
 
 end

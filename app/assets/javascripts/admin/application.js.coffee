@@ -1,7 +1,11 @@
 
+#=== Rails UJS
+#==============================================================================================
 require ['jquery_ujs']
 
 
+#=== General
+#==============================================================================================
 #  Remove Chrome's ugly autofill highlights
 #-----------------------------------------------
 if navigator.userAgent.toLowerCase().indexOf('chrome') >= 0
@@ -11,15 +15,9 @@ if navigator.userAgent.toLowerCase().indexOf('chrome') >= 0
       $clone = $t.clone true, true
       $t.after($clone).remove()
 
-
-require [
-  'jquery'
-  'powertip'
-  'domReady!'
-], ($) ->
-
-  #  Smooth Scrolling
-  #-----------------------------------------------
+#  Smooth Scrolling
+#-----------------------------------------------
+require ['jquery'], ($) ->
   $(document).on 'click', 'a[href^=#]', (e) ->
     $t = $ @
     id = $t.attr 'href'
@@ -39,8 +37,13 @@ require [
       # easing: 'easeInCubic'
       complete: -> window.location.hash = id
 
-  #  Tooltip
-  #-----------------------------------------------
+#  Tooltip
+#-----------------------------------------------
+require [
+  'jquery'
+  'powertip'
+  'domReady!'
+], ($) ->
   $('.tooltip, abbr[title], a[title]').powerTip
     placement: 'n'
     smartPlacement: true

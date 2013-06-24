@@ -1,0 +1,4 @@
+
+:coffee
+  @opener.$(@opener)?.trigger 'oauth:linked', '#{h params[:provider]}'
+  @close()

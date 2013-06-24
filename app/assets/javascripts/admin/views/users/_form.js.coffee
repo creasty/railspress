@@ -5,6 +5,8 @@ require [
   'app/models/user'
   'common/notify'
   'common/alert'
+  'components/oauth'
+  'components/oauth_button'
 
   'backbone.syphon'
   'domReady!'
@@ -15,11 +17,17 @@ require [
   User
   Notify
   Alert
+  OAuth
+  OAuthButton
 ) ->
 
   #  Componets
   #-----------------------------------------------
   UpdateNotify = Notify()
+
+  OAuth.attachTo window
+  OAuthButton.attachTo '.ui-auth-twitter', provider: 'twitter'
+  OAuthButton.attachTo '.ui-auth-facebook', provider: 'facebook'
 
   #  Model
   #-----------------------------------------------
@@ -38,7 +46,6 @@ require [
     initialize: ->
       @load()
       @render()
-      @
 
     load: ->
       id = $('#user_form').data 'id'
