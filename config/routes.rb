@@ -30,7 +30,8 @@ RailsPress::Application.routes.draw do
 
   #  OmniAuth
   #-----------------------------------------------
-  get '/auth/:provider/callback' => 'oauth#callback'
+  get '/auth/:provider/callback' => 'oauths#callback'
+  delete '/auth/:provider' => 'oauths#destroy'
 
   #  Commenter
   #-----------------------------------------------

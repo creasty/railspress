@@ -58,7 +58,7 @@ define [
 
       Alert
         title: 'このユーザを削除しますか？'
-        message: '一度削除するともとに戻すことはできません。'
+        message: '関連するデータも全て削除します。<br />一度削除したユーザは復元することができません。'
         type: 'danger'
         btns: [
           { text: '削除', action: 'destroy', type: 'danger' }

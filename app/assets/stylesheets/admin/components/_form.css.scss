@@ -303,7 +303,7 @@ label.checkbox > input:checked:after {
 	background: $body-bg-color;
 	height: 35px;
 	font-size: 12px;
-	color: #fff !important;
+	color: #fff;
 	cursor: pointer;
 	padding: 0 20px;
 	text-align: center;
@@ -317,8 +317,11 @@ label.checkbox > input:checked:after {
 		background: darken($body-bg-color, 5%);
 	}
 
-	&:active {
-		color: #fff;
+	&:active,
+	&.active,
+	&.linked {
+		color: rgba(#fff, .7);
+		background: darken($body-bg-color, 10%);
 		@include box-shadow(inset 0 2px 0 rgba(#000, .15));
 	}
 
@@ -358,6 +361,11 @@ $btn-color-list:
 
 		&:hover {
 			background: darken(nth($btn-color, 2), 5%) !important;
+		}
+		&:active,
+		&.active,
+		&.linked {
+			background: darken(nth($btn-color, 2), 10%) !important;
 		}
 	}
 }

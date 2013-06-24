@@ -1,34 +1,37 @@
 # coding: utf-8
 
-class OauthController < ApplicationController
+require 'open-uri'
+
+
+class OauthsController < ApplicationController
 
   def callback
-
-    destroy false if session[:oauth_data]
+    session[:oauth_data] = nil if session[:oauth_data]
 
     account = request.env['omniauth.auth']
     provider = account[:provider]
 
     was_created = false
 
-    @oauth = Oauth.find_or_create_by_provider_and_uid provider, account[:uid] do
-      was_created = true
-    end
+    @oauth = Oauth.find_or_create_by_provider_and_uid provider, account[:uid] { was_created = true }
 
     oauth_data = {
       uid:      account[:uid],
       provider: provider,
       name:     account[:info][:name],
-      user_id:  @oauth.user.try(&:id),
       email:    "#{provider}.#{account[:uid]}@creasty.com"
     }
 
     unless @oauth.user.present?
-      @user = User.new name: oauth_data[:name], email: oauth_data[:email]
+      if user_signed_in? && current_user
+        oauth_data[:user_id] = current_user.id
+      else
+        @user = User.new name: oauth_data[:name], email: oauth_data[:email]
 
-      if @user.save validate: false
-        @oauth.update_attributes user_id: @user.id
-        oauth_data[:user_id] = @user.id
+        if @user.save validate: false
+          @oauth.update_attributes user_id: @user.id
+          oauth_data[:user_id] = @user.id
+        end
       end
     end
 
@@ -39,6 +42,7 @@ class OauthController < ApplicationController
       avatar_image = open URI.parse(oauth_data[:image_url]) rescue nil
 
       @oauth.update_attributes(
+        user_id:          oauth_data[:user_id],
         token:            account[:credentials][:token],
         token_expires_at: account[:credentials][:expires_at],
         avatar:           avatar_image
@@ -50,6 +54,7 @@ class OauthController < ApplicationController
       avatar_image = open URI.parse(oauth_data[:image_url]) rescue nil
 
       @oauth.update_attributes(
+        user_id:      oauth_data[:user_id],
         token:        account[:credentials][:token],
         token_secret: account[:credentials][:secret],
         avatar:       avatar_image
@@ -58,20 +63,14 @@ class OauthController < ApplicationController
     end
 
     session[:oauth_data] = oauth_data
-    sign_in @oauth.user, bypass: true
-
-=begin
-    if was_created
-      redirect_to commenter_path
-    else
-      redirect_to root_path
-    end
-=end
+    sign_in @oauth.user, bypass: true unless user_signed_in?
   end
 
-  def destroy(redirect = true)
+  def destroy
+    @oauth = current_user.oauths.find_by_provider params[:provider]
+    @oauth.destroy
     session[:oauth_data] = nil
-    redirect_to root_path if redirect
+    render nothing: true
   end
 
 end

@@ -35,7 +35,7 @@
             - if 'new' == action_name
               = f.text_field :password, placeholder: 'パスワードを入力', class: 'text block', autocomplete: false
             - else
-              = f.password_field :password, placeholder: 'パスワードを変更する場合は入力', class: 'text block', autocomplete: false
+              = f.password_field :password, value: '', placeholder: 'パスワードを変更する場合は入力', class: 'text block', autocomplete: false
 
         %tr
           %td
@@ -56,16 +56,73 @@
 
       %h2 ソーシャルアカウント
 
-      %table.form
-        %tr
-          %td.label Facebook
-          %td
-            = button_tag 'Facebook アカウントと連動', class: 'btn btn-success'
+      - if @user.id == current_user.id
 
-        %tr
-          %td Twitter
-          %td
-            = button_tag 'Twitter アカウントと連動', class: 'btn btn-success'
+        %table.form
+          %tr
+            %td.label Facebook
+            %td
+              - if @user.facebook?
+                = button_tag '接続しています', class: 'btn btn-success ui-auth-facebook linked'
+              - else
+                = button_tag 'Facebook アカウントに接続', class: 'btn btn-success ui-auth-facebook'
+
+          %tr
+            %td Twitter
+            %td
+              - if @user.twitter?
+                = button_tag '接続しています', class: 'btn btn-success ui-auth-twitter linked'
+              - else
+                = button_tag 'Twitter アカウントに接続', class: 'btn btn-success ui-auth-twitter'
+
+      - else
+
+        %table.table.table-vhead
+          %tr
+            %th Facebook
+            %td
+              - if @user.facebook?
+                Facebook アカウントに接続済み
+              - else
+                接続していません
+
+          %tr
+            %th Twitter
+            %td
+              - if @user.twitter?
+                Twitter アカウントに接続済み
+              - else
+                接続していません
+
+
+      %h2 ログイン状況
+
+      %table.table.table-vhead
+        %tbody
+          %tr
+            %th ログイン回数
+            %td
+              #{@user.sign_in_count} 回
+
+          %tr
+            %th 現在のログインセッション
+            %td
+              - if @user.current_sign_in_at.present?
+                = @user.current_sign_in_at.strftime '%Y.%m.%d %H:%M'
+                %br
+                = @user.current_sign_in_ip
+              - else
+                現在ログインしていません
+
+          %tr
+            %th 過去のログインセッション
+            %td
+              - if @user.last_sign_in_at.present?
+                = @user.last_sign_in_at.strftime '%Y.%m.%d %H:%M'
+                %br
+                = @user.last_sign_in_ip
+              - else
+                過去のログイン情報がありません
 
 
 
