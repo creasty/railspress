@@ -2,6 +2,15 @@
 - content_for :menubar do
   = link_to '', '#', class: 'icon-plus', title: 'メディアを追加'
 
+- content_for :modal_header do
+  - if 'thumbnail' == params[:modal]
+    %h2 サムネイルを選択
+  - else
+    %h2 メディアを選択
+
+- content_for :modal_footer do
+  = button_tag '挿入する', class: 'btn btn-primary'
+
 
 #pocket_body
   #main.loader

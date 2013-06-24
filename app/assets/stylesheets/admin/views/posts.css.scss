@@ -8,6 +8,8 @@ body#posts {
 		// @include box-shadow(0 1px 4px rgba(#000, .1));
 		@include inline-block;
 		overflow: hidden;
+		@include background-image(linear-gradient(-45deg, rgba(#fff, .05) 25%, transparent 25%, transparent 50%, rgba(#fff, .05) 50%, rgba(#fff, .05) 75%, transparent 75%, transparent));
+		@include background-size(20px 20px);
 
 		&:before {
 			content: "";
@@ -129,22 +131,13 @@ body#posts.edit {
 		}
 	}
 
-	#post_thumbnail_preview {
+	#post_thumbnail {
 		margin: 0;
+		width: 260px;
+		height: 184px;
 
 		&:before {
 			@include box-shadow(inset 0 0 0 1px rgba(#000, .5));
-		}
-
-		img,
-		.sample {
-			width: 260px;
-			height: 184px;
-		}
-
-		.sample {
-			@include background-image(linear-gradient(-45deg, rgba(#fff, .05) 25%, transparent 25%, transparent 50%, rgba(#fff, .05) 50%, rgba(#fff, .05) 75%, transparent 75%, transparent));
-			@include background-size(20px 20px);
 		}
 	}
 

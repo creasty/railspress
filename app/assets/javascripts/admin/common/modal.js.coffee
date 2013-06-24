@@ -1,6 +1,9 @@
 
 define ['jquery'], ($) ->
 
+  $modals = {}
+  uuid = 0
+
   class Modal
     constructor: (@config) ->
       @config = $.extend
@@ -25,6 +28,7 @@ define ['jquery'], ($) ->
       @$modal.append @$closebtn, @$body
       @$popup.append @$modal, @$overlay
       @$popup.appendTo $ 'body'
+      @uuid = "modal_iframe_#{uuid++}"
 
     events: ->
       @$overlay.on 'click', => @close()
@@ -59,7 +63,7 @@ define ['jquery'], ($) ->
         @$body.append @$node = $ @config.content
         onload()
       else if @config.iframe
-        $iframe = $ '<iframe frameborder="0"></iframe>'
+        $iframe = $ "<iframe name=\"#{@uuid}\" frameborder=\"0\" allowtransparency=\"true\" width=\"100%\" height=\"100%\"></iframe>"
         $iframe.attr 'src', @config.content
         @$body.append @$node = $iframe
         $iframe.on 'load', onload

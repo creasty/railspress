@@ -5,6 +5,7 @@ require [
   'app/models/post'
   'common/notify'
   'common/alert'
+  'common/modal'
   'ace/ace'
 
   'backbone.syphon'
@@ -22,6 +23,7 @@ require [
   Post
   Notify
   Alert
+  Modal
   ACE
 ) ->
 
@@ -172,6 +174,7 @@ require [
     events:
       'scroll': 'hideDatepicker'
       'click #btn_delete': 'destroy'
+      'click #post_thumbnail': 'thumbnailModal'
 
     initialize: ->
       @$form =
@@ -221,6 +224,10 @@ require [
                 window.location.href = Post.urlRoot
               error: ->
                 UpdateNotify.fail '記事の削除に失敗しました'
+
+    thumbnailModal: ->
+      modal = Modal content: '/admin/media?modal=thumbnail', iframe: true
+      modal.open()
 
 
   #  Initialize Backbone App

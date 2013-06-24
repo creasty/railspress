@@ -6,10 +6,10 @@
 	@include popup-animation;
 
 	position: fixed;
-	top: 60px;
-	bottom: 60px;
-	left: 60px;
-	right: 60px;
+	top: 40px;
+	bottom: 40px;
+	left: 40px;
+	right: 40px;
 	z-index: 2001;
 
 	> .close-btn {
@@ -23,6 +23,7 @@
 		cursor: pointer;
 		@include border-radius(50%);
 		@include transition(background .3s);
+		z-index: 4000;
 
 		&:before, &:after {
 			content: "";
@@ -47,65 +48,76 @@
 		}
 	}
 
-	.modal-header {
-		height: 60px;
-		background: $menubar-bg-color;
-		@include border-radius(3px 3px 0 0);
-
-		h2 {
-			font-size: 20px;
-			padding: 20px 20px;
-			line-height: 1;
-			letter-spacing: 1px;
-			color: $main-text-color;
-		}
-	}
-
-	.modal-content {
-		position: absolute;
-		top: 60px;
-		left: 0;
-		right: 0;
-		bottom: 75px;
-		color: $main-text-color;
-		padding: 20px;
-
-		.modal-body,
-		.modal-side {
-			position: absolute;
-			top: 0;
-			bottom: 0;
-			overflow-x: hidden;
-			@include box-sizing(border-box);
-		}
-
-		.modal-body {
-			left: 0;
-			right: 300px;
-			padding: 20px;
-		}
-		.modal-side {
-			@extend .pocket_side;
-
-			right: 0;
-			width: 300px;
-			padding: 20px;
-			background: $body-bg-color;
-			color: $body-text-color;
-		}
-	}
-	.no-footer .modal-content {
-		bottom: 0 !important;
-	}
-
-	.modal-footer {
-		position: absolute;
-		bottom: 0;
+	> div {
+		position: relative;
 		width: 100%;
-		height: 75px;
-		background: $menubar-bg-color;
-		padding: 20px;
-		@include box-sizing(border-box);
-		@include border-radius(0 0 3px 3px);
+		height: 100%;
 	}
+}
+
+
+.modal-header {
+	height: 60px;
+	background: $menubar-bg-color;
+	@include border-radius(3px 3px 0 0);
+
+	h2 {
+		font-size: 20px;
+		padding: 20px 20px;
+		line-height: 1;
+		letter-spacing: 1px;
+		color: $main-text-color;
+	}
+}
+
+.modal-content {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	color: $main-text-color;
+	padding: 20px;
+
+	.has-header & {
+		top: 60px;
+	}
+	.has-footer & {
+		bottom: 75px;
+	}
+
+	.modal-body,
+	.modal-side {
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		overflow-x: hidden;
+		@include box-sizing(border-box);
+	}
+
+	.modal-body {
+		left: 0;
+		right: 300px;
+		padding: 20px;
+	}
+	.modal-side {
+		@extend .pocket_side;
+
+		right: 0;
+		width: 300px;
+		padding: 20px;
+		background: $body-bg-color;
+		color: $body-text-color;
+	}
+}
+
+.modal-footer {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	height: 75px;
+	background: $menubar-bg-color;
+	padding: 20px;
+	@include box-sizing(border-box);
+	@include border-radius(0 0 3px 3px);
 }

@@ -11,18 +11,21 @@
     = javascript_include_tag 'admin/require-config'
     = javascript_include_tag 'require', data: { main: 'admin/application' }
     = view_script_tag
+
     = yield :js
 
     = render 'admin/application/flash', flash: flash
 
   %body{ id: controller_name, class: action_name }
 
-    - if is_admin?
-      = render 'header'
+    #modal_container{ class: [content_for?(:modal_header) && 'has-header', content_for?(:modal_footer) && 'has-footer'] }
 
-      #menubar
-        %h1
-          = document_title
-          = yield :menubar
+      - if content_for? :modal_header
+        .modal-header
+          = yield :modal_header
 
-    = yield
+      = yield
+
+      - if content_for? :modal_footer
+        .modal-footer
+          = yield :modal_footer
