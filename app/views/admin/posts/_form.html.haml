@@ -82,17 +82,15 @@
     %section
       %h2 サムネイル
 
-      #post_thumbnail_preview.post-thumbnail
-        - if false
-          =# image_tag @post.thumbnail.asset.url(:thumbnail)
+      #post_thumbnail.post-thumbnail
+        - if @post.thumbnail.present?
+          = image_tag @post.thumbnail.asset.url(:thumbnail)
 
           .edit.has-two
             %i.icon-image
             %i.icon-ban
 
         - else
-          .sample
-
           .edit.has-one
             %i.icon-plus
 

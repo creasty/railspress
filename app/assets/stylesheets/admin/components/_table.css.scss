@@ -4,11 +4,25 @@
 table.form {
 	width: 100%;
 
+	#main & {
+		width: 60%;
+
+		td.label {
+			width: 200px;
+		}
+	}
+
 	tr + tr > td {
 		padding-top: 10px;
 	}
-	td + td {
-		padding-left: 10px;
+	td {
+		& + td {
+			padding-left: 10px;
+		}
+
+		> img {
+			vertical-align: middle;
+		}
 	}
 
 	tr.doubled > td {
@@ -47,6 +61,10 @@ table.table {
 
 	td {
 		line-height: 1.35;
+
+		> img {
+			vertical-align: middle;
+		}
 	}
 	td,
 	th {
@@ -68,6 +86,7 @@ table.table {
 		}
 
 		th {
+			font-weight: bold;
 			cursor: default;
 			@include experimental(user-select, none);
 
@@ -101,9 +120,8 @@ table.table {
 				}
 			}
 		}
-
-
 	}
+
 	tbody {
 		tr {
 			@include transition(background-color .3s);
@@ -122,17 +140,24 @@ table.table {
 		}
 
 		td {
-
 			> input[type=checkbox] {
 				margin: 0;
+			}
+			&.controller .btn {
+				margin-right: 10px;
 			}
 		}
 	}
 
-	thead th,
-	.headerBlock th {
-		// background: $sub-base-color;
-		font-weight: bold;
+	&.table-vhead tbody {
+		border-top: 1px solid $main-rule-color;
+
+		tr th {
+			background: $menubar-bg-color;
+			font-weight: bold;
+			color: rgba(#000, .5);
+			vertical-align: middle;
+		}
 	}
 }
 

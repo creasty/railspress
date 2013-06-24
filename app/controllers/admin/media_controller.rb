@@ -15,7 +15,13 @@ class Admin::MediaController < Admin::ApplicationController
         render json: @media.map { |m| m.to_backbone_json }
       end
 
-      format.html { render }
+      format.html do
+        if params[:modal]
+          render layout: 'admin/modal'
+        else
+          render
+        end
+      end
     end
   end
 

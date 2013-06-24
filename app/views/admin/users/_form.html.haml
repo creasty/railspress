@@ -1,47 +1,140 @@
 
-#main
-  = form_for [:admin, @user] do |f|
+#pocket_body
+  #main
+    = form_for [:admin, @user], html: { id: 'user_form', 'data-id' => params[:id] } do |f|
 
-    %table.form
-      %tr
-        %td
-          = f.label :name, '名前'
-        %td
-          = f.text_field :name, class: 'text'
+      %h2.top-title プロフィール
 
-      %tr
-        %td
-          = f.label :email, 'メールアドレス'
-        %td
-          = f.text_field :email, class: 'text'
+      %table.form
+        %tr
+          %td.label
+            アバター
+          %td
+            = image_tag avatar_url(@user, 64), alt: '', size: '64x64'
 
-      - if 'new' == action_name
+        %tr
+          %td
+            = f.label :name, '名前'
+          %td
+            = f.text_field :name, placeholder: '名前を入力', class: 'text block'
+
+
+      %h2 アカウント情報
+
+      %table.form
+        %tr
+          %td.label
+            = f.label :email, 'メールアドレス'
+          %td
+            = f.text_field :email, placeholder: 'メールアドレスを入力', class: 'text block'
+
         %tr
           %td
             = f.label :password, 'パスワード'
           %td
-            = f.text_field :password, class: 'text'
+            - if 'new' == action_name
+              = f.text_field :password, placeholder: 'パスワードを入力', class: 'text block', autocomplete: false
+            - else
+              = f.password_field :password, value: '', placeholder: 'パスワードを変更する場合は入力', class: 'text block', autocomplete: false
 
         %tr
           %td
             = f.label :password_confirmation, 'パスワード (確認用)'
           %td
-            = f.text_field :password_confirmation, class: 'text'
+            - if 'new' == action_name
+              = f.text_field :password_confirmation, placeholder: 'パスワードを入力', class: 'text block', autocomplete: false
+            - else
+              = f.password_field :password_confirmation, placeholder: 'パスワードを変更する場合は入力', class: 'text block', autocomplete: false
+
+        %tr
+          %td
+            = f.label :admin, 'ユーザ権限'
+          %td
+            .select
+              = f.select :admin, { 'コメンター' => 0, '管理者' => 1 }
+
+
+      %h2 ソーシャルアカウント
+
+      - if @user.id == current_user.id
+
+        %table.form
+          %tr
+            %td.label Facebook
+            %td
+              - if @user.facebook?
+                = button_tag '接続しています', class: 'btn btn-success ui-auth-facebook linked'
+              - else
+                = button_tag 'Facebook アカウントに接続', class: 'btn btn-success ui-auth-facebook'
+
+          %tr
+            %td Twitter
+            %td
+              - if @user.twitter?
+                = button_tag '接続しています', class: 'btn btn-success ui-auth-twitter linked'
+              - else
+                = button_tag 'Twitter アカウントに接続', class: 'btn btn-success ui-auth-twitter'
 
       - else
-        %tr
-          %td
-            = f.label :password, 'パスワード'
-          %td
-            = f.password_field :password, value: '', class: 'text'
 
-        %tr
-          %td
-            = f.label :password_confirmation, 'パスワード (確認用)'
-          %td
-            = f.password_field :password_confirmation, class: 'text'
+        %table.table.table-vhead
+          %tr
+            %th Facebook
+            %td
+              - if @user.facebook?
+                Facebook アカウントに接続済み
+              - else
+                接続していません
 
-      %tr.doubled
-        %td{ colspan: 2 }
-          = f.submit nil, class: 'btn btn-primary'
+          %tr
+            %th Twitter
+            %td
+              - if @user.twitter?
+                Twitter アカウントに接続済み
+              - else
+                接続していません
+
+
+      %h2 ログイン状況
+
+      %table.table.table-vhead
+        %tbody
+          %tr
+            %th ログイン回数
+            %td
+              #{@user.sign_in_count} 回
+
+          %tr
+            %th 現在のログインセッション
+            %td
+              - if @user.current_sign_in_at.present?
+                = @user.current_sign_in_at.strftime '%Y.%m.%d %H:%M'
+                %br
+                = @user.current_sign_in_ip
+              - else
+                現在ログインしていません
+
+          %tr
+            %th 過去のログインセッション
+            %td
+              - if @user.last_sign_in_at.present?
+                = @user.last_sign_in_at.strftime '%Y.%m.%d %H:%M'
+                %br
+                = @user.last_sign_in_ip
+              - else
+                過去のログイン情報がありません
+
+
+
+#pocket_side
+
+  %section
+    %h2 保存
+
+    = button_tag '保存する', id: 'btn_save', class: 'btn btn-primary block'
+
+  %section
+    %h2 ユーザを削除
+
+    = button_tag '削除する', id: 'btn_delete', class: 'btn btn-danger block'
 

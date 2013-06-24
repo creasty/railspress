@@ -27,7 +27,6 @@ class Admin::PostsController < Admin::ApplicationController
       end
       format.html { render }
     end
-
   end
 
   def new
@@ -75,7 +74,6 @@ class Admin::PostsController < Admin::ApplicationController
         end
       end
     end
-
   end
 
   def destroy
