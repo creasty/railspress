@@ -2,12 +2,9 @@ class Oauth < ActiveRecord::Base
 
   attr_accessible :uid, :provider, :token, :token_secret, :token_expires_at, :avatar, :user_id
 
-  require 'open-uri'
-
   #  Association
   #-----------------------------------------------
   belongs_to :user
-  has_many :entries
 
   #  Validation
   #-----------------------------------------------

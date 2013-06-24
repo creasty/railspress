@@ -1,45 +1,7 @@
-body#posts.new,
-body#posts.edit {
 
-	#post_form {
-		#post_title {
-			font-size: 20px;
-			height: 60px;
-			padding: 0 20px;
-			width: 100%;
-		}
-	}
-
-	#post_content_ace {
-		position: absolute;
-		top: 112px;
-		left: 0;
-		bottom: 0;
-		right: 0;
-
-		.ace_scroller {
-			background: none;
-		}
-		.ace_gutter {
-			background: none;
-		}
-		.ace_gutter-cell {
-			color: #bbb;
-		}
-		.ace_gutter-active-line {
-			background: #f1f0ee;
-		}
-		.ace_active-line {
-			background: #f1f0ee;
-		}
-		.ace_selection {
-			background: #eee8d5;
-		}
-		.ace_cursor {
-			border-left: 1px solid $body-bg-color;
-			@include transition(.3s opacity);
-		}
-	}
+/*=== Common
+==============================================================================================*/
+body#posts {
 
 	.post-thumbnail {
 		position: relative;
@@ -116,6 +78,54 @@ body#posts.edit {
 			visibility: visible;
 			opacity: 1;
 			@include transform(scale(1));
+		}
+	}
+
+}
+
+
+/*=== Form
+==============================================================================================*/
+body#posts.new,
+body#posts.edit {
+
+	#post_form {
+		#post_title {
+			font-size: 20px;
+			height: 60px;
+			padding: 0 20px;
+			width: 100%;
+		}
+	}
+
+	#post_content_ace {
+		position: absolute;
+		top: 112px;
+		left: 0;
+		bottom: 0;
+		right: 0;
+
+		.ace_scroller {
+			background: none;
+		}
+		.ace_gutter {
+			background: none;
+		}
+		.ace_gutter-cell {
+			color: #bbb;
+		}
+		.ace_gutter-active-line {
+			background: #f1f0ee;
+		}
+		.ace_active-line {
+			background: #f1f0ee;
+		}
+		.ace_selection {
+			background: #eee8d5;
+		}
+		.ace_cursor {
+			border-left: 1px solid $body-bg-color;
+			@include transition(.3s opacity);
 		}
 	}
 

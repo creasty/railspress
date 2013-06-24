@@ -26,12 +26,20 @@ require [
   UpdateNotify = Notify()
 
   OAuth.attachTo window
-  OAuthButton.attachTo '.ui-auth-twitter', provider: 'twitter'
-  OAuthButton.attachTo '.ui-auth-facebook', provider: 'facebook'
+
+  OAuthButton.attachTo '.ui-auth-twitter',
+    provider: 'twitter'
+    defaultText: 'Twitter に接続します'
+
+  OAuthButton.attachTo '.ui-auth-facebook',
+    provider: 'facebook'
+    defaultText: 'Facebook に接続します'
+
 
   #  Model
   #-----------------------------------------------
   User = new User()
+
 
   #  App View
   #-----------------------------------------------
@@ -91,6 +99,7 @@ require [
       e.preventDefault()
       false
 
+
   #  Sidebar View
   #-----------------------------------------------
   class SidebarView extends Backbone.View
@@ -104,13 +113,13 @@ require [
     initialize: ->
       @$form = $ '#user_form'
 
-    save: (e) ->
+    save: ->
       @$form.trigger 'save'
 
     destroy: ->
       Alert
-        title: "ユーザを削除しますか？"
-        message: '一度削除するともとに戻すことはできません。'
+        title: 'ユーザを削除しますか？'
+        message: '関連するデータも全て削除します。<br />一度削除したユーザは復元することができません。'
         type: 'danger'
         btns: [
           { text: '削除', action: 'destroy', type: 'danger' }

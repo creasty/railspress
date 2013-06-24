@@ -1,9 +1,11 @@
 # coding: utf-8
 
+require 'open-uri'
+
+
 class OauthsController < ApplicationController
 
   def callback
-
     session[:oauth_data] = nil if session[:oauth_data]
 
     account = request.env['omniauth.auth']
@@ -11,9 +13,7 @@ class OauthsController < ApplicationController
 
     was_created = false
 
-    @oauth = Oauth.find_or_create_by_provider_and_uid provider, account[:uid] do
-      was_created = true
-    end
+    @oauth = Oauth.find_or_create_by_provider_and_uid provider, account[:uid] { was_created = true }
 
     oauth_data = {
       uid:      account[:uid],
@@ -63,10 +63,7 @@ class OauthsController < ApplicationController
     end
 
     session[:oauth_data] = oauth_data
-
-    unless user_signed_in?
-      sign_in @oauth.user, bypass: true
-    end
+    sign_in @oauth.user, bypass: true unless user_signed_in?
   end
 
   def destroy
