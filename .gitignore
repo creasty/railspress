@@ -14,3 +14,5 @@ public/system
 
 *.sublime-project
 *.sublime-workspace
+
+vendor/assets/components

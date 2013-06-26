@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "ace": "git://github.com/ajaxorg/ace.git",
     "backbone": "latest",
     "backbone-pageable": "latest",
     "backbone.syphon": "latest",
