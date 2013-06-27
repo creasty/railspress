@@ -51,7 +51,7 @@
             = f.label :admin, 'ユーザ権限'
           %td
             .select
-              = f.select :admin, { 'コメンター' => 0, '管理者' => 1 }
+              = f.select :admin, { 'コメンター' => 0, '管理者' => 1 }, selected: (@user.admin? ? 1 : 0)
 
 
       %h2 ソーシャルアカウント

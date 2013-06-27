@@ -39,9 +39,9 @@ RailsPress::Application.routes.draw do
 
   #  Commenter
   #-----------------------------------------------
-  get '/commenter' => 'users#edit'
-  put '/commenter' => 'users#update'
-  delete '/commenter' => 'users#destroy'
+  get :commenter, to: 'users#edit'
+  put :commenter, to: 'users#update'
+  delete :commenter, to: 'users#destroy'
 
   #  Blog
   #-----------------------------------------------
