@@ -9,18 +9,62 @@ class Admin::CommentsController < Admin::ApplicationController
           .order('created_at DESC')
           .includes :post
 
-        render json: @comments.map { |comment| comment.to_backbone_json }
+        render json: @comments.map { |comment| comment.post.to_backbone_json }
       end
       format.html { render }
     end
   end
 
-  def show
+  def thread
     respond_to do |format|
-      @comment = Comment
-        .where('post_id = ?', params[comment][:post_id])
-        .order('created_at DESC')
-        .includes :post
+      format.json do
+        @comments = Comment
+          .where('post_id = ?', params[:post_id])
+          .order('created_at DESC')
+
+        render json: @comments.map { |comment| comment.to_backbone_json }
+      end
+    end
+  end
+
+  def create
+    respond_to do |format|
+      format.json do
+        @comment = Comment.new params[:comment]
+
+        if @comment.save
+          render json: @comment.to_backbone_json
+        else
+          render json: @comment.errors.full_messages,
+            status: :unprocessable_entity
+        end
+      end
+    end
+  end
+
+  def update
+    respond_to do |format|
+      format.json do
+        @comment = Comment.find params[:id]
+
+        if @comment.update_attributes params[:comment]
+          render json: @comment.to_backbone_json
+        else
+          render json: @comment.errors.full_messages,
+            status: :unprocessable_entity
+        end
+      end
+    end
+  end
+
+  def destroy
+    @comment = Comment.find params[:id]
+    @comment.destroy
+
+    respond_to do |format|
+      format.json do
+        render json: {}
+      end
     end
   end
 

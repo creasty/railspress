@@ -13,8 +13,8 @@ RailsPress::Application.routes.draw do
     resources :pages
     resources :posts do
       get :tags, on: :collection
+      resources :comments
     end
-    resources :comments
     resources :users
     resources :media
   end

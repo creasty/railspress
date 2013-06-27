@@ -62,7 +62,7 @@ SimpleNavigation::Configuration.run do |navigation|
     #-----------------------------------------------
     primary.item :comments,
       document_title('comment', 'index'),
-      admin_comments_path,
+      admin_post_comments_path,
       highlights_on: :subpath,
       link: { class: 'icon-comment' }
 
