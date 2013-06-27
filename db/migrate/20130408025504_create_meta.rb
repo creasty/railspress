@@ -1,6 +1,6 @@
 class CreateMeta < ActiveRecord::Migration
   def change
-    create_table :meta do |t|
+    create_table :metas do |t|
       t.references :object, polymorphic: true
       t.string :key
       t.text :value
@@ -13,7 +13,7 @@ class CreateMeta < ActiveRecord::Migration
   end
 
   def self.down
-    change_table :meta do |t|
+    change_table :metas do |t|
       t.remove_references :object, polymorphic: true
     end
   end

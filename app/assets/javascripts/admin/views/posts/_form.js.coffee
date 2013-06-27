@@ -57,17 +57,16 @@ require [
 
       if id?
         id >>>= 0
-        # Post.fetch data: { id }, success: -> console.log Post
         model = Backbone.Syphon.serialize(@).post
         model.id = id
         Post.id = id
         Post.set model
+        # Post.fetch data: { id }
 
     refresh: ->
       Backbone.Syphon.deserialize @, post: Post.attributes
 
-    render: ->
-      @
+    render: -> @
 
     save: (e) ->
       data = Backbone.Syphon.serialize @
