@@ -39,7 +39,7 @@ SimpleNavigation::Configuration.run do |navigation|
     primary.item :posts,
       document_title('post', 'index'),
       admin_posts_path,
-      highlights_on: :subpath,
+      highlights_on: %r(posts/?(\d+/edit|new|tags)?$),
       link: { class: 'icon-edit' } \
     do |sub|
       sub.item :index,
@@ -61,8 +61,8 @@ SimpleNavigation::Configuration.run do |navigation|
     #  Comments
     #-----------------------------------------------
     primary.item :comments,
-      document_title('comment', 'index'),
-      admin_post_comments_path,
+      document_title('comment', 'inbox'),
+      comments_admin_posts_path,
       highlights_on: :subpath,
       link: { class: 'icon-comment' }
 

@@ -1,0 +1,17 @@
+<div class="inner <%= by_me ? 'right' : 'left' %>">
+	<a href="<%= user_path %>" class="user" target="_blank">
+		<img src="<%= user_avatar %>" alt="" width="64" height="64">
+		<span><%= user_name %></span>
+	</a>
+
+	<div class="box">
+		<div class="comment">
+			<%= content %>
+		</div>
+		<div class="controller">
+			<button class="btn btn-success icon-reply size-small" title="返信"></button>
+			<button class="btn btn-primary icon-edit size-small" title="編集"></button>
+			<button class="btn btn-danger icon-delete size-small" title="削除"></button>
+		</div>
+	</div>
+</div>

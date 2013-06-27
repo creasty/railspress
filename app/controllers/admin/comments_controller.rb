@@ -1,7 +1,7 @@
 
 class Admin::CommentsController < Admin::ApplicationController
 
-  def index
+  def inbox
     respond_to do |format|
       format.json do
         @comments = Comment
@@ -15,7 +15,7 @@ class Admin::CommentsController < Admin::ApplicationController
     end
   end
 
-  def thread
+  def index
     respond_to do |format|
       format.json do
         @comments = Comment
@@ -31,6 +31,7 @@ class Admin::CommentsController < Admin::ApplicationController
     respond_to do |format|
       format.json do
         @comment = Comment.new params[:comment]
+        @comment.user = current_user
 
         if @comment.save
           render json: @comment.to_backbone_json

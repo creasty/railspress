@@ -12,7 +12,11 @@ RailsPress::Application.routes.draw do
 
     resources :pages
     resources :posts do
-      get :tags, on: :collection
+      collection do
+        get :comments, to: 'comments#inbox'
+        get :tags
+      end
+
       resources :comments
     end
     resources :users
