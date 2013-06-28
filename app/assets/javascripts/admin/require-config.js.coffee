@@ -22,7 +22,6 @@
     'backbone.syphon': 'backbone.syphon/lib/backbone.syphon.min'
     'datepicker': 'datepicker/js/bootstrap-datepicker'
     'jcrop': 'jcrop/js/jquery.Jcrop.min'
-    'markdown': 'markdown/lib/markdown'
     'masonry': 'jquery-masonry/jquery.masonry.min'
     'powertip': 'powertip/jquery.powertip.min'
     'selectize': 'selectize/selectize.min'
@@ -41,7 +40,6 @@
     'backbone.pageable': ['backbone']
     'backbone.syphon': ['backbone']
     'datepicker': ['jquery']
-    'hashchange': ['jquery']
     'jcrop': ['jquery', 'css!jcrop/../../css/jquery.Jcrop.min']
     'jquery_ujs': ['jquery']
     'masonry': ['jquery']
