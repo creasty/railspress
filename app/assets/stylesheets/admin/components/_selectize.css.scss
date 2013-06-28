@@ -1,6 +1,5 @@
 
 .selectize-control {
-	@extend %form-base;
 	display: block !important;
 }
 
@@ -100,6 +99,8 @@
 	position: relative;
 }
 .selectize-input {
+	@extend %form-base;
+
 	overflow: hidden;
 	position: relative;
 	z-index: 1;
