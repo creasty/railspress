@@ -206,9 +206,6 @@ GEM
       rspec-core (~> 2.13.0)
       rspec-expectations (~> 2.13.0)
       rspec-mocks (~> 2.13.0)
-    ruby-haml-js (0.0.4)
-      execjs
-      sprockets (>= 2.0.0)
     sass (3.2.8)
     sass-rails (3.2.6)
       railties (~> 3.2.0)
@@ -278,7 +275,6 @@ DEPENDENCIES
   rails (= 3.2.13)
   requirejs-rails
   rspec-rails
-  ruby-haml-js
   sass-rails (~> 3.2.3)
   simple-navigation
   strong_parameters

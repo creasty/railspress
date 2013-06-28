@@ -3,15 +3,15 @@ define [
   'jquery'
   'underscore'
   'backbone'
-  'text!app/templates/comments/message.html'
-], ($, _, Backbone, MessageTemplate) ->
+  'text!app/templates/comments/comment.html'
+], ($, _, Backbone, CommentTemplate) ->
 
-  class MessageView extends Backbone.View
+  class CommentView extends Backbone.View
 
     tagName: 'div'
-    className: 'converstaion'
+    className: 'comment'
 
-    template: _.template MessageTemplate
+    template: _.template CommentTemplate
 
     initialize: ->
       @model.view = @

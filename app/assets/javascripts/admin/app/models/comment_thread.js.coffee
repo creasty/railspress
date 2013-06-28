@@ -8,10 +8,4 @@ define [
 
     urlRoot: '/admin/posts/comments'
 
-    defualts:
-      post_title: ''
-      content:    ''
-      user:       {}
-      created_at: ''
-
     isSynced: -> @get('id')?

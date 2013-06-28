@@ -10,7 +10,7 @@ define [
 
     model: Comment
 
-    url: '/admin/posts/comments.json'
+    url: -> "/admin/posts/#{@post_id}/comments.json"
     mode: 'infinite'
 
     state:
@@ -21,4 +21,4 @@ define [
       totalPages: null
       totalRecords: null
 
-  new CommentsCollection()
+  # new CommentsCollection()

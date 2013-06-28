@@ -6,7 +6,7 @@ body#comments {
 		background: $menubar-bg-color;
 	}
 
-	#comments_list {
+	#threads_list {
 		float: left;
 		width: 280px;
 		height: 100%;
@@ -21,10 +21,7 @@ body#comments {
 			list-style: none;
 			margin: 0;
 			cursor: pointer;
-
-			& + li {
-				border-top: 1px solid $main-rule-color;
-			}
+			border-bottom: 1px solid $main-rule-color;
 
 			&.unread {
 				@include box-shadow(inset 3px 0 0 0 $success-color);
@@ -40,11 +37,14 @@ body#comments {
 
 			strong {
 				@include truncate-line;
-				width: 190px;
+				width: 170px;
 				display: block;
 				float: left;
 			}
 			time {
+				@include truncate-line;
+				width: 70px;
+				display: block;
 				float: right;
 				color: $primary-color;
 			}
@@ -63,7 +63,7 @@ body#comments {
 		}
 	}
 
-	#converstaions {
+	#thread {
 		float: left;
 		width: 100%;
 		height: 100%;
@@ -72,9 +72,10 @@ body#comments {
 		@include box-sizing(border-box);
 		padding: 20px;
 
-		#converstaions_list {
+		#comments_list {
 			margin-top: 100px;
-			.converstaion {
+
+			.comment {
 				@extend .clear-after;
 				margin-bottom: 20px;
 
@@ -82,10 +83,9 @@ body#comments {
 					display: inline-block;
 					max-width: 50%;
 
-					.user {
-						width: 80px;
+					.avatar {
+						width: 64px;
 						color: $menubar-text-color;
-						text-align: center;
 
 						img {
 							display: inline-block;
@@ -94,16 +94,18 @@ body#comments {
 							@include border-radius(50%);
 						}
 
-						span {
-							display: block;
-							margin-top: 10px;
-							font-size: 11px;
-						}
 					}
 					.box {
 						@extend .popup-box;
 						position: relative;
 						padding: 20px;
+
+						.user {
+							display: block;
+							font: 11px;
+							font-weight: bold;
+							margin-bottom: 5px;
+						}
 
 						.controller {
 							height: 0;
@@ -125,31 +127,31 @@ body#comments {
 
 					&.left {
 						float: left;
-						padding-left: 100px;
+						padding-left: 64px + 30px;
 
-						.user {
+						.avatar {
 							float: left;
-							margin-left: -100px;
+							margin-left: -64px - 30px;
 						}
 						.box {
 							&:before {
 								content: "";
-								@include arrow(left, 10px, $main-bg-color, -10px, 15px);
+								@include arrow(left, 10px, $main-bg-color, -10px, 22px);
 							}
 						}
 					}
 					&.right {
 						float: right;
-						padding-right: 100px;
+						padding-right: 64px + 30px;
 
-						.user {
+						.avatar {
 							float: right;
-							margin-right: -100px;
+							margin-right: -64px - 30px;
 						}
 						.box {
 							&:before {
 								content: "";
-								@include arrow(right, 10px, $main-bg-color, -10px, 15px);
+								@include arrow(right, 10px, $main-bg-color, -10px, 22px);
 							}
 						}
 					}
