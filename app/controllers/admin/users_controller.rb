@@ -7,7 +7,7 @@ class Admin::UsersController < Admin::ApplicationController
       format.json do
         if params[:id]
           @user = User.find params[:id]
-          render json: @user.to_backbone_json
+          render json: @user.to_json
         else
           @users = User
             .sort(params[:sort_by], params[:order])
@@ -20,7 +20,7 @@ class Admin::UsersController < Admin::ApplicationController
               total_entries: @users.total_count,
               total_pages: @users.total_pages
             },
-            @users.map { |user| user.to_backbone_json }
+            @users.map { |user| user.to_json }
           ]
         end
       end
@@ -41,7 +41,7 @@ class Admin::UsersController < Admin::ApplicationController
 
     respond_to do |format|
       if @user.save
-        format.json { render json: @user.to_backbone_json }
+        format.json { render json: @user.to_json }
         format.html do
           redirect_to edit_admin_post_path(@user),
             notice: '作成されました'
@@ -69,7 +69,7 @@ class Admin::UsersController < Admin::ApplicationController
 
     respond_to do |format|
       if @user.save
-        format.json { render json: @user.to_backbone_json }
+        format.json { render json: @user.to_json }
       else
         format.json do
           render json: @user.errors.full_messages,

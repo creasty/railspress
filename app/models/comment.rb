@@ -1,6 +1,7 @@
 class Comment < ActiveRecord::Base
 
   include Rails.application.routes.url_helpers
+  include ActionView::Helpers
 
   attr_accessible :content, :post
 
@@ -17,14 +18,23 @@ class Comment < ActiveRecord::Base
 
   #  Public Methods
   #-----------------------------------------------
-  def to_backbone_json
+  def to_json
     {
       id: id,
       content: content,
-      by_me: user.id == current_user.id,
+      by_me: user.id == User.current_user.id,
       user_path: admin_user_path(user),
       user_name: user.name,
       user_avatar: '//placehold.it/64x64',
+    }
+  end
+  def to_thread_json
+    {
+      post_id: post.id,
+      post_title: post.title,
+      excerpt: truncate(content.strip, omission: '', length: 100),
+      user_name: user.name,
+      created_at: created_at.to_i,
     }
   end
 

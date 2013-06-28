@@ -74,7 +74,7 @@ class Post < ActiveRecord::Base
     self.status == 1
   end
 
-  def to_backbone_json
+  def to_json
     {
       id: id,
       title: title,

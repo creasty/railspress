@@ -6,9 +6,10 @@ define [
 
   class CommentThread extends Backbone.Model
 
-    urlRoot: '/admin/posts/comments/threads'
+    urlRoot: '/admin/posts/comments'
 
     defualts:
+      post_title: ''
       content:    ''
       user:       {}
       created_at: ''

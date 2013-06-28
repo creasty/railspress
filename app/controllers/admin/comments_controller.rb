@@ -9,7 +9,7 @@ class Admin::CommentsController < Admin::ApplicationController
           .order('created_at DESC')
           .includes :post
 
-        render json: @comments.map { |comment| comment.post.to_backbone_json }
+        render json: @comments.map { |comment| comment.to_thread_json }
       end
       format.html { render }
     end
@@ -22,7 +22,7 @@ class Admin::CommentsController < Admin::ApplicationController
           .where('post_id = ?', params[:post_id])
           .order('created_at DESC')
 
-        render json: @comments.map { |comment| comment.to_backbone_json }
+        render json: @comments.map { |comment| comment.to_json }
       end
     end
   end
@@ -34,7 +34,7 @@ class Admin::CommentsController < Admin::ApplicationController
         @comment.user = current_user
 
         if @comment.save
-          render json: @comment.to_backbone_json
+          render json: @comment.to_json
         else
           render json: @comment.errors.full_messages,
             status: :unprocessable_entity
@@ -49,7 +49,7 @@ class Admin::CommentsController < Admin::ApplicationController
         @comment = Comment.find params[:id]
 
         if @comment.update_attributes params[:comment]
-          render json: @comment.to_backbone_json
+          render json: @comment.to_json
         else
           render json: @comment.errors.full_messages,
             status: :unprocessable_entity
