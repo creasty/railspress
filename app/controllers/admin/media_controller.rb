@@ -12,7 +12,7 @@ class Admin::MediaController < Admin::ApplicationController
 
         paginate_headers_for @media
 
-        render json: @media.map { |m| m.to_backbone_json }
+        render json: @media.map { |m| m.to_json }
       end
 
       format.html do
@@ -30,7 +30,7 @@ class Admin::MediaController < Admin::ApplicationController
 
     respond_to do |format|
       format.html { render }
-      format.json { render json: @medium.to_backbone_json }
+      format.json { render json: @medium.to_json }
     end
   end
 
@@ -39,7 +39,7 @@ class Admin::MediaController < Admin::ApplicationController
 
     respond_to do |format|
       format.html { render }
-      format.json { render json: @medium.to_backbone_json }
+      format.json { render json: @medium.to_json }
     end
   end
 
@@ -52,7 +52,7 @@ class Admin::MediaController < Admin::ApplicationController
           redirect_to edit_admin_medium_path(@medium), notice: 'Created!'
         end
         format.json do
-          render json: @medium.to_backbone_json
+          render json: @medium.to_json
         end
       else
         format.html do

@@ -7,7 +7,7 @@ class Admin::PostsController < Admin::ApplicationController
       format.json do
         if params[:id]
           @post = Post.find params[:id]
-          render json: @post.to_backbone_json
+          render json: @post.to_json
         else
           @posts = Post
             .sort(params[:sort_by], params[:order])
@@ -21,7 +21,7 @@ class Admin::PostsController < Admin::ApplicationController
               total_entries: @posts.total_count,
               total_pages: @posts.total_pages
             },
-            @posts.map { |post| post.to_backbone_json }
+            @posts.map { |post| post.to_json }
           ]
         end
       end
@@ -42,7 +42,7 @@ class Admin::PostsController < Admin::ApplicationController
 
     respond_to do |format|
       if @post.save
-        format.json { render json: @post.to_backbone_json }
+        format.json { render json: @post.to_json }
         format.html do
           redirect_to edit_admin_post_path(@post),
             notice: '作成されました'
@@ -66,7 +66,7 @@ class Admin::PostsController < Admin::ApplicationController
 
     respond_to do |format|
       if @post.update_attributes params[:post]
-        format.json { render json: @post.to_backbone_json }
+        format.json { render json: @post.to_json }
       else
         format.json do
           render json: @post.errors.full_messages,

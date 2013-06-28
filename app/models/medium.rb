@@ -68,7 +68,7 @@ class Medium < ActiveRecord::Base
     type.split('/')[0]
   end
 
-  def to_backbone_json
+  def to_json
     {
       id: id,
       title: title,

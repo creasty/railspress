@@ -1,26 +1,80 @@
 
 class Admin::CommentsController < Admin::ApplicationController
 
-  def index
+  def inbox
     respond_to do |format|
       format.json do
         @comments = Comment
-          .group('post_id')
+          .select('comments.*')
+          .joins('
+            inner join (
+              select post_id, max(created_at) as latest
+              from comments
+              group by post_id
+            ) as cm
+            on cm.post_id = comments.post_id
+            and cm.latest = comments.created_at
+          ')
           .order('created_at DESC')
           .includes :post
 
-        render json: @comments.map { |comment| comment.to_backbone_json }
+        render json: @comments.map { |comment| comment.to_thread_json }
       end
       format.html { render }
     end
   end
 
-  def show
+  def index
     respond_to do |format|
-      @comment = Comment
-        .where('post_id = ?', params[comment][:post_id])
-        .order('created_at DESC')
-        .includes :post
+      format.json do
+        @comments = Comment
+          .where('post_id = ?', params[:post_id])
+          .order('created_at DESC')
+
+        render json: @comments.map { |comment| comment.to_json }
+      end
+    end
+  end
+
+  def create
+    respond_to do |format|
+      format.json do
+        @comment = Comment.new params[:comment]
+        @comment.user = current_user
+
+        if @comment.save
+          render json: @comment.to_json
+        else
+          render json: @comment.errors.full_messages,
+            status: :unprocessable_entity
+        end
+      end
+    end
+  end
+
+  def update
+    respond_to do |format|
+      format.json do
+        @comment = Comment.find params[:id]
+
+        if @comment.update_attributes params[:comment]
+          render json: @comment.to_json
+        else
+          render json: @comment.errors.full_messages,
+            status: :unprocessable_entity
+        end
+      end
+    end
+  end
+
+  def destroy
+    @comment = Comment.find params[:id]
+    @comment.destroy
+
+    respond_to do |format|
+      format.json do
+        render json: {}
+      end
     end
   end
 

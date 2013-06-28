@@ -12,9 +12,13 @@ RailsPress::Application.routes.draw do
 
     resources :pages
     resources :posts do
-      get :tags, on: :collection
+      collection do
+        get :comments, to: 'comments#inbox'
+        get :tags
+      end
+
+      resources :comments
     end
-    resources :comments
     resources :users
     resources :media
   end
@@ -35,9 +39,9 @@ RailsPress::Application.routes.draw do
 
   #  Commenter
   #-----------------------------------------------
-  get '/commenter' => 'users#edit'
-  put '/commenter' => 'users#update'
-  delete '/commenter' => 'users#destroy'
+  get :commenter, to: 'users#edit'
+  put :commenter, to: 'users#update'
+  delete :commenter, to: 'users#destroy'
 
   #  Blog
   #-----------------------------------------------

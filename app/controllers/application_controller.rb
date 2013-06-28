@@ -2,6 +2,8 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery
 
+  before_filter :set_current_user
+
   #  Rescue From
   #-----------------------------------------------
   rescue_from ActiveRecord::RecordNotFound do |e|
@@ -20,6 +22,9 @@ class ApplicationController < ActionController::Base
   helper_method :is_admin?
   helper_method :is_current_user?
 
+  def set_current_user
+    User.current_user = current_user
+  end
   def is_admin?
     user_signed_in? && current_user.try(:admin?)
   end

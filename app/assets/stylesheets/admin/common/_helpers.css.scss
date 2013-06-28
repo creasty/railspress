@@ -98,3 +98,15 @@ dl.compact > dd { margin-left: 0; }
 	@include popup-box-shadow;
 }
 
+
+/*=== Loader
+==============================================================================================*/
+.loader {
+	&:before {
+		content: "";
+		@include loading-cube;
+	}
+	&.loaded:before {
+		display: none;
+	}
+}

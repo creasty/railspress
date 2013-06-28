@@ -46,9 +46,21 @@ class User < ActiveRecord::Base
   #-----------------------------------------------
   paginates_per 10
 
+  #  Class methods
+  #-----------------------------------------------
+  class << self
+    def current_user=(user)
+      Thread.current[:current_user] = user
+    end
+
+    def current_user
+      Thread.current[:current_user]
+    end
+  end
+
   #  Public Methods
   #-----------------------------------------------
-  def to_backbone_json
+  def to_json
     {
       id: id,
       name: name,
