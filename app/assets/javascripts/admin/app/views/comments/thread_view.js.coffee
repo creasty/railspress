@@ -17,6 +17,7 @@ define [
 
       @listenTo @model, 'change', @render
       @listenTo @model, 'destroy', @remove
+      @listenTo @model, 'change:selected', @renderSelected
 
     render: ->
       @$el.html @template @model.toJSON()
@@ -24,5 +25,7 @@ define [
       @
 
     renderSelected: ->
-      @$el.toggleClass 'selected'
-
+      if @model.get 'selected'
+        @$el.addClass 'selected'
+      else
+        @$el.removeClass 'selected'

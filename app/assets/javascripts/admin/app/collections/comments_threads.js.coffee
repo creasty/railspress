@@ -21,4 +21,7 @@ define [
       totalPages: null
       totalRecords: null
 
+    selected: ->
+      @filter (thread) -> thread.get 'selected'
+
   new CommentsThreadsCollection()

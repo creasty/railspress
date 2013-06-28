@@ -22,9 +22,14 @@ body#comments {
 			margin: 0;
 			cursor: pointer;
 			border-bottom: 1px solid $main-rule-color;
+			@include transition(box-shadow .3s, background .3s);
 
 			&.unread {
 				@include box-shadow(inset 3px 0 0 0 $success-color);
+			}
+
+			&.selected {
+				background: rgba($primary-color, .05);
 			}
 
 			> div {
@@ -55,10 +60,6 @@ body#comments {
 				color: $muted-color;
 				display: block;
 				@include truncate-line;
-			}
-
-			&.selected {
-				background: rgba($primary-color, .05);
 			}
 		}
 	}

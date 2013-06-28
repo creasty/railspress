@@ -23,14 +23,14 @@ class Comment < ActiveRecord::Base
       id: id,
       content: content,
       by_me: user.id == User.current_user.id,
-      user_path: admin_user_path(user),
+      user_path: edit_admin_user_path(user),
       user_name: user.name,
       user_avatar: '//placehold.it/64x64',
     }
   end
   def to_thread_json
     {
-      post_id: post.id,
+      id: post.id,
       post_title: post.title,
       excerpt: truncate(content.strip, omission: '', length: 100),
       user_name: user.name,

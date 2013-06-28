@@ -5,7 +5,16 @@ class Admin::CommentsController < Admin::ApplicationController
     respond_to do |format|
       format.json do
         @comments = Comment
-          .group('post_id')
+          .select('comments.*')
+          .joins('
+            inner join (
+              select post_id, max(created_at) as latest
+              from comments
+              group by post_id
+            ) as cm
+            on cm.post_id = comments.post_id
+            and cm.latest = comments.created_at
+          ')
           .order('created_at DESC')
           .includes :post
 

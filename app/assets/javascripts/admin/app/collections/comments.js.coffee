@@ -21,4 +21,4 @@ define [
       totalPages: null
       totalRecords: null
 
-  # new CommentsCollection()
+  new CommentsCollection()

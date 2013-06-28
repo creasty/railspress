@@ -18,8 +18,8 @@ define [
   Backbone
   CommentsThreads
   Comments
-  CommentsThreadsView
-  CommentsView
+  CommentThreadView
+  CommentView
   Notify
   Alert
   Modal
@@ -57,8 +57,9 @@ define [
           # @loadMore()
 
     addOne: (thread) ->
-      view = new CommentsThreadsView model: thread
+      view = new CommentThreadView model: thread
       $el = view.render().$el
+
       if thread.get('id')?
         @$el.append $el
       else
@@ -76,6 +77,17 @@ define [
     toggle: (e) ->
       $t = $ e.currentTarget
       model = $t.data 'model'
+      post_id = model.id
+
+      return if Comments.post_id == post_id
+
+      CommentsThreads.selected().forEach (thread) ->
+        thread.toggle() if thread.id != model.id
+
+      model.toggle()
+
+      Comments.post_id = post_id
+      Comments.fetch { post_id }
 
     loadMore: (e) ->
       buffer = 200
@@ -102,7 +114,31 @@ define [
     el: '#comments_list'
 
     initialize: ->
+      @listenTo Comments, 'add', @addOne
+      @listenTo Comments, 'reset', @addAll
+      @listenTo Comments, 'change', @bulk
 
+      @listenTo Comments, 'clear', @clear
+
+    bulk: ->
+      console.log 124
+
+    addOne: (comment) ->
+      view = new CommentView model: comment
+      $el = view.render().$el
+
+      if comment.get('id')?
+        @$el.append $el
+      else
+        @$el.prepend $el
+
+    addAll: (_, ob) ->
+      unless @postId == Comments.post_id
+        @postId = Comments.post_id
+        @$el.empty()
+
+      Comments.each @addOne, @
+      Comments.add ob.previousModels, silent: true
 
   #  New Comment View
   #-----------------------------------------------

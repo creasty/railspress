@@ -18,10 +18,10 @@
       = button_tag '送信', class: 'btn btn-primary'
 
     #comments_list
-
+    /
       - 10.times do |i|
         .comment
-          .inner{ class: %w[left right][((i + 2) + (i % 3) + (i % 5)) % 2] }
+          .inner{ class: %w[right left][((i + 2) + (i % 3) + (i % 5)) % 2] }
             = link_to '#', class: 'avatar', target: '_blank' do
               = image_tag '//placehold.it/64x64'
 

@@ -8,4 +8,9 @@ define [
 
     urlRoot: '/admin/posts/comments'
 
+    defualts:
+      selected: false
+
+    toggle: -> @set 'selected', !@get 'selected'
+
     isSynced: -> @get('id')?
