@@ -46,6 +46,8 @@ define [
       @refresh()
 
     refresh: ->
+      return if Users.isProcessing
+
       @$main.removeClass 'loaded'
 
       Users.fetch
@@ -177,12 +179,15 @@ define [
       success = error = 0
 
       notify = ->
-        return if count < success + error
+        return if count > success + error
 
         if error > 0
           UpdateNotify.fail "ユーザの削除に失敗しました (#{error}件)"
         else
           UpdateNotify.success "全 #{count} ユーザを削除しました"
+
+        Users.isProcessing = false
+        Users.trigger 'destroy'
 
       Alert
         title: "#{count} 件のユーザを削除しますか？"
@@ -196,6 +201,8 @@ define [
           if action == 'destroy'
             UpdateNotify.progress 'ユーザを削除しています...'
             al.close()
+
+            Users.isProcessing = true
 
             _.invoke selected, 'destroy',
               wait: true
@@ -213,7 +220,7 @@ define [
       success = error = 0
 
       notify = ->
-        return if count < success + error
+        return if count > success + error
 
         if error > 0
           UpdateNotify.fail "ユーザの更新に失敗しました (#{error}件)"

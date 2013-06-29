@@ -46,6 +46,8 @@ define [
       @refresh()
 
     refresh: ->
+      return if Posts.isProcessing
+
       @$main.removeClass 'loaded'
 
       Posts.fetch
@@ -180,12 +182,15 @@ define [
       success = error = 0
 
       notify = ->
-        return if count < success + error
+        return if count > success + error
 
         if error > 0
           UpdateNotify.fail "記事の削除に失敗しました (#{error}件)"
         else
           UpdateNotify.success "全 #{count} つの記事を削除しました"
+
+        Posts.isProcessing = false
+        Posts.trigger 'destroy'
 
       Alert
         title: "#{count} 件の記事を削除しますか？"
@@ -195,10 +200,12 @@ define [
           { text: '削除', action: 'destroy', type: 'danger' }
           { text: 'キャンセル', action: 'close', align: 'right' }
         ]
-        callback: (action, al) =>
+        callback: (action, al) ->
           if action == 'destroy'
             UpdateNotify.progress '記事を削除しています...'
             al.close()
+
+            Posts.isProcessing = true
 
             _.invoke selected, 'destroy',
               wait: true
@@ -216,7 +223,7 @@ define [
       success = error = 0
 
       notify = ->
-        return if count < success + error
+        return if count > success + error
 
         if error > 0
           UpdateNotify.fail "記事の更新に失敗しました (#{error}件)"

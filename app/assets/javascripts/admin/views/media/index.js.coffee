@@ -218,7 +218,7 @@ define [
       success = error = 0
 
       notify = ->
-        return if count < success + error
+        return if count > success + error
 
         if error > 0
           UpdateNotify.fail "メディアの削除に失敗しました (#{error}件)"

@@ -42,7 +42,10 @@ class Admin::PostsController < Admin::ApplicationController
 
     respond_to do |format|
       if @post.save
-        format.json { render json: @post.to_json }
+        format.json do
+          flash[:notice] = '作成されました'
+          render json: @post.to_json
+        end
         format.html do
           redirect_to edit_admin_post_path(@post),
             notice: '作成されました'
