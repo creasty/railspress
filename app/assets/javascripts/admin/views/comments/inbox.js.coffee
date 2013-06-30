@@ -37,7 +37,7 @@ define [
     el: '#threads_list'
 
     events:
-      'click li': 'toggle'
+      'click li': 'loadComments'
 
     initialize: ->
       @listenTo CommentsThreads, 'add', @addOne
@@ -47,14 +47,16 @@ define [
       @listenTo CommentsThreads, 'addLoader', @addLoader
 
       @$main = $ '#main'
+      @$thread = $ '#thread'
       @$bottomOfList = $ '#bottom_of_list'
 
-      # @$pocketBody.on 'scroll', @loadMore.bind(@)
+      @$el.on 'scroll', @loadMore.bind(@)
 
       CommentsThreads.fetch
         success: =>
           @$main.addClass 'loaded'
-          # @loadMore()
+          @loadComments null, CommentsThreads.at(0).id
+          @loadMore()
 
     addOne: (thread) ->
       view = new CommentThreadView model: thread
@@ -67,36 +69,45 @@ define [
 
     addAll: (_, ob) ->
       CommentsThreads.each @addOne, @
-      CommentsThreads.add ob.previousModels, silent: true
+      CommentsThreads.add ob.previousModels, at: 0, silent: true
 
     addLoader: (op) ->
       thread = new CommentsThreads.model
       thread.set op
       CommentsThreads.add thread
 
-    toggle: (e) ->
-      $t = $ e.currentTarget
-      model = $t.data 'model'
-      post_id = model.id
+    loadComments: (e, post_id) ->
+      unless post_id
+        $t = $ e.currentTarget
+        model = $t.data 'model'
+        post_id = model.id
 
       return if Comments.post_id == post_id
 
       CommentsThreads.selected().forEach (thread) ->
         thread.toggle() if thread.id != model.id
 
-      model.toggle()
+      CommentsThreads.where(id: post_id)[0].toggle()
+
+      @$thread.removeClass 'loaded'
 
       Comments.post_id = post_id
-      Comments.fetch { post_id }
+      Comments.fetch
+        post_id: post_id,
+        success: =>
+          @$thread.addClass 'loaded'
 
     loadMore: (e) ->
-      buffer = 200
+      buffer = 100
 
-      bottomOfViewport = @$pocketBody.scrollTop() + @$pocketBody.height()
+      bottomOfViewport = @$el.scrollTop() + @$el.height()
 
-      bottomOfCollectionView = @$el.offset().top + @$el.height() - buffer
+      last = CommentsThreads.at CommentsThreads.models.length - 1
+      $last = last.view.$el
 
-      unless !CommentsThreads.hasNext() || @isLoading || bottomOfViewport <= bottomOfCollectionView
+      bottomOfCollectionView = @$el.scrollTop() + $last.offset().top + $last.height() - buffer
+
+      if CommentsThreads.hasNext() && !@isLoading && bottomOfViewport > bottomOfCollectionView
 
         @isLoading = true
 
@@ -121,7 +132,6 @@ define [
       @listenTo Comments, 'clear', @clear
 
     bulk: ->
-      console.log 124
 
     addOne: (comment) ->
       view = new CommentView model: comment

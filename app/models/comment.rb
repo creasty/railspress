@@ -16,6 +16,10 @@ class Comment < ActiveRecord::Base
   validates :user, presence: true
   validates :content, presence: true
 
+  #  Kaminari
+  #-----------------------------------------------
+  paginates_per 10
+
   #  Public Methods
   #-----------------------------------------------
   def to_json
