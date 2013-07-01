@@ -48,8 +48,9 @@ class Comment < ActiveRecord::Base
       user_path: edit_admin_user_path(user),
       user_name: user.name,
       user_username: user.username,
-      user_avatar: '//placehold.it/64x64',
-      was_created: was_created
+      user_avatar: '//placehold.it/48x48',
+      timestamp: created_at.to_i,
+      was_created: was_created,
     }
   end
   def to_thread_json

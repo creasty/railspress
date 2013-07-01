@@ -27,12 +27,12 @@ define [
     template: _.template CommentTemplate
 
     events:
-      'click .btn.icon-reply': 'reply'
-      'click .btn.icon-edit': 'edit'
-      'click .btn.icon-delete': 'delete'
+      'click .icon-reply': 'reply'
+      'click .icon-edit': 'edit'
+      'click .icon-delete': 'delete'
 
-      'click .btn.icon-check': 'save'
-      'click .btn.icon-ban': 'discard'
+      'click .icon-check': 'save'
+      'click .icon-ban': 'discard'
 
     initialize: ->
       @model.view = @
@@ -47,10 +47,10 @@ define [
       @$message = @$ '.message'
       @$edit = @$ '.edit'
       @$textarea = @$ '.edit > textarea'
-      @$controller = @$ '.controller'
 
-      @$('.btn').powerTip
-        placement: 'n'
+      @$('time').timeago()
+      @$('.btn-link').powerTip
+        placement: 's'
         smartPlacement: true
 
       @
@@ -60,7 +60,6 @@ define [
 
     edit: ->
       @$message.addClass 'hide'
-      @$controller.addClass 'hide'
       @$edit.removeClass 'hide'
       @$textarea.val @model.get 'content'
 
@@ -77,7 +76,6 @@ define [
 
     discard: ->
       @$message.removeClass 'hide'
-      @$controller.removeClass 'hide'
       @$edit.addClass 'hide'
 
     delete: (e) ->

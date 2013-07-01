@@ -47,6 +47,7 @@ body#comments {
 				width: 170px;
 				display: block;
 				float: left;
+				color: $primary-color;
 			}
 			time {
 				@include truncate-line;
@@ -54,7 +55,7 @@ body#comments {
 				display: block;
 				float: right;
 				text-align: right;
-				color: $primary-color;
+				color: $muted-color;
 			}
 			b {
 				display: block;
@@ -84,14 +85,14 @@ body#comments {
 
 			.comment {
 				@extend .clear-after;
-				margin-bottom: 30px;
-				padding-left: 48px + 30px;
+				margin-bottom: 20px;
+				padding-left: 48px + 20px;
 
 				.avatar {
 					width: 48px;
 					color: $menubar-text-color;
 					float: left;
-					margin-left: -48px - 30px;
+					margin-left: -48px - 20px;
 
 					img {
 						display: inline-block;
@@ -105,14 +106,29 @@ body#comments {
 					position: relative;
 
 					.user {
-						display: block;
-						font: 11px;
-						font-weight: bold;
 						margin-bottom: 10px;
+						@extend .clear-after;
 
-						small {
-							font-weight: normal;
+						a {
+							font-weight: bold;
+
+							small {
+								font-weight: normal;
+								color: $muted-color;
+							}
+						}
+						time {
+							position: absolute;
+							right: 0;
 							color: $muted-color;
+						}
+
+						.controller {
+							margin-top: 5px;
+
+							> .btn-link {
+								margin-right: 10px;
+							}
 						}
 					}
 
@@ -121,18 +137,9 @@ body#comments {
 
 						textarea {
 							display: block;
-							margin-bottom: 20px;
+							margin-bottom: 10px;
 							width: 100%;
 						}
-
-						> .btn {
-							margin-right: 10px;
-						}
-					}
-
-					.controller {
-						margin-top: 20px;
-						margin-bottom: -5px;
 
 						> .btn {
 							margin-right: 10px;
