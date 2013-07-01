@@ -22,10 +22,28 @@ class Comment < ActiveRecord::Base
   #  Public Methods
   #-----------------------------------------------
   def to_json(was_created = false)
+    options = {
+      filter_html: true,
+      autolink: true,
+      no_intraemphasis: true,
+      fenced_code: true,
+      gh_blockcode: true,
+    }
+    settings = {
+      hard_wrap: true,
+      filter_html: [],
+      no_images: true,
+      no_styles: true,
+    }
+    renderer = Redcarpet::Render::HTML.new settings
+    md = Redcarpet::Markdown.new renderer, options
+    md = md.render(content).html_safe
+
     {
       id: id,
       post_id: post.id,
       content: content,
+      markdown: md,
       by_me: user.id == User.current_user.id,
       user_path: edit_admin_user_path(user),
       user_name: user.name,

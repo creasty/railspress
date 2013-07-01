@@ -1,27 +1,25 @@
-<div class="inner <%= by_me ? 'right' : 'left' %>">
-	<a href="<%= user_path %>" class="avatar" target="_blank">
-		<img src="<%= user_avatar %>" alt="" width="64" height="64">
-	</a>
+<a href="<%= user_path %>" class="avatar" target="_blank">
+	<img src="<%= user_avatar %>" alt="" width="64" height="64">
+</a>
 
-	<div class="box">
-		<a href="<%= user_path %>" class="user" target="_blank">
-			<%= user_name %>
-			<small>@<%= user_username %></small>
-		</a>
-		<div class="message">
-			<%= content %>
-		</div>
-		<div class="edit hide">
-			<textarea class="textarea"></textarea>
-			<button class="btn btn-success icon-check size-small" title="保存"></button>
-			<button class="btn btn-danger icon-ban size-small" title="変更を破棄"></button>
-		</div>
-		<div class="controller">
-			<button class="btn btn-success icon-reply size-small" title="返信"></button>
-			<% if (by_me) { %>
-				<button class="btn btn-primary icon-edit size-small" title="編集"></button>
-			<% } %>
-			<button class="btn btn-danger icon-delete size-small" title="削除"></button>
-		</div>
+<div class="box">
+	<a href="<%= user_path %>" class="user" target="_blank">
+		<%= user_name %>
+		<small>@<%= user_username %></small>
+	</a>
+	<div class="message">
+		<%= markdown %>
+	</div>
+	<div class="edit hide">
+		<textarea class="textarea"></textarea>
+		<button class="btn btn-success icon-check size-small" title="保存"></button>
+		<button class="btn btn-danger icon-ban size-small" title="変更を破棄"></button>
+	</div>
+	<div class="controller">
+		<button class="btn btn-success icon-reply size-small" title="返信"></button>
+		<% if (by_me) { %>
+			<button class="btn btn-primary icon-edit size-small" title="編集"></button>
+		<% } %>
+		<button class="btn btn-danger icon-delete size-small" title="削除"></button>
 	</div>
 </div>

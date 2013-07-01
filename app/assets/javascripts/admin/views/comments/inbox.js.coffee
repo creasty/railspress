@@ -159,11 +159,14 @@ define [
       Comments.add ob.previousModels, at: 0, silent: true
 
     loadMore: ->
-      buffer = 100
+      buffer = 345
 
-      bottomOfViewport = @$thread.scrollTop() + @$thread.height()
+      bottomOfViewport = @$el.scrollTop() + @$el.height()
 
-      bottomOfCollectionView = @$el.offset().top + @$el.height() - buffer
+      last = Comments.at Comments.models.length - 1
+      $last = last.view.$el
+
+      bottomOfCollectionView = @$el.scrollTop() + $last.offset().top + $last.height() - buffer
 
       if Comments.hasNext() && !@isLoading && bottomOfViewport > bottomOfCollectionView
 

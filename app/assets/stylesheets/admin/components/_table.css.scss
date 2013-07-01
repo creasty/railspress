@@ -129,13 +129,13 @@ table.table {
 
 			&.selected,
 			&.selected:hover {
-				background-color: rgba($primary-color, .05);
+				background-color: $single-selection-color;
 			}
 		}
 		&.bulk {
 			tr.selected,
 			tr.selected:hover {
-				background-color: rgba($success-color, .05);
+				background-color: $multiple-selection-color;
 			}
 		}
 
