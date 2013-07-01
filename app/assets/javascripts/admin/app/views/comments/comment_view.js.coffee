@@ -31,6 +31,9 @@ define [
       'click .btn.icon-edit': 'edit'
       'click .btn.icon-delete': 'delete'
 
+      'click .btn.icon-check': 'save'
+      'click .btn.icon-ban': 'discard'
+
     initialize: ->
       @model.view = @
 
@@ -40,13 +43,36 @@ define [
     render: ->
       @$el.html @template @model.toJSON()
       @$el.data 'model', @model
+
+      @$message = @$ '.message'
+      @$edit = @$ '.edit'
+      @$textarea = @$ '.edit > textarea'
+      @$controller = @$ '.controller'
+
       @
 
     reply: ->
       CommentsObserver.trigger 'reply', @model
 
     edit: ->
-      CommentsObserver.trigger 'edit', @model
+      @$controller.addClass 'hide'
+      @$edit.removeClass 'hide'
+      @$textarea.val @model.get 'content'
+
+    save: ->
+      notify = Notify()
+      notify.progress '変更を保存しています...'
+
+      @model.save { content: @$textarea.val() },
+        success: =>
+          notify.success '変更を保存しました...'
+          @discard()
+        error: ->
+          notify.fail '保存に失敗しました...'
+
+    discard: ->
+      @$controller.removeClass 'hide'
+      @$edit.addClass 'hide'
 
     delete: (e) ->
       e.preventDefault()

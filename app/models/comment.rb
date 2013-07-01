@@ -24,6 +24,7 @@ class Comment < ActiveRecord::Base
   def to_json(was_created = false)
     {
       id: id,
+      post_id: post.id,
       content: content,
       by_me: user.id == User.current_user.id,
       user_path: edit_admin_user_path(user),
@@ -39,7 +40,7 @@ class Comment < ActiveRecord::Base
       post_title: post.title,
       excerpt: truncate(content.strip, omission: '', length: 100),
       user_name: user.name,
-      timestamp: created_at.to_i * 1e3,
+      timestamp: created_at.to_i,
     }
   end
 
