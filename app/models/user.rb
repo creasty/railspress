@@ -2,7 +2,7 @@ class User < ActiveRecord::Base
 
   include Rails.application.routes.url_helpers
 
-  attr_accessible :email, :password, :password_confirmation, :remember_me, :admin, :name
+  attr_accessible :email, :password, :password_confirmation, :remember_me, :admin, :name, :username
 
   attr_readonly :sign_in_count, :current_sign_in_at, :current_sign_in_ip, :last_sign_in_at, :last_sign_in_ip
 
@@ -12,6 +12,13 @@ class User < ActiveRecord::Base
   has_many :pages, dependent: :destroy
   has_many :oauths, dependent: :destroy
   accepts_nested_attributes_for :oauths
+
+  #  Validation
+  #-----------------------------------------------
+  validates :name, presence: true
+  validates :email, presence: true
+  validates :username, presence: true
+  validates_uniqueness_of :username
 
   #  Scope
   #-----------------------------------------------
@@ -64,10 +71,12 @@ class User < ActiveRecord::Base
     {
       id: id,
       name: name,
+      email: email,
+      username: username,
       admin: admin?,
       avatar: avatar_url,
       edit_link: edit_admin_user_path(self),
-      date: self.created_at.strftime('%Y.%m.%d %H:%M')
+      date: self.created_at.strftime('%Y.%m.%d %H:%M'),
     }
   end
 

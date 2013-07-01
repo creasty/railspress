@@ -52,7 +52,6 @@ define [
 
       @$main = $ '#main'
       @$pocketBody = $ '#pocket_body'
-      @$bottomOfList = $ '#bottom_of_list'
 
       @$pocketBody.on 'scroll', @loadMore.bind(@)
 
@@ -119,7 +118,7 @@ define [
 
       model.toggle()
 
-    loadMore: (e) ->
+    loadMore: ->
       buffer = 200
 
       bottomOfViewport = @$pocketBody.scrollTop() + @$pocketBody.height()

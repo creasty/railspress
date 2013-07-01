@@ -1,111 +1,184 @@
+
 define ['jquery'], ($) ->
-  class TimeAgo
 
-    constructor: (@$element, @timestamp, @i18n) ->
-      @startInterval = 6e4
-      @updateTime()
-      @startTimer()
+  Timeago = (timestamp) ->
+    if timestamp instanceof Date
+      inWords timestamp
+    else if typeof timestamp == 'string'
+      inWords $.timeago.parse timestamp
+    else if typeof timestamp == 'number'
+      inWords new Date timestamp
+    else
+      inWords $.timeago.datetime timestamp
 
-    startTimer: ->
-      @interval = setInterval (=> @refresh()), @startInterval
+  $.extend Timeago,
+    settings:
+      refreshMillis: 60000
+      allowFuture: false
+      localeTitle: false
+      cutoff: 0
+      strings:
+        prefixAgo: null
+        prefixFromNow: null
+        suffixAgo: '前'
+        suffixFromNow: '後'
+        seconds: '少し'
+        minute: '1分'
+        minutes: '%d分'
+        hour: '1時間'
+        hours: '%d時間'
+        day: '1日'
+        days: '%d日'
+        month: '1ヶ月'
+        months: '%dヶ月'
+        year: '1年'
+        years: '%d年'
+        wordSeparator: ''
+        numbers: []
 
-    stopTimer: -> clearInterval @interval
+    inWords: (distanceMillis) ->
+      $l = this.settings.strings
+      prefix = $l.prefixAgo
+      suffix = $l.suffixAgo
 
-    restartTimer: ->
-      @stopTimer()
-      @startTimer()
+      if this.settings.allowFuture && distanceMillis < 0
+        prefix = $l.prefixFromNow
+        suffix = $l.suffixFromNow
 
-    refresh: ->
-      @updateTime()
-      @updateInterval()
+      seconds = Math.abs(distanceMillis) / 1e3
+      minutes = seconds / 60
+      hours = minutes / 60
+      days = hours / 24
+      years = days / 365
 
-    updateTime: ->
-      @$element.each (_, el) => $(el).text @toWords()
+      substitute = (stringOrFunction, number) ->
+        string =
+          if $.isFunction(stringOrFunction)
+          then stringOrFunction(number, distanceMillis)
+          else stringOrFunction
 
-    updateInterval: ->
-      t = @getTimeDistance()
+        value = ($l.numbers && $l.numbers[number]) || number
+        string.replace /%d/i, value
 
-      if 0 <= t <= 44 && @startInterval != 6e4 #1 minute
-        @startInterval = 6e4
-        @restartTimer()
-      else if 45 <= t <= 89 && @startInterval != 6e4 * 22 #22 minutes
-        @startInterval = 6e4 * 22
-        @restartTimer()
-      else if 90 <= t <= 2519 && @startInterval != 6e4 * 30 #half hour
-        @startInterval = 6e4 * 30
-        @restartTimer()
-      else if 2520 <= t && @startInterval != 6e4 * 60 * 12 #half day
-        @startInterval = 6e4 * 60 * 12
-        @restartTimer()
+      words =
+        switch true
+          when seconds < 45
+            substitute $l.seconds, Math.round seconds
+          when seconds < 90
+            substitute $l.minute, 1
+          when minutes < 45
+            substitute $l.minutes, Math.round minutes
+          when minutes < 90
+            substitute $l.hour, 1
+          when hours < 24
+            substitute $l.hours, Math.round hours
+          when hours < 42
+            substitute $l.day, 1
+          when days < 30
+            substitute $l.days, Math.round days
+          when days < 45
+            substitute $l.month, 1
+          when days < 365
+            substitute $l.months, Math.round days / 30
+          when years < 1.5
+            substitute $l.year, 1
+          else
+            substitute $l.years, Math.round years
 
-    toWords: (t) ->
-      "#{@i18n.prefixes.ago}#{@distanceOfTimeInWords(t)}#{@i18n.suffix}"
+      separator = $l.wordSeparator ? ' '
+      $.trim [prefix, words, suffix].join separator
 
-    getTimeDistance: ->
-      timeDistance = new Date().getTime() - @timestamp.getTime()
-      Math.round Math.abs(timeDistance) / 6e4
+    parse: (iso8601) ->
+      s = $.trim(iso8601)
+        .replace(/\.\d+/, '')
+        .replace(/-/g, '/')
+        .replace(/T/, ' ')
+        .replace(/Z/, ' UTC')
+        .replace(/([\+\-]\d\d)\:?(\d\d)/, ' $1$2')
 
-    distanceOfTimeInWords: ->
-      dim = @getTimeDistance()
+      new Date s
 
-      if dim == 0
-        "#{ @i18n.units.minute }#{ @i18n.prefixes.lt }"
-      else if dim == 1
-        "#{ @i18n.units.minute }"
-      else if dim >= 2 and dim <= 44
-        "#{ dim }#{ @i18n.units.minutes }"
-      else if dim >= 45 and dim <= 89
-        "#{ @i18n.prefixes.about }1#{ @i18n.units.hour }"
-      else if dim >= 90 and dim <= 1439
-        "#{ @i18n.prefixes.about }#{ Math.round(dim / 60) }#{ @i18n.units.hours }"
-      else if dim >= 1440 and dim <= 2519
-        "1 #{ @i18n.units.day }"
-      else if dim >= 2520 and dim <= 43199
-        "#{ Math.round(dim / 1440) }#{ @i18n.units.days }"
-      else if dim >= 43200 and dim <= 86399
-        "#{ @i18n.prefixes.about }1#{ @i18n.units.month }"
-      else if dim >= 86400 and dim <= 525599 #1 yr
-        "#{ Math.round(dim / 43200) }#{ @i18n.units.months }"
-      else if dim >= 525600 and dim <= 655199 #1 yr, 3 months
-        "#{ @i18n.prefixes.about }1#{ @i18n.units.year }"
-      else if dim >= 655200 and dim <= 914399 #1 yr, 9 months
-        "#{ @i18n.prefixes.over }1#{ @i18n.units.year }"
-      else if dim >= 914400 and dim <= 1051199 #2 yr minus half minute
-        "#{ @i18n.prefixes.almost }2#{ @i18n.units.years }"
+    datetime: (elem) ->
+      if elem.data 'timestamp'
+        new Date elem.data 'timestamp'
       else
-        "#{ @i18n.prefixes.about }#{ Math.round(dim / 525600) }#{ @i18n.units.years }"
+        iso8601 =
+          if Timeago.isTime(elem)
+          then $(elem).attr 'datetime'
+          else $(elem).attr 'title'
 
-  $.fn.timeago = (timestamp, i18n = {}) ->
-    i18n = $.extend {}, $.timeago.i18n, i18n
+        Timeago.parse iso8601
 
-    @each -> new TimeAgo $(@), timestamp, i18n
+    isTime: (elem) ->
+      tag = $(elem)
+      .get(0)
+      .tagName
+      .toLowerCase()
 
-  $.timeago = ($el, timestamp, i18n) ->
-    $el = $ $el unless $el instanceof $
-    $el.timeago timestamp, i18n
+      tag == 'time'
 
-  $.timeago.i18n =
-    units:
-      second: "1秒"
-      seconds: "秒"
-      minute: "1分"
-      minutes: "分"
-      hour: "1時間"
-      hours: "時間"
-      day: "1日"
-      days: "日"
-      month: "1ヶ月"
-      months: "ヶ月"
-      year: "1年"
-      years: "年"
-    prefixes:
-      lt: "より"
-      about: "訳"
-      over: "over"
-      almost: "almost"
-      ago: ""
-    suffix: '前'
+  functions =
+    init: ->
+      do refresh_el = refresh.bind @
+      rf = Timeago.settings.refreshMillis
+      setInterval refresh_el, rf if rf > 0
 
+    update: (time) ->
+      $(@).data 'timeago', datetime: Timeago.parse time
+      refresh.apply @
 
-  # Exports
-  $.timeago
+    updateFromDOM: ->
+      $t = $ @
+      time =
+        if Timeago.isTime @
+        then $t.attr 'datetime'
+        else $t.attr 'title'
+
+      $t.data 'timeago', datetime: Timeago.parse time
+      refresh.apply @
+
+  refresh = ->
+    data = prepareData @
+    cutoff = Timeago.settings.cutoff
+
+    if (
+      !isNaN data.datetime \
+      && cutoff == 0 \
+      || distance(data.datetime) < cutoff
+    )
+      $(@).text inWords data.datetime
+
+    @
+
+  prepareData = (element) ->
+    element = $ element
+
+    unless element.data 'timeago'
+      element.data 'timeago', datetime: Timeago.datetime element
+      text = $.trim element.text()
+
+      if Timeago.settings.localeTitle
+        element.attr 'title', element.data('timeago').datetime.toLocaleString()
+      else if (
+        text.length > 0 \
+        && !(
+          Timeago.isTime(element) \
+          && element.attr('title')
+        )
+      )
+        element.attr 'title', text
+
+    element.data 'timeago'
+
+  inWords = (date) ->
+    Timeago.inWords distance date
+
+  distance = (date) ->
+    new Date().getTime() - date.getTime()
+
+  $.fn.timeago = (action, options) ->
+    fn = functions[action ? 'init']
+    return unless fn
+    @each -> fn.call @, options
+
+  $.timeago = Timeago

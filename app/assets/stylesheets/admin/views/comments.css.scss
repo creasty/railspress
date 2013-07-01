@@ -51,6 +51,7 @@ body#comments {
 				width: 70px;
 				display: block;
 				float: right;
+				text-align: right;
 				color: $primary-color;
 			}
 			b {
@@ -107,6 +108,11 @@ body#comments {
 							font: 11px;
 							font-weight: bold;
 							margin-bottom: 5px;
+
+							small {
+								font-weight: normal;
+								color: $muted-color;
+							}
 						}
 
 						.controller {

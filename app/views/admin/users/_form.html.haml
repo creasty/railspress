@@ -24,6 +24,12 @@
       %table.form
         %tr
           %td.label
+            = f.label :username, 'ユーザ名'
+          %td
+            = f.text_field :username, placeholder: 'ユーザ名を入力', class: 'text block'
+
+        %tr
+          %td.label
             = f.label :email, 'メールアドレス'
           %td
             = f.text_field :email, placeholder: 'メールアドレスを入力', class: 'text block'

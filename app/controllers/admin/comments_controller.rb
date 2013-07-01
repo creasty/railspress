@@ -48,10 +48,11 @@ class Admin::CommentsController < Admin::ApplicationController
     respond_to do |format|
       format.json do
         @comment = Comment.new params[:comment]
+        @comment.post_id = params[:post_id]
         @comment.user = current_user
 
         if @comment.save
-          render json: @comment.to_json
+          render json: @comment.to_json(true)
         else
           render json: @comment.errors.full_messages,
             status: :unprocessable_entity

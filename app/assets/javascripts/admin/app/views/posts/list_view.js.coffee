@@ -8,13 +8,13 @@ define [
   'common/notify'
 
   'powertip'
-], ($, _, Backbone, itemTemplate, Alert, Notify) ->
+], ($, _, Backbone, ItemTemplate, Alert, Notify) ->
 
   class PostView extends Backbone.View
 
     tagName: 'tr'
 
-    template: _.template itemTemplate
+    template: _.template ItemTemplate
 
     events:
       'click .checkbox':  'toggle'

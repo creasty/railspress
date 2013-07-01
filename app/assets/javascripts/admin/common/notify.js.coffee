@@ -110,7 +110,10 @@ define ['jquery', 'common/timeago', 'domReady!'], ($) ->
 
     active: (state, message, icon) ->
       @$text.text message
-      @$timestamp.timeago new Date()
+
+      @$timestamp
+      .data('timestamp', +new Date())
+      .timeago()
 
       Statusbar.prepend @$notifi
         .attr('class', state)
