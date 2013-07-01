@@ -52,7 +52,6 @@ define [
 
       @$main = $ '#main'
       @$pocketBody = $ '#pocket_body'
-      @$bottomOfList = $ '#bottom_of_list'
 
       @$pocketBody.on 'scroll', @loadMore.bind(@)
 
@@ -98,7 +97,7 @@ define [
 
     addAll: (_, ob) ->
       Media.each @addOne, @
-      Media.add ob.previousModels, silent: true
+      Media.add ob.previousModels, at: 0, silent: true
 
     addLoader: (op, callback) ->
       medium = new Media.model
@@ -119,14 +118,14 @@ define [
 
       model.toggle()
 
-    loadMore: (e) ->
+    loadMore: ->
       buffer = 200
 
       bottomOfViewport = @$pocketBody.scrollTop() + @$pocketBody.height()
 
       bottomOfCollectionView = @$el.offset().top + @$el.height() - buffer
 
-      unless !Media.hasNext() || @isLoading || bottomOfViewport <= bottomOfCollectionView
+      if Media.hasNext() && !@isLoading && bottomOfViewport > bottomOfCollectionView
 
         @isLoading = true
 

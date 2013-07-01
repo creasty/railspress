@@ -20,7 +20,7 @@ gem 'oj'
 gem 'browsernizer'
 gem 'strong_parameters'
 gem 'acts-as-taggable-on'
-
+gem 'redcarpet'
 
 group :assets do
   gem 'sass-rails', '~> 3.2.3'
@@ -34,6 +34,7 @@ group :assets do
 end
 
 group :development do
+  gem 'powder', '~> 0.1.8'
   gem 'meta_request'
   gem 'better_errors'
   gem 'binding_of_caller'

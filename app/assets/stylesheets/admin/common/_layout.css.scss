@@ -1,7 +1,10 @@
 
 /*=== Body
 ==============================================================================================*/
-html, body { height: 100%; }
+html, body {
+	height: 100%;
+	overflow: hidden;
+}
 body {
 	background: $body-bg-color;
 	font: 12px/1.6 $family;

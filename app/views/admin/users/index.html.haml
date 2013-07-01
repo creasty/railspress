@@ -9,6 +9,7 @@
           %th{ width: '24px' }
             %i.icon-check
           %th{ width: '80px' } アバター
+          %th{ 'data-sortby' => 'username' } ユーザ名
           %th{ 'data-sortby' => 'name' } 名前
           %th{ 'data-sortby' => 'admin' } ユーザ権限
           %th{ 'data-sortby' => 'created_at', width: '130px' } 作成日
@@ -46,6 +47,11 @@
       %h2 検索
 
       %table.form
+        %tr
+          %td
+            .text.icon-search
+              = text_field :search, :username, placeholder: 'ユーザ名 で検索'
+
         %tr
           %td
             .text.icon-search

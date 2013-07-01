@@ -36,6 +36,11 @@ $warning-color: #dcba00;
 $info-color: #439bbb;
 $muted-color: #aaa;
 
+// $main-bg-color + rgba($primary-color, .05)
+$single-selection-color: #f2eeea;
+// $main-bg-color + rgba($success-color, .05)
+$multiple-selection-color: #f0f0ea;
+
 $anchor-color: $primary-color;
 $anchor-active-color: darken($anchor-color, 20%);
 

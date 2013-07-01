@@ -326,7 +326,7 @@ label.checkbox > input:checked:after {
 	}
 
 	&[class*="icon-"].size-small {
-		padding: 0 8px;
+		padding: 0 7px;
 		line-height: 30px;
 
 		&:before {
@@ -350,13 +350,29 @@ a.btn {
 	}
 }
 
+/*	Button Link
+-----------------------------------------------*/
+.btn-link {
+	color: $body-bg-color;
+	cursor: pointer;
+	@include transition(color .3s);
+
+	&:before {
+		position: relative;
+		font-size: 22px;
+		padding: 0;
+	}
+}
+
+/*	Coloring
+-----------------------------------------------*/
 $btn-color-list:
 	primary $primary-color,
 	danger  $danger-color,
 	success $success-color;
 
 @each $btn-color in $btn-color-list {
-	.btn-#{nth($btn-color, 1)} {
+	.btn.btn-#{nth($btn-color, 1)} {
 		background: nth($btn-color, 2) !important;
 
 		&:hover {
@@ -368,8 +384,15 @@ $btn-color-list:
 			background: darken(nth($btn-color, 2), 10%) !important;
 		}
 	}
-}
 
+	.btn-link.btn-#{nth($btn-color, 1)} {
+		color: nth($btn-color, 2);
+
+		&:hover {
+			color: darken(nth($btn-color, 2), 10%);
+		}
+	}
+}
 
 /*=== Sizing
 ==============================================================================================*/

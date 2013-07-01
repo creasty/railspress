@@ -7,7 +7,7 @@ define [
   class Comment extends Backbone.Model
 
     url: ->
-      url = ['/admin/posts', @post_id, 'comments']
+      url = ['/admin/posts', @get('post_id'), 'comments']
       url.push @id if @id?
       url.join '/'
 

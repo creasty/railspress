@@ -4,6 +4,8 @@ define [
   'underscore'
   'backbone'
   'text!app/templates/comments/thread.html'
+
+  'common/timeago'
 ], ($, _, Backbone, ThreadTemplate) ->
 
   class TheadView extends Backbone.View
@@ -22,6 +24,8 @@ define [
     render: ->
       @$el.html @template @model.toJSON()
       @$el.data 'model', @model
+      @$time = @$ 'time'
+      @$time.timeago()
       @
 
     renderSelected: ->

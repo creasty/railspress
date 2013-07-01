@@ -4,7 +4,7 @@ class Admin::CommentsController < Admin::ApplicationController
   def inbox
     respond_to do |format|
       format.json do
-        @comments = Comment
+        @threads = Comment
           .select('comments.*')
           .joins('
             inner join (
@@ -16,9 +16,13 @@ class Admin::CommentsController < Admin::ApplicationController
             and cm.latest = comments.created_at
           ')
           .order('created_at DESC')
+          .page(params[:page])
+          .per(params[:per_page])
           .includes :post
 
-        render json: @comments.map { |comment| comment.to_thread_json }
+        paginate_headers_for @threads
+
+        render json: @threads.map { |thread| thread.to_thread_json }
       end
       format.html { render }
     end
@@ -28,8 +32,12 @@ class Admin::CommentsController < Admin::ApplicationController
     respond_to do |format|
       format.json do
         @comments = Comment
-          .where('post_id = ?', params[:post_id])
+          .where(post_id: params[:post_id])
           .order('created_at DESC')
+          .page(params[:page])
+          .per(params[:per_page])
+
+        paginate_headers_for @comments
 
         render json: @comments.map { |comment| comment.to_json }
       end
@@ -40,10 +48,11 @@ class Admin::CommentsController < Admin::ApplicationController
     respond_to do |format|
       format.json do
         @comment = Comment.new params[:comment]
+        @comment.post_id = params[:post_id]
         @comment.user = current_user
 
         if @comment.save
-          render json: @comment.to_json
+          render json: @comment.to_json(true)
         else
           render json: @comment.errors.full_messages,
             status: :unprocessable_entity

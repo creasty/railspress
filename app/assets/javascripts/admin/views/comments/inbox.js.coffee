@@ -3,6 +3,7 @@ define [
   'jquery'
   'underscore'
   'backbone'
+  'app/observers/comments'
   'app/collections/comments_threads'
   'app/collections/comments'
   'app/views/comments/thread_view'
@@ -16,6 +17,7 @@ define [
   $
   _
   Backbone
+  CommentsObserver
   CommentsThreads
   Comments
   CommentThreadView
@@ -37,66 +39,61 @@ define [
     el: '#threads_list'
 
     events:
-      'click li': 'toggle'
+      'click li': 'loadComments'
+      'scroll':   'loadMore'
 
     initialize: ->
       @listenTo CommentsThreads, 'add', @addOne
       @listenTo CommentsThreads, 'reset', @addAll
       @listenTo CommentsThreads, 'change', @bulk
 
-      @listenTo CommentsThreads, 'addLoader', @addLoader
-
       @$main = $ '#main'
-      @$bottomOfList = $ '#bottom_of_list'
-
-      # @$pocketBody.on 'scroll', @loadMore.bind(@)
 
       CommentsThreads.fetch
         success: =>
           @$main.addClass 'loaded'
-          # @loadMore()
+          @loadComments null, CommentsThreads.at(0).id
+          @loadMore()
 
     addOne: (thread) ->
       view = new CommentThreadView model: thread
       $el = view.render().$el
 
-      if thread.get('id')?
+      if thread.isSynced()?
         @$el.append $el
       else
         @$el.prepend $el
 
     addAll: (_, ob) ->
       CommentsThreads.each @addOne, @
-      CommentsThreads.add ob.previousModels, silent: true
+      CommentsThreads.add ob.previousModels, at: 0, silent: true
 
-    addLoader: (op) ->
-      thread = new CommentsThreads.model
-      thread.set op
-      CommentsThreads.add thread
-
-    toggle: (e) ->
-      $t = $ e.currentTarget
-      model = $t.data 'model'
-      post_id = model.id
+    loadComments: (e, post_id) ->
+      unless post_id
+        $t = $ e.currentTarget
+        model = $t.data 'model'
+        post_id = model.id
 
       return if Comments.post_id == post_id
 
       CommentsThreads.selected().forEach (thread) ->
         thread.toggle() if thread.id != model.id
 
-      model.toggle()
+      CommentsThreads.where(id: post_id)[0].toggle()
 
-      Comments.post_id = post_id
-      Comments.fetch { post_id }
+      Comments.trigger 'loadComments', post_id
 
     loadMore: (e) ->
-      buffer = 200
+      buffer = 100
 
-      bottomOfViewport = @$pocketBody.scrollTop() + @$pocketBody.height()
+      bottomOfViewport = @$el.scrollTop() + @$el.height()
 
-      bottomOfCollectionView = @$el.offset().top + @$el.height() - buffer
+      last = CommentsThreads.at CommentsThreads.models.length - 1
+      $last = last.view.$el
 
-      unless !CommentsThreads.hasNext() || @isLoading || bottomOfViewport <= bottomOfCollectionView
+      bottomOfCollectionView = @$el.scrollTop() + $last.offset().top + $last.height() - buffer
+
+      if CommentsThreads.hasNext() && !@isLoading && bottomOfViewport > bottomOfCollectionView
 
         @isLoading = true
 
@@ -113,24 +110,45 @@ define [
 
     el: '#comments_list'
 
+    events:
+      'scroll': 'loadMore'
+
     initialize: ->
       @listenTo Comments, 'add', @addOne
       @listenTo Comments, 'reset', @addAll
-      @listenTo Comments, 'change', @bulk
-
       @listenTo Comments, 'clear', @clear
+      @listenTo Comments, 'loadComments', @loadComments
+      @listenTo Comments, 'addNew', @addNew
 
-    bulk: ->
-      console.log 124
+      @$thread = $ '#thread'
+      @$thread.on 'scroll', @loadMore.bind(@)
+
+    loadComments: (post_id) ->
+      @$thread.removeClass 'loaded'
+
+      Comments.post_id = post_id
+      Comments.fetch
+        post_id: post_id,
+        success: =>
+          @$thread.addClass 'loaded'
+
+    addNew: (op) ->
+      comment = new Comments.model
+      comment.set 'post_id', Comments.post_id
+
+      comment.save op,
+        success: ->
+          Comments.add comment
+          CommentsObserver.trigger 'addedNew'
 
     addOne: (comment) ->
       view = new CommentView model: comment
       $el = view.render().$el
 
-      if comment.get('id')?
-        @$el.append $el
-      else
+      if comment.get 'was_created'
         @$el.prepend $el
+      else
+        @$el.append $el
 
     addAll: (_, ob) ->
       unless @postId == Comments.post_id
@@ -138,7 +156,28 @@ define [
         @$el.empty()
 
       Comments.each @addOne, @
-      Comments.add ob.previousModels, silent: true
+      Comments.add ob.previousModels, at: 0, silent: true
+
+    loadMore: ->
+      buffer = 345
+
+      bottomOfViewport = @$el.scrollTop() + @$el.height()
+
+      last = Comments.at Comments.models.length - 1
+      $last = last.view.$el
+
+      bottomOfCollectionView = @$el.scrollTop() + $last.offset().top + $last.height() - buffer
+
+      if Comments.hasNext() && !@isLoading && bottomOfViewport > bottomOfCollectionView
+
+        @isLoading = true
+
+        Comments.getNextPage
+          remove: false
+          update: true
+          success: =>
+            @isLoading = false
+
 
   #  New Comment View
   #-----------------------------------------------
@@ -156,7 +195,28 @@ define [
     initialize: ->
       @$content = $ '#comment_content'
 
+      @listenTo CommentsObserver, 'reply', @reply
+      @listenTo CommentsObserver, 'addedNew', @resetContent
+
     create: ->
+      Comments.trigger 'addNew', content: @$content.val()
+
+    resetContent: ->
+      @$content.val ''
+      @updateSize()
+
+    reply: (model) ->
+      @focus()
+      @$content.val "@#{model.get 'user_username'} "
+
+      el = @$content.get 0
+
+      if el.createTextRange
+        range = el.createTextRange()
+        range.move 'character', el.value.length
+        range.select()
+      else if el.setSelectionRange
+        el.setSelectionRange el.value.length, el.value.length
 
     focus: ->
       @$content.focus()
@@ -166,13 +226,14 @@ define [
 
     disactivate: (e) ->
       @$el.removeClass 'active'
-      updateSize e.target
+      @updateSize()
 
     expand: (e) ->
-      updateSize e.target
+      @updateSize()
       ++e.target.rows
 
-    updateSize = (el) ->
+    updateSize: ->
+      el = @$content.get 0
       el.rows = 2
       ++el.rows while el.scrollHeight > el.clientHeight && el.rows < 10
 
