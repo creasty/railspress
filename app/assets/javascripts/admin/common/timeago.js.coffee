@@ -13,7 +13,7 @@ define ['jquery'], ($) ->
 
   $.extend Timeago,
     settings:
-      refreshMillis: 5 * 600
+      refreshMillis: 5000
       allowFuture: false
       localeTitle: false
       cutoff: 0
@@ -63,7 +63,7 @@ define ['jquery'], ($) ->
       words =
         switch true
           when seconds < 45
-            substitute $l.seconds, Math.round seconds
+            substitute $l.seconds, Math.max(Math.round(seconds), 1)
           when seconds < 90
             substitute $l.minute, 1
           when minutes < 45

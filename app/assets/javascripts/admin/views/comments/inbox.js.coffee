@@ -59,7 +59,7 @@ define [
       view = new CommentThreadView model: thread
       $el = view.render().$el
 
-      if thread.get('id')?
+      if thread.isSynced()?
         @$el.append $el
       else
         @$el.prepend $el

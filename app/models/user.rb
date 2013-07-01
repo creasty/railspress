@@ -34,6 +34,10 @@ class User < ActiveRecord::Base
     q = ['1 = 1']
 
     if params.try(:[], :name).present?
+      q[0] << ' and username like ?'
+      q << "%#{params[:username]}%"
+    end
+    if params.try(:[], :name).present?
       q[0] << ' and name like ?'
       q << "%#{params[:name]}%"
     end
