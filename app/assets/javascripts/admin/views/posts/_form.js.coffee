@@ -106,9 +106,18 @@ require [
     el: '#main'
 
     events:
-      'click .menubar .icon-link': 'insertLink'
       'click #editor_mode_md': 'switchToMarkdown'
       'click #editor_mode_html': 'switchToHtml'
+
+      'click .menubar .icon-link': 'insertLink'
+      'click .menubar .icon-image': 'insertMedia'
+
+      'click .menubar .icon-bold': 'textBold'
+      'click .menubar .icon-italic': 'textItalic'
+      'click .menubar .icon-underline': 'textUnderline'
+      'click .menubar .icon-strike': 'textStrike'
+      'click .menubar .icon-quote': 'textQuote'
+      'click .menubar .icon-code': 'textCode'
 
     initialize: ->
       @$textarea = $ '#post_content'
@@ -153,8 +162,6 @@ require [
 
       @
 
-    insertLink: ->
-
     switchToHtml: (e) ->
       e.preventDefault()
       @setMode 'html'
@@ -162,6 +169,122 @@ require [
     switchToMarkdown: (e) ->
       e.preventDefault()
       @setMode 'markdown'
+
+    getSelectionText: ->
+      ran = @editor.getSelection().getRange()
+      @session.getTextRange ran
+
+    insertText: (text) ->
+      ran = @editor.getSelection().getRange()
+      @session.insert ran.start, text
+      @editor.focus()
+
+    replaceSelection: (text) ->
+      ran = @editor.getSelection().getRange()
+      @session.remove ran
+      @session.insert ran.start, text
+      @editor.focus()
+
+    insertLink: (e) ->
+      e.preventDefault()
+      txt = @getSelectionText()
+
+      repl =
+        if 'html' == @mode
+          "<a href=\"\">#{txt}</a>"
+        else
+          "[#{txt}]()"
+
+      @replaceSelection repl
+
+    insertMedia: (e) ->
+      e.preventDefault()
+
+    textBold: (e) ->
+      e.preventDefault()
+      txt = @getSelectionText()
+
+      repl =
+        if 'html' == @mode
+          "<strong>#{txt}</strong>"
+        else
+          "**#{txt}**"
+
+      @replaceSelection repl
+
+    textItalic: (e) ->
+      e.preventDefault()
+      txt = @getSelectionText()
+
+      repl =
+        if 'html' == @mode
+          "<em>#{txt}</em>"
+        else
+          "_#{txt}_"
+
+      @replaceSelection repl
+
+    textUnderline: (e) ->
+      e.preventDefault()
+      txt = @getSelectionText()
+
+      repl = "<u>#{txt}</u>"
+
+      @replaceSelection repl
+
+    textStrike: (e) ->
+      e.preventDefault()
+      txt = @getSelectionText()
+
+      repl =
+        if 'html' == @mode
+          "<del>#{txt}</del>"
+        else
+          "~~#{txt}~~"
+
+      @replaceSelection repl
+
+    textQuote: (e) ->
+      e.preventDefault()
+      txt = @getSelectionText()
+
+      repl =
+        if 'html' == @mode
+          """
+          <blockquote>
+          #{txt.replace(/^/mg, '\t')}
+          </blockquote>
+          """
+        else
+          txt.replace /^/mg, '> '
+
+      @replaceSelection repl
+
+    textCode: (e) ->
+      e.preventDefault()
+      txt = @getSelectionText()
+
+      repl =
+        if 'html' == @mode
+          if txt.indexOf('\n') >= 0
+            """
+            <pre><code>
+            #{txt}
+            </code></pre>
+            """
+          else
+            """
+            <code>
+            #{txt}
+            </code>
+            """
+        else
+          if txt.indexOf('\n') >= 0
+            txt.replace /^/mg, '\t'
+          else
+            "`#{txt}`"
+
+      @replaceSelection repl
 
 
   #  Sidebar View

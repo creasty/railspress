@@ -10,9 +10,9 @@ Thumbs.db
 
 db/schema.rb
 
-public/system
+/public/system
 
 *.sublime-project
 *.sublime-workspace
 
-vendor/assets/components
+/vendor/assets/components

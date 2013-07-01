@@ -71,7 +71,7 @@
               - if @user.facebook?
                 = button_tag '接続しています', class: 'btn btn-success ui-auth-facebook linked'
               - else
-                = button_tag 'Facebook アカウントに接続', class: 'btn btn-success ui-auth-facebook'
+                = button_tag 'Facebook に接続する', class: 'btn btn-success ui-auth-facebook'
 
           %tr
             %td Twitter
@@ -79,7 +79,7 @@
               - if @user.twitter?
                 = button_tag '接続しています', class: 'btn btn-success ui-auth-twitter linked'
               - else
-                = button_tag 'Twitter アカウントに接続', class: 'btn btn-success ui-auth-twitter'
+                = button_tag 'Twitter に接続する', class: 'btn btn-success ui-auth-twitter'
 
       - else
 

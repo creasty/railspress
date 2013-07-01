@@ -29,11 +29,11 @@ require [
 
   OAuthButton.attachTo '.ui-auth-twitter',
     provider: 'twitter'
-    defaultText: 'Twitter に接続します'
+    defaultText: 'Twitter に接続する'
 
   OAuthButton.attachTo '.ui-auth-facebook',
     provider: 'facebook'
-    defaultText: 'Facebook に接続します'
+    defaultText: 'Facebook に接続する'
 
 
   #  Model

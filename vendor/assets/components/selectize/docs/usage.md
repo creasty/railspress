@@ -91,8 +91,8 @@ $(function() {
 	</tr>
 	<tr>
 		<td valign="top"><code>preload</code></td>
-		<td valign="top">If true, the "load" function will be called upon control initialization (with an empty search).</td>
-		<td valign="top"><code>boolean</code></td>
+		<td valign="top">If true, the "load" function will be called upon control initialization (with an empty search). Alternatively it can be set to "focus" to call the "load" function when control receives focus.</td>
+		<td valign="top"><code>boolean/string</code></td>
 		<td valign="top"><code>false</code></td>
 	</tr>
 	<tr>
@@ -117,10 +117,28 @@ $(function() {
 		<td valign="top"><code>'value'</code></td>
 	</tr>
 	<tr>
+		<td valign="top"><code>optgroupValueField</code></td>
+		<td valign="top">The name of the option group property that serves as its unique identifier.</td>
+		<td valign="top"><code>string</code></td>
+		<td valign="top"><code>'value'</code></td>
+	</tr>
+	<tr>
 		<td valign="top"><code>labelField</code></td>
-		<td valign="top">The name of the property to render as the option/item label (not needed when custom rendering functions are defined).</td>
+		<td valign="top">The name of the property to render as an option / item label (not needed when custom rendering functions are defined).</td>
 		<td valign="top"><code>string</code></td>
 		<td valign="top"><code>'text'</code></td>
+	</tr>
+	<tr>
+		<td valign="top"><code>optgroupLabelField</code></td>
+		<td valign="top">The name of the property to render as an option group label (not needed when custom rendering functions are defined).</td>
+		<td valign="top"><code>string</code></td>
+		<td valign="top"><code>'label'</code></td>
+	</tr>
+	<tr>
+		<td valign="top"><code>optgroupField</code></td>
+		<td valign="top">The name of the property to group items by.</td>
+		<td valign="top"><code>string</code></td>
+		<td valign="top"><code>'optgroup'</code></td>
 	</tr>
 	<tr>
 		<td valign="top"><code>sortField</code></td>
@@ -139,6 +157,12 @@ $(function() {
 		<td valign="top">An array of property names to analyze when filtering options.</td>
 		<td valign="top"><code>array</code></td>
 		<td valign="top"><code>['text']</code></td>
+	</tr>
+	<tr>
+		<td valign="top"><code>optgroupOrder</td>
+		<td valign="top">An array of optgroup values that indicates the order they should be listed in in the dropdown. If not provided, groups will be ordered by the ranking of the options within them.</td>
+		<td valign="top"><code>array</code></td>
+		<td valign="top"><code>null</code></td>
 	</tr>
 	<tr>
 		<th valign="top" colspan="4" align="left"><a href="#callbacks" name="callbacks">Callbacks</a></th>
@@ -233,19 +257,29 @@ $(function() {
 	<tr>
 		<td valign="top"><code>render</code></td>
 		<td valign="top">
-			An object containing any of the following methods:
+			Custom rendering functions. Each function should accept two arguments: "data" and "escape".
+			The "escape" argument is a function that takes a string and escapes all special HTML characters.
+			This is very important to use to prevent XSS vulnerabilities.
 			<table width="100%">
 				<tr>
-					<td valign="top"><code>option(data)</code></td>
+					<td valign="top"><code>option</code></td>
 					<td valign="top">An option in the dropdown list of available options.</td>
 				</tr>
 				<tr>
-					<td valign="top"><code>item(data)</code></td>
+					<td valign="top"><code>item</code></td>
 					<td valign="top">An item the user has selected.</td>
 				</tr>
 				<tr>
-					<td valign="top"><code>option_create(data)</code></td>
-					<td valign="top">The "create new" option at the bottom of the dropdown. The "data" argument contains one property: "input" (which is what the user has typed).</td>
+					<td valign="top"><code>option_create</code></td>
+					<td valign="top">The "create new" option at the bottom of the dropdown. The data contains one property: "input" (which is what the user has typed).</td>
+				</tr>
+				<tr>
+					<td valign="top"><code>optgroup_header</code></td>
+					<td valign="top">The header of an option group.</td>
+				</tr>
+				<tr>
+					<td valign="top"><code>optgroup</code></td>
+					<td valign="top">The wrapper for an optgroup. The "html" property in the data will be the raw html of the optgroup's header and options.</td>
 				</tr>
 			</table>
 		</td>
