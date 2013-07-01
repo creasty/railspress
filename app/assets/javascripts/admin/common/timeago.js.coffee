@@ -13,7 +13,7 @@ define ['jquery'], ($) ->
 
   $.extend Timeago,
     settings:
-      refreshMillis: 60000
+      refreshMillis: 5 * 600
       allowFuture: false
       localeTitle: false
       cutoff: 0
@@ -22,7 +22,7 @@ define ['jquery'], ($) ->
         prefixFromNow: null
         suffixAgo: '前'
         suffixFromNow: '後'
-        seconds: '少し'
+        seconds: '%d秒'
         minute: '1分'
         minutes: '%d分'
         hour: '1時間'

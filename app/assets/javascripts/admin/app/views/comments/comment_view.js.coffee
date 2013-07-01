@@ -49,12 +49,17 @@ define [
       @$textarea = @$ '.edit > textarea'
       @$controller = @$ '.controller'
 
+      @$('.btn').powerTip
+        placement: 'n'
+        smartPlacement: true
+
       @
 
     reply: ->
       CommentsObserver.trigger 'reply', @model
 
     edit: ->
+      @$message.addClass 'hide'
       @$controller.addClass 'hide'
       @$edit.removeClass 'hide'
       @$textarea.val @model.get 'content'
@@ -71,6 +76,7 @@ define [
           notify.fail '保存に失敗しました...'
 
     discard: ->
+      @$message.removeClass 'hide'
       @$controller.removeClass 'hide'
       @$edit.addClass 'hide'
 

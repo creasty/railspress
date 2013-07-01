@@ -111,7 +111,7 @@ define [
     el: '#comments_list'
 
     events:
-      'scroll':   'loadMore'
+      'scroll': 'loadMore'
 
     initialize: ->
       @listenTo Comments, 'add', @addOne
@@ -121,6 +121,7 @@ define [
       @listenTo Comments, 'addNew', @addNew
 
       @$thread = $ '#thread'
+      @$thread.on 'scroll', @loadMore.bind(@)
 
     loadComments: (post_id) ->
       @$thread.removeClass 'loaded'
@@ -133,7 +134,7 @@ define [
 
     addNew: (op) ->
       comment = new Comments.model
-      comment.post_id = Comments.post_id
+      comment.set 'post_id', Comments.post_id
 
       comment.save op,
         success: ->
@@ -160,12 +161,9 @@ define [
     loadMore: ->
       buffer = 100
 
-      bottomOfViewport = @$el.scrollTop() + @$el.height()
+      bottomOfViewport = @$thread.scrollTop() + @$thread.height()
 
-      last = Comments.at Comments.models.length - 1
-      $last = last.view.$el
-
-      bottomOfCollectionView = @$el.scrollTop() + $last.offset().top + $last.height() - buffer
+      bottomOfCollectionView = @$el.offset().top + @$el.height() - buffer
 
       if Comments.hasNext() && !@isLoading && bottomOfViewport > bottomOfCollectionView
 

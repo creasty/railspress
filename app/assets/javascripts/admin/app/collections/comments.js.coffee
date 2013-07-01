@@ -15,8 +15,7 @@ define [
 
     state:
       currentPage: 1
-      pageSize: 20
-
+      pageSize: 5
     queryParams:
       totalPages: null
       totalRecords: null
