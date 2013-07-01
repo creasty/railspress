@@ -41,7 +41,10 @@ class Admin::UsersController < Admin::ApplicationController
 
     respond_to do |format|
       if @user.save
-        format.json { render json: @user.to_json }
+        format.json do
+          flash[:notice] = '作成されました'
+          render json: @user.to_json
+        end
         format.html do
           redirect_to edit_admin_post_path(@user),
             notice: '作成されました'
@@ -84,10 +87,7 @@ class Admin::UsersController < Admin::ApplicationController
     @user.destroy
 
     respond_to do |format|
-      format.json do
-        render json: {}
-      end
-
+      format.json { render json: {} }
       format.html do
         redirect_to admin_users_path,
           notice: 'ユーザを削除しました'
