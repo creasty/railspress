@@ -398,7 +398,7 @@ define [
           title:     d.fileName
           file_type: d.fileType
           is_image:  d.fileType.split('/')[0] == 'image'
-          thumbnail: data
+          small:     data
           loading:   true
         },
         (view) ->
@@ -428,4 +428,17 @@ define [
   new SidebarView()
   new ImageEditorView()
   new FileUploaderView()
+
+
+  #  Modal
+  #-----------------------------------------------
+  $('#btn_modal_thumbnail').on 'click', ->
+    p = window.parent
+    p$ = p.$ p
+
+    sel = Media.selected()
+    if sel.length == 1
+      p$.trigger 'setThumbnail', Media.selected()[0]
+
+    p$.trigger 'closeModal', window.name
 

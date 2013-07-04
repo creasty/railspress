@@ -73,17 +73,7 @@
     %section
       %h2 サムネイル
 
-      #post_thumbnail.post-thumbnail
-        - if @post.thumbnail.present?
-          = image_tag @post.thumbnail.asset.url(:thumbnail)
-
-          .edit.has-two
-            %i.icon-image
-            %i.icon-ban
-
-        - else
-          .edit.has-one
-            %i.icon-plus
+      #post_thumbnail.post-thumbnail{ 'data-thumbnail' => @post.thumbnail.present? && @post.thumbnail.asset.url(:thumbnail) }
 
       = f.hidden_field :thumbnail_id
 

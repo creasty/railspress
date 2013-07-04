@@ -15,6 +15,9 @@ define ['jquery'], ($) ->
         destroy: false
       , @config
 
+      @uuid = "modal_iframe_#{uuid++}"
+      $modals[@uuid] = @
+
       @init()
       @events()
 
@@ -28,23 +31,21 @@ define ['jquery'], ($) ->
       @$modal.append @$closebtn, @$body
       @$popup.append @$modal, @$overlay
       @$popup.appendTo $ 'body'
-      @uuid = "modal_iframe_#{uuid++}"
 
     events: ->
       @$overlay.on 'click', => @close()
       @$closebtn.on 'click', => @close()
+      $(window).on 'closeModal', (e, uuid) =>
+        $modals[uuid].close()
 
     close: ->
       @$popup.removeClass 'show'
+      @isloaded = false if @config.destroy
+      @trigger 'modalClose', @
 
-      if @config.destroy
-        setTimeout (=> @$popup.remove()), @config.duration
-        @isloaded = false
-        @$node = null
-      else
-        setTimeout =>
-          @trigger 'modalClose', [@$body, @$modal]
-        , @config.duration
+    on: (name, handler) ->
+      return unless @$node
+      @$node.on name, handler
 
     trigger: (type, args) ->
       return unless @$node
@@ -55,6 +56,7 @@ define ['jquery'], ($) ->
       @isloaded = true
 
       @$modal.removeClass 'error'
+      @$body.empty() if @config.destroy
 
       if @config.content instanceof $
         @$body.append @$node = @config.content
@@ -85,7 +87,7 @@ define ['jquery'], ($) ->
       @$modal.addClass @config.type
 
       @getContent =>
-        @trigger 'modalOpen', [@$body, @$modal]
+        @trigger 'modalOpen', @
         setTimeout (=> @$popup.addClass 'show'), 1
 
   (config) -> new Modal config

@@ -3,6 +3,7 @@ require [
   'underscore'
   'backbone'
   'app/models/post'
+  'text!app/templates/posts/thumbnail.html'
   'common/notify'
   'common/alert'
   'common/modal'
@@ -21,6 +22,7 @@ require [
   _
   Backbone
   Post
+  ThumbnailTemplate
   Notify
   Alert
   Modal
@@ -321,12 +323,22 @@ require [
     events:
       'scroll': 'hideDatepicker'
       'click #btn_delete': 'destroy'
-      'click #post_thumbnail': 'thumbnailModal'
+      'click #post_thumbnail .icon-image': 'selectThumbnail'
+      'click #post_thumbnail .icon-plus': 'selectThumbnail'
+      'click #post_thumbnail .icon-ban': 'clearThumbnail'
 
     initialize: ->
       @$form =
-        date: $ '#post_date_str'
-        tags: $ '#post_tag_list'
+        date:        $ '#post_date_str'
+        tags:        $ '#post_tag_list'
+        thumbnail:   $ '#post_thumbnail'
+        thumbnailId: $ '#post_thumbnail_id'
+
+      $(window).on 'setThumbnail', @setThumbnail.bind @
+
+      @modal = Modal content: '/admin/media?modal=thumbnail', iframe: true, destroy: true
+
+      @thumbnailTemplate = _.template ThumbnailTemplate
 
       @render()
 
@@ -335,6 +347,8 @@ require [
 
     render: ->
       @$form.date.datepicker format: 'yyyy.mm.dd'
+
+      @$form.thumbnail.html @thumbnailTemplate thumbnail: @$form.thumbnail.data 'thumbnail'
 
       $.ajax
         url: "#{Post.urlRoot}/tags"
@@ -372,9 +386,16 @@ require [
               error: ->
                 UpdateNotify.fail '記事の削除に失敗しました'
 
-    thumbnailModal: ->
-      modal = Modal content: '/admin/media?modal=thumbnail', iframe: true
-      modal.open()
+    selectThumbnail: ->
+      @modal.open()
+
+    setThumbnail: (e, medium) ->
+      @$form.thumbnailId.val medium.get 'id'
+      @$form.thumbnail.html @thumbnailTemplate medium.toJSON()
+
+    clearThumbnail: ->
+      @$form.thumbnailId.val null
+      @$form.thumbnail.html @thumbnailTemplate thumbnail: false
 
 
   #  Initialize Backbone App
