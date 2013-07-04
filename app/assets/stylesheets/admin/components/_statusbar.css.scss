@@ -26,6 +26,9 @@
 		);
 		@include transition(background .2s);
 
+		&.info {
+			background-color: $info-color;
+		}
 		&.success {
 			background-color: $success-color;
 		}

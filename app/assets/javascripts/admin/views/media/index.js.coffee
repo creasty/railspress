@@ -65,7 +65,7 @@ define [
         itemSelector: 'li'
         gutterWidth: 20
         columns: 5
-        minWidth: 170
+        minWidth: 150
         isAnimated: false
         isFitWidth: true
         isResizable: true

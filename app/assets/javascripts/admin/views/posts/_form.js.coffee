@@ -165,24 +165,52 @@ require [
     switchToHtml: (e) ->
       e.preventDefault()
       @setMode 'html'
+      Notify().info 'HTML モードに切り替えました'
 
     switchToMarkdown: (e) ->
       e.preventDefault()
       @setMode 'markdown'
+      Notify().info 'Markdown モードに切り替えました'
 
     getSelectionText: ->
       ran = @editor.getSelection().getRange()
       @session.getTextRange ran
 
+    insertAndMoveCursor: (start, text) ->
+      @session.insert start, text.replace /[\x02\x03\x0b]/g, ''
+
+      { row, column } = start
+      p = {}
+      ch =
+        '\x0b': 'cur'
+        '\x02': 'begin'
+        '\x03': 'end'
+
+      text.split('\n').forEach (t, i) ->
+        col = column
+        for c, name of ch
+          idx = t.indexOf c
+          if idx >= 0
+            p[name] = [row + i, col + idx]
+            --col if name == 'begin'
+
+      if p.begin && p.end
+        @editor.moveCursorTo p.begin...
+        @editor.clearSelection()
+        @editor.selection.selectTo p.end...
+      else if p.cur
+        @editor.moveCursorTo p.cur...
+        @editor.clearSelection()
+
     insertText: (text) ->
       ran = @editor.getSelection().getRange()
-      @session.insert ran.start, text
+      @insertAndMoveCursor ran.start, text
       @editor.focus()
 
     replaceSelection: (text) ->
       ran = @editor.getSelection().getRange()
       @session.remove ran
-      @session.insert ran.start, text
+      @insertAndMoveCursor ran.start, text
       @editor.focus()
 
     insertLink: (e) ->
@@ -191,9 +219,9 @@ require [
 
       repl =
         if 'html' == @mode
-          "<a href=\"\">#{txt}</a>"
+          "<a href=\"\">\x02#{txt}\x03</a>"
         else
-          "[#{txt}]()"
+          "[#{txt}](\x0b)"
 
       @replaceSelection repl
 
@@ -206,21 +234,22 @@ require [
 
       repl =
         if 'html' == @mode
-          "<strong>#{txt}</strong>"
+          "<strong>\x02#{txt}\x03</strong>"
         else
-          "**#{txt}**"
+          "**\x02#{txt}\x03**"
 
       @replaceSelection repl
 
     textItalic: (e) ->
       e.preventDefault()
       txt = @getSelectionText()
+      cur = {}
 
       repl =
         if 'html' == @mode
-          "<em>#{txt}</em>"
+          "<em>\x02#{txt}\x03</em>"
         else
-          "_#{txt}_"
+          "_\x02#{txt}\x03_"
 
       @replaceSelection repl
 
@@ -228,7 +257,7 @@ require [
       e.preventDefault()
       txt = @getSelectionText()
 
-      repl = "<u>#{txt}</u>"
+      repl = "<u>\x02#{txt}\x03</u>"
 
       @replaceSelection repl
 
@@ -238,9 +267,9 @@ require [
 
       repl =
         if 'html' == @mode
-          "<del>#{txt}</del>"
+          "<del>\x02#{txt}\x03</del>"
         else
-          "~~#{txt}~~"
+          "~~\x02#{txt}\x03~~"
 
       @replaceSelection repl
 
@@ -252,7 +281,7 @@ require [
         if 'html' == @mode
           """
           <blockquote>
-          #{txt.replace(/^/mg, '\t')}
+          \x02#{txt.replace(/^/mg, '\t')}\x03
           </blockquote>
           """
         else
@@ -269,20 +298,16 @@ require [
           if txt.indexOf('\n') >= 0
             """
             <pre><code>
-            #{txt}
+            \x02#{txt}\x03
             </code></pre>
             """
           else
-            """
-            <code>
-            #{txt}
-            </code>
-            """
+            "<code>\x02#{txt}\x03</code>"
         else
           if txt.indexOf('\n') >= 0
             txt.replace /^/mg, '\t'
           else
-            "`#{txt}`"
+            "`\x02#{txt}\x03`"
 
       @replaceSelection repl
 

@@ -61,6 +61,7 @@ p + p {
 ==============================================================================================*/
 a {
 	color: $anchor-color;
+	cursor: pointer;
 	@include transition(.3s linear);
 
 	&:hover {

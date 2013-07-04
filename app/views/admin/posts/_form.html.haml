@@ -8,29 +8,29 @@
       .menubar
         %ul
           %li
-            %a.tooltip.icon-link{ href: '#', title: 'リンク挿入' }
+            %a.tooltip.icon-link{ title: 'リンク挿入' }
           %li
-            %a.tooltip.icon-image{ href: '#', title: 'メディア挿入' }
+            %a.tooltip.icon-image{ title: 'メディア挿入' }
 
           %li.divide
-            %a.tooltip.icon-bold{ href: '#', title: '太字' }
+            %a.tooltip.icon-bold{ title: '太字' }
           %li
-            %a.tooltip.icon-italic{ href: '#', title: '斜字' }
+            %a.tooltip.icon-italic{ title: '斜字' }
           %li
-            %a.tooltip.icon-underline{ href: '#', title: '下線' }
+            %a.tooltip.icon-underline{ title: '下線' }
           %li
-            %a.tooltip.icon-strike{ href: '#', title: '打消' }
+            %a.tooltip.icon-strike{ title: '打消' }
           %li
-            %a.tooltip.icon-quote{ href: '#', title: '引用' }
+            %a.tooltip.icon-quote{ title: '引用' }
           %li
-            %a.tooltip.icon-code{ href: '#', title: 'コード' }
+            %a.tooltip.icon-code{ title: 'コード' }
 
         %ul.right
           %li#editor_mode_md
-            %a.tooltip{ href: '#', title: 'Markdown' }
+            %a.tooltip{ title: 'Markdown モード' }
               MD
           %li#editor_mode_html
-            %a.tooltip{ href: '#', title: 'ソースコード' }
+            %a.tooltip{ title: 'HTML モード' }
               HTML
 
       = f.text_area :content, class: 'hide'

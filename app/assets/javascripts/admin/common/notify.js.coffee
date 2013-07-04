@@ -3,11 +3,11 @@ define ['jquery', 'common/timeago', 'domReady!'], ($) ->
     threshold: 15
     height: 25
     duration: 300
-    parent: '#globalheader'
+    parent: 'body'
     statusbar: '<div id="statusbar"></div>'
     showClass: 'show'
 
-  #  Statusbar UI
+  #  Statusbar
   #-----------------------------------------------
   Statusbar = new class
     states:
@@ -153,6 +153,10 @@ define ['jquery', 'common/timeago', 'domReady!'], ($) ->
     fail: (message, icon = 'ban') ->
       @active 'fail', message, icon
       @timer = setTimeout (=> @inactive()), 4e3
+
+    info: (message, icon = 'info') ->
+      @active 'info', message, icon
+      @timer = setTimeout (=> @inactive()), 3e3
 
 
   -> new Notify()
