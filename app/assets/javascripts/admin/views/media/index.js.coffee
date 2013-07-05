@@ -113,7 +113,7 @@ define [
       $t = $ e.currentTarget
       model = $t.data 'model'
 
-      unless e.shiftKey
+      if !e.shiftKey || window.MODAL_NAME == 'thumbnail'
         Media.selected().forEach (medium) ->
           medium.toggle() if medium.id != model.id
 
