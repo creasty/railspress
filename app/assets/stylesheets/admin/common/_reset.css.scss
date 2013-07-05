@@ -19,6 +19,8 @@ tbody, tfoot, thead, tr, th, td {
 article, aside, details, embed, figcaption, figure,
 footer, header, hgroup, menu, nav, section, summary {
 	display: block;
+	margin: 0;
+	padding: 0;
 }
 command, datalist, keygen, mark, meter,
 progress, rp, rt, ruby, time, wbr {

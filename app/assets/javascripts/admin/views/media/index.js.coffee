@@ -14,6 +14,7 @@ define [
   'backbone.syphon'
   'masonry'
   'jcrop'
+  'easing'
   'domReady!'
 ], (
   $
@@ -402,7 +403,7 @@ define [
           loading:   true
         },
         (view) ->
-          d.loader = view.$el.find('.preview-image').addClass 'loading'
+          d.loader = view.$preview.addClass 'loading'
           d.model = view.model
 
     eachSuccess: (e, res, d) ->
@@ -422,23 +423,79 @@ define [
       UploaderNotify.fail 'アップロードに失敗しました'
 
 
+  #  Modal
+  #-----------------------------------------------
+  class ModalView extends Backbone.View
+
+    el: '#modal_container'
+
+    events:
+      'click #modal_btn_thumbnail': 'setThumbnail'
+      'click #modal_btn_insert': 'insert'
+
+    initialize: ->
+      @listenTo Media, 'change:selected', @update
+
+      @wp = window.parent
+      @$wp = @wp.$ @wp
+      @name = window.name
+      @$images = {}
+
+      @$preview = $ '#footer_preview'
+      @$pocketBody = $ '#pocket_body'
+
+    closeModal: ->
+      @$wp.trigger 'closeModal', @name
+
+    setThumbnail: ->
+      sel = Media.selected()
+      @$wp.trigger 'setThumbnail', medium: sel[0] if sel.length == 1
+      @closeModal()
+
+    insert: ->
+      sel = Media.selected()
+      @$wp.trigger 'insertMedia', media: sel if sel.length > 0
+      @closeModal()
+
+    update: ->
+      now = []
+
+      _.each Media.selected(), (medium) =>
+        id = medium.get 'id'
+        now.push id
+
+        unless @$images[id]
+          src = medium.get 'small'
+          $el = medium.view.$el
+
+          $img = $ "<figure style=\"background-image: url(#{src})\"></figure>"
+
+          $img.on 'click', =>
+            offset = -80 + @$pocketBody.scrollTop()
+
+            @$pocketBody
+            .stop()
+            .animate
+              scrollTop: offset + $el.offset().top
+              duration: 600
+              easing: 'easeInCubic'
+
+          @$images[id] = $img
+
+      _.each _.without(@prev, now...), (id) =>
+        @$images[id].detach()
+
+      _.each _.difference(now, @prev), (id) =>
+        @$images[id].prependTo @$preview
+
+      @prev = now
+
+
   #  Initialize Backbone App
   #-----------------------------------------------
   new AppView()
   new SidebarView()
   new ImageEditorView()
   new FileUploaderView()
-
-
-  #  Modal
-  #-----------------------------------------------
-  $('#btn_modal_thumbnail').on 'click', ->
-    p = window.parent
-    p$ = p.$ p
-
-    sel = Media.selected()
-    if sel.length == 1
-      p$.trigger 'setThumbnail', Media.selected()[0]
-
-    p$.trigger 'closeModal', window.name
+  new ModalView()
 

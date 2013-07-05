@@ -11,16 +11,13 @@
     'utils': 'admin/utils'
     'views': 'admin/views'
 
-    'jquery': [
-      'http://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min'
-      'jquery.min'
-    ]
-
     'ace': 'ace/lib/ace'
     'backbone': 'backbone/backbone-min'
     'backbone.pageable': 'backbone-pageable/lib/backbone-pageable.min'
     'backbone.syphon': 'backbone.syphon/lib/backbone.syphon.min'
     'datepicker': 'datepicker/js/bootstrap-datepicker'
+    'easing': 'jquery.easing.min'
+    'jquery': 'jquery.min'
     'jcrop': 'jcrop/js/jquery.Jcrop.min'
     'masonry': 'jquery-masonry/jquery.masonry.min'
     'powertip': 'powertip/jquery.powertip.min'
@@ -40,6 +37,7 @@
     'backbone.pageable': ['backbone']
     'backbone.syphon': ['backbone']
     'datepicker': ['jquery']
+    'easing': ['jquery']
     'jcrop': ['jquery', 'css!jcrop/../../css/jquery.Jcrop.min']
     'jquery_ujs': ['jquery']
     'masonry': ['jquery']

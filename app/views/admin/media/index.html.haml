@@ -9,7 +9,13 @@
     %h2 メディアを選択
 
 - content_for :modal_footer do
-  = button_tag '挿入する', class: 'btn btn-primary', id: 'btn_modal_thumbnail'
+  - if 'thumbnail' == params[:modal]
+    = button_tag 'サムネイル画像に使う', class: 'btn btn-primary', id: 'modal_btn_thumbnail'
+  - else
+    #footer_preview
+
+    = button_tag '画像を挿入する', class: 'btn btn-primary', id: 'modal_btn_insert'
+
 
 #pocket_body
   #main.loader

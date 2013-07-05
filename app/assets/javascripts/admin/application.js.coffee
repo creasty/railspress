@@ -17,7 +17,7 @@ if navigator.userAgent.toLowerCase().indexOf('chrome') >= 0
 
 #  Smooth Scrolling
 #-----------------------------------------------
-require ['jquery'], ($) ->
+require ['jquery', 'easing'], ($) ->
   $(document).on 'click', 'a[href^=#]', (e) ->
     $t = $ @
     id = $t.attr 'href'
@@ -34,7 +34,7 @@ require ['jquery'], ($) ->
       scrollTop: $target.offset().top
     ,
       duration: 600
-      # easing: 'easeInCubic'
+      easing: 'easeInCubic'
       complete: -> window.location.hash = id
 
 #  Tooltip

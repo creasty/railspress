@@ -112,7 +112,7 @@ require [
       'click #editor_mode_html': 'switchToHtml'
 
       'click .menubar .icon-link': 'insertLink'
-      'click .menubar .icon-image': 'insertMedia'
+      'click .menubar .icon-image': 'selectMedia'
 
       'click .menubar .icon-bold': 'textBold'
       'click .menubar .icon-italic': 'textItalic'
@@ -129,6 +129,10 @@ require [
       @$mode =
         markdown: $ '#editor_mode_md'
         html: $ '#editor_mode_html'
+
+      @modal = Modal content: '/admin/media?modal=insert', iframe: true, destroy: true
+
+      $(window).on 'insertMedia', @insertMedia.bind @
 
       @render()
       @$el.addClass 'loaded'
@@ -227,9 +231,6 @@ require [
 
       @replaceSelection repl
 
-    insertMedia: (e) ->
-      e.preventDefault()
-
     textBold: (e) ->
       e.preventDefault()
       txt = @getSelectionText()
@@ -313,6 +314,29 @@ require [
 
       @replaceSelection repl
 
+    selectMedia: (e) ->
+      e.preventDefault()
+      @modal.open()
+
+    insertImage: (url, nl = false) ->
+      if @mode == 'html'
+        img = "<img src=\"#{url}\" alt=\"\x0b\" />"
+      else
+        img = "![\x0b](#{url})"
+
+      if nl
+        img = img.replace '\x0b', ''
+        img += '\n'
+
+      @insertText img
+
+    insertMedia: (e, { media }) ->
+      if media.length > 1
+        _.each media, (medium) =>
+          @insertImage medium.get('small'), true
+      else
+        @insertImage media[0].get 'small'
+
 
   #  Sidebar View
   #-----------------------------------------------
@@ -389,7 +413,7 @@ require [
     selectThumbnail: ->
       @modal.open()
 
-    setThumbnail: (e, medium) ->
+    setThumbnail: (e, { medium }) ->
       @$form.thumbnailId.val medium.get 'id'
       @$form.thumbnail.html @thumbnailTemplate medium.toJSON()
 
