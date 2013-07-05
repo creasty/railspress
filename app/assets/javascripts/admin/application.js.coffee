@@ -8,7 +8,7 @@ require ['jquery_ujs']
 #==============================================================================================
 #  Remove Chrome's ugly autofill highlights
 #-----------------------------------------------
-if navigator.userAgent.toLowerCase().indexOf('chrome') >= 0
+if ~navigator.userAgent.toLowerCase().indexOf 'chrome'
   require ['jquery'], ($) -> $ ->
     $('input:-webkit-autofill').each ->
       $t = $ @
