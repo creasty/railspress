@@ -219,7 +219,7 @@ require [
       @insertAndMoveCursor ran.start, text
       @editor.focus()
 
-    insertLink: (e) ->
+    insertLink: (e, txt) ->
       e.preventDefault()
       txt = @getSelectionText()
 
@@ -318,24 +318,40 @@ require [
       e.preventDefault()
       @modal.open()
 
-    insertImage: (url, alignment, nl = false) ->
-      if @mode == 'html'
-        img = "<img src=\"#{url}\" alt=\"\x0b\" class=\"align-#{alignment}\" />"
+    insertMedium: (medium, size, alignment, nl = false) ->
+      title = medium.get('title') ? ''
+      description = medium.get('description') ? title
+
+      title = _.escape title.replace /\n/, ' '
+      description = _.escape description.replace /\n/, ' '
+
+      if medium.get 'is_image'
+        url = medium.get size
+        text =
+          if @mode == 'html'
+            "<img src=\"#{url}\" alt=\"\x02#{description}\x03\" class=\"align-#{alignment}\" />"
+          else
+            "![\x02#{description}\x03](#{url})"
       else
-        img = "![\x0b](#{url})"
+        link = medium.get 'link'
+        text =
+          if 'html' == @mode
+            "<a href=\"#{link}\">\x02#{title}\x03</a>"
+          else
+            "[#{link}](\x02#{title}\x03)"
 
       if nl
-        img = img.replace '\x0b', ''
-        img += '\n'
+        text = text.replace /[\x02\x03\x0b]/g, ''
+        text += '\n'
 
-      @insertText img
+      @insertText text
 
     insertMedia: (e, { media, size, alignment }) ->
       if media.length > 1
         _.each media, (medium) =>
-          @insertImage medium.get(size), alignment, true
+          @insertMedium medium, size, alignment, true
       else
-        @insertImage media[0].get(size), alignment
+        @insertMedium media[0], size, alignment
 
 
   #  Sidebar View

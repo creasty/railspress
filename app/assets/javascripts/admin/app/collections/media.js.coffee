@@ -18,6 +18,7 @@ define [
       pageSize: 20
 
     queryParams:
+      modal: window.MODAL_NAME
       totalPages: null
       totalRecords: null
 

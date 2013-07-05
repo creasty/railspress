@@ -6,6 +6,7 @@ class Admin::MediaController < Admin::ApplicationController
     respond_to do |format|
       format.json do
         @media = Medium
+          .search(params[:modal] == 'thumbnail' ? { type: 'image/%' } : {})
           .order('created_at desc')
           .page(params[:page])
           .per(params[:per_page])

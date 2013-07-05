@@ -157,6 +157,8 @@ define [
       @$counter = @$view.find 'span.counter'
       Viewstate.attachTo @$view
 
+      @$displayOption = $ '#display_option'
+
       @$btn =
         crop: $ '#btn_crop'
         link: $ '#btn_link'
@@ -180,8 +182,10 @@ define [
         @$btn.link.attr 'href', selected[0].get 'link'
 
         if selected[0].get 'is_image'
+          @$displayOption.show()
           @$btn.crop.show().data 'model', selected[0]
         else
+          @$displayOption.hide()
           @$btn.crop.hide().data 'model', null
 
         @$view.trigger 'changeViewstate', 'selecting'

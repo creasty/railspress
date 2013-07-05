@@ -14,6 +14,19 @@ class Medium < ActiveRecord::Base
     presence: true,
     attachment_size: { less_than: 20.megabyte }
 
+  #  Scope
+  #-----------------------------------------------
+  def self.search(params)
+    q = ['1 = 1']
+
+    if params.try(:[], :type).present?
+      q[0] << ' and asset_content_type like ?'
+      q << params[:type]
+    end
+
+    where q
+  end
+
   #  General Callbacks
   #-----------------------------------------------
   before_validation :generate_title
