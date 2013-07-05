@@ -318,9 +318,9 @@ require [
       e.preventDefault()
       @modal.open()
 
-    insertImage: (url, nl = false) ->
+    insertImage: (url, alignment, nl = false) ->
       if @mode == 'html'
-        img = "<img src=\"#{url}\" alt=\"\x0b\" />"
+        img = "<img src=\"#{url}\" alt=\"\x0b\" class=\"align-#{alignment}\" />"
       else
         img = "![\x0b](#{url})"
 
@@ -330,12 +330,12 @@ require [
 
       @insertText img
 
-    insertMedia: (e, { media }) ->
+    insertMedia: (e, { media, size, alignment }) ->
       if media.length > 1
         _.each media, (medium) =>
-          @insertImage medium.get('small'), true
+          @insertImage medium.get(size), alignment, true
       else
-        @insertImage media[0].get 'small'
+        @insertImage media[0].get(size), alignment
 
 
   #  Sidebar View

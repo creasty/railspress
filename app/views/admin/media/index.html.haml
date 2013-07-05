@@ -57,6 +57,23 @@
           %td
             = button_tag '更新する', id: 'btn_update', class: 'btn btn-primary block'
 
+    - if params[:modal] == 'insert'
+      %section
+        %h2 表示オプション
+
+        %table.form.table-doubled
+          %tr
+            %td
+              %h3= label_tag :medium_size, 'サイズ'
+              %div.select
+                = select :medium, :size, [['大', 'large'], ['小', 'small'], ['サムネイル', 'thumbnail'], ['クロップ', 'cropped']]
+
+          %tr
+            %td
+              %h3= label_tag :medium_alignment, '位置'
+              %div.select
+                = select :medium, :alignment, [['左揃え', 'left'], ['中央揃え', 'center'], ['右揃え', 'right']]
+
     %section
       %h2 ファイルを削除
       = button_tag '削除する', id: 'btn_delete', class: 'btn btn-danger block'
@@ -69,6 +86,23 @@
         項目を選択中
 
       = button_tag '選択を解除する', id: 'btn_disselect', class: 'btn block'
+
+    - if params[:modal] == 'insert'
+      %section
+        %h2 表示オプション
+
+        %table.form.table-doubled
+          %tr
+            %td
+              %h3= label_tag :bulk_size, 'サイズ'
+              %div.select
+                = select :bulk, :size, [['大', 'large'], ['小', 'small'], ['サムネイル', 'thumbnail'], ['クロップ', 'cropped']]
+
+          %tr
+            %td
+              %h3= label_tag :bulk_alignment, '位置'
+              %div.select
+                = select :bulk, :alignment, [['左揃え', 'left'], ['中央揃え', 'center'], ['右揃え', 'right']]
 
     %section
       %h2 一括削除

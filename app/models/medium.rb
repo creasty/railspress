@@ -76,8 +76,12 @@ class Medium < ActiveRecord::Base
       file_name: read_attribute(:asset_file_name),
       file_size: read_attribute(:asset_file_size),
       file_type: file_type,
-      small: asset.url(:small),
+
+      large: asset.url(:large),
       thumbnail: asset.url(:thumbnail),
+      small: asset.url(:small),
+      cropped: asset.url(:cropped),
+
       link: asset.url,
       is_image: image?,
       crop_x: crop_x,
@@ -97,10 +101,6 @@ private
     unless self.title.present?
       title = file_name || asset_file_name.dup
       title.gsub!(/\.\w+$/, '')
-      title.gsub!(/[\']/, '')
-      title.gsub!('&', ' and ')
-      title.gsub!('@', ' at ')
-      title.gsub!(/[^a-z0-9]+/i, ' ')
       title.gsub!(/\s+/, ' ')
       title.strip!
       title.capitalize!

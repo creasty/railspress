@@ -17,7 +17,7 @@ define [
     template: _.template itemTemplate
 
     events:
-      'click .checkbox':  'toggle'
+      'click': 'toggle'
       'click .icon-delete': 'delete'
 
     initialize: ->
@@ -42,11 +42,11 @@ define [
       @
 
     renderSelected: ->
-      @$checkbox.attr 'checked', @model.get 'selected'
-
       if @model.get 'selected'
+        @$checkbox.prop 'checked', true
         @$el.addClass 'selected'
       else
+        @$checkbox.prop 'checked', false
         @$el.removeClass 'selected'
 
     toggle: -> @model.toggle()

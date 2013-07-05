@@ -164,6 +164,8 @@ define [
       @$form =
         title: $ '#medium_title'
         description: $ '#medium_description'
+        size: $ '#medium_size'
+        alignment: $ '#medium_alignment'
 
     changeSidebar: ->
       selected = Media.selected()
@@ -444,17 +446,37 @@ define [
       @$preview = $ '#footer_preview'
       @$pocketBody = $ '#pocket_body'
 
+      @$form =
+        medium_size: $ '#medium_size'
+        medium_alignment: $ '#medium_alignment'
+        bulk_size: $ '#bulk_size'
+        bulk_alignment: $ '#bulk_alignment'
+
     closeModal: ->
       @$wp.trigger 'closeModal', @name
 
     setThumbnail: ->
       sel = Media.selected()
-      @$wp.trigger 'setThumbnail', medium: sel[0] if sel.length == 1
+
+      if sel.length == 1
+        @$wp.trigger 'setThumbnail', medium: sel[0]
+
       @closeModal()
 
     insert: ->
       sel = Media.selected()
-      @$wp.trigger 'insertMedia', media: sel if sel.length > 0
+
+      if sel.length == 1
+        @$wp.trigger 'insertMedia',
+          media: sel
+          size: @$form.medium_size.val()
+          alignment: @$form.medium_alignment.val()
+      else if sel.length > 1
+        @$wp.trigger 'insertMedia',
+          media: sel
+          size: @$form.bulk_size.val()
+          alignment: @$form.bulk_alignment.val()
+
       @closeModal()
 
     update: ->
