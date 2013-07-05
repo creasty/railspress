@@ -298,7 +298,7 @@ require [
 
       repl =
         if 'html' == @mode
-          if txt.indexOf('\n') >= 0
+          if ~txt.indexOf '\n'
             """
             <pre><code>
             \x02#{txt}\x03
@@ -307,7 +307,7 @@ require [
           else
             "<code>\x02#{txt}\x03</code>"
         else
-          if txt.indexOf('\n') >= 0
+          if ~txt.indexOf '\n'
             txt.replace /^/mg, '\t'
           else
             "`\x02#{txt}\x03`"
@@ -347,12 +347,9 @@ require [
       @insertText text
 
     insertMedia: (e, { media, size, alignment }) ->
-      if media.length > 1
-        _.each media, (medium) =>
-          @insertMedium medium, size, alignment, true
-      else
-        @insertMedium media[0], size, alignment
-
+      nl = media.length > 1
+      _.each media, (medium) =>
+        @insertMedium medium, size, alignment, nl
 
   #  Sidebar View
   #-----------------------------------------------
