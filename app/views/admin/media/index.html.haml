@@ -66,13 +66,13 @@
             %td
               %h3= label_tag :medium_size, 'サイズ'
               %div.select
-                = select :medium, :size, [['大', 'large'], ['小', 'small'], ['サムネイル', 'thumbnail'], ['クロップ', 'cropped']]
+                = select :medium, :size, [['オリジナル', 'link'], ['大', 'large'], ['小', 'small'], ['サムネイル', 'thumbnail'], ['クロップ', 'cropped']]
 
           %tr
             %td
               %h3= label_tag :medium_alignment, '位置'
               %div.select
-                = select :medium, :alignment, [['左揃え', 'left'], ['中央揃え', 'center'], ['右揃え', 'right']]
+                = select :medium, :alignment, [['なし', 'none'], ['左揃え', 'left'], ['中央揃え', 'center'], ['右揃え', 'right']]
 
     %section
       %h2 ファイルを削除
@@ -96,13 +96,13 @@
             %td
               %h3= label_tag :bulk_size, 'サイズ'
               %div.select
-                = select :bulk, :size, [['大', 'large'], ['小', 'small'], ['サムネイル', 'thumbnail'], ['クロップ', 'cropped']]
+                = select :bulk, :size, [['オリジナル', 'link'], ['大', 'large'], ['小', 'small'], ['サムネイル', 'thumbnail'], ['クロップ', 'cropped']]
 
           %tr
             %td
               %h3= label_tag :bulk_alignment, '位置'
               %div.select
-                = select :bulk, :alignment, [['左揃え', 'left'], ['中央揃え', 'center'], ['右揃え', 'right']]
+                = select :bulk, :alignment, [['なし', 'none'], ['左揃え', 'left'], ['中央揃え', 'center'], ['右揃え', 'right']]
 
     %section
       %h2 一括削除
