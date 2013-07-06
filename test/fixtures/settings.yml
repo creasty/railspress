@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  setting_option: 
+  user: 
+  params: MyString
+
+two:
+  setting_option: 
+  user: 
+  params: MyString
