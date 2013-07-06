@@ -6,3 +6,5 @@ development:
   FACEBOOK_APP_ID: '423468787678045'
   FACEBOOK_SECRET: '9149b132fc2dc63a2b0c582c3f68da41'
 
+  MAIL_NOREPLY: 'no-reply@creasty.com'
+

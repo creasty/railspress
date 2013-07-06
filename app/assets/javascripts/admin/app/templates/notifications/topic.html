@@ -1,0 +1,11 @@
+<div class="icon">
+	<% if (icon_type == 'avatar') { %>
+		<img src="<%= icon %>" alt="">
+	<% } else { %>
+		<i class="icon-<%= icon %>"></i>
+	<% } %>
+</div>
+<div class="message">
+	<%= message %>
+	<time data-timestamp="<%= timestamp * 1e3 %>"></time>
+</div>

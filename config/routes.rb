@@ -21,6 +21,7 @@ RailsPress::Application.routes.draw do
     end
     resources :users
     resources :media
+    resources :notifications, except: %w[show edit]
   end
 
   #  Device for Commenter

@@ -2,10 +2,14 @@
   %nav
     = render_navigation expand_all: true
 
-  #usermenu
-    %div
+  %ul#usermenu
+    %li#notification
+      = link_to '', '#'
+      %ul
+
+    %li
       = link_to image_tag(avatar_url(current_user, 32), size: '32x32'), edit_admin_user_path(current_user)
-    %ul
-      %li= link_to 'プロフィール', edit_admin_user_path(current_user), class: 'icon-user'
-      %li= link_to '管理画面設定', '#settings', class: 'icon-setting'
-      %li= link_to 'ログアウト', admin_logout_path, class: 'icon-logout'
+      %ul
+        %li= link_to 'プロフィール', edit_admin_user_path(current_user), class: 'icon-user'
+        %li= link_to '管理画面設定', '#settings', class: 'icon-setting'
+        %li= link_to 'ログアウト', admin_logout_path, class: 'icon-logout'

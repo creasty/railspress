@@ -18,7 +18,7 @@ class Admin::CommentsController < Admin::ApplicationController
           .order('created_at DESC')
           .page(params[:page])
           .per(params[:per_page])
-          .includes :post
+          .includes :post, :user
 
         paginate_headers_for @threads
 
@@ -36,6 +36,7 @@ class Admin::CommentsController < Admin::ApplicationController
           .order('created_at DESC')
           .page(params[:page])
           .per(params[:per_page])
+          .includes :post, :user
 
         paginate_headers_for @comments
 

@@ -27,9 +27,8 @@ class Post < ActiveRecord::Base
 
   #  Scope
   #-----------------------------------------------
-  # default_scope where('status < ?', 2)
-  scope :privated, where(status: 0)
-  scope :published, where(status: 1)
+  scope :private, -> { where status: 0 }
+  scope :published, -> { where status: 1 }
 
   def self.sort(order_by, dir)
     order_by = order_by.present? ? order_by.gsub(/\W/, '') : 'created_at'

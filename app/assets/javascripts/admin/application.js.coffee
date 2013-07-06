@@ -53,3 +53,8 @@ require [
     offset: 12
     smartPlacement: true
 
+
+#=== Notification
+#==============================================================================================
+require ['common/notifications']
+

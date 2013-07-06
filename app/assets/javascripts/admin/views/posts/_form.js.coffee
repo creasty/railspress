@@ -322,8 +322,8 @@ require [
       title = medium.get('title') ? ''
       description = medium.get('description') ? title
 
-      title = _.escape title.replace /\n/, ' '
-      description = _.escape description.replace /\n/, ' '
+      title = _.escape title.replace /\n+/g, ' '
+      description = _.escape description.replace /\n+/g, ' '
 
       if medium.get 'is_image'
         url = medium.get size
