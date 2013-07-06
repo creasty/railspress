@@ -36,6 +36,7 @@ end
 
 group :development do
   gem 'powder', '~> 0.1.8'
+  gem 'pry-remote'
   gem 'meta_request'
   gem 'better_errors'
   gem 'binding_of_caller'
