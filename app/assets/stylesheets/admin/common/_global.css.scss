@@ -5,14 +5,14 @@
 	position: relative;
 	background: $header-bg-color;
 	width: 100%;
-	height: 55px;
+	height: 60px;
 	z-index: 1000;
 	@include experimental(user-select, none);
 
 	nav {
 		display: block;
 		width: 100%;
-		height: 55px;
+		height: 60px;
 	}
 }
 
@@ -24,7 +24,7 @@
 	ul {
 		background: $header-bg-color;
 		position: absolute;
-		top: 55px;
+		top: 60px;
 		margin-left: -15px;
 		width: 180px;
 		padding: 0;
@@ -67,7 +67,7 @@
 	top: 0;
 
 	> li {
-		height: 55px;
+		height: 60px;
 		margin-right: 40px;
 
 		> a {
@@ -75,7 +75,7 @@
 			display: block;
 			height: 26px;
 			line-height: 26px;
-			padding: 15px 0 14px;
+			padding: 17px 0;
 			font-size: 12px;
 			color: rgba($body-text-color, .3);
 
@@ -107,26 +107,112 @@
 #usermenu {
 	position: absolute;
 	right: 20px;
-	top: 11px;
-	height: 55px;
-	padding-left: 30px;
+	top: 0;
+	padding: 0;
+	margin: 0;
+	list-style: none;
+	height: 60px;
+	@extend .compact;
+	@extend .menu;
 
-	> div {
+	> li {
+		padding: 14px 0;
 		width: 32px;
 		height: 32px;
+		margin-left: 15px;
+		position: relative;
 
 		img {
 			@include border-radius(2px);
 			@include box-shadow(0 0 0 1px rgba(#000, .3));
 		}
+
+		@extend %dropdown-panel;
+
+		ul {
+			top: 60px;
+			margin-left: 0 !important;
+			right: -15px !important;
+		}
 	}
 
-	@extend %dropdown-panel;
+	#notification {
+		> a {
+			display: block;
+			width: 32px;
+			height: 32px;
+			line-height: 28px;
+			font-size: 12px;
+			color: $primary-color;
+			font-weight: bold;
+			text-align: center;
+			border: 2px solid $primary-color;
+			@include border-radius(2px);
+			@include box-sizing(border-box);
 
-	ul {
-		top: 32px;
-		right: -15px;
+		}
+		&:hover > a {
+			color: #fff;
+			background: $primary-color;
+		}
+
+		> ul {
+			width: 290px;
+			max-height: 350px;
+			font-size: 11px;
+			overflow-x: hidden;
+			overflow-y: scroll;
+
+			li {
+				@extend .clear-after;
+
+				padding: 15px 30px 15px (15px + 32px + 15px);
+				@include transition(background .3s);
+				cursor: default;
+				position: relative;
+
+				&:hover {
+					background: rgba(#000, .2);
+				}
+
+				&:before {
+					content: "";
+					position: absolute;
+					display: block;
+					width: 6px;
+					height: 6px;
+					top: 50%;
+					right: 15px - 3px;
+					margin-top: -3px;
+					@include border-radius(3px);
+					background: $primary-color;
+					opacity: 1;
+					visibility: visible;
+					@include transform(scale(1));
+					@include transition(all .3s ease, visibility 0s .3s);
+				}
+				&.read:before {
+					opacity: 0;
+					@include transform(scale(1.5));
+					visibility: hidden;
+				}
+
+				.icon {
+					width: 32px;
+					height: 32px;
+					float: left;
+					margin-left: -(32px + 15px);
+					background: rgba(#000, .5);
+				}
+				.message {
+					line-height: 1.6;
+					time {
+						display: block;
+						color: rgba(#fff, .5);
+					}
+				}
+			}
+		}
 	}
+
 }
-
-

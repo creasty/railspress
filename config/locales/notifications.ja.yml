@@ -1,0 +1,4 @@
+ja:
+  notifications:
+    test_topic_1: "あいああああいあいあいあいあい%{num}人がフォローしました"
+    test_topic_2: "%{num}人がフォローしましたあいああああいあいあいあいあい"

@@ -9,11 +9,14 @@
     = stylesheet_link_tag 'admin/application', media: 'all'
 
     = javascript_include_tag 'admin/require-config'
-    = javascript_include_tag 'require', data: { main: 'admin/application' }
-    = view_script_tag
-    = yield :js
 
-    = render 'admin/application/flash', flash: flash
+    - if is_admin?
+      = javascript_include_tag 'require', data: { main: 'admin/application' }
+      = render 'admin/application/flash', flash: flash
+    - else
+      = javascript_include_tag 'require'
+
+    = view_script_tag
 
   %body{ id: controller_name, class: action_name }
 
@@ -26,3 +29,5 @@
           = yield :menubar
 
     = yield
+
+    = yield :js

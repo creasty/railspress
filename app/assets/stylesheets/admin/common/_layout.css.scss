@@ -32,7 +32,7 @@ body {
 ==============================================================================================*/
 #menubar {
 	position: absolute;
-	top: 55px;
+	top: 60px;
 	left: 0;
 	right: 300px;
 	height: 60px;
@@ -96,7 +96,7 @@ body {
 ==============================================================================================*/
 %pocket {
 	position: absolute;
-	top: 115px;
+	top: 120px;
 	bottom: 0;
 	overflow-x: hidden;
 	@include box-sizing(border-box);
@@ -147,7 +147,7 @@ body {
 #pocket_side {
 	@extend %pocket;
 
-	top: 55px;
+	top: 60px;
 	right: 0;
 	width: 300px;
 	padding: 60px 20px 20px;
