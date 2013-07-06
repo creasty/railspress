@@ -13,7 +13,6 @@ require [
   'powertip'
   'datepicker'
   'selectize'
-  'ace/theme/solarized_light'
   'ace/mode/html'
   'ace/mode/markdown'
   'domReady!'

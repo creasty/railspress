@@ -1,2 +1,8 @@
 
-= render file: '/admin/sample/index'
+#main
+  - @pageviews.each do |pv|
+
+    %p #{pv.pageviews} (#{pv.date})
+
+
+/ render file: '/admin/sample/index'

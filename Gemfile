@@ -21,6 +21,7 @@ gem 'browsernizer'
 gem 'strong_parameters'
 gem 'acts-as-taggable-on'
 gem 'redcarpet'
+gem 'garb', git: 'git://github.com/Sija/garb.git'
 
 group :assets do
   gem 'sass-rails', '~> 3.2.3'

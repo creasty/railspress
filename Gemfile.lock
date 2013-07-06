@@ -1,3 +1,11 @@
+GIT
+  remote: git://github.com/Sija/garb.git
+  revision: 3dff408078bb2b5652ceeedd186c29dc3c438ac5
+  specs:
+    garb (0.9.7)
+      activesupport (>= 2.2)
+      multi_json (>= 1.3)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -269,6 +277,7 @@ DEPENDENCIES
   factory_girl_rails
   figaro
   friendly_id
+  garb!
   haml-rails
   jquery-fileupload-rails
   jquery-rails

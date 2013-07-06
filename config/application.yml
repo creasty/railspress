@@ -8,3 +8,8 @@ development:
 
   MAIL_NOREPLY: 'no-reply@creasty.com'
 
+  GOOGLE_API_KEY: 'AIzaSyCv3Fh19Z8Fc15ZiwQqw06Wh4q28MyzCP0'
+  GOOGLE_USERNAME: 'ykiwng@gmail.com'
+  GOOGLE_PASSWORD: 'kytwqsetmodzecqz'
+  GOOGLE_ANALYTICS_USERAGENT: 'UA-4498942-3'
+

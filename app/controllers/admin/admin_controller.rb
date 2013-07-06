@@ -2,7 +2,12 @@
 class Admin::AdminController < Admin::ApplicationController
 
   def index
-    # dashboard
+    GoogleAnalytics.login
+    @pageviews = GoogleAnalytics.pageview(
+      start_date: 1.month.ago,
+      # limit: 10,
+      sort: 'pageviews.desc',
+    ).results
   end
 
   def login

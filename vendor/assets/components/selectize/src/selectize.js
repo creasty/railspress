@@ -106,6 +106,7 @@ Selectize.prototype.setup = function() {
 	var $control_input;
 	var $dropdown;
 	var $dropdown_content;
+	var $dropdown_parent;
 	var inputMode;
 	var timeout_blur;
 	var timeout_focus;
@@ -117,7 +118,8 @@ Selectize.prototype.setup = function() {
 	$wrapper          = $('<div>').addClass(this.settings.theme).addClass(this.settings.wrapperClass).addClass(classes);
 	$control          = $('<div>').addClass(this.settings.inputClass).addClass('items').toggleClass('has-options', !$.isEmptyObject(this.options)).appendTo($wrapper);
 	$control_input    = $('<input type="text">').appendTo($control).attr('tabindex',tab_index);
-	$dropdown         = $('<div>').addClass(this.settings.dropdownClass).hide().appendTo($wrapper);
+	$dropdown_parent  = $(this.settings.dropdownParent || $wrapper);
+	$dropdown         = $('<div>').addClass(this.settings.dropdownClass).hide().appendTo($dropdown_parent);
 	$dropdown_content = $('<div>').addClass(this.settings.dropdownContentClass).appendTo($dropdown);
 
 	$wrapper.css({
@@ -152,6 +154,14 @@ Selectize.prototype.setup = function() {
 			window.setTimeout(function() {
 				self.focus(true);
 			}, 0);
+		}
+	});
+
+	// necessary for mobile webkit devices (manual focus triggering
+	// is ignored unless invoked within a click event)
+	$control.on('click', function(e) {
+		if (!self.isInputFocused) {
+			self.focus(true);
 		}
 	});
 
@@ -1450,7 +1460,7 @@ Selectize.prototype.close = function() {
  */
 Selectize.prototype.positionDropdown = function() {
 	var $control = this.$control;
-	var offset = $control.position();
+	var offset = this.settings.dropdownParent === 'body' ? $control.offset() : $control.position();
 	offset.top += $control.outerHeight(true);
 
 	this.$dropdown.css({
@@ -1776,6 +1786,8 @@ Selectize.defaults = {
 	inputClass: 'selectize-input',
 	dropdownClass: 'selectize-dropdown',
 	dropdownContentClass: 'selectize-dropdown-content',
+
+	dropdownParent: null,
 
 	load            : null, // function(query, callback)
 	score           : null, // function(search)
