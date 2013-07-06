@@ -22,8 +22,7 @@ ja:
       comment_inbox: "コメント"
       medium: "メディア"
       user: "ユーザ"
-      term: "タグ"
-      taxonomy: "分類"
+      setting: "設定"
 
     page: "ページ"
     post: "ブログ"

@@ -21,6 +21,10 @@
 %dropdown-panel {
 	@include popup-animation("ul", "&:hover ul", $y: -10px, $rotate: 0);
 
+	&:hover {
+		z-index: 1002;
+	}
+
 	ul {
 		background: $header-bg-color;
 		position: absolute;
@@ -67,6 +71,8 @@
 	top: 0;
 
 	> li {
+		@extend %dropdown-panel;
+
 		height: 60px;
 		margin-right: 40px;
 
@@ -78,27 +84,31 @@
 			padding: 17px 0;
 			font-size: 12px;
 			color: rgba($body-text-color, .3);
+			font-weight: bold;
 
 			&:before {
 				font-size: 24px;
 				vertical-align: -3px;
 				opacity: .5;
+				@include transition(all .3s);
 			}
 		}
 
-		&:hover > a {
-			color: $body-text-color;
-		}
+		&:hover > a,
 		&.selected > a {
 			color: $body-text-color;
 
+			&:before {
+				color: $primary-color;
+				opacity: 1;
+			}
+		}
+		&.selected > a {
 			&:after {
 				content: "";
 				@include arrow(bottom, 7px, $header-bg-color, 50%, 100%);
 			}
 		}
-
-		@extend %dropdown-panel;
 	}
 }
 
@@ -116,6 +126,8 @@
 	@extend .menu;
 
 	> li {
+		@extend %dropdown-panel;
+
 		padding: 14px 0;
 		width: 32px;
 		height: 32px;
@@ -127,8 +139,6 @@
 			@include box-shadow(0 0 0 1px rgba(#000, .3));
 		}
 
-		@extend %dropdown-panel;
-
 		ul {
 			top: 60px;
 			margin-left: 0 !important;
@@ -138,6 +148,7 @@
 
 	#notification {
 		> a {
+			position: relative;
 			display: block;
 			width: 32px;
 			height: 32px;
@@ -150,10 +161,23 @@
 			@include border-radius(2px);
 			@include box-sizing(border-box);
 
+			&:before {
+				content: "";
+				@include arrow(right, 7px, $primary-color, -7px, 7px);
+			}
+			&:after {
+				content: "";
+				@include arrow(right, 4px, $header-bg-color, -4px, 10px);
+				@include transition(border-left-color .3s);
+			}
 		}
 		&:hover > a {
 			color: #fff;
 			background: $primary-color;
+
+			&:after {
+				border-left-color: $primary-color;
+			}
 		}
 
 		> ul {
@@ -202,7 +226,18 @@
 					height: 32px;
 					float: left;
 					margin-left: -(32px + 15px);
-					background: rgba(#000, .5);
+					background: $info-color;
+					text-align: center;
+					color: $header-bg-color;
+					@include border-radius(3px);
+
+					i {
+						font-size: 24px;
+
+						&:before {
+							padding: 0;
+						}
+					}
 				}
 				.message {
 					line-height: 1.6;

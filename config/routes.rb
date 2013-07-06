@@ -6,8 +6,8 @@ RailsPress::Application.routes.draw do
     root to: 'admin#index'
 
     devise_scope :user do
-      get '/login' => 'admin#login'
-      get '/logout' => 'admin#logout'
+      get :login, to: 'admin#login'
+      get :logout, to: 'admin#logout'
     end
 
     resources :pages
@@ -21,7 +21,9 @@ RailsPress::Application.routes.draw do
     end
     resources :users
     resources :media
+
     resources :notifications, except: %w[show edit]
+    resources :settings
   end
 
   #  Device for Commenter
