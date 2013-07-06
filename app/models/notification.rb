@@ -27,7 +27,7 @@ class Notification < ActiveRecord::Base
     {
       id: id,
       name: notification_topic.name,
-      icon: 'check',
+      icon: 'info',
       icon_type: 'icon',
       message: message,
       timestamp: created_at.to_i,

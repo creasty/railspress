@@ -12,6 +12,7 @@ class User < ActiveRecord::Base
   has_many :pages, dependent: :destroy
   has_many :oauths, dependent: :destroy
   has_many :notifications, dependent: :destroy
+  has_many :settings, dependent: :destroy
   accepts_nested_attributes_for :oauths
 
   #  Validation
