@@ -2,6 +2,7 @@
 class Notification < ActiveRecord::Base
 
   attr_accessible :notification_topic, :params, :user, :read
+  serialize :params
 
   #  Association
   #-----------------------------------------------
@@ -16,8 +17,7 @@ class Notification < ActiveRecord::Base
   #  Public Methods
   #-----------------------------------------------
   def message
-    op = params.present? ? ActiveSupport::JSON.decode(params) : {}
-    op.symbolize_keys!
+    op = params.merge params
     op[:scope] = :notifications
     op[:default] = ''
     I18n.t notification_topic.name, op
