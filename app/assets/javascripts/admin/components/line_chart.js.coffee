@@ -10,11 +10,12 @@ define [
   defineComponent ->
 
     @defaultAttrs
+      className: 'ui-line-chart'
+
       padding: [20, 20, 50, 20]
       data: []
       labels: []
-
-      className: 'ui-line-chart'
+      unit: ''
 
       lineHtml: '<div class="line"></div>'
       dotHtml: '<div class="dot"></div>'
@@ -40,7 +41,7 @@ define [
 
         @$dots[i] =
           $(@attr.dotHtml)
-          .data('powertip', @attr.data[i])
+          .data('powertip', @attr.data[i] + @attr.unit)
           .powerTip
             placement: 'n'
             smartPlacement: true
@@ -53,8 +54,8 @@ define [
           .appendTo @$node
 
     @render = ->
-      @height = @$node.height() - (@attr.padding[0]) - (@attr.padding[2])
-      @width = @$node.width() - (@attr.padding[1]) - (@attr.padding[3])
+      @height = @$node.height() - @attr.padding[0] - @attr.padding[2]
+      @width = @$node.width() - @attr.padding[1] - @attr.padding[3]
 
       @dx = @width / (@len - 1)
 
@@ -64,10 +65,8 @@ define [
         else
           @height / (@maximum - @minimum)
 
-      for i in [0...@len - 1] by 1
-        @drawLine i
-
       for i in [0...@len] by 1
+        @drawLine i if i < @len - 1
         @drawDot i
         @renderLabelX i
 

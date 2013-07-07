@@ -1,16 +1,20 @@
 
-/ render file: '/admin/sample/index'
 
 #main
 
   #google_analytics
 
+  :coffee
 
-:coffee
+    require ['components/line_chart', 'domReady!'], (LineChart) ->
 
-  require ['components/line_chart', 'domReady!'], (LineChart) ->
+      LineChart.attachTo '#google_analytics',
+        unit: ' PV'
+        data: [70, 200, 90, 110, 35, 300, 125]
+        labels: ['sunday', 'monday', 'tuesday', 'wednesday', 'friday', 'thursday', 'saturday']
 
-    LineChart.attachTo '#google_analytics',
-      data: [70, 200, 90, 110, 35, 300, 125]
-      labels: ['sunday', 'monday', 'tuesday', 'wednesday', 'friday', 'thursday', 'saturday']
+
+  != '<br>' * 3
+
+  = render file: '/admin/sample/all'
 
