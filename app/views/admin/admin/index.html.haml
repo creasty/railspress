@@ -1,8 +1,16 @@
 
-#main
-  - @pageviews.each do |pv|
-
-    %p #{pv.pageviews} (#{pv.date})
-
-
 / render file: '/admin/sample/index'
+
+#main
+
+  #google_analytics
+
+
+:coffee
+
+  require ['components/line_chart', 'domReady!'], (LineChart) ->
+
+    LineChart.attachTo '#google_analytics',
+      data: [70, 200, 90, 110, 35, 300, 125]
+      labels: ['sunday', 'monday', 'tuesday', 'wednesday', 'friday', 'thursday', 'saturday']
+
