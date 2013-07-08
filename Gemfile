@@ -43,12 +43,17 @@ group :development do
   gem 'binding_of_caller'
   gem 'yaml_db'
   gem 'rails-erd'
+  gem 'growl'
+  gem 'guard-rspec'
+  gem 'guard-spork'
 end
 
 group :test do
   gem 'capybara'
+  # gem 'capybara-webkit'
   gem 'capybara-screenshot'
   gem 'database_cleaner'
   gem 'factory_girl_rails'
   gem 'rspec-rails'
+  gem 'spork-rails'
 end
