@@ -15,12 +15,14 @@ gem 'omniauth-twitter'
 gem 'omniauth-facebook'
 gem 'koala'
 gem 'twitter'
+gem 'tweetstream'
 gem 'rabl'
 gem 'oj'
 gem 'browsernizer'
 gem 'strong_parameters'
 gem 'acts-as-taggable-on'
 gem 'redcarpet'
+gem 'garb', git: 'git://github.com/Sija/garb.git'
 
 group :assets do
   gem 'sass-rails', '~> 3.2.3'
@@ -35,6 +37,7 @@ end
 
 group :development do
   gem 'powder', '~> 0.1.8'
+  gem 'pry-remote'
   gem 'meta_request'
   gem 'better_errors'
   gem 'binding_of_caller'

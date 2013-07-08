@@ -4,6 +4,7 @@ RailsPress::Application.routes.draw do
   #-----------------------------------------------
   namespace :admin do
     root to: 'admin#index'
+    get :google_analytics, to: 'admin#google_analytics'
 
     devise_scope :user do
       get :login, to: 'admin#login'

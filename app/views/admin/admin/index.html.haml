@@ -1,2 +1,33 @@
 
-= render file: '/admin/sample/index'
+#main
+  .row
+    .col-Ab-A
+      #google_analytics.ui-line-chart.loader
+        %h2 Google Analytics
+
+      %table.table
+        %thead
+          %tr
+            %th ページ
+            %th PV
+            %th オーガニック
+            %th 新規
+            %th 離脱率
+            %th 検索エンジン
+
+        %tbody#google_analytics_table
+
+    .col-Ab-b
+
+      #facebook_reports.loader
+        %h2 Facebook Page
+
+      #twitter_share
+        %h2 Twitter
+        %span 457
+
+
+  != '<br>' * 3
+
+  = render file: '/admin/sample/all'
+
