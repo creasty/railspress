@@ -25,9 +25,9 @@ define [
       @$lines = []
       @$dots = []
       @$labels = []
-      @len = @attr.data.length
-      @maximum = Math.max @attr.data...
-      @minimum = Math.min @attr.data...
+      @len = @values.length
+      @maximum = Math.max @values...
+      @minimum = Math.min @values...
 
       @$node.addClass @attr.className
 
@@ -41,7 +41,7 @@ define [
 
         @$dots[i] =
           $(@attr.dotHtml)
-          .data('powertip', @attr.data[i] + @attr.unit)
+          .data('powertip', @values[i] + @unit)
           .powerTip
             placement: 'n'
             smartPlacement: true
@@ -50,7 +50,7 @@ define [
         @$labels[i] =
           $(@attr.labelHtml)
           .addClass(if i == 0 then 'first' else if i == @len - 1 then 'last' else null)
-          .html(@attr.labels[i])
+          .html(@labels[i])
           .appendTo @$node
 
     @render = ->
@@ -92,9 +92,13 @@ define [
 
     @getPosX = (i) -> @dx * i + @attr.padding[3]
 
-    @getPosY = (i) -> @ratio * (@attr.data[i] - @minimum) + @attr.padding[2]
+    @getPosY = (i) -> @ratio * (@values[i] - @minimum) + @attr.padding[2]
 
     @after 'initialize', ->
+      @values = @$node.data('values') ? @attr.values
+      @labels = @$node.data('labels') ? @attr.labels
+      @unit = @$node.data('unit') ? @attr.unit
+
       @init()
       @render()
       $(window).smartresize @render.bind @

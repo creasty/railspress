@@ -1,17 +1,30 @@
 
-
 #main
+  .row
+    .col-Ab-A
+      #google_analytics.ui-line-chart.loader
+        %h2 Google Analytics
 
-  #google_analytics
+      %table.table
+        %thead
+          %tr
+            %th ページ
+            %th PV
+            %th オーガニック
+            %th 新規
+            %th 離脱率
+            %th 検索エンジン
 
-  :coffee
+        %tbody#google_analytics_table
 
-    require ['components/line_chart', 'domReady!'], (LineChart) ->
+    .col-Ab-b
 
-      LineChart.attachTo '#google_analytics',
-        unit: ' PV'
-        data: [70, 200, 90, 110, 35, 300, 125]
-        labels: ['sunday', 'monday', 'tuesday', 'wednesday', 'friday', 'thursday', 'saturday']
+      #facebook_reports.loader
+        %h2 Facebook Page
+
+      #twitter_share
+        %h2 Twitter
+        %span 457
 
 
   != '<br>' * 3

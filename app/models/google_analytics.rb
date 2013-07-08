@@ -6,16 +6,18 @@ class GoogleAnalytics
     def login
       Garb::Session.api_key = ENV['GOOGLE_API_KEY']
       Garb::Session.login ENV['GOOGLE_USERNAME'], ENV['GOOGLE_PASSWORD']
-    end
 
-    def pageview(url = '/', options = {})
-      options[:filters] = { 'page_path.eql' => url }
-
-      profile = Garb::Management::Profile.all.detect { |p|
+      @@profile = Garb::Management::Profile.all.detect { |p|
         p.web_property_id == ENV['GOOGLE_ANALYTICS_USERAGENT']
       }
+    end
 
-      GoogleReport.results profile, options
+    def pageview(options = {})
+      GooglePageview.results @@profile, options
+    end
+
+    def search(options = {})
+      GoogleSearch.results @@profile, options
     end
 
   end

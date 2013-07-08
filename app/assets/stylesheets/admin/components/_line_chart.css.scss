@@ -45,14 +45,16 @@
 		font-weight: bold;
 		text-transform: uppercase;
 		line-height: 1;
+		@include experimental(user-select, none);
+		cursor: default;
 
 		&.first {
 			text-align: left;
-			margin-left: 0;
+			margin-left: -2px;
 		}
 		&.last {
 			text-align: right;
-			margin-left: -100px;
+			margin-left: -100px + 3px;
 		}
 	}
 }
