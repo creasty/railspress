@@ -2,9 +2,9 @@ class Medium < ActiveRecord::Base
 
   include Rails.application.routes.url_helpers
 
-  attr_accessor :asset_delete, :processing, :content_type, :file_name
+  attr_accessor :processing, :content_type
   attr_accessible :title, :description, :asset
-  attr_accessible :asset_delete, :content_type, :file_name,
+  attr_accessible :content_type, :file_name,
     :crop_x, :crop_y, :crop_w, :crop_h
 
   #  Validation
@@ -29,7 +29,7 @@ class Medium < ActiveRecord::Base
 
   #  General Callbacks
   #-----------------------------------------------
-  before_validation :generate_title
+  # before_validation :generate_title
 
   #  Paperclip
   #-----------------------------------------------
@@ -49,7 +49,6 @@ class Medium < ActiveRecord::Base
     url: '/system/:class/:id_partition/:style.:extension',
     path: ':rails_root/public:url'
 
-  before_validation :destroy?
   # before_validation :fix_crop_coord
   # before_post_process :rename_image
   before_post_process :image?
@@ -74,6 +73,7 @@ class Medium < ActiveRecord::Base
   end
 
   def file_type
+    return ''
     type = content_type || asset.content_type
 
     return 'pdf' if type == 'application/pdf'
@@ -148,10 +148,6 @@ private
     self.crop_y = (self.crop_y * ratio).truncate
     self.crop_w = (self.crop_w * ratio).truncate
     self.crop_h = (self.crop_h * ratio).truncate
-  end
-
-  def destroy?
-    self.asset.clear if self.asset_delete == '1'
   end
 
 end

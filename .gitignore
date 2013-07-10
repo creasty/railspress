@@ -15,4 +15,4 @@ db/schema.rb
 *.sublime-project
 *.sublime-workspace
 
-/vendor/assets/components
+vendor/assets/components

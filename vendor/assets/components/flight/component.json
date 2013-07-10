@@ -23,6 +23,6 @@
   "_id": "flight@1.0.9",
   "repository": {
     "type": "git",
-    "url": "git://github.com/twitter/flight"
+    "url": "git://github.com/flightjs/flight.git"
   }
 }

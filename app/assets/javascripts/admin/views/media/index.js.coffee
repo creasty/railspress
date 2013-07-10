@@ -262,8 +262,8 @@ define [
 
         medium = selected[0]
         medium.save data,
-          success: (model, res) ->
-            UpdateNotify.success res.message
+          success: ->
+            UpdateNotify.success 'メディアを更新しました'
 
   #  Modal
   #-----------------------------------------------

@@ -74,8 +74,8 @@ class Admin::MediaController < Admin::ApplicationController
       if @medium.update_attributes params[:medium]
         format.html do
           redirect_to edit_admin_medium_path(@medium), notice: 'Updated!'
-          end
-          format.json { render json: { message: 'メディアを更新しました' } }
+        end
+        format.json { render json: {} }
       else
         format.html do
           flash.now[:alert] = 'Failed!'
