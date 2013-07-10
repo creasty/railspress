@@ -2,7 +2,7 @@ class Medium < ActiveRecord::Base
 
   include Rails.application.routes.url_helpers
 
-  attr_accessor :processing, :content_type
+  attr_accessor :processing, :content_type, :file_name
   attr_accessible :title, :description, :asset
   attr_accessible :content_type, :file_name,
     :crop_x, :crop_y, :crop_w, :crop_h
@@ -27,9 +27,9 @@ class Medium < ActiveRecord::Base
     where q
   end
 
-  #  General Callbacks
+  #  Callbacks
   #-----------------------------------------------
-  # before_validation :generate_title
+  before_validation :generate_title
 
   #  Paperclip
   #-----------------------------------------------
@@ -49,8 +49,6 @@ class Medium < ActiveRecord::Base
     url: '/system/:class/:id_partition/:style.:extension',
     path: ':rails_root/public:url'
 
-  # before_validation :fix_crop_coord
-  # before_post_process :rename_image
   before_post_process :image?
   after_save :check_file
   after_update :reprocess_image
@@ -73,7 +71,6 @@ class Medium < ActiveRecord::Base
   end
 
   def file_type
-    return ''
     type = content_type || asset.content_type
 
     return 'pdf' if type == 'application/pdf'
