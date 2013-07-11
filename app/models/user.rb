@@ -8,8 +8,9 @@ class User < ActiveRecord::Base
 
   #  Association
   #-----------------------------------------------
-  has_many :posts, dependent: :destroy
   has_many :pages, dependent: :destroy
+  has_many :posts, dependent: :destroy
+  has_many :comments, dependent: :destroy
   has_many :oauths, dependent: :destroy
   has_many :notifications, dependent: :destroy
   has_many :settings, dependent: :destroy

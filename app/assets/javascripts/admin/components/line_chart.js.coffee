@@ -15,6 +15,7 @@ define [
       padding: [20, 20, 50, 20]
       data: []
       labels: []
+      tooltips: []
       unit: ''
 
       lineHtml: '<div class="line"></div>'
@@ -41,7 +42,7 @@ define [
 
         @$dots[i] =
           $(@attr.dotHtml)
-          .data('powertip', @values[i] + @unit)
+          .data('powertip', @tooltips[i] ? (@values[i] + @unit))
           .powerTip
             placement: 'n'
             smartPlacement: true
@@ -97,6 +98,7 @@ define [
     @after 'initialize', ->
       @values = @$node.data('values') ? @attr.values
       @labels = @$node.data('labels') ? @attr.labels
+      @tooltips = @$node.data('tooltips') ? @attr.tooltips
       @unit = @$node.data('unit') ? @attr.unit
 
       @init()

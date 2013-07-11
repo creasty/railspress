@@ -1,8 +1,12 @@
 
 body#admin.index {
 
-	#google_analytics {
+	.ui-line-chart {
 		height: 250px;
+
+		+ .ui-line-chart {
+			margin-top: 20px;
+		}
 
 		h2 {
 			color: #fff;
@@ -10,6 +14,14 @@ body#admin.index {
 			padding: 20px;
 			margin: 0;
 			line-height: 1;
+		}
+	}
+
+	#activities {
+		background: $info-color;
+
+		.dot {
+			border: 2px solid $info-color;
 		}
 	}
 

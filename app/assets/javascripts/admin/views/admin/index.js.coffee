@@ -10,6 +10,19 @@ require [
   $google_analytics_table = $ '#google_analytics_table'
   $twitter_share = $ '#twitter_share'
   $facebook_reports = $ '#facebook_reports'
+  $activities = $ '#activities'
+
+  $.ajax
+    url: '/admin/activities'
+    success: (data) ->
+      $activities.removeClass 'loader'
+
+      LineChart.attachTo $activities,
+        values: data.values
+        labels: data.labels
+        tooltips: data.tooltips
+        padding: [60, 20, 50, 20]
+
 
   $.ajax
     url: '/admin/google_analytics'
