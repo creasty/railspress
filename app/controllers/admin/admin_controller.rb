@@ -12,22 +12,23 @@ class Admin::AdminController < Admin::ApplicationController
       tooltips: [],
     }
 
-    @posts = Post
-      .select('id, date(created_at) as d, count(*) as count')
-      .where('created_at >= ?', 29.day.ago)
-      .group('date(created_at)')
-      .order 'created_at'
+    oma = 29.day.ago
+    post_index = 0
+    comment_index = 0
+
+    @posts = User.current_user
+      .posts
+      .select('date(created_at) as d, count(*) as count')
+      .where('created_at >= ?', oma)
+      .group('d')
+      .order 'd'
 
     @comments = User.current_user
       .comments
-      .select('id, date(created_at) as d, count(*) as count')
-      .where('created_at >= ?', 29.day.ago)
-      .group('date(created_at)')
-      .order 'created_at'
-
-    post_index = 0
-    comment_index = 0
-    oma = 29.day.ago
+      .select('date(created_at) as d, count(*) as count')
+      .where('created_at >= ?', oma)
+      .group('d')
+      .order 'd'
 
     30.times do |day|
       d = oma + day.day
