@@ -51,3 +51,8 @@ define [
     mouseLeave: ->
       @$preview.css backgroundPosition: '50% 50%'
 
+    addLoader: ->
+      @$preview.addClass 'loader'
+
+    removeLoader: ->
+      @$preview.removeClass 'loader'

@@ -101,12 +101,7 @@ dl.compact > dd { margin-left: 0; }
 
 /*=== Loader
 ==============================================================================================*/
-.loader {
-	&:before {
-		content: "";
-		@include loading-cube;
-	}
-	&.loaded:before {
-		display: none;
-	}
+.loader:after {
+	content: "";
+	@include loading-cube;
 }

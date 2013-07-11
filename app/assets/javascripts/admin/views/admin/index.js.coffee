@@ -28,7 +28,7 @@ require [
       for se in data.search
         $google_analytics_table.append temp se
 
-      $google_analytics.addClass 'loaded'
+      $google_analytics.removeClass 'loader'
 
       LineChart.attachTo $google_analytics,
         unit: ' PV'
@@ -37,7 +37,7 @@ require [
         padding: [60, 20, 50, 20]
 
 
-  $facebook_reports.addClass 'loaded'
+  $facebook_reports.removeClass 'loader'
   LineChart.attachTo $facebook_reports,
     unit: ' 人'
     values: Array(Array(15)...).map (v, i) -> (Math.random() * 400) | 0
