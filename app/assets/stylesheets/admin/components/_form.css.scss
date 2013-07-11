@@ -369,7 +369,11 @@ a.btn {
 $btn-color-list:
 	primary $primary-color,
 	danger  $danger-color,
-	success $success-color;
+	success $success-color,
+	info $info-color,
+	warning $warning-color,
+	facebook $facebook-color,
+	twitter $twitter-color;
 
 @each $btn-color in $btn-color-list {
 	.btn.btn-#{nth($btn-color, 1)} {

@@ -2,8 +2,6 @@
 class Admin::AdminController < Admin::ApplicationController
 
   def index
-    GoogleAnalytics.login
-
   end
 
   def google_analytics

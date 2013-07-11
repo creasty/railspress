@@ -58,7 +58,7 @@ define [
 
       Media.fetch
         success: =>
-          @$main.addClass 'loaded'
+          @$main.removeClass 'loader'
           @loadMore()
 
     render: ->
@@ -76,6 +76,7 @@ define [
           width = (cw + @gutterWidth) / col - @gutterWidth
 
           $el.find('li').width width
+          $el.data 'masonry-width', width
           width
 
       @
@@ -91,6 +92,7 @@ define [
     addOne: (medium) ->
       view = new ThumbView model: medium
       $el = view.render().$el
+
       if medium.get('id')?
         @$el.append($el.addClass('appended')).masonry 'reload'
       else
@@ -103,17 +105,17 @@ define [
     addLoader: (op, callback) ->
       medium = new Media.model
       medium.set op
-      Media.add medium
+      Media.add medium, at: 0
 
       callback && callback
-        $el: medium.view.$el
         model: medium
+        view: medium.view
 
     toggle: (e) ->
       $t = $ e.currentTarget
       model = $t.data 'model'
 
-      if !e.shiftKey || window.MODAL_NAME == 'thumbnail'
+      if !(e.ctrlKey || e.metaKey) || window.MODAL_NAME == 'thumbnail'
         Media.selected().forEach (medium) ->
           medium.toggle() if medium.id != model.id
 
@@ -299,7 +301,7 @@ define [
       ]
       @prev = @coords.join ':'
 
-      @$el.addClass 'loading'
+      @$el.addClass 'loader'
 
       img = new Image()
       img.src = src
@@ -314,7 +316,7 @@ define [
           setSelect: @getSelection()
           # aspectRatio: 1
 
-        @$el.removeClass 'loading'
+        @$el.removeClass 'loader'
 
     close: ->
       if @prev != @coords.join ':'
@@ -408,12 +410,14 @@ define [
           small:     data
           loading:   true
         },
-        (view) ->
-          d.loader = view.$preview.addClass 'loading'
-          d.model = view.model
+        (ob) ->
+          d.view = ob.view
+          d.model = ob.view.model
+
+          d.view.addLoader()
 
     eachSuccess: (e, res, d) ->
-      d.loader.removeClass 'loading'
+      d.view.removeLoader()
       d.model.set res
 
     eachError: (e, res, d) ->

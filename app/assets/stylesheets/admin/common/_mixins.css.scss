@@ -247,6 +247,7 @@
 	background: transparent;
 	@include transition(box-shadow .1s);
 	@include experimental(animation, loading-cude 1s linear infinite);
+	z-index: 2000;
 }
 
 @include keyframes(loading-cude) {

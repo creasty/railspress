@@ -51,7 +51,7 @@ define [
 
       CommentsThreads.fetch
         success: =>
-          @$main.addClass 'loaded'
+          @$main.removeClass 'loader'
           @loadComments null, CommentsThreads.at(0).id
           @loadMore()
 
@@ -124,13 +124,13 @@ define [
       @$thread.on 'scroll', @loadMore.bind(@)
 
     loadComments: (post_id) ->
-      @$thread.removeClass 'loaded'
+      @$thread.addClass 'loader'
 
       Comments.post_id = post_id
       Comments.fetch
         post_id: post_id,
         success: =>
-          @$thread.addClass 'loaded'
+          @$thread.removeClass 'loader'
 
     addNew: (op) ->
       comment = new Comments.model
