@@ -1,8 +1,0 @@
-{
-  "name": "jquery-autocomplete",
-  "version": "2.2.0",
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/dyve/jquery-autocomplete.git"
-  }
-}
