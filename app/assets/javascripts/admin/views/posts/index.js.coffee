@@ -48,11 +48,11 @@ define [
     refresh: ->
       return if Posts.isProcessing
 
-      @$main.removeClass 'loaded'
+      @$main.addClass 'loader'
 
       Posts.fetch
         success: (_, res) =>
-          @$main.addClass 'loaded'
+          @$main.removeClass 'loader'
 
     render: -> @
 

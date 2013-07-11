@@ -89,6 +89,7 @@ table.table {
 			font-weight: bold;
 			cursor: default;
 			@include experimental(user-select, none);
+			vertical-align: middle;
 
 			&:after {
 				font-family: "LigatureSymbols";

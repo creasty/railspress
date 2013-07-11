@@ -134,7 +134,7 @@ require [
       $(window).on 'insertMedia', @insertMedia.bind @
 
       @render()
-      @$el.addClass 'loaded'
+      @$el.removeClass 'loader'
 
     setMode: (mode) ->
       return if mode == @mode

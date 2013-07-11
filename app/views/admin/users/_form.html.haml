@@ -69,17 +69,17 @@
             %td.label Facebook
             %td
               - if @user.facebook?
-                = button_tag '接続しています', class: 'btn btn-success ui-auth-facebook linked'
+                = button_tag '接続しています', class: 'btn btn-facebook ui-auth-facebook linked'
               - else
-                = button_tag 'Facebook に接続する', class: 'btn btn-success ui-auth-facebook'
+                = button_tag 'Facebook に接続する', class: 'btn btn-facebook ui-auth-facebook'
 
           %tr
             %td Twitter
             %td
               - if @user.twitter?
-                = button_tag '接続しています', class: 'btn btn-success ui-auth-twitter linked'
+                = button_tag '接続しています', class: 'btn btn-twitter ui-auth-twitter linked'
               - else
-                = button_tag 'Twitter に接続する', class: 'btn btn-success ui-auth-twitter'
+                = button_tag 'Twitter に接続する', class: 'btn btn-twitter ui-auth-twitter'
 
       - else
 
