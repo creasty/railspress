@@ -24,18 +24,19 @@ class NotificationMailer < ActionMailer::Base
 
   #  誰かが誰かに返信したときに送信する通知メール
   #-----------------------------------------------
-  def reply(replied_user, user, comment)
-    @user = replied_user
-    @replying_user = user
-    @commentable = comment.commentable
+  def reply(comment, object_user, user)
     @comment = comment
+    @object_user = object_user
+    @user = user
+
+    @commentable = comment.commentable
 
     subject = I18n.t(
       'notification_mailer.reply.subject',
-      username: @replying_user.username
+      username: @user.username
     )
 
-    mail to: @user.email, subject: subject
+    mail to: @object_user.email, subject: subject
   end
 
   #  アカウントが削除されたとき送信する通知メール

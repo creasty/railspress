@@ -8,8 +8,6 @@ require [
 
   $google_analytics = $ '#google_analytics'
   $google_analytics_table = $ '#google_analytics_table'
-  $twitter_share = $ '#twitter_share'
-  $facebook_reports = $ '#facebook_reports'
   $activities = $ '#activities'
 
   $.ajax
@@ -22,7 +20,6 @@ require [
         labels: data.labels
         tooltips: data.tooltips
         padding: [60, 20, 50, 20]
-
 
   $.ajax
     url: '/admin/google_analytics'
@@ -49,10 +46,3 @@ require [
         labels: data.pageviews.labels
         padding: [60, 20, 50, 20]
 
-
-  $facebook_reports.removeClass 'loader'
-  LineChart.attachTo $facebook_reports,
-    unit: ' 人'
-    values: Array(Array(15)...).map (v, i) -> (Math.random() * 400) | 0
-    labels: Array(Array(15)...).map (v, i) -> (11 + i) % 31
-    padding: [60, 20, 50, 20]

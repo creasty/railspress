@@ -15,6 +15,10 @@ class Comment < ActiveRecord::Base
   validates :user, presence: true
   validates :content, presence: true
 
+  #  Callbacks
+  #-----------------------------------------------
+  after_create :reply
+
   #  Kaminari
   #-----------------------------------------------
   paginates_per 10
@@ -53,6 +57,7 @@ class Comment < ActiveRecord::Base
       was_created: was_created,
     }
   end
+
   def to_thread_json
     {
       id: post.id,
@@ -61,6 +66,22 @@ class Comment < ActiveRecord::Base
       user_name: user.name,
       timestamp: created_at.to_i,
     }
+  end
+
+  def reply
+    object_users = content.scan(/\@\w+/)
+
+    return true if object_users.lenght == 0
+
+    object_users.each do |object_user|
+      object_user = User.find object_user
+
+      if object_user
+        NotificationMailer.reply self, User.current_user, object_user
+      end
+    end
+
+    true
   end
 
 end
