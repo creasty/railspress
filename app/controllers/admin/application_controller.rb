@@ -24,8 +24,12 @@ module Admin
     def paginate_headers_for(model)
       rp = request.query_parameters
 
-      offset = request.original_url.index('?') - 1
-      url = request.original_url.slice(0..offset) unless rp.empty?
+      offset = request.original_url.index '?'
+
+      return if offset.nil?
+
+      offset -= 1
+      url = request.original_url[0..offset] unless rp.empty?
       url ||= request.original_url
 
       page = {}
@@ -37,12 +41,12 @@ module Admin
 
       links = []
 
-      page.each do |k,v|
-        new_request_hash= rp.merge({:page => v})
+      page.each do |k, v|
+        new_request_hash = rp.merge page: v
         links << "<#{url}?#{new_request_hash.to_param}>;rel=\"#{k}\""
       end
 
-      headers[:Link] = links.join ','
+      headers['Link'] = links.join ','
     end
 
   end
