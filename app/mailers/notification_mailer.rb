@@ -24,12 +24,10 @@ class NotificationMailer < ActionMailer::Base
 
   #  誰かが誰かに返信したときに送信する通知メール
   #-----------------------------------------------
-  def reply(comment, object_user, user)
+  def reply(comment, user, object_user)
     @comment = comment
-    @object_user = object_user
     @user = user
-
-    @commentable = comment.commentable
+    @object_user = object_user
 
     subject = I18n.t(
       'notification_mailer.reply.subject',
@@ -56,19 +54,13 @@ class NotificationMailer < ActionMailer::Base
 
 
   def self.deliver_mail(mail)
-    allow_send = true # production 以外では @creasty.com にしか送信しない
-    unless Rails.env.production?
-      mail.to.each do |to|
-        unless to =~ /@creasty\.com$/
-          allow_send = false
-          break
-        end
-      end
-    end
+    # production 以外では @creasty.com にしか送信しない
+    allow_send = Rails.env.production? || mail.to.all? { |to| to =~ /@creasty\.com$/ }
+
     if allow_send
       ActiveSupport::Notifications.instrument('deliver.action_mailer') do |payload|
-        set_payload_for_mail(payload, mail)
-        yield # Let mail do the delivery actions
+        set_payload_for_mail payload, mail
+        yield
       end
     else
       raise 'Cannot deliver to this email address.'

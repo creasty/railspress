@@ -25,7 +25,7 @@ class Comment < ActiveRecord::Base
 
   #  Public Methods
   #-----------------------------------------------
-  def to_json(was_created = false)
+  def formated_content
     options = {
       filter_html: true,
       autolink: true,
@@ -42,12 +42,14 @@ class Comment < ActiveRecord::Base
     renderer = Redcarpet::Render::HTML.new settings
     md = Redcarpet::Markdown.new renderer, options
     md = md.render(content).html_safe
+  end
 
+  def to_json(was_created = false)
     {
       id: id,
       post_id: post.id,
       content: content,
-      markdown: md,
+      markdown: formated_content,
       by_me: user.id == User.current_user.id,
       user_path: edit_admin_user_path(user),
       user_name: user.name,
@@ -68,20 +70,19 @@ class Comment < ActiveRecord::Base
     }
   end
 
-  def reply
-    object_users = content.scan(/\@\w+/)
 
-    return true if object_users.lenght == 0
+private
+
+
+  def reply
+    object_users = content.scan(/\@(\w+?)\b/)
+
+    return if object_users.length == 0
 
     object_users.each do |object_user|
-      object_user = User.find object_user
-
-      if object_user
-        NotificationMailer.reply self, User.current_user, object_user
-      end
+      object_user = User.find_by_username object_user[0]
+      NotificationMailer.delay.reply self, User.current_user, object_user
     end
-
-    true
   end
 
 end

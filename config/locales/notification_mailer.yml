@@ -1,0 +1,5 @@
+ja:
+  notification_mailer:
+
+    reply:
+      subject: '%{username} さんがあなたに返信をしました。'

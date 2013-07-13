@@ -25,7 +25,7 @@ class User < ActiveRecord::Base
 
   #  Scope
   #-----------------------------------------------
-  scope :admin, where(admin: true)
+  scope :admin, -> { where admin: true }
 
   def self.sort(order_by, dir)
     order_by = order_by.present? ? order_by.gsub(/\W/, '') : 'created_at'

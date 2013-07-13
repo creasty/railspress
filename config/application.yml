@@ -1,5 +1,8 @@
 
 development:
+  APP_DOMAIN: 'creasty.com'
+  MAIL_NOREPLY: 'no-reply@creasty.com'
+
   TWITTER_KEY: 'UWC1Z3BYQ9GGNg1ixBiVJw'
   TWITTER_SECRET: 'ZimTPG4Cj19ETvkmPZusPKHaHN975CbIqnPrEgYXw8'
   TWITTER_TOKEN: '148334424-tfeF62cliaJcIfYJjHzAz7FVDs1lSFDjiY4onGup'
@@ -7,8 +10,6 @@ development:
 
   FACEBOOK_APP_ID: '423468787678045'
   FACEBOOK_SECRET: '9149b132fc2dc63a2b0c582c3f68da41'
-
-  MAIL_NOREPLY: 'no-reply@creasty.com'
 
   GOOGLE_API_KEY: 'AIzaSyCv3Fh19Z8Fc15ZiwQqw06Wh4q28MyzCP0'
   GOOGLE_USERNAME: 'ykiwng@gmail.com'
