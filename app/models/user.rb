@@ -20,8 +20,12 @@ class User < ActiveRecord::Base
   #-----------------------------------------------
   validates :name, presence: true
   validates :email, presence: true
-  validates :username, presence: true
-  validates_uniqueness_of :username
+  validates :username,
+    presence: true,
+    uniqueness: { case_sensitive: false },
+    length: { in: 4..20 },
+    format: { with: /\A\w+\z/ },
+    exclusion: { in: ENV['RESERVED_WORDS'].split(' ') }
 
   #  Scope
   #-----------------------------------------------

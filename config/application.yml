@@ -1,7 +1,10 @@
 
 development:
+
   APP_DOMAIN: 'creasty.com'
   MAIL_NOREPLY: 'no-reply@creasty.com'
+
+  RESERVED_WORDS: 'master webmaster admin admins administrator'
 
   TWITTER_KEY: 'UWC1Z3BYQ9GGNg1ixBiVJw'
   TWITTER_SECRET: 'ZimTPG4Cj19ETvkmPZusPKHaHN975CbIqnPrEgYXw8'

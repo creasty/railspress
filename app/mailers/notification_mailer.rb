@@ -25,9 +25,9 @@ class NotificationMailer < ActionMailer::Base
 
   #  誰かが誰かに返信したとき、@ユーザに送る
   #-----------------------------------------------
-  def reply(comment, user, object_user)
+  def reply(comment, object_user)
     @comment = comment
-    @user = user
+    @user = comment.user
     @object_user = object_user
 
     subject = I18n.t(

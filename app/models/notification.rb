@@ -39,7 +39,7 @@ class Notification < ActiveRecord::Base
     }
   end
 
-  #  Class Methods
+  #  Notify
   #-----------------------------------------------
   class << self
 
@@ -65,7 +65,7 @@ class Notification < ActiveRecord::Base
           excerpt: comment.content.strip[0..30],
         }
 
-      NotificationMailer.delay.reply comment, User.current_user, object_user
+      NotificationMailer.delay.reply comment, object_user
     end
 
   end
