@@ -1,5 +1,10 @@
 ja:
   notifications:
 
-    test_topic_1: "あいああああいあいあいあいあい%{num}人がフォローしました"
-    test_topic_2: "%{num}人がフォローしましたあいああああいあいあいあいあい"
+    comment: "%{username} さんが「%{post_title}」にコメントしました: %{excerpt}"
+    reply: "%{username} さんがあなたのコメントに返信しました: %{excerpt}"
+
+    account_delete: "アカウントを削除しました"
+
+    topic_01: "あいああああいあいあいあいあい%{num}人がフォローしました"
+    topic_02: "%{num}人がフォローしましたあいああああいあいあいあいあい"

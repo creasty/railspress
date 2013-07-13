@@ -17,7 +17,8 @@ class Comment < ActiveRecord::Base
 
   #  Callbacks
   #-----------------------------------------------
-  after_create :reply
+  after_create :notify_reply
+  after_create :notify_comment
 
   #  Kaminari
   #-----------------------------------------------
@@ -73,15 +74,20 @@ class Comment < ActiveRecord::Base
 
 private
 
+  #  Notifications
+  #-----------------------------------------------
+  def notify_comment
+    Notification.comment self
+  end
 
-  def reply
+  def notify_reply
     object_users = content.scan(/\@(\w+?)\b/)
 
     return if object_users.length == 0
 
     object_users.each do |object_user|
       object_user = User.find_by_username object_user[0]
-      NotificationMailer.delay.reply self, User.current_user, object_user
+      Notification.reply self, object_user
     end
   end
 

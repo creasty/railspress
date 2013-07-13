@@ -1,5 +1,8 @@
 ja:
   notification_mailer:
 
+    comment:
+      subject: '%{username} さんがあなたの記事にコメントしました。'
+
     reply:
       subject: '%{username} さんがあなたに返信をしました。'

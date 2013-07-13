@@ -8,8 +8,7 @@ class Admin::NotificationsController < Admin::ApplicationController
     @notifications = User.current_user.notifications
       .order('created_at desc')
       .page(params[:page])
-      .per(params[:per_page])
-      .includes :notification_topic
+      .per params[:per_page]
 
     paginate_headers_for @notifications
 

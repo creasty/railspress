@@ -8,7 +8,8 @@ class NotificationMailer < ActionMailer::Base
 
   default from: ENV['MAIL_NOREPLY']
 
-  #  コメントが投稿されたとき、管理者に送信する通知メール
+
+  #  コメントが投稿されたとき、記事の作成者に送る
   #-----------------------------------------------
   def comment(comment)
     @comment = comment
@@ -22,7 +23,7 @@ class NotificationMailer < ActionMailer::Base
     mail to: @user.email, subject: subject
   end
 
-  #  誰かが誰かに返信したときに送信する通知メール
+  #  誰かが誰かに返信したとき、@ユーザに送る
   #-----------------------------------------------
   def reply(comment, user, object_user)
     @comment = comment
@@ -37,13 +38,13 @@ class NotificationMailer < ActionMailer::Base
     mail to: @object_user.email, subject: subject
   end
 
-  #  アカウントが削除されたとき送信する通知メール
+  #  アカウントが削除されたとき
   #-----------------------------------------------
-  def cancel_account(user)
+  def account_delete(user)
     @user = user
 
     mail to: @user.email,
-      subject: I18n.t('notification_mailer.cancel_account.subject')
+      subject: I18n.t('notification_mailer.account_delete.subject')
   end
 
   def news(user)
@@ -53,6 +54,8 @@ class NotificationMailer < ActionMailer::Base
   end
 
 
+  #  送信の制御
+  #-----------------------------------------------
   def self.deliver_mail(mail)
     # production 以外では @creasty.com にしか送信しない
     allow_send = Rails.env.production? || mail.to.all? { |to| to =~ /@creasty\.com$/ }
