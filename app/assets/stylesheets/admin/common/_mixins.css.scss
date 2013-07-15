@@ -220,7 +220,7 @@
 			opacity: 0;
 		}
 		@include transform(scale($scale) translateY($y) perspective(400px) rotateX($rotate));
-		@include transition(all #{$duration} ease, visibility 0s #{$duration});
+		@include transition(all #{$duration} $funcy-easing, visibility 0s #{$duration});
 		@include transform-origin(50% 0 0);
 	}
 

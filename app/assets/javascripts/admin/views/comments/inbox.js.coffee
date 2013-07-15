@@ -146,8 +146,14 @@ define [
       $el = view.render().$el
 
       if comment.get 'was_created'
-        @$el.prepend $el.css 'top', '-100%'
-        $el.animate 'top': 0
+        $el.css 'top', '-100%'
+        @$el.prepend $el
+
+        $el.animate
+          top: 0
+        ,
+          duration: 300
+          easing: 'easeInCubic'
       else
         @$el.append $el
 

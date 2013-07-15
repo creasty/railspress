@@ -31,8 +31,8 @@ define [
       'click .icon-edit': 'edit'
       'click .icon-delete': 'delete'
 
-      'click .icon-check': 'save'
-      'click .icon-ban': 'discard'
+      'click .btn-success': 'save'
+      'click .btn-danger': 'discard'
 
     initialize: ->
       @model.view = @
@@ -50,9 +50,6 @@ define [
       @$textarea = @$ '.edit > textarea'
 
       @$('time').timeago()
-      @$('.btn').powerTip
-        placement: 's'
-        smartPlacement: true
 
       @
 
@@ -80,6 +77,17 @@ define [
       @$message.removeClass 'hide'
       @$edit.addClass 'hide'
       @$controller.removeClass 'hide'
+
+    remove: ->
+      @$el.animate
+        left: '-100%'
+        height: 0
+        opacity: 0
+      ,
+        duration: 300
+        easing: 'easeInCubic'
+        complete: =>
+          @$el.remove()
 
     delete: (e) ->
       e.preventDefault()
