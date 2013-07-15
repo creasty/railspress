@@ -8,19 +8,18 @@
 			<small>@<%= user_username %></small>
 		</a>
 		<time data-timestamp="<%= timestamp * 1e3 %>"></time>
-
-		<div class="controller">
-			<% if (!by_me) { %>
-				<button class="btn-link btn-success icon-reply" title="返信"></button>
-			<% } %>
-			<% if (by_me) { %>
-				<button class="btn-link btn-primary icon-edit" title="コメントを編集"></button>
-			<% } %>
-			<button class="btn-link btn-danger icon-delete" title="このコメントを削除"></button>
-		</div>
 	</div>
 	<div class="message">
 		<%= markdown %>
+	</div>
+	<div class="controller">
+		<% if (!by_me) { %>
+			<a class="icon-reply">返信する</a>
+		<% } %>
+		<% if (by_me) { %>
+			<a class="icon-edit">編集する</a>
+		<% } %>
+		<a class="icon-delete">削除する</a>
 	</div>
 	<div class="edit hide">
 		<textarea class="textarea" rows="10"></textarea>

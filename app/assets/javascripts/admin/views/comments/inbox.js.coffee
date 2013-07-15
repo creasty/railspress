@@ -191,6 +191,7 @@ define [
       'focus #comment_content': 'activate'
       'blur #comment_content': 'disactivate'
       'keyup #comment_content': 'expand'
+      'keydown #comment_content': 'expand'
 
     initialize: ->
       @$content = $ '#comment_content'
@@ -234,7 +235,7 @@ define [
 
     updateSize: ->
       el = @$content.get 0
-      el.rows = 2
+      el.rows = 1
       ++el.rows while el.scrollHeight > el.clientHeight && el.rows < 10
 
 

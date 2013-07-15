@@ -64,7 +64,7 @@ SimpleNavigation::Configuration.run do |navigation|
       document_title('comment', 'inbox'),
       comments_admin_posts_path,
       highlights_on: :subpath,
-      link: { class: 'icon-comment' }
+      link: { class: 'icon-comments' }
 
     #  Media
     #-----------------------------------------------

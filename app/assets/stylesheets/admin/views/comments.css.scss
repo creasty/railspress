@@ -26,6 +26,10 @@ body#comments {
 			background: $main-bg-color;
 			@include transition(box-shadow .3s, background .3s);
 
+			&:hover {
+				background: lighten($menubar-bg-color, 5%);
+			}
+
 			&.unread {
 				@include box-shadow(inset 3px 0 0 0 $success-color);
 			}
@@ -78,14 +82,14 @@ body#comments {
 			position: relative;
 			height: 100%;
 			padding: 20px;
-			padding-top: 20px + 75px;
+			padding-top: 20px + 88px;
 			overflow: hidden;
 			overflow-y: scroll;
 			@include box-sizing(border-box);
 
 			.comment {
 				@extend .clear-after;
-				margin-bottom: 20px;
+				margin-bottom: 30px;
 				padding-left: 48px + 20px;
 
 				.avatar {
@@ -107,7 +111,6 @@ body#comments {
 
 					.user {
 						margin-bottom: 10px;
-						@extend .clear-after;
 
 						a {
 							font-weight: bold;
@@ -122,16 +125,33 @@ body#comments {
 							right: 0;
 							color: $muted-color;
 						}
+					}
 
-						.controller {
-							margin-top: 5px;
+					.controller {
+						margin-top: 10px;
 
-							> .btn-link {
-								margin-right: 10px;
+						a {
+							margin-right: 10px;
+							color: $muted-color;
+
+							&:before {
+								position: relative;
+								font-size: 22px;
+								vertical-align: -2px;
+							}
+
+							$colors:
+								reply  $primary-color,
+								edit   $success-color,
+								delete $danger-color;
+
+							@each $color in $colors {
+								&.icon-#{nth($color, 1)}:hover {
+									color: nth($color, 2);
+								}
 							}
 						}
 					}
-
 					.edit {
 						position: relative;
 
@@ -158,20 +178,29 @@ body#comments {
 			z-index: 100;
 			min-height: 35px;
 			padding: 20px;
-			padding-right: 100px;
+			padding-left: 88px;
 			background: $menubar-bg-color;
 			cursor: text;
+
+			> img {
+				position: absolute;
+				top: 20px;
+				left: 20px;
+				@include border-radius(3px);
+			}
 
 			textarea {
 				display: block;
 				width: 100%;
 				@include box-sizing(border-box);
+				padding: 13px 10px 12px;
+				padding-right: 135px;
 			}
 
 			button {
 				position: absolute;
-				top: 20px;
-				right: 20px;
+				top: 29px;
+				right: 29px;
 			}
 		}
 	}

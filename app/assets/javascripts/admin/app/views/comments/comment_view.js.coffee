@@ -46,10 +46,11 @@ define [
 
       @$message = @$ '.message'
       @$edit = @$ '.edit'
+      @$controller = @$ '.controller'
       @$textarea = @$ '.edit > textarea'
 
       @$('time').timeago()
-      @$('.btn-link').powerTip
+      @$('.btn').powerTip
         placement: 's'
         smartPlacement: true
 
@@ -61,6 +62,7 @@ define [
     edit: ->
       @$message.addClass 'hide'
       @$edit.removeClass 'hide'
+      @$controller.addClass 'hide'
       @$textarea.val @model.get 'content'
 
     save: ->
@@ -77,6 +79,7 @@ define [
     discard: ->
       @$message.removeClass 'hide'
       @$edit.addClass 'hide'
+      @$controller.removeClass 'hide'
 
     delete: (e) ->
       e.preventDefault()

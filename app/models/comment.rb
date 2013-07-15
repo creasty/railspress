@@ -7,8 +7,8 @@ class Comment < ActiveRecord::Base
 
   #  Association
   #-----------------------------------------------
-  belongs_to :post
-  belongs_to :user
+  belongs_to :post, dependent: :destroy
+  belongs_to :user, dependent: :destroy
 
   #  Validation
   #-----------------------------------------------
@@ -55,7 +55,7 @@ class Comment < ActiveRecord::Base
       user_path: edit_admin_user_path(user),
       user_name: user.name,
       user_username: user.username,
-      user_avatar: '//placehold.it/48x48',
+      user_avatar: user.avatar_url,
       timestamp: created_at.to_i,
       was_created: was_created,
     }
