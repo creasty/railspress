@@ -13,7 +13,6 @@ class Post < ActiveRecord::Base
 
   belongs_to :user
   has_many :comments, dependent: :destroy
-  has_many :metas, as: :object
   belongs_to :thumbnail, class_name: '::Medium'
 
   accepts_nested_attributes_for :user, allow_destroy: true
