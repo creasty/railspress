@@ -12,7 +12,7 @@ class Post < ActiveRecord::Base
   acts_as_taggable
 
   belongs_to :user
-  has_many :comments
+  has_many :comments, dependent: :destroy
   has_many :metas, as: :object
   belongs_to :thumbnail, class_name: '::Medium'
 

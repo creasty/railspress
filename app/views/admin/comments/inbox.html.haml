@@ -5,7 +5,7 @@
   #thread.loader
     #new_comment
       = image_tag current_user.avatar_url, size: '48x48'
-      = text_area :comment, :content, placeholder: '新しいコメントを追加', rows: 1, class: 'textarea'
-      = button_tag 'コメントする', class: 'btn btn-primary size-small'
+      = text_area :comment, :content, placeholder: '新しいコメントを追加...', rows: 1, class: 'textareaa'
+      = button_tag 'コメントする', class: 'btn btn-primary'
 
     #comments_list

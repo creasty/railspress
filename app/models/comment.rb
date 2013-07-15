@@ -7,8 +7,8 @@ class Comment < ActiveRecord::Base
 
   #  Association
   #-----------------------------------------------
-  belongs_to :post, dependent: :destroy
-  belongs_to :user, dependent: :destroy
+  belongs_to :post
+  belongs_to :user
 
   #  Validation
   #-----------------------------------------------

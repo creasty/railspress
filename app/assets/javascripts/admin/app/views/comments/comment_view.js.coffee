@@ -71,10 +71,10 @@ define [
 
       @model.save { content: @$textarea.val() },
         success: =>
-          notify.success '変更を保存しました...'
+          notify.success '変更を保存しました'
           @discard()
         error: ->
-          notify.fail '保存に失敗しました...'
+          notify.fail '保存に失敗しました'
 
     discard: ->
       @$message.removeClass 'hide'
