@@ -146,11 +146,20 @@ define [
       $el = view.render().$el
 
       if comment.get 'was_created'
-        $el.css 'top', '-100%'
+        $el.css visibility: 'none'
+
         @$el.prepend $el
+
+        h = $el.height()
+
+        $el.css
+          top: -h - 20
+          visibility: 'visible'
+          height: 0
 
         $el.animate
           top: 0
+          height: h
         ,
           duration: 300
           easing: 'easeInCubic'
