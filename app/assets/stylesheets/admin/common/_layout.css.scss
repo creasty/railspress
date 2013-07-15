@@ -32,11 +32,12 @@ body {
 ==============================================================================================*/
 #menubar {
 	position: absolute;
-	top: 60px;
+	top: 0;
 	left: 0;
 	right: 300px;
 	height: 60px;
 	@include experimental(user-select, none);
+	background: $body-bg-color;
 
 	h1 {
 		font-size: 20px;
@@ -94,9 +95,25 @@ body {
 
 /*=== Layout
 ==============================================================================================*/
+#container {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 60px;
+	right: 0;
+	overflow: hidden;
+
+	@include transform(translateX(0));
+	@include transition(.3s cubic-bezier(.77, 0, .175, 1));
+	@include transform-origin(100% 50% 0);
+
+	&.open-menu {
+		@include transform(translateX(190px));
+	}
+}
 %pocket {
 	position: absolute;
-	top: 120px;
+	top: 60px;
 	bottom: 0;
 	overflow-x: hidden;
 	@include box-sizing(border-box);
@@ -124,7 +141,7 @@ body {
 		margin-bottom: 0;
 	}
 
-	body > & {
+	#container > & {
 		@extend %pocket;
 
 		left: 0;
@@ -147,7 +164,7 @@ body {
 #pocket_side {
 	@extend %pocket;
 
-	top: 60px;
+	top: 0;
 	right: 0;
 	width: 300px;
 	padding: 60px 20px 20px;
@@ -159,6 +176,8 @@ body {
 
 #pocket_side,
 .pocket_side {
+
+	background: $body-bg-color;
 
 	a {
 		color: rgba($body-text-color, .5);

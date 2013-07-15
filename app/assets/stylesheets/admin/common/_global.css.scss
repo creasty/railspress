@@ -4,15 +4,22 @@
 #globalheader {
 	position: relative;
 	background: $header-bg-color;
-	width: 100%;
-	height: 60px;
-	z-index: 1000;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 250px;
+	z-index: 0;
 	@include experimental(user-select, none);
 
 	nav {
 		display: block;
-		width: 100%;
-		height: 60px;
+		position: absolute;
+		top: 0;
+		left: 0;
+		bottom: 60px;
+		width: 250px;
+		overflow-x: hidden;
+		overflow-y: scroll;
 	}
 }
 
@@ -64,26 +71,19 @@
 /*	Global Nav Menu
 -----------------------------------------------*/
 #globalnav {
-	@extend .compact;
-	@extend .menu;
-	position: absolute;
-	left: 20px;
-	top: 0;
+	padding: 0;
+	margin: 0;
 
 	> li {
-		@extend %dropdown-panel;
-
-		height: 60px;
-		margin-right: 40px;
+		list-style: none;
+		padding: 0;
 
 		> a {
 			position: relative;
 			display: block;
-			height: 26px;
-			line-height: 26px;
-			padding: 17px 0;
+			padding: 15px 20px;
 			font-size: 12px;
-			color: rgba($body-text-color, .3);
+			color: $body-text-color;
 			font-weight: bold;
 
 			&:before {
@@ -94,9 +94,39 @@
 			}
 		}
 
-		&:hover > a,
+		> ul {
+			padding: 0;
+			margin: 0;
+
+			> li {
+				list-style: none;
+				padding: 0;
+
+				> a {
+					display: block;
+					padding: 10px 20px 10px 49px;
+					color: rgba($body-text-color, .3);
+
+					&:before {
+						font-size: 14px;
+						color: rgba($body-text-color, .5);
+					}
+
+					&:hover {
+						color: $body-text-color;
+
+						&:before {
+							color: $primary-color;
+						}
+					}
+				}
+			}
+		}
+
+		& > a:hover,
 		&.selected > a {
 			color: $body-text-color;
+			background: rgba(#000, .2);
 
 			&:before {
 				color: $primary-color;
@@ -116,8 +146,8 @@
 -----------------------------------------------*/
 #usermenu {
 	position: absolute;
-	right: 20px;
-	top: 0;
+	left: 0;
+	bottom: 0;
 	padding: 0;
 	margin: 0;
 	list-style: none;

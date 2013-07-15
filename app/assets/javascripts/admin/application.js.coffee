@@ -58,3 +58,23 @@ require [
 #==============================================================================================
 require ['common/notifications']
 
+require ['jquery'], ($) ->
+
+  opened = false
+  $container = $ '#container'
+
+  $(window).on 'mousemove', (e) ->
+    if opened
+      open = e.pageX <= 190
+    else
+      open = e.pageX <= 60
+
+    return if open == opened
+    opened = open
+
+    if open
+      $container.addClass 'open-menu'
+    else
+      $container.removeClass 'open-menu'
+
+
