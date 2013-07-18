@@ -14,7 +14,7 @@ class Post < ActiveRecord::Base
   belongs_to :user
   belongs_to :thumbnail, class_name: '::Medium'
   has_many :comments, dependent: :destroy
-  has_many :ratings, as: :object, dependent: :destroy
+  has_many :ratings, as: :ratable, dependent: :destroy
 
   accepts_nested_attributes_for :user, allow_destroy: true
   # accepts_nested_attributes_for :tag_list

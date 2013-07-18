@@ -9,7 +9,7 @@ class Comment < ActiveRecord::Base
   #-----------------------------------------------
   belongs_to :post
   belongs_to :user
-  has_many :ratings, as: :object, dependent: :destroy
+  has_many :ratings, as: :ratable, dependent: :destroy
 
   #  Validation
   #-----------------------------------------------
@@ -25,7 +25,7 @@ class Comment < ActiveRecord::Base
   #-----------------------------------------------
   paginates_per 10
 
-  #  Public Methods
+  #  Markdown
   #-----------------------------------------------
   def formated_content
     options = {
@@ -46,6 +46,35 @@ class Comment < ActiveRecord::Base
     md = md.render(content).html_safe
   end
 
+  #  Like / Dislike
+  #-----------------------------------------------
+  def user_rating(user)
+    Rating
+    .where(
+      user_id: user.id,
+      ratable_type: self.class.name,
+      ratable_id: self.id,
+    )
+    .first_or_initialize
+  end
+  def like(user)
+    rating = user_rating user
+    rating.positive = 1
+    rating.negative = 0
+    rating.save
+  end
+  def dislike(user)
+    rating = user_rating user
+    rating.positive = 0
+    rating.negative = 1
+    rating.save
+  end
+  def unlike(user)
+    user_rating(user).destroy
+  end
+
+  #  Backbone JSON
+  #-----------------------------------------------
   def to_json(was_created = false)
     {
       id: id,

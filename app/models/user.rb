@@ -65,7 +65,7 @@ class User < ActiveRecord::Base
   #-----------------------------------------------
   paginates_per 10
 
-  #  Class methods
+  #  Set current user
   #-----------------------------------------------
   class << self
     def current_user=(user)
@@ -77,7 +77,7 @@ class User < ActiveRecord::Base
     end
   end
 
-  #  Public Methods
+  #  Backbone JSON
   #-----------------------------------------------
   def to_json
     {
@@ -92,11 +92,15 @@ class User < ActiveRecord::Base
     }
   end
 
+  #  Avatar
+  #-----------------------------------------------
   def avatar_url(size = 48)
     gravatar_id = Digest::MD5.hexdigest self.email.downcase
     "http://gravatar.com/avatar/#{gravatar_id}.png?s=#{size}&d=identicon"
   end
 
+  #  OAuth
+  #-----------------------------------------------
   def facebook?
     oauths.exists? provider: 'facebook'
   end
