@@ -251,10 +251,10 @@
 }
 
 @include keyframes(loading-cude) {
-	$c1: lighten($primary-color, 10%);
-	$c2: $primary-color;
-	$c3: darken($primary-color, 10%);
-	$c4: darken($primary-color, 20%);
+	$c1: rgba($header-bg-color, .4);
+	$c2: rgba($header-bg-color, .5);
+	$c3: rgba($header-bg-color, .6);
+	$c4: rgba($header-bg-color, .7);
 
 	25% {
 		@include box-shadow(
