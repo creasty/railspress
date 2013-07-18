@@ -9,6 +9,7 @@ class Comment < ActiveRecord::Base
   #-----------------------------------------------
   belongs_to :post
   belongs_to :user
+  has_many :ratings, as: :object, dependent: :destroy
 
   #  Validation
   #-----------------------------------------------
