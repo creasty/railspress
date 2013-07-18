@@ -21,9 +21,9 @@ class Post < ActiveRecord::Base
 
   #  Validation
   #-----------------------------------------------
-  validates :user_id, numericality: true
-  validates :title, presence: true
   validates :status, numericality: { only_integer: true }
+  validates :title, presence: true
+  validates :user_id, numericality: true
 
   #  Scope
   #-----------------------------------------------

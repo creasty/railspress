@@ -130,26 +130,42 @@ body#comments {
 					}
 
 					.controller {
+						@extend .menu;
+						@extend .compact;
+
 						margin-top: 10px;
 
-						a {
+						li {
 							margin-right: 10px;
-							color: $muted-color;
 
-							&:before {
-								position: relative;
-								font-size: 22px;
-								vertical-align: -2px;
-							}
+							a {
+								color: $muted-color;
 
-							$colors:
-								reply  $primary-color,
-								edit   $success-color,
-								delete $danger-color;
+								&:before {
+									position: relative;
+									font-size: 22px;
+									vertical-align: -2px;
+								}
 
-							@each $color in $colors {
-								&.icon-#{nth($color, 1)}:hover {
-									color: nth($color, 2);
+								$colors:
+									good   $success-color,
+									bad    $danger-color,
+									reply  $primary-color,
+									edit   $success-color,
+									delete $danger-color;
+
+								@each $color in $colors {
+									&.icon-#{nth($color, 1)}.active,
+									&.icon-#{nth($color, 1)}:hover {
+										color: nth($color, 2);
+									}
+								}
+
+								&.icon-good:before {
+									top: -1px;
+								}
+								&.icon-bad:before {
+									top: 1px;
 								}
 							}
 						}

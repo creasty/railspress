@@ -48,28 +48,39 @@ class Comment < ActiveRecord::Base
 
   #  Like / Dislike
   #-----------------------------------------------
-  def user_rating(user)
-    Rating
-    .where(
-      user_id: user.id,
-      ratable_type: self.class.name,
-      ratable_id: self.id,
-    )
-    .first_or_initialize
+  def user_rating(user = nil)
+    user ||= User.current_user
+    @user_rating ||= {}
+
+    @user_rating[user.id] ||= Rating
+      .where(
+        user_id: user.id,
+        ratable_type: self.class.name,
+        ratable_id: self.id,
+      )
+      .first_or_initialize
   end
-  def like(user)
+
+  def liked?(user = nil)
+    user_rating(user).positive == 1
+  end
+  def disliked?(user = nil)
+    user_rating(user).negative == 1
+  end
+
+  def like(user = nil)
     rating = user_rating user
     rating.positive = 1
     rating.negative = 0
     rating.save
   end
-  def dislike(user)
+  def dislike(user = nil)
     rating = user_rating user
     rating.positive = 0
     rating.negative = 1
     rating.save
   end
-  def unlike(user)
+  def unlike(user = nil)
     user_rating(user).destroy
   end
 
@@ -77,6 +88,7 @@ class Comment < ActiveRecord::Base
   #-----------------------------------------------
   def to_json(was_created = false)
     {
+      was_created: was_created,
       id: id,
       post_id: post.id,
       content: content,
@@ -87,7 +99,9 @@ class Comment < ActiveRecord::Base
       user_username: user.username,
       user_avatar: user.avatar_url,
       timestamp: created_at.to_i,
-      was_created: was_created,
+      like_counts: read_attribute(:like_counts).to_i,
+      dislike_counts: read_attribute(:dislike_counts).to_i,
+      my_rating: (liked? ? 'like' : disliked? ? 'dislike' : ''),
     }
   end
 

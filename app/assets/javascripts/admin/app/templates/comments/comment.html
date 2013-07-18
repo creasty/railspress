@@ -12,15 +12,18 @@
 	<div class="message">
 		<%= markdown %>
 	</div>
-	<div class="controller">
+	<ul class="controller">
+		<li><a class="icon-good <%= my_rating == 'like' ? 'active' : '' %>" title="高評価"><%= like_counts %></a></li>
+		<li><a class="icon-bad <%= my_rating == 'dislike' ? 'active' : '' %>" title="低評価"><%= dislike_counts %></a></li>
+		<li class="divider"></li>
 		<% if (!by_me) { %>
-			<a class="icon-reply">返信する</a>
+			<li><a class="icon-reply">返信する</a></li>
 		<% } %>
 		<% if (by_me) { %>
-			<a class="icon-edit">編集する</a>
+			<li><a class="icon-edit">編集する</a></li>
 		<% } %>
-		<a class="icon-delete">削除する</a>
-	</div>
+		<li><a class="icon-delete">削除する</a></li>
+	</ul>
 	<div class="edit hide">
 		<textarea class="textarea" rows="10"></textarea>
 		<button class="btn btn-success">保存する</button>
