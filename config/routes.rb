@@ -19,7 +19,13 @@ RailsPress::Application.routes.draw do
         get :tags
       end
 
-      resources :comments
+      resources :comments do
+        collection do
+          post :like
+          post :dislike
+          post :unlike
+        end
+      end
     end
     resources :users
     resources :media

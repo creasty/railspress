@@ -16,6 +16,38 @@ class Comment < ActiveRecord::Base
   validates :user, presence: true
   validates :content, presence: true
 
+  #  Scope
+  #-----------------------------------------------
+  def self.with_ratings(user)
+    user_id = user.id.to_i
+
+    select('
+      comments.*,
+      coalesce(rr.total_positives, 0) as like_counts,
+      coalesce(rr.total_negatives, 0) as dislike_counts,
+      coalesce(rr.user_positive, 0) as user_like,
+      coalesce(rr.user_negative, 0) as user_dislike
+    ')
+    .joins("
+      left join (
+        select
+          r1.ratable_id as comment_id,
+          sum(r1.positive) as total_positives,
+          sum(r1.negative) as total_negatives,
+          max(r2.positive) as user_positive,
+          max(r2.negative) as user_negative
+        from ratings as r1
+        left join ratings as r2
+        on r1.id = r2.id
+        and r2.user_id = #{user_id}
+        where r1.ratable_type = 'Comment'
+        group by r1.ratable_id
+      ) as rr
+      on rr.comment_id = comments.id
+    ")
+    .group('comments.id')
+  end
+
   #  Callbacks
   #-----------------------------------------------
   after_create :notify_reply
@@ -61,11 +93,36 @@ class Comment < ActiveRecord::Base
       .first_or_initialize
   end
 
+  def like_counts
+    if read_attribute(:like_counts).present?
+      read_attribute(:like_counts).to_i
+    else
+      @ratings_totals ||= ratings.totals
+      @ratings_totals.total_positives.to_i
+    end
+  end
+  def dislike_counts
+    if read_attribute(:dislike_counts).present?
+      read_attribute(:dislike_counts).to_i
+    else
+      @ratings_totals ||= ratings.totals
+      @ratings_totals.total_negatives.to_i
+    end
+  end
+
   def liked?(user = nil)
-    user_rating(user).positive == 1
+    if read_attribute(:user_like).present?
+      read_attribute(:user_like).to_i == 1
+    else
+      user_rating(user).positive == 1
+    end
   end
   def disliked?(user = nil)
-    user_rating(user).negative == 1
+    if read_attribute(:user_dislike).present?
+      read_attribute(:user_dislike).to_i == 1
+    else
+      user_rating(user).negative == 1
+    end
   end
 
   def like(user = nil)
@@ -99,9 +156,9 @@ class Comment < ActiveRecord::Base
       user_username: user.username,
       user_avatar: user.avatar_url,
       timestamp: created_at.to_i,
-      like_counts: read_attribute(:like_counts).to_i,
-      dislike_counts: read_attribute(:dislike_counts).to_i,
-      my_rating: (liked? ? 'like' : disliked? ? 'dislike' : ''),
+      like_counts: like_counts,
+      dislike_counts: dislike_counts,
+      my_rating: (liked? ? 'like' : disliked? ? 'dislike' : 'none'),
     }
   end
 
@@ -117,6 +174,7 @@ class Comment < ActiveRecord::Base
 
 
 private
+
 
   #  Notifications
   #-----------------------------------------------
