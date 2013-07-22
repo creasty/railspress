@@ -26,6 +26,10 @@ body#comments {
 			background: $main-bg-color;
 			@include transition(box-shadow .3s, background .3s);
 
+			&:hover {
+				background: lighten($menubar-bg-color, 5%);
+			}
+
 			&.unread {
 				@include box-shadow(inset 3px 0 0 0 $success-color);
 			}
@@ -78,14 +82,16 @@ body#comments {
 			position: relative;
 			height: 100%;
 			padding: 20px;
-			padding-top: 20px + 75px;
+			padding-top: 20px + 88px;
 			overflow: hidden;
 			overflow-y: scroll;
 			@include box-sizing(border-box);
 
 			.comment {
 				@extend .clear-after;
-				margin-bottom: 20px;
+
+				position: relative;
+				margin-bottom: 40px;
 				padding-left: 48px + 20px;
 
 				.avatar {
@@ -107,7 +113,6 @@ body#comments {
 
 					.user {
 						margin-bottom: 10px;
-						@extend .clear-after;
 
 						a {
 							font-weight: bold;
@@ -122,16 +127,71 @@ body#comments {
 							right: 0;
 							color: $muted-color;
 						}
+					}
 
-						.controller {
-							margin-top: 5px;
+					.controller {
+						@extend .menu;
+						@extend .compact;
 
-							> .btn-link {
-								margin-right: 10px;
+						margin-top: 10px;
+
+						li {
+							margin-right: 10px;
+
+							&.divider {
+								display: block;
+								width: 1px;
+								background: #ddd;
+								height: 15px;
+								margin: 3px 15px 0 5px;
+							}
+
+							a {
+								color: $muted-color;
+
+								&:before {
+									position: relative;
+									font-size: 22px;
+									vertical-align: -2px;
+								}
+
+								&:hover {
+									color: $primary-color;
+								}
+
+								&.icon-good:before {
+									top: -1px;
+								}
+								&.icon-bad:before {
+									top: 1px;
+								}
+
+								$colors:
+									good   $success-color,
+									bad    $danger-color;
+
+								@each $color in $colors {
+									&.icon-#{nth($color, 1)} {
+										color: nth($color, 2);
+
+										&.active {
+											font-weight: bold;
+										}
+
+										&:before {
+											color: $muted-color;
+											@include transition(color .3s);
+										}
+
+										&.active:before,
+										&:hover:before {
+											color: nth($color, 2) !important;
+										}
+									}
+								}
 							}
 						}
 					}
-
 					.edit {
 						position: relative;
 
@@ -156,16 +216,27 @@ body#comments {
 			right: 0;
 			top: 0;
 			z-index: 100;
-			min-height: 35px;
-			padding: 20px;
-			padding-right: 100px;
+			min-height: 48px;
+			padding: 20px 152px 20px 88px;
 			background: $menubar-bg-color;
+			background: $main-bg-color;
 			cursor: text;
+			@include transition(box-shadow .3s);
+
+			&.scrolling {
+				@include box-shadow(0 6px 0 -3px rgba(#000, .05));
+			}
+
+			> img {
+				position: absolute;
+				top: 20px;
+				left: 20px;
+				@include border-radius(3px);
+			}
 
 			textarea {
 				display: block;
 				width: 100%;
-				@include box-sizing(border-box);
 			}
 
 			button {

@@ -31,8 +31,11 @@ define [
       'click .icon-edit': 'edit'
       'click .icon-delete': 'delete'
 
-      'click .icon-check': 'save'
-      'click .icon-ban': 'discard'
+      'click .btn-success': 'save'
+      'click .btn-danger': 'discard'
+
+      'click .icon-good': 'like'
+      'click .icon-bad': 'dislike'
 
     initialize: ->
       @model.view = @
@@ -46,10 +49,14 @@ define [
 
       @$message = @$ '.message'
       @$edit = @$ '.edit'
+      @$controller = @$ '.controller'
       @$textarea = @$ '.edit > textarea'
 
+      @$like = @$ '.icon-good'
+      @$dislike = @$ '.icon-bad'
+
       @$('time').timeago()
-      @$('.btn-link').powerTip
+      @$('.tooltip').powerTip
         placement: 's'
         smartPlacement: true
 
@@ -61,6 +68,7 @@ define [
     edit: ->
       @$message.addClass 'hide'
       @$edit.removeClass 'hide'
+      @$controller.addClass 'hide'
       @$textarea.val @model.get 'content'
 
     save: ->
@@ -69,14 +77,26 @@ define [
 
       @model.save { content: @$textarea.val() },
         success: =>
-          notify.success '変更を保存しました...'
+          notify.success '変更を保存しました'
           @discard()
         error: ->
-          notify.fail '保存に失敗しました...'
+          notify.fail '保存に失敗しました'
 
     discard: ->
       @$message.removeClass 'hide'
       @$edit.addClass 'hide'
+      @$controller.removeClass 'hide'
+
+    remove: ->
+      @$el.animate
+        left: '-100%'
+        height: 0
+        opacity: 0
+      ,
+        duration: 300
+        easing: 'easeInCubic'
+        complete: =>
+          @$el.remove()
 
     delete: (e) ->
       e.preventDefault()
@@ -100,4 +120,50 @@ define [
               wait: true
               success: (model, res) ->
                 notify.success 'コメントを削除しました'
+
+    rating: (url) ->
+      @rating_pending = true
+
+      $.ajax
+        url: url
+        type: 'post'
+
+        complete: =>
+          @rating_pending = false
+
+        success: (data) =>
+          @model.set 'my_rating', data.state
+
+          switch data.state
+            when 'like'
+              @$like.addClass 'active'
+              @$dislike.removeClass 'active'
+            when 'dislike'
+              @$like.removeClass 'active'
+              @$dislike.addClass 'active'
+            when 'unlike'
+              @$like.removeClass 'active'
+              @$dislike.removeClass 'active'
+
+          @$like.html data.like_counts
+          @$dislike.html data.dislike_counts
+
+    unlike: -> @rating "#{@model.url()}/unlike"
+
+    like: ->
+      return if @rating_pending
+
+      if 'like' == @model.get 'my_rating'
+        @unlike()
+      else
+        @rating "#{@model.url()}/like"
+
+    dislike: ->
+      return if @rating_pending
+
+      if 'dislike' == @model.get 'my_rating'
+        @unlike()
+      else
+        @rating "#{@model.url()}/dislike"
+
 

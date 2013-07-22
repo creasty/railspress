@@ -1,5 +1,6 @@
-//  Compass Config
-//-----------------------------------------------
+
+/*	Compass Config
+-----------------------------------------------*/
 $legacy-support-for-ie6: false;
 $legacy-support-for-ie7: false;
 $experimental-support-for-mozilla: true;
@@ -8,14 +9,13 @@ $experimental-support-for-opera: true;
 $experimental-support-for-microsoft: true;
 
 
-//	Font
-//-----------------------------------------------
+/*	Font
+-----------------------------------------------*/
 $family: unquote("'Open Sans', Arial, Helvetica, 'Hiragino Kaku Gothic Pro', 'ヒラギノ角ゴ Pro W3', 'メイリオ', Meiryo");
 
 
-//	Color Scheme
-//-----------------------------------------------
-
+/*	Color Scheme
+-----------------------------------------------*/
 $body-bg-color: #445360;
 $body-text-color: #ebe8e1;
 
@@ -47,8 +47,14 @@ $anchor-active-color: darken($anchor-color, 20%);
 $facebook-color: desaturate(#3b5998, 20%);
 $twitter-color: desaturate(#00acee, 45%);
 
-//	Grid System
-//-----------------------------------------------
+
+/*	Easing
+-----------------------------------------------*/
+$funcy-easing: cubic-bezier(.77, 0, .175, 1);
+
+
+/*	Grid System
+-----------------------------------------------*/
 $grid-columns: 12;
 $grid-gutter: 20px;
 $grid-width: 100%;

@@ -1,4 +1,4 @@
-class AddReadToNotification < ActiveRecord::Migration
+class AddReadToNotifications < ActiveRecord::Migration
   def change
     add_column :notifications, :read, :bool, default: false
   end

@@ -146,7 +146,23 @@ define [
       $el = view.render().$el
 
       if comment.get 'was_created'
+        $el.css visibility: 'none'
+
         @$el.prepend $el
+
+        h = $el.height()
+
+        $el.css
+          top: -h - 20
+          visibility: 'visible'
+          height: 0
+
+        $el.animate
+          top: 0
+          height: h
+        ,
+          duration: 300
+          easing: 'easeInCubic'
       else
         @$el.append $el
 
@@ -161,12 +177,14 @@ define [
     loadMore: ->
       buffer = 345
 
-      bottomOfViewport = @$el.scrollTop() + @$el.height()
+      top = @$el.scrollTop()
+
+      bottomOfViewport = top + @$el.height()
 
       last = Comments.at Comments.models.length - 1
       $last = last.view.$el
 
-      bottomOfCollectionView = @$el.scrollTop() + $last.offset().top + $last.height() - buffer
+      bottomOfCollectionView = top + $last.offset().top + $last.height() - buffer
 
       if Comments.hasNext() && !@isLoading && bottomOfViewport > bottomOfCollectionView
 
@@ -188,15 +206,18 @@ define [
     events:
       'click': 'focus'
       'click button': 'create'
-      'focus #comment_content': 'activate'
       'blur #comment_content': 'disactivate'
       'keyup #comment_content': 'expand'
+      'keydown #comment_content': 'expand'
 
     initialize: ->
+      @$commentsList = $ '#comments_list'
       @$content = $ '#comment_content'
 
       @listenTo CommentsObserver, 'reply', @reply
       @listenTo CommentsObserver, 'addedNew', @resetContent
+
+      @$commentsList.on 'scroll', @onScroll.bind @
 
     create: ->
       Comments.trigger 'addNew', content: @$content.val()
@@ -204,6 +225,7 @@ define [
     resetContent: ->
       @$content.val ''
       @updateSize()
+      @updateListPadding()
 
     reply: (model) ->
       @focus()
@@ -221,21 +243,31 @@ define [
     focus: ->
       @$content.focus()
 
-    activate: ->
-      @$el.addClass 'active'
-
     disactivate: (e) ->
-      @$el.removeClass 'active'
       @updateSize()
+      @updateListPadding()
 
     expand: (e) ->
       @updateSize()
       ++e.target.rows
+      @updateListPadding()
 
     updateSize: ->
       el = @$content.get 0
-      el.rows = 2
+      el.rows = 1
       ++el.rows while el.scrollHeight > el.clientHeight && el.rows < 10
+
+    updateListPadding: ->
+      @$commentsList.css 'paddingTop', @$el.outerHeight() + 20
+
+    onScroll: ->
+      top = @$commentsList.scrollTop()
+
+      if top < 15
+        @$el.removeClass 'scrolling'
+      else
+        @$el.addClass 'scrolling'
+
 
 
   #  Initialize Backbone App
