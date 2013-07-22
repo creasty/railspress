@@ -5,7 +5,7 @@ body#admin.index {
 		height: 250px;
 
 		+ .ui-line-chart {
-			margin-top: 20px;
+			margin-top: 25px;
 		}
 
 		h2 {
@@ -22,6 +22,14 @@ body#admin.index {
 
 		.dot {
 			border: 2px solid $info-color;
+		}
+	}
+
+	#google_analytics {
+		background: $ga-color;
+
+		.dot {
+			border: 2px solid $ga-color;
 		}
 	}
 
@@ -65,7 +73,7 @@ body#admin.index {
 		height: 250px;
 		background: $facebook-color;
 		text-align: center;
-		margin-bottom: 20px;
+		margin-bottom: 25px;
 
 		h2 {
 			color: #fff;

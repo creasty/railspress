@@ -8,10 +8,14 @@ html, body {
 body {
 	background: $body-bg-color;
 	font: 12px/1.6 $family;
-	color: $body-text-color;
 	text-align: center;
 	min-height: 100%;
 	@include experimental(font-smoothing, antialiased);
+
+	&.loader:before {
+		content: "";
+		@include loading-cube('primary');
+	}
 
 	> * { text-align: left; }
 }
@@ -34,14 +38,15 @@ body {
 	position: absolute;
 	top: 0;
 	left: 0;
-	right: 300px;
-	height: 60px;
+	right: 0;
+	height: 70px;
 	@include experimental(user-select, none);
-	background: $body-bg-color;
+	color: $side-text-color;
+	background: $side-bg-color;
 
 	h1 {
 		font-size: 20px;
-		padding: 20px 20px;
+		padding: 25px;
 		line-height: 1;
 		letter-spacing: 1px;
 		cursor: default;
@@ -49,7 +54,7 @@ body {
 
 	[class*="icon-"] {
 		@include inline-block;
-		color: rgba($body-text-color, .5);
+		color: rgba($side-text-color, .5);
 		margin: -14px 0 -10px 10px;
 		@include transition(.3s linear);
 
@@ -72,7 +77,7 @@ body {
 		position: relative;
 		width: 16px;
 		height: 16px;
-		border: 2px solid rgba($body-text-color, .5);
+		border: 2px solid rgba($side-text-color, .5);
 		@include border-radius(3px);
 
 		&:hover {
@@ -99,21 +104,24 @@ body {
 	position: absolute;
 	top: 0;
 	bottom: 0;
-	left: 60px;
+	left: 70px;
 	right: 0;
 	overflow: hidden;
 
 	@include transform(translateX(0));
-	@include transition(.3s cubic-bezier(.77, 0, .175, 1));
+	@include transition(transform .3s $funcy-easing);
 	@include transform-origin(100% 50% 0);
 
-	&.open-menu {
-		@include transform(translateX(190px));
+	body.loader & {
+		@include transform(translateX(100%));
+	}
+	body.globalnav-open & {
+		@include transform(translateX(180px));
 	}
 }
 %pocket {
 	position: absolute;
-	top: 60px;
+	top: 70px;
 	bottom: 0;
 	overflow-x: hidden;
 	@include box-sizing(border-box);
@@ -122,7 +130,7 @@ body {
 		top: 0;
 	}
 	#modal_container.has-header & {
-		top: 60px;
+		top: 70px;
 	}
 	#modal_container.has-footer & {
 		bottom: 75px;
@@ -135,7 +143,7 @@ body {
 	position: relative;
 	background: $main-bg-color;
 	color: $main-text-color;
-	padding: 20px;
+	padding: 25px;
 
 	*:last-child {
 		margin-bottom: 0;
@@ -152,7 +160,7 @@ body {
 	@extend %pocket;
 
 	left: 0;
-	right: 300px;
+	right: 310px;
 
 	> #main {
 		min-height: 100%;
@@ -166,21 +174,22 @@ body {
 
 	top: 0;
 	right: 0;
-	width: 300px;
-	padding: 60px 20px 20px;
+	width: 310px;
+	padding: 70px 25px 25px;
 
 	#modal_container & {
-		padding-top: 20px;
+		padding-top: 25px;
 	}
 }
 
 #pocket_side,
 .pocket_side {
 
-	background: $body-bg-color;
+	background: $side-bg-color;
+	color: $side-text-color;
 
 	a {
-		color: rgba($body-text-color, .5);
+		color: rgba($side-text-color, .5);
 
 		&:hover {
 			color: $primary-color;
@@ -194,12 +203,12 @@ body {
 		font-weight: bold;
 		line-height: 1;
 		overflow: visible;
-		margin-bottom: 20px;
+		margin-bottom: 25px;
 		letter-spacing: 1px;
 		cursor: default;
 
 		> a {
-			color: rgba($body-text-color, .5);
+			color: rgba($side-text-color, .5);
 			float: right;
 			font-size: 22px;
 			line-height: 1;
@@ -220,13 +229,13 @@ body {
 	}
 
 	h2 + .btn {
-		margin-top: 20px;
+		margin-top: 25px;
 	}
 
 	section {
 		@extend .clear-after;
 
-		margin-bottom: 40px;
+		margin-bottom: 50px;
 	}
 }
 

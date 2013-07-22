@@ -128,7 +128,7 @@ body#posts.edit {
 			background: #eee8d5;
 		}
 		.ace_cursor {
-			border-left: 1px solid $body-bg-color;
+			border-left: 1px solid $side-bg-color;
 			@include transition(.3s opacity);
 		}
 	}

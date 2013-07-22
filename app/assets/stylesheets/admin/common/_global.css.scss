@@ -9,7 +9,15 @@
 	height: 100%;
 	width: 250px;
 	z-index: 0;
+	opacity: 1;
+	overflow: hidden;
+
+	@include transition(opacity .3s .3s);
 	@include experimental(user-select, none);
+
+	body.loader & {
+		opacity: 0;
+	}
 
 	nav {
 		display: block;
@@ -35,8 +43,7 @@
 	ul {
 		background: $header-bg-color;
 		position: absolute;
-		top: 60px;
-		margin-left: -15px;
+		left: 250px;
 		width: 180px;
 		padding: 0;
 		list-style: none;
@@ -49,11 +56,11 @@
 			a {
 				display: block;
 				padding: 15px;
-				color: $body-text-color;
+				color: $side-text-color;
 
 				&:before {
 					font-size: 14px;
-					color: rgba($body-text-color, .5);
+					color: rgba($side-text-color, .5);
 				}
 
 				&:hover {
@@ -75,65 +82,51 @@
 	margin: 0;
 
 	> li {
+		@extend %dropdown-panel;
+
 		list-style: none;
 		padding: 0;
 
 		> a {
 			position: relative;
 			display: block;
-			padding: 15px 20px;
+			padding: 21px 21px;
 			font-size: 12px;
-			color: $body-text-color;
+			color: $side-text-color;
 			font-weight: bold;
 
 			&:before {
-				font-size: 24px;
+				font-size: 28px;
 				vertical-align: -3px;
+				padding-right: 40px;
 				opacity: .5;
-				@include transition(all .3s);
-			}
-		}
 
-		> ul {
-			padding: 0;
-			margin: 0;
-
-			> li {
-				list-style: none;
-				padding: 0;
-
-				> a {
-					display: block;
-					padding: 10px 20px 10px 49px;
-					color: rgba($body-text-color, .3);
-
-					&:before {
-						font-size: 14px;
-						color: rgba($body-text-color, .5);
-					}
-
-					&:hover {
-						color: $body-text-color;
-
-						&:before {
-							color: $primary-color;
-						}
-					}
+				body.globalnav-open & {
+					padding-right: 10px;
 				}
+
+				@include transition(color .3s, opacity .3s, padding-right .3s);
 			}
 		}
 
-		& > a:hover,
-		&.selected > a {
-			color: $body-text-color;
+		& > a:hover {
+			color: $side-text-color;
 			background: rgba(#000, .2);
 
 			&:before {
-				color: $primary-color;
 				opacity: 1;
+				color: $primary-color;
 			}
 		}
 		&.selected > a {
+			color: #fff;
+			background: $primary-color;
+
+			&:before {
+				opacity: 1;
+				color: rgba(#000, .5);
+			}
+
 			&:after {
 				content: "";
 				@include arrow(bottom, 7px, $header-bg-color, 50%, 100%);

@@ -58,23 +58,16 @@ require [
 #==============================================================================================
 require ['common/notifications']
 
-require ['jquery'], ($) ->
+window.onload = ->
+  require ['jquery'], ($) ->
+    $('body').removeClass 'loader'
 
-  opened = false
-  $container = $ '#container'
+    opened = false
+    $body = $ 'body'
+    $globalheader = $ '#globalheader'
 
-  $(window).on 'mousemove', (e) ->
-    if opened
-      open = e.pageX <= 190
-    else
-      open = e.pageX <= 60
+    $globalheader.on 'mouseleave', (e) ->
+      $body.removeClass 'globalnav-open'
 
-    return if open == opened
-    opened = open
-
-    if open
-      $container.addClass 'open-menu'
-    else
-      $container.removeClass 'open-menu'
-
-
+    $globalheader.on 'mouseenter', (e) ->
+      $body.addClass 'globalnav-open'
