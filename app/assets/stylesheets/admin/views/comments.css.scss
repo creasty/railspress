@@ -173,7 +173,10 @@ body#comments {
 								@each $color in $colors {
 									&.icon-#{nth($color, 1)} {
 										color: nth($color, 2);
-										font-weight: bold;
+
+										&.active {
+											font-weight: bold;
+										}
 
 										&:before {
 											color: $muted-color;

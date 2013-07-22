@@ -20,7 +20,7 @@ RailsPress::Application.routes.draw do
       end
 
       resources :comments do
-        collection do
+        member do
           post :like
           post :dislike
           post :unlike

@@ -1,6 +1,6 @@
 class Rating < ActiveRecord::Base
 
-  attr_accessible :positive, :negative
+  attr_accessible :positive, :negative, :total_positives, :total_positives
   attr_readonly :ratable_id, :ratable_type
 
   #  Association
@@ -21,6 +21,13 @@ class Rating < ActiveRecord::Base
   #-----------------------------------------------
   scope :positives, -> { where 'positive > 0' }
   scope :negatives, -> { where 'negative > 0' }
-  scope :totals, -> { select 'sum(positive) as total_positives, sum(negative) as total_negatives' }
+
+  def self.totals
+    select('
+      sum(positive) as total_positives,
+      sum(negative) as total_negatives
+    ')
+    .first
+  end
 
 end

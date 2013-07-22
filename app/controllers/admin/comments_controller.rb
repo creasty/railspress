@@ -93,7 +93,11 @@ class Admin::CommentsController < Admin::ApplicationController
     @comment = Comment.find params[:id]
 
     if @comment.like
-      render json: {}, status: :ok
+      render json: {
+        state: 'like',
+        like_counts: @comment.like_counts,
+        dislike_counts: @comment.dislike_counts
+      }, status: :ok
     else
       render json: {}, status: :unprocessable_entity
     end
@@ -102,8 +106,12 @@ class Admin::CommentsController < Admin::ApplicationController
   def dislike
     @comment = Comment.find params[:id]
 
-    if @comment.like
-      render json: {}, status: :ok
+    if @comment.dislike
+      render json: {
+        state: 'dislike',
+        like_counts: @comment.like_counts,
+        dislike_counts: @comment.dislike_counts
+      }, status: :ok
     else
       render json: {}, status: :unprocessable_entity
     end
@@ -112,7 +120,12 @@ class Admin::CommentsController < Admin::ApplicationController
   def unlike
     @comment = Comment.find params[:id]
     @comment.unlike
-    render json: {}, status: :ok
+
+    render json: {
+      state: 'unlike',
+      like_counts: @comment.like_counts,
+      dislike_counts: @comment.dislike_counts
+    }, status: :ok
   end
 
 end

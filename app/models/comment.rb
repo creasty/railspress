@@ -31,17 +31,14 @@ class Comment < ActiveRecord::Base
     .joins("
       left join (
         select
-          r1.ratable_id as comment_id,
-          sum(r1.positive) as total_positives,
-          sum(r1.negative) as total_negatives,
-          max(r2.positive) as user_positive,
-          max(r2.negative) as user_negative
-        from ratings as r1
-        left join ratings as r2
-        on r1.id = r2.id
-        and r2.user_id = #{user_id}
-        where r1.ratable_type = 'Comment'
-        group by r1.ratable_id
+          r.ratable_id as comment_id,
+          sum(r.positive) as total_positives,
+          sum(r.negative) as total_negatives,
+          max(if(r.user_id = #{user_id}, r.positive, 0)) as user_positive,
+          max(if(r.user_id = #{user_id}, r.negative, 0)) as user_negative
+        from ratings as r
+        where r.ratable_type = 'Comment'
+        group by r.ratable_id
       ) as rr
       on rr.comment_id = comments.id
     ")
