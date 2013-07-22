@@ -34,6 +34,9 @@ define [
       'click .btn-success': 'save'
       'click .btn-danger': 'discard'
 
+      'click .icon-good': 'like'
+      'click .icon-bad': 'dislike'
+
     initialize: ->
       @model.view = @
 
@@ -49,7 +52,13 @@ define [
       @$controller = @$ '.controller'
       @$textarea = @$ '.edit > textarea'
 
+      @$like = @$ '.icon-good'
+      @$dislike = @$ '.icon-bad'
+
       @$('time').timeago()
+      @$('.tooltip').powerTip
+        placement: 's'
+        smartPlacement: true
 
       @
 
@@ -111,4 +120,50 @@ define [
               wait: true
               success: (model, res) ->
                 notify.success 'コメントを削除しました'
+
+    rating: (url) ->
+      @rating_pending = true
+
+      $.ajax
+        url: url
+        type: 'post'
+
+        complete: =>
+          @rating_pending = false
+
+        success: (data) =>
+          @model.set 'my_rating', data.state
+
+          switch data.state
+            when 'like'
+              @$like.addClass 'active'
+              @$dislike.removeClass 'active'
+            when 'dislike'
+              @$like.removeClass 'active'
+              @$dislike.addClass 'active'
+            when 'unlike'
+              @$like.removeClass 'active'
+              @$dislike.removeClass 'active'
+
+          @$like.html data.like_counts
+          @$dislike.html data.dislike_counts
+
+    unlike: -> @rating "#{@model.url()}/unlike"
+
+    like: ->
+      return if @rating_pending
+
+      if 'like' == @model.get 'my_rating'
+        @unlike()
+      else
+        @rating "#{@model.url()}/like"
+
+    dislike: ->
+      return if @rating_pending
+
+      if 'dislike' == @model.get 'my_rating'
+        @unlike()
+      else
+        @rating "#{@model.url()}/dislike"
+
 

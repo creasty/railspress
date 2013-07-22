@@ -32,8 +32,9 @@ class Admin::CommentsController < Admin::ApplicationController
     respond_to do |format|
       format.json do
         @comments = Comment
+          .with_ratings(current_user)
           .where(post_id: params[:post_id])
-          .order('created_at DESC')
+          .order('comments.created_at DESC')
           .page(params[:page])
           .per(params[:per_page])
           .includes :post, :user
@@ -86,6 +87,45 @@ class Admin::CommentsController < Admin::ApplicationController
         render json: {}
       end
     end
+  end
+
+  def like
+    @comment = Comment.find params[:id]
+
+    if @comment.like
+      render json: {
+        state: 'like',
+        like_counts: @comment.like_counts,
+        dislike_counts: @comment.dislike_counts
+      }, status: :ok
+    else
+      render json: {}, status: :unprocessable_entity
+    end
+  end
+
+  def dislike
+    @comment = Comment.find params[:id]
+
+    if @comment.dislike
+      render json: {
+        state: 'dislike',
+        like_counts: @comment.like_counts,
+        dislike_counts: @comment.dislike_counts
+      }, status: :ok
+    else
+      render json: {}, status: :unprocessable_entity
+    end
+  end
+
+  def unlike
+    @comment = Comment.find params[:id]
+    @comment.unlike
+
+    render json: {
+      state: 'unlike',
+      like_counts: @comment.like_counts,
+      dislike_counts: @comment.dislike_counts
+    }, status: :ok
   end
 
 end

@@ -8,18 +8,20 @@ class User < ActiveRecord::Base
 
   #  Association
   #-----------------------------------------------
+  has_many :comments, dependent: :destroy
+  has_many :notifications, dependent: :destroy
+  has_many :oauths, dependent: :destroy
   has_many :pages, dependent: :destroy
   has_many :posts, dependent: :destroy
-  has_many :comments, dependent: :destroy
-  has_many :oauths, dependent: :destroy
-  has_many :notifications, dependent: :destroy
+  has_many :ratings, dependent: :destroy
   has_many :settings, dependent: :destroy
+
   accepts_nested_attributes_for :oauths
 
   #  Validation
   #-----------------------------------------------
-  validates :name, presence: true
   validates :email, presence: true
+  validates :name, presence: true
   validates :username,
     presence: true,
     uniqueness: { case_sensitive: false },
@@ -64,7 +66,7 @@ class User < ActiveRecord::Base
   #-----------------------------------------------
   paginates_per 10
 
-  #  Class methods
+  #  Set current user
   #-----------------------------------------------
   class << self
     def current_user=(user)
@@ -76,7 +78,7 @@ class User < ActiveRecord::Base
     end
   end
 
-  #  Public Methods
+  #  Backbone JSON
   #-----------------------------------------------
   def to_json
     {
@@ -91,11 +93,15 @@ class User < ActiveRecord::Base
     }
   end
 
+  #  Avatar
+  #-----------------------------------------------
   def avatar_url(size = 48)
     gravatar_id = Digest::MD5.hexdigest self.email.downcase
     "http://gravatar.com/avatar/#{gravatar_id}.png?s=#{size}&d=identicon"
   end
 
+  #  OAuth
+  #-----------------------------------------------
   def facebook?
     oauths.exists? provider: 'facebook'
   end

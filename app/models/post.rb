@@ -12,17 +12,18 @@ class Post < ActiveRecord::Base
   acts_as_taggable
 
   belongs_to :user
-  has_many :comments, dependent: :destroy
   belongs_to :thumbnail, class_name: '::Medium'
+  has_many :comments, dependent: :destroy
+  has_many :ratings, as: :ratable, dependent: :destroy
 
   accepts_nested_attributes_for :user, allow_destroy: true
   # accepts_nested_attributes_for :tag_list
 
   #  Validation
   #-----------------------------------------------
-  validates :user_id, numericality: true
-  validates :title, presence: true
   validates :status, numericality: { only_integer: true }
+  validates :title, presence: true
+  validates :user_id, numericality: true
 
   #  Scope
   #-----------------------------------------------
