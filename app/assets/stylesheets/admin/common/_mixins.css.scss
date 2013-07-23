@@ -263,6 +263,13 @@ $loading-cude-themes:
 	$c3: rgba($color, .6);
 	$c4: rgba($color, .7);
 
+	@if $name == 'primary' {
+		$c1: lighten($color, 20%);
+		$c2: lighten($color, 10%);
+		$c3: $color;
+		$c4: darken($color, 10%);
+	}
+
 	@include keyframes(loading-cude-#{$name}) {
 		25% {
 			@include box-shadow(
