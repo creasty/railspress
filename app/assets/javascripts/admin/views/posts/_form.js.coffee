@@ -13,7 +13,6 @@ require [
   'powertip'
   'datepicker'
   'selectize'
-  'ace/mode/html'
   'ace/mode/markdown'
   'domReady!'
 ], (
@@ -107,9 +106,6 @@ require [
     el: '#main'
 
     events:
-      'click #editor_mode_md': 'switchToMarkdown'
-      'click #editor_mode_html': 'switchToHtml'
-
       'click .menubar .icon-link': 'insertLink'
       'click .menubar .icon-image': 'selectMedia'
 
@@ -125,10 +121,6 @@ require [
       @editor = ACE.edit 'post_content_ace'
       @session = @editor.getSession()
 
-      @$mode =
-        markdown: $ '#editor_mode_md'
-        html: $ '#editor_mode_html'
-
       @modal = Modal content: '/admin/media?modal=insert', iframe: true, destroy: true
 
       $(window).on 'insertMedia', @insertMedia.bind @
@@ -136,17 +128,9 @@ require [
       @render()
       @$el.removeClass 'loader'
 
-    setMode: (mode) ->
-      return if mode == @mode
-      @mode = mode
-      @session.setMode "ace/mode/#{@mode}"
-      @$mode.markdown.removeClass 'selected'
-      @$mode.html.removeClass 'selected'
-      @$mode[@mode].addClass 'selected'
-
     render: ->
       @editor.setTheme 'ace/theme/solarized_light'
-      @setMode 'html'
+      @session.setMode 'ace/mode/markdown'
       @session.setTabSize 2
       @session.setUseWrapMode true
       @session.setValue @$textarea.val()
@@ -166,16 +150,6 @@ require [
         exec: (editor) -> Post.save()
 
       @
-
-    switchToHtml: (e) ->
-      e.preventDefault()
-      @setMode 'html'
-      Notify().info 'HTML モードに切り替えました'
-
-    switchToMarkdown: (e) ->
-      e.preventDefault()
-      @setMode 'markdown'
-      Notify().info 'Markdown モードに切り替えました'
 
     getSelectionText: ->
       ran = @editor.getSelection().getRange()
@@ -222,11 +196,7 @@ require [
       e.preventDefault()
       txt = @getSelectionText()
 
-      repl =
-        if 'html' == @mode
-          "<a href=\"\">\x02#{txt}\x03</a>"
-        else
-          "[#{txt}](\x0b)"
+      repl = "[#{txt}](\x0b)"
 
       @replaceSelection repl
 
@@ -234,11 +204,7 @@ require [
       e.preventDefault()
       txt = @getSelectionText()
 
-      repl =
-        if 'html' == @mode
-          "<strong>\x02#{txt}\x03</strong>"
-        else
-          "**\x02#{txt}\x03**"
+      repl = "**\x02#{txt}\x03**"
 
       @replaceSelection repl
 
@@ -247,11 +213,7 @@ require [
       txt = @getSelectionText()
       cur = {}
 
-      repl =
-        if 'html' == @mode
-          "<em>\x02#{txt}\x03</em>"
-        else
-          "_\x02#{txt}\x03_"
+      repl = "_\x02#{txt}\x03_"
 
       @replaceSelection repl
 
@@ -267,11 +229,7 @@ require [
       e.preventDefault()
       txt = @getSelectionText()
 
-      repl =
-        if 'html' == @mode
-          "<del>\x02#{txt}\x03</del>"
-        else
-          "~~\x02#{txt}\x03~~"
+      repl = "~~\x02#{txt}\x03~~"
 
       @replaceSelection repl
 
@@ -279,15 +237,7 @@ require [
       e.preventDefault()
       txt = @getSelectionText()
 
-      repl =
-        if 'html' == @mode
-          """
-          <blockquote>
-          \x02#{txt.replace(/^/mg, '\t')}\x03
-          </blockquote>
-          """
-        else
-          txt.replace /^/mg, '> '
+      repl = txt.replace /^/mg, '> '
 
       @replaceSelection repl
 
@@ -296,20 +246,10 @@ require [
       txt = @getSelectionText()
 
       repl =
-        if 'html' == @mode
-          if ~txt.indexOf '\n'
-            """
-            <pre><code>
-            \x02#{txt}\x03
-            </code></pre>
-            """
-          else
-            "<code>\x02#{txt}\x03</code>"
+        if ~txt.indexOf '\n'
+          txt.replace /^/mg, '\t'
         else
-          if ~txt.indexOf '\n'
-            txt.replace /^/mg, '\t'
-          else
-            "`\x02#{txt}\x03`"
+          "`\x02#{txt}\x03`"
 
       @replaceSelection repl
 
@@ -326,18 +266,10 @@ require [
 
       if medium.get 'is_image'
         url = medium.get size
-        text =
-          if @mode == 'html'
-            "<img src=\"#{url}\" alt=\"\x02#{description}\x03\" class=\"align-#{alignment}\" />"
-          else
-            "![\x02#{description}\x03](#{url})"
+        text = "![\x02#{description}\x03](#{url})"
       else
         link = medium.get 'link'
-        text =
-          if 'html' == @mode
-            "<a href=\"#{link}\">\x02#{title}\x03</a>"
-          else
-            "[#{link}](\x02#{title}\x03)"
+        text = "[#{link}](\x02#{title}\x03)"
 
       if nl
         text = text.replace /[\x02\x03\x0b]/g, ''

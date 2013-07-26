@@ -16,7 +16,6 @@ $family: unquote("'Open Sans', Arial, Helvetica, 'Hiragino Kaku Gothic Pro', 'ãƒ
 
 /*	Color Scheme
 -----------------------------------------------*/
-
 $body-text-color: #88959e;
 $body-bg-color: #202329;
 
@@ -26,7 +25,7 @@ $header-text-color: #88959e;
 $menubar-bg-color: #e6e2d8;
 $menubar-text-color: #88857c;
 
-$main-bg-color: #f6f6f6;
+$main-bg-color: #f0f0f0;
 $main-text-color: #666;
 $main-rule-color: #d0d0d0;
 
@@ -42,11 +41,12 @@ $warning-color: #d69a32;
 $info-color: #3383a0;
 $muted-color: #aaa;
 
+$selection-color: #eeedeb;
 $single-selection-color: #e6eaea;
 $multiple-selection-color: #ebece6;
 
 $anchor-color: $primary-color;
-$anchor-active-color: darken($anchor-color, 20%);
+$anchor-active-color: darken($anchor-color, 10%);
 
 $form-base-color: $menubar-text-color;
 $form-base-hover-color: darken($menubar-text-color, 5%);

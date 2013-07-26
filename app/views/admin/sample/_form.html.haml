@@ -170,17 +170,19 @@
           %td
             %code .size-small
           %td
-            = link_to 'ボタン', '#', class: 'btn size-small'
+            = link_to 'ボ', '#', class: 'btn size-small'
           %td
-            なし
+            = text_field_tag '', '', class: 'text size-small'
           %td
-            なし
+            %span.select.size-small
+              = select '', '', [['オプション', 0], ['オプション', 1], ['オプション', 2]], { prompt: '選択して下さい' }
+
 
         %tr
           %td
             普通
           %td
-            = link_to 'ボタン', '#', class: 'btn'
+            = link_to 'ボ', '#', class: 'btn'
           %td
             = text_field_tag '', '', class: 'text'
           %td
@@ -191,7 +193,7 @@
           %td
             %code .size-large
           %td
-            = link_to 'ボタン', '#', class: 'btn size-large'
+            = link_to 'ボ', '#', class: 'btn size-large'
           %td
             = text_field_tag '', '', class: 'text size-large'
           %td

@@ -27,7 +27,7 @@ body#comments {
 			@include transition(box-shadow .3s, background .3s);
 
 			&:hover {
-				background: lighten($menubar-bg-color, 5%);
+				background: $selection-color;
 			}
 
 			&.unread {

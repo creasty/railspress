@@ -19,14 +19,11 @@ window.onload = ->
 
       $nav
       .stop()
-      .css('overflow', 'hidden')
       .animate
         scrollTop: 0
       ,
         duration: 300
         easing: 'easeInOutQuart'
-        complete: ->
-          $nav.css 'overflow', ''
 
     open = ->
       $body.addClass 'globalnav-open'

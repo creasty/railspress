@@ -5,7 +5,6 @@ body#posts {
 
 	.post-thumbnail {
 		position: relative;
-		// @include box-shadow(0 1px 4px rgba(#000, .1));
 		@include inline-block;
 		overflow: hidden;
 		@include background-image(linear-gradient(-45deg, rgba(#fff, .05) 25%, transparent 25%, transparent 50%, rgba(#fff, .05) 50%, rgba(#fff, .05) 75%, transparent 75%, transparent));

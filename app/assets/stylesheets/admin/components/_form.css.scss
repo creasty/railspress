@@ -85,7 +85,7 @@ label.radio > input,
 input.text,
 .text > input {
 	padding: 0 10px;
-	height: 30px;
+	height: 35px;
 	width: 180px;
 }
 
@@ -98,9 +98,9 @@ input.text,
 		display: block;
 		position: absolute;
 		right: 8px;
+		top: 7px;
 		padding-right: 0 !important;
-		top: 6px;
-		font-size: 18px;
+		font-size: 22px;
 		color: $form-base-color;
 	}
 }
@@ -255,13 +255,14 @@ label.checkbox > input:checked:after {
 		cursor: pointer;
 		width: 100%;
 		z-index: 2;
+		height: 35px;
 	}
 
 	&:before {
 		content: "";
 		position: absolute;
 		display: block;
-		height: 26px;
+		height: 31px;
 		border-left: 2px solid $form-base-color;
 		right: 32px;
 		top: 2px;
@@ -391,16 +392,31 @@ $btn-color-list:
 input.text.size-large,
 .text.size-large > input,
 .select.size-large > select {
-	height: 35px;
+	height: 42px;
 }
 
 .text[class*="icon-"].size-large:before {
-	top: 7px;
+	top: 10px;
 	font-size: 22px;
 }
 
 .select.size-large:before {
-	height: 31px;
+	height: 38px;
+}
+
+input.text.size-small,
+.text.size-small > input,
+.select.size-small > select {
+	height: 30px;
+}
+
+.text[class*="icon-"].size-small:before {
+	top: 4px;
+	font-size: 22px;
+}
+
+.select.size-small:before {
+	height: 26px;
 }
 
 .btn.size-small {

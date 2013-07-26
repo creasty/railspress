@@ -26,8 +26,12 @@
 		left: 0;
 		bottom: 0;
 		width: 250px;
-		overflow-x: hidden;
-		overflow-y: scroll;
+		overflow: hidden;
+
+		body.globalnav-open & {
+			overflow-x: hidden;
+			overflow-y: scroll;
+		}
 	}
 }
 
@@ -69,7 +73,7 @@
 
 		& > a:hover {
 			color: $header-text-color;
-			background: rgba(#000, .2);
+			background: rgba(#000, .1);
 
 			&:before {
 				color: $primary-color;
@@ -103,7 +107,7 @@
 	height: 70px;
 	@extend .compact;
 	@extend .menu;
-	background: rgba(#000, .5);
+	background: rgba(#000, .3);
 
 	> li {
 		&:first-child > a {
@@ -199,7 +203,7 @@
 			position: relative;
 
 			&:hover {
-				background: rgba(#000, .2);
+				background: rgba(#000, .1);
 			}
 
 			&:before {

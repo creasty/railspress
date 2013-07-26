@@ -7,10 +7,10 @@
 
   = form_for :user, url: user_session_path do |f|
 
-    .text.size-large.icon-user.icon-on-left
+    .text.icon-user.icon-on-left
       = f.text_field :username, autofocus: true, placeholder: 'username'
 
-    .text.size-large.icon-key.icon-on-left
+    .text.icon-key.icon-on-left
       = f.password_field :password, password: 'password'
 
     %div

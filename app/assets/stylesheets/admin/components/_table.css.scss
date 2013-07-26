@@ -165,7 +165,7 @@ table.table {
 table.table-hover {
 	tbody tr {
 		&:hover {
-			background-color: lighten($menubar-bg-color, 5%);
+			background-color: $selection-color;
 		}
 	}
 }
