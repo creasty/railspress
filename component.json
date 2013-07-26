@@ -3,6 +3,7 @@
     "ace": "git://github.com/ajaxorg/ace.git",
     "backbone": "latest",
     "backbone-pageable": "latest",
+    "backbone-shortcuts": "latest",
     "backbone.syphon": "latest",
     "flight": "latest",
     "jcrop": "latest",

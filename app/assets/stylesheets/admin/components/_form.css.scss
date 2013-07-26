@@ -47,18 +47,13 @@ textarea {
 ==============================================================================================*/
 %form-base {
 	position: relative;
-	border: 2px solid rgba(#000, .4);
+	border: 2px solid $form-base-color;
 	@include inline-block;
-	// @include box-shadow(inset 0 1px 0 rgba(#000, .15));
 	@include border-radius(3px);
 	@include transition(.3s linear);
 
 	&:hover, &:active, &:focus {
-		border-color: rgba(#000, .5);
-	}
-
-	&:active, &:focus {
-		// @include box-shadow(inset 0 1px 0 rgba(#000, .15));
+		border-color: $form-base-hover-color;
 	}
 
 	&.error {
@@ -106,6 +101,7 @@ input.text,
 		padding-right: 0 !important;
 		top: 6px;
 		font-size: 18px;
+		color: $form-base-color;
 	}
 }
 
@@ -129,20 +125,21 @@ input.text,
 		top: 2px;
 		bottom: 2px;
 		width: 32px;
-		border: 0 solid rgba(#000, .4);
+		border: 0 solid $form-base-color;
 		cursor: pointer;
 		z-index: 6;
 		@include transition(background .3s, border-color .3s);
 
 		&:hover {
 			background: rgba(#000, .1);
-			border-color: rgba(#000, .3);
+			border-color: $form-base-hover-color;
 		}
 
 		&:before {
 			@extend %icon;
 			padding: 0;
 			font-size: 14px;
+			color: $form-base-color;
 		}
 	}
 	.btn-first {
@@ -231,11 +228,7 @@ label.radio > input {
 		top: 2px;
 		left: 2px;
 		@include border-radius(8px);
-		background: $body-text-color;
-
-		#main & {
-			background: $main-text-color;
-		}
+		background: $form-base-color;
 	}
 }
 
@@ -248,6 +241,7 @@ label.checkbox > input:checked:after {
 	left: 1px;
 	top: -7px;
 	font-size: 15px;
+	color: $form-base-color;
 }
 
 
@@ -268,7 +262,7 @@ label.checkbox > input:checked:after {
 		position: absolute;
 		display: block;
 		height: 26px;
-		border-left: 2px solid rgba(#000, .4);
+		border-left: 2px solid $form-base-color;
 		right: 32px;
 		top: 2px;
 		z-index: 1;
@@ -276,7 +270,7 @@ label.checkbox > input:checked:after {
 
 	&:after {
 		content: "";
-		@include arrow(bottom, 5px, $body-text-color, none, 50%);
+		@include arrow(bottom, 5px, $form-base-color, none, 50%);
 		margin-top: -2px;
 		right: 12px;
 		z-index: 1;
@@ -287,12 +281,6 @@ label.checkbox > input:checked:after {
 	}
 }
 
-#main .select {
-	&:after {
-		border-top-color: $main-text-color;
-	}
-}
-
 
 /*=== Button
 ==============================================================================================*/
@@ -300,7 +288,7 @@ label.checkbox > input:checked:after {
 	@include inline-block;
 	position: relative;
 	border: 0;
-	background: $body-bg-color;
+	background: $form-base-color;
 	height: 35px;
 	font-size: 12px;
 	color: #fff;
@@ -314,14 +302,14 @@ label.checkbox > input:checked:after {
 
 	&:hover {
 		color: #fff;
-		background: darken($body-bg-color, 5%);
+		background: darken($form-base-color, 5%);
 	}
 
 	&:active,
 	&.active,
 	&.linked {
 		color: rgba(#fff, .7);
-		background: darken($body-bg-color, 10%);
+		background: darken($form-base-color, 10%);
 		@include box-shadow(inset 0 2px 0 rgba(#000, .15));
 	}
 

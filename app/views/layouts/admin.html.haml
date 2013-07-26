@@ -18,16 +18,21 @@
 
     = view_script_tag
 
-  %body{ id: controller_name, class: action_name }
+  %body{ id: controller_name, class: [action_name, content_for?(:no_body_loader) ? '' : 'loader'] }
 
     - if is_admin?
       = render 'header'
 
-      #menubar
-        %h1
-          = document_title
-          = yield :menubar
+      #container
+        #menubar
+          %h1
+            = document_title
+            = yield :menubar
 
-    = yield
+        = yield
+
+    - else
+
+      = yield
 
     = yield :js

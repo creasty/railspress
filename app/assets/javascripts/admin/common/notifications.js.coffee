@@ -26,10 +26,12 @@ define [
       @listenTo Notifications, 'reset', @addAll
       @listenTo Notifications, 'change:read', @updateCount
 
-      @$counter = @$ '> a'
+      @$counter = $ '#usermenu span.notifications'
+
+      @$parent = @$el.parent()
       @$ul = @$ '> ul'
 
-      @$ul.on 'scroll', @loadMore.bind @
+      @$parent.on 'scroll', @loadMore.bind @
 
       Notifications.fetch
         success: =>
@@ -51,12 +53,9 @@ define [
     loadMore: (e) ->
       buffer = 100
 
-      bottomOfViewport = @$ul.scrollTop() + @$ul.height()
+      bottomOfViewport = @$parent.scrollTop() + @$parent.height()
 
-      last = Notifications.at Notifications.models.length - 1
-      $last = last.view.$el
-
-      bottomOfCollectionView = @$ul.scrollTop() + $last.offset().top + $last.height() - buffer
+      bottomOfCollectionView = @$parent.scrollTop() + @$ul.offset().top + @$ul.height() - buffer
 
       if Notifications.hasNext() && !@isLoading && bottomOfViewport > bottomOfCollectionView
 

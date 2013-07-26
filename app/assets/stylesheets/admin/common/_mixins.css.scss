@@ -211,6 +211,7 @@
 	$duration: .3s,
 	$scale: .98,
 	$y: 15px,
+	$to-y: 0,
 	$rotate: -3deg,
 	$opacity: true
 ) {
@@ -229,7 +230,7 @@
 		@if $opacity {
 			opacity: 1;
 		}
-		@include transform(scale(1) translateY(0px) perspective(400px) rotateX(0deg));
+		@include transform(scale(1) translateY($to-y) perspective(400px) rotateX(0deg));
 		@include transition-delay(0s);
 	}
 }
@@ -237,7 +238,7 @@
 
 /*=== Loading Cube
 ==============================================================================================*/
-@mixin loading-cube {
+@mixin loading-cube($theme: 'mono') {
 	display: block;
 	position: absolute;
 	top: 50%;
@@ -246,48 +247,65 @@
 	height: 10px;
 	background: transparent;
 	@include transition(box-shadow .1s);
-	@include experimental(animation, loading-cude 1s linear infinite);
+	@include experimental(animation, loading-cude-#{$theme} 1s linear infinite);
 	z-index: 2000;
 }
 
-@include keyframes(loading-cude) {
-	$c1: rgba($header-bg-color, .4);
-	$c2: rgba($header-bg-color, .5);
-	$c3: rgba($header-bg-color, .6);
-	$c4: rgba($header-bg-color, .7);
+$loading-cude-themes:
+	mono $header-bg-color,
+	primary $primary-color;
 
-	25% {
-		@include box-shadow(
-			inset 0 0 0 10px $c2,
-			-10px 0 0 $c3,
-			-10px -10px 0 $c4,
-			0 -10px 0 $c1
-		);
+@each $lct in $loading-cude-themes {
+	$name: nth($lct, 1);
+	$color: nth($lct, 2);
+
+	$c1: rgba($color, .4);
+	$c2: rgba($color, .5);
+	$c3: rgba($color, .6);
+	$c4: rgba($color, .7);
+
+	@if $name == 'primary' {
+		$c1: lighten($color, 20%);
+		$c2: lighten($color, 10%);
+		$c3: $color;
+		$c4: darken($color, 10%);
 	}
-	50% {
-		@include box-shadow(
-			inset 0 0 0 10px $c1,
-			-10px 0 0 $c2,
-			-10px -10px 0 $c3,
-			0 -10px 0 $c4
-		);
+
+	@include keyframes(loading-cude-#{$name}) {
+		25% {
+			@include box-shadow(
+				inset 0 0 0 10px $c2,
+				-10px 0 0 $c3,
+				-10px -10px 0 $c4,
+				0 -10px 0 $c1
+			);
+		}
+		50% {
+			@include box-shadow(
+				inset 0 0 0 10px $c1,
+				-10px 0 0 $c2,
+				-10px -10px 0 $c3,
+				0 -10px 0 $c4
+			);
+		}
+		75% {
+			@include box-shadow(
+				inset 0 0 0 10px $c4,
+				-10px 0 0 $c1,
+				-10px -10px 0 $c2,
+				0 -10px 0 $c3
+			);
+		}
+		0%, 100% {
+			@include box-shadow(
+				inset 0 0 0 10px $c3,
+				-10px 0 0 $c4,
+				-10px -10px 0 $c1,
+				0 -10px 0 $c2
+			);
+		}
 	}
-	75% {
-		@include box-shadow(
-			inset 0 0 0 10px $c4,
-			-10px 0 0 $c1,
-			-10px -10px 0 $c2,
-			0 -10px 0 $c3
-		);
-	}
-	0%, 100% {
-		@include box-shadow(
-			inset 0 0 0 10px $c3,
-			-10px 0 0 $c4,
-			-10px -10px 0 $c1,
-			0 -10px 0 $c2
-		);
-	}
+
 }
 
 

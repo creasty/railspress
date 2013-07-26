@@ -1,32 +1,24 @@
 
 #main
 
-  .row
-    .col-Ab-A
+  #activities.ui-line-chart.loader
+    %h2 Activities: Posts & Comments
 
-      #activities.ui-line-chart.loader
-        %h2 Activities: Posts & Comments
+  #google_analytics.ui-line-chart.loader
+    %h2 Google Analytics
 
-      #google_analytics.ui-line-chart.loader
-        %h2 Google Analytics
+  %table.table
+    %thead
+      %tr
+        %th ページ
+        %th PV
+        %th オーガニック
+        %th 新規
+        %th 離脱率
+        %th 検索エンジン
 
-      %table.table
-        %thead
-          %tr
-            %th ページ
-            %th PV
-            %th オーガニック
-            %th 新規
-            %th 離脱率
-            %th 検索エンジン
+    %tbody#google_analytics_table
 
-        %tbody#google_analytics_table
-
-    .col-Ab-b
-
-      #facebook_reports
-
-      #twitter_share
 
   != '<br>' * 3
 

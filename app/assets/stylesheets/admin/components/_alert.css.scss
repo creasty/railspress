@@ -3,7 +3,7 @@
 ==============================================================================================*/
 .alert {
 	@extend .popup-box;
-	@include popup-animation;
+	@include popup-animation();
 
 	position: absolute;
 	top: 50%;
@@ -12,46 +12,45 @@
 	margin-top: -100px;
 	@include box-sizing(border-box);
 	width: 415px;
-	padding: 20px;
+	max-height: 80%;
+	padding: 25px;
 	z-index: 3001;
-	border: 3px solid $main-bg-color;
+	color: rgba(#fff, .7);
+	background: $info-color;
 
 	h2 {
+		color: #fff;
 		font-size: 20px;
 		line-height: 1;
-		margin-bottom: 20px;
-		color: $body-bg-color;
+		margin-bottom: 25px;
+		letter-spacing: 1px;
 	}
 
 	p {
-		color: $main-text-color;
 		margin-bottom: 10px;
 	}
 
 	footer {
 		@extend .clear-after;
-		margin-top: 20px;
+		margin: 25px -25px -25px;
+		padding: 20px 25px;
+		background: $menubar-bg-color;
+		@include border-radius(0 0 3px 3px);
 
 		.btn {
-			margin: 0 20px 0 0;
+			margin: 0 15px 0 0;
 		}
+
 		.btn.float-right {
-			margin: 0 0 0 20px;
+			margin: 0 0 0 15px;
 		}
 	}
 
 	&.danger {
-		border-color: $danger-color;
-
-		h2 {
-			color: $danger-color;
-		}
+		background: $danger-color;
 	}
 	&.success {
-		border-color: $success-color;
-
-		h2 {
-			color: $success-color;
-		}
+		background: $success-color;
 	}
+
 }

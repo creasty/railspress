@@ -28,9 +28,9 @@
 .selectize-control.multi .selectize-input > div {
 	margin: 0 5px 5px 0;
 	padding: 6px;
-	background: $body-text-color;
+	background: $side-text-color;
 	line-height: 1;
-	color: $body-bg-color;
+	color: $side-bg-color;
 	cursor: pointer;
 	@include border-radius(2px);
 }
