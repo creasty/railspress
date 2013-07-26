@@ -18,7 +18,7 @@
 
     = view_script_tag
 
-  %body{ id: controller_name, class: [action_name, 'loader'] }
+  %body{ id: controller_name, class: [action_name, content_for?(:no_body_loader) ? '' : 'loader'] }
 
     - if is_admin?
       = render 'header'

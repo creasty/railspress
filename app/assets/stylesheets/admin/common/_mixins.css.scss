@@ -211,6 +211,7 @@
 	$duration: .3s,
 	$scale: .98,
 	$y: 15px,
+	$to-y: 0,
 	$rotate: -3deg,
 	$opacity: true
 ) {
@@ -229,7 +230,7 @@
 		@if $opacity {
 			opacity: 1;
 		}
-		@include transform(scale(1) translateY(0px) perspective(400px) rotateX(0deg));
+		@include transform(scale(1) translateY($to-y) perspective(400px) rotateX(0deg));
 		@include transition-delay(0s);
 	}
 }

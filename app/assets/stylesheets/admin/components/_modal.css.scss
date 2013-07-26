@@ -57,13 +57,13 @@
 
 
 .modal-header {
-	height: 60px;
+	height: 70px;
 	background: $menubar-bg-color;
 	@include border-radius(3px 3px 0 0);
 
 	h2 {
 		font-size: 20px;
-		padding: 20px 20px;
+		padding: 25px;
 		line-height: 1;
 		letter-spacing: 1px;
 		color: $main-text-color;
@@ -77,10 +77,10 @@
 	right: 0;
 	bottom: 0;
 	color: $main-text-color;
-	padding: 20px;
+	padding: 25px;
 
 	.has-header & {
-		top: 60px;
+		top: 70px;
 	}
 	.has-footer & {
 		bottom: 75px;
@@ -98,14 +98,14 @@
 	.modal-body {
 		left: 0;
 		right: 300px;
-		padding: 20px;
+		padding: 25px;
 	}
 	.modal-side {
 		@extend .pocket_side;
 
 		right: 0;
 		width: 300px;
-		padding: 20px;
+		padding: 25px;
 		background: $side-bg-color;
 		color: $side-text-color;
 	}
@@ -117,7 +117,7 @@
 	width: 100%;
 	height: 75px;
 	background: $menubar-bg-color;
-	padding: 20px;
+	padding: 20px 25px;
 	@include box-sizing(border-box);
 	@include border-radius(0 0 3px 3px);
 }

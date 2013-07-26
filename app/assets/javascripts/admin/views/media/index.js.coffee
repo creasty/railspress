@@ -64,9 +64,9 @@ define [
     render: ->
       @$el.masonry
         itemSelector: 'li'
-        gutterWidth: 20
+        gutterWidth: 25
         columns: 5
-        minWidth: 150
+        minWidth: 140
         isAnimated: false
         isFitWidth: true
         isResizable: true

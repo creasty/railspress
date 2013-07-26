@@ -18,7 +18,7 @@ body#comments {
 
 		li {
 			position: relative;
-			padding: 20px;
+			padding: 25px;
 			list-style: none;
 			margin: 0;
 			cursor: pointer;
@@ -48,7 +48,7 @@ body#comments {
 
 			strong {
 				@include truncate-line;
-				width: 170px;
+				width: 160px;
 				display: block;
 				float: left;
 				color: $primary-color;
@@ -81,8 +81,8 @@ body#comments {
 		#comments_list {
 			position: relative;
 			height: 100%;
-			padding: 20px;
-			padding-top: 20px + 88px;
+			padding: 25px;
+			padding-top: 25px + 88px;
 			overflow: hidden;
 			overflow-y: scroll;
 			@include box-sizing(border-box);
@@ -92,13 +92,13 @@ body#comments {
 
 				position: relative;
 				margin-bottom: 40px;
-				padding-left: 48px + 20px;
+				padding-left: 48px + 25px;
 
 				.avatar {
 					width: 48px;
 					color: $menubar-text-color;
 					float: left;
-					margin-left: -48px - 20px;
+					margin-left: -48px - 25px;
 
 					img {
 						display: inline-block;
@@ -217,7 +217,7 @@ body#comments {
 			top: 0;
 			z-index: 100;
 			min-height: 48px;
-			padding: 20px 152px 20px 88px;
+			padding: 25px 157px 25px 93px;
 			background: $menubar-bg-color;
 			background: $main-bg-color;
 			cursor: text;
@@ -229,8 +229,8 @@ body#comments {
 
 			> img {
 				position: absolute;
-				top: 20px;
-				left: 20px;
+				top: 25px;
+				left: 25px;
 				@include border-radius(3px);
 			}
 
@@ -241,8 +241,8 @@ body#comments {
 
 			button {
 				position: absolute;
-				top: 20px;
-				right: 20px;
+				top: 25px;
+				right: 25px;
 			}
 		}
 	}

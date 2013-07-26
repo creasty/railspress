@@ -22,56 +22,12 @@
 	nav {
 		display: block;
 		position: absolute;
-		top: 0;
+		top: 70px;
 		left: 0;
-		bottom: 60px;
+		bottom: 0;
 		width: 250px;
 		overflow-x: hidden;
 		overflow-y: scroll;
-	}
-}
-
-/*	Dropdown Panel
------------------------------------------------*/
-%dropdown-panel {
-	@include popup-animation("ul", "&:hover ul", $y: -10px, $rotate: 0);
-
-	&:hover {
-		z-index: 1002;
-	}
-
-	ul {
-		background: $header-bg-color;
-		position: absolute;
-		left: 250px;
-		width: 180px;
-		padding: 0;
-		list-style: none;
-		z-index: 1001;
-		@include box-shadow(0 5px 0 -2px rgba(#000, .1));
-
-		li {
-			padding: 0;
-
-			a {
-				display: block;
-				padding: 15px;
-				color: $side-text-color;
-
-				&:before {
-					font-size: 14px;
-					color: rgba($side-text-color, .5);
-				}
-
-				&:hover {
-					background: rgba(#000, .2);
-
-					&:before {
-						color: $primary-color;
-					}
-				}
-			}
-		}
 	}
 }
 
@@ -80,51 +36,53 @@
 #globalnav {
 	padding: 0;
 	margin: 0;
+	position: relative;
 
 	> li {
-		@extend %dropdown-panel;
-
 		list-style: none;
 		padding: 0;
+
+		> ul {
+			display: none;
+		}
 
 		> a {
 			position: relative;
 			display: block;
-			padding: 21px 21px;
+			padding: 21px;
 			font-size: 12px;
-			color: $side-text-color;
-			font-weight: bold;
+			color: $header-text-color;
 
 			&:before {
 				font-size: 28px;
 				vertical-align: -3px;
 				padding-right: 40px;
-				opacity: .5;
+				color: rgba($header-text-color, .4);
 
 				body.globalnav-open & {
 					padding-right: 10px;
 				}
 
-				@include transition(color .3s, opacity .3s, padding-right .3s);
+				@include transition(color .3s, padding-right .3s);
 			}
 		}
 
 		& > a:hover {
-			color: $side-text-color;
+			color: $header-text-color;
 			background: rgba(#000, .2);
 
 			&:before {
-				opacity: 1;
 				color: $primary-color;
 			}
 		}
 		&.selected > a {
-			color: #fff;
+			color: $menubar-bg-color;
 			background: $primary-color;
 
 			&:before {
 				opacity: 1;
 				color: rgba(#000, .5);
+				color: $menubar-bg-color;
 			}
 
 			&:after {
@@ -138,136 +96,140 @@
 /*	User Menu
 -----------------------------------------------*/
 #usermenu {
-	position: absolute;
-	left: 0;
-	bottom: 0;
+	position: relative;
 	padding: 0;
 	margin: 0;
 	list-style: none;
-	height: 60px;
+	height: 70px;
 	@extend .compact;
 	@extend .menu;
+	background: rgba(#000, .5);
 
 	> li {
-		@extend %dropdown-panel;
-
-		padding: 14px 0;
-		width: 32px;
-		height: 32px;
-		margin-left: 15px;
-		position: relative;
-
-		img {
-			@include border-radius(2px);
-			@include box-shadow(0 0 0 1px rgba(#000, .3));
+		&:first-child > a {
+			padding: 18px;
+			width: 34px;
+			height: 34px;
 		}
 
-		ul {
-			top: 60px;
-			margin-left: 0 !important;
-			right: -15px !important;
+		> a {
+			display: block;
+			position: relative;
+			padding: 15px 18px 16px;
+			height: 39px;
+			width: 54px;
+			text-align: center;
+			font-size: 10px;
+			color: $header-text-color;
+
+			&:hover {
+				background: $primary-color;
+				color: $menubar-bg-color;
+			}
+
+			&:before {
+				width: 100%;
+				text-align: center;
+				font-size: 22px;
+				padding: 0 0 2px;
+				display: block;
+			}
+
+			img {
+				@include border-radius(2px);
+				@include box-shadow(0 0 0 1px rgba(#000, .3));
+			}
+
+			span.notifications {
+				position: absolute;
+				right: 10px;
+				top: 10px;
+				font-size: 10px;
+				font-weight: bold;
+				padding: 0;
+				line-height: 16px;
+				background: $primary-color;
+				height: 16px;
+				min-width: 16px;
+				text-align: center;
+				color: $menubar-bg-color;
+				@include border-radius(16px);
+				@include box-shadow(0 0 0 1px rgba(#000, .4));
+			}
 		}
 	}
+}
 
-	#notification {
-		> a {
+/*	Notification
+-----------------------------------------------*/
+#notification {
+
+	opacity: 0;
+	@include transition(opacity .3s);
+
+	body.globalnav-open & {
+		opacity: 1;
+	}
+
+	> .title {
+		margin: 25px 0;
+		padding: 0 25px;
+		font-size: 14px;
+		font-weight: bold;
+		line-height: 1;
+		letter-spacing: 1px;
+		cursor: default;
+		color: $header-text-color;
+	}
+
+	> ul {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		width: 250px;
+		color: $header-text-color;
+		font-size: 11px;
+
+		li {
+			@extend .clear-after;
+
+			padding: 15px 25px;
+			@include transition(background .3s);
+			cursor: default;
 			position: relative;
-			display: block;
-			width: 32px;
-			height: 32px;
-			line-height: 28px;
-			font-size: 12px;
-			color: $primary-color;
-			font-weight: bold;
-			text-align: center;
-			border: 2px solid $primary-color;
-			@include border-radius(2px);
-			@include box-sizing(border-box);
+
+			&:hover {
+				background: rgba(#000, .2);
+			}
 
 			&:before {
 				content: "";
-				@include arrow(right, 7px, $primary-color, -7px, 7px);
+				position: absolute;
+				display: block;
+				width: 6px;
+				height: 6px;
+				top: 50%;
+				left: 10px;
+				margin-top: -3px;
+				@include border-radius(3px);
+				background: $primary-color;
+				opacity: 1;
+				visibility: visible;
+				@include transform(scale(1));
+				@include transition(all .3s ease, visibility 0s .3s);
 			}
-			&:after {
-				content: "";
-				@include arrow(right, 4px, $header-bg-color, -4px, 10px);
-				@include transition(border-left-color .3s);
+			&.read:before {
+				opacity: 0;
+				@include transform(scale(1.5));
+				visibility: hidden;
 			}
-		}
-		&:hover > a {
-			color: #fff;
-			background: $primary-color;
 
-			&:after {
-				border-left-color: $primary-color;
-			}
-		}
+			.message {
+				line-height: 1.6;
 
-		> ul {
-			width: 290px;
-			max-height: 350px;
-			font-size: 11px;
-			overflow-x: hidden;
-			overflow-y: scroll;
-
-			li {
-				@extend .clear-after;
-
-				padding: 15px 30px 15px (15px + 32px + 15px);
-				@include transition(background .3s);
-				cursor: default;
-				position: relative;
-
-				&:hover {
-					background: rgba(#000, .2);
-				}
-
-				&:before {
-					content: "";
-					position: absolute;
+				time {
 					display: block;
-					width: 6px;
-					height: 6px;
-					top: 50%;
-					right: 15px - 3px;
-					margin-top: -3px;
-					@include border-radius(3px);
-					background: $primary-color;
-					opacity: 1;
-					visibility: visible;
-					@include transform(scale(1));
-					@include transition(all .3s ease, visibility 0s .3s);
-				}
-				&.read:before {
-					opacity: 0;
-					@include transform(scale(1.5));
-					visibility: hidden;
-				}
-
-				.icon {
-					width: 32px;
-					height: 32px;
-					float: left;
-					margin-left: -(32px + 15px);
-					background: $info-color;
-					text-align: center;
-					color: $header-bg-color;
-					@include border-radius(3px);
-
-					i {
-						font-size: 24px;
-
-						&:before {
-							padding: 0;
-						}
-					}
-				}
-				.message {
-					line-height: 1.6;
-					time {
-						display: block;
-						color: rgba(#fff, .5);
-					}
+					color: rgba($header-text-color, .4);
 				}
 			}
 		}

@@ -1,4 +1,50 @@
 
+#=== Page Animation
+#==============================================================================================
+window.onload = ->
+  require ['jquery'], ($) ->
+    $('body').removeClass 'loader'
+
+    opened = false
+    $body = $ 'body'
+    $container = $ '#container'
+    $nav = $ '#globalheader > nav'
+
+    animate = (container) ->
+      $container
+      .stop()
+      .animate container,
+        duration: 300
+        easing: 'easeInOutQuart'
+
+      $nav
+      .stop()
+      .css('overflow', 'hidden')
+      .animate
+        scrollTop: 0
+      ,
+        duration: 300
+        easing: 'easeInOutQuart'
+        complete: ->
+          $nav.css 'overflow', ''
+
+    open = ->
+      $body.addClass 'globalnav-open'
+      animate
+        left: 250
+        right: 70 - 250
+
+    close = ->
+      $body.removeClass 'globalnav-open'
+      animate
+        left: 70
+        right: 0
+
+    $('#globalheader')
+    .on('mouseleave', close)
+    .on 'mouseenter', open
+
+
 #=== Rails UJS
 #==============================================================================================
 require ['jquery_ujs']
@@ -57,17 +103,3 @@ require [
 #=== Notification
 #==============================================================================================
 require ['common/notifications']
-
-window.onload = ->
-  require ['jquery'], ($) ->
-    $('body').removeClass 'loader'
-
-    opened = false
-    $body = $ 'body'
-    $globalheader = $ '#globalheader'
-
-    $globalheader.on 'mouseleave', (e) ->
-      $body.removeClass 'globalnav-open'
-
-    $globalheader.on 'mouseenter', (e) ->
-      $body.addClass 'globalnav-open'
