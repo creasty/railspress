@@ -76,7 +76,7 @@ require ['jquery', 'domReady!'], ($) ->
     .stop()
     .animate container,
       duration: 300
-      easing: 'easeInOutQuart'
+      easing: 'easeInOutExpo'
 
     $nav
     .stop()
@@ -84,7 +84,7 @@ require ['jquery', 'domReady!'], ($) ->
       scrollTop: 0
     ,
       duration: 300
-      easing: 'easeInOutQuart'
+      easing: 'easeInOutExpo'
 
   open = ->
     $body.addClass 'globalnav-open'
