@@ -3,17 +3,17 @@
 
 #pocket_body
   #main.no-padding.loader
-    %table.table.table-hover#users_list
+    %table.table.table-fixed.table-hover#users_list
       %thead
         %tr
-          %th{ width: '24px' }
+          %th{ width: '24' }
             %i.icon-check
-          %th{ width: '80px' } アバター
+          %th{ width: '60' } アバター
           %th{ 'data-sortby' => 'username' } ユーザ名
           %th{ 'data-sortby' => 'name' } 名前
-          %th{ 'data-sortby' => 'admin' } ユーザ権限
-          %th{ 'data-sortby' => 'created_at', width: '130px' } 作成日
-          %th アクション
+          %th{ width: '80', 'data-sortby' => 'admin' } ユーザ権限
+          %th{ width: '110', 'data-sortby' => 'created_at' } 作成日
+          %th{ width: '100' } アクション
 
       %tbody
 

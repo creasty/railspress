@@ -174,3 +174,18 @@ table.table-stripe-v tbody tr:nth-child(even),
 table.table-stripe-h tbody td:nth-child(even) {
 	background-color: #f3f7fb;
 }
+
+table.table-fixed {
+	table-layout: fixed;
+}
+
+table .truncate {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: elipsis;
+}
+
+table .wrap {
+	vertical-align: middle;
+	@include force-wrap;
+}

@@ -4,7 +4,7 @@
 		<img src="<%= thumbnail %>" alt="" width="80" height="57">
 	</a>
 </td>
-<td class="<%= ['privated', 'published'][status] %>"><a href="<%= edit_link %>"><%= title %></a></td>
+<td class="wrap <%= ['privated', 'published'][status] %>"><a href="<%= edit_link %>"><%= title %></a></td>
 <td><%= ['非公開', '公開'][status] %></td>
 <td><%= user_name %></td>
 <td><%= date_str %> <%= time_str %></td>

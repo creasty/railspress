@@ -3,17 +3,17 @@
 
 #pocket_body
   #main.no-padding.loader
-    %table.table.table-hover#posts_list
+    %table.table.table-fixed.table-hover#posts_list
       %thead
         %tr
-          %th{ width: '24px' }
+          %th{ width: '24' }
             %i.icon-check
-          %th{ width: '80px' } サムネイル
+          %th{ width: '80' } サムネイル
           %th{ 'data-sortby' => 'title' } タイトル
-          %th{ 'data-sortby' => 'status' } 公開状況
-          %th{ 'data-sortby' => 'user_name' } 作成者
-          %th{ 'data-sortby' => 'created_at', width: '130px' } 作成日
-          %th アクション
+          %th{ width: '70', 'data-sortby' => 'status' } 公開状況
+          %th{ width: '80', 'data-sortby' => 'user_name' } 作成者
+          %th{ width: '110', 'data-sortby' => 'created_at' } 作成日
+          %th{ width: '140' } アクション
 
       %tbody
 

@@ -124,13 +124,20 @@ define [
       @$thread.on 'scroll', @loadMore.bind(@)
 
     loadComments: (post_id) ->
-      @$thread.addClass 'loader'
-
       Comments.post_id = post_id
-      Comments.fetch
-        post_id: post_id,
-        success: =>
-          @$thread.removeClass 'loader'
+
+      Comments.each (c) -> c.view.remove()
+
+      setTimeout =>
+        @$thread.addClass 'loader'
+      , 300
+
+      setTimeout =>
+        Comments.fetch
+          post_id: post_id,
+          success: =>
+            @$thread.removeClass 'loader'
+      , 400
 
     addNew: (op) ->
       comment = new Comments.model
@@ -163,8 +170,22 @@ define [
         ,
           duration: 300
           easing: 'easeInCubic'
+
       else
+
         @$el.append $el
+        h = $el.height()
+
+        $el.css
+          left: '-100%'
+          height: 0
+
+        $el.animate
+          left: 0
+          height: h
+        ,
+          duration: 300
+          easing: 'easeInCubic'
 
     addAll: (_, ob) ->
       unless @postId == Comments.post_id
