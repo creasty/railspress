@@ -52,14 +52,15 @@
 	padding-top: 3px;
 	padding-bottom: 3px;
 }
-.selectize-dropdown .option {
+.selectize-dropdown .option,
+.selectize-dropdown .create {
 	padding: 10px;
 	line-height: 1;
 }
-.selectize-dropdown .option.create {
+.selectize-dropdown .create {
 	color: $muted-color;
 }
-.selectize-dropdown .option.active {
+.selectize-dropdown .active {
 	color: #fff;
 	background-color: $primary-color;
 }
