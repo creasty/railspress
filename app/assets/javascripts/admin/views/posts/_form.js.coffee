@@ -138,6 +138,8 @@ require [
       @session.on 'change', =>
         @$textarea.val @session.getValue()
 
+      @editor.setHighlightActiveLine true
+      @editor.renderer.setShowGutter false
       @editor.setShowPrintMargin false
       @editor.focus()
 
