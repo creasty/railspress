@@ -35,11 +35,17 @@ define [
 
       Notifications.fetch
         success: =>
-          @$counter.html @unread = Notifications.unreadCount()
+          @updateBadge @unread = Notifications.unreadCount()
           @loadMore()
 
+    updateBadge: (n) ->
+      if n == 0
+        @$counter.addClass 'hide'
+      else
+        @$counter.html(n).removeClass 'hide'
+
     updateCount: ->
-      @$counter.html --@unread
+      @updateBadge --@unread
 
     addOne: (topic) ->
       view = new NotificationTopicView model: topic
