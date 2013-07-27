@@ -2,44 +2,8 @@
 #=== Page Animation
 #==============================================================================================
 window.onload = ->
-  require ['jquery'], ($) ->
-    $('body').removeClass 'loader'
-
-    opened = false
-    $body = $ 'body'
-    $container = $ '#container'
-    $nav = $ '#globalheader > nav'
-
-    animate = (container) ->
-      $container
-      .stop()
-      .animate container,
-        duration: 300
-        easing: 'easeInOutQuart'
-
-      $nav
-      .stop()
-      .animate
-        scrollTop: 0
-      ,
-        duration: 300
-        easing: 'easeInOutQuart'
-
-    open = ->
-      $body.addClass 'globalnav-open'
-      animate
-        left: 250
-        right: 70 - 250
-
-    close = ->
-      $body.removeClass 'globalnav-open'
-      animate
-        left: 70
-        right: 0
-
-    $('#globalheader')
-    .on('mouseleave', close)
-    .on 'mouseenter', open
+  body = document.getElementsByTagName('body')[0]
+  body.className = body.className.replace /\bloader\b/, ''
 
 
 #=== Rails UJS
@@ -95,6 +59,48 @@ require [
     placement: 's'
     offset: 12
     smartPlacement: true
+
+
+#=== Global Navigation
+#==============================================================================================
+require ['jquery', 'domReady!'], ($) ->
+  opened = false
+
+  $body = $ 'body'
+  $container = $ '#container'
+  $globalnav = $ '#globalnav'
+  $nav = $globalnav.find '> nav'
+
+  animate = (container) ->
+    $container
+    .stop()
+    .animate container,
+      duration: 300
+      easing: 'easeInOutQuart'
+
+    $nav
+    .stop()
+    .animate
+      scrollTop: 0
+    ,
+      duration: 300
+      easing: 'easeInOutQuart'
+
+  open = ->
+    $body.addClass 'globalnav-open'
+    animate
+      left: 250
+      right: 70 - 250
+
+  close = ->
+    $body.removeClass 'globalnav-open'
+    animate
+      left: 70
+      right: 0
+
+  $globalnav
+  .on('mouseleave', close)
+  .on 'mouseenter', open
 
 
 #=== Notification

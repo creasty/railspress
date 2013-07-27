@@ -6,7 +6,7 @@ SimpleNavigation::Configuration.run do |navigation|
   navigation.auto_highlight = true
 
   navigation.items do |primary|
-    primary.dom_id = 'globalnav'
+    primary.dom_id = 'sitemenu'
 
     #  Dashboard
     #-----------------------------------------------

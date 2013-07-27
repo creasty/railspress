@@ -20,17 +20,6 @@ body {
 	> * { text-align: left; }
 }
 
-/*	Text selection
------------------------------------------------*/
-::-moz-selection {
-	background: rgba(0, 163, 217, .3);
-	text-shadow: none !important;
-}
-::selection {
-	background: rgba(0, 163, 217, .3);
-	text-shadow: none !important;
-}
-
 
 /*=== Menubar
 ==============================================================================================*/

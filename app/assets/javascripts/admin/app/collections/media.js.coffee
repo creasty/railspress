@@ -15,7 +15,7 @@ define [
 
     state:
       currentPage: 1
-      pageSize: 20
+      pageSize: 30
 
     queryParams:
       modal: window.MODAL_NAME
