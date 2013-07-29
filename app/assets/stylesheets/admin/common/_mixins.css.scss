@@ -250,7 +250,7 @@
 }
 
 $loading-cude-themes:
-	mono $header-bg-color,
+	mono $globalnav-bg-color,
 	primary $primary-color;
 
 @each $lct in $loading-cude-themes {

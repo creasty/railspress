@@ -170,6 +170,7 @@ define [
         ,
           duration: 300
           easing: 'easeInCubic'
+          complete: -> $el.css height: 'auto'
 
       else
 
@@ -186,6 +187,7 @@ define [
         ,
           duration: 300
           easing: 'easeInCubic'
+          complete: -> $el.css height: 'auto'
 
     addAll: (_, ob) ->
       unless @postId == Comments.post_id

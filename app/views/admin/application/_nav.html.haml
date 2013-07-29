@@ -4,7 +4,7 @@
     %li
       = link_to edit_admin_user_path(current_user) do
         = image_tag(avatar_url(current_user, 32), size: '32x32')
-        %span.notifications.hide
+        %span.badge.notification-count.hide
 
     %li= link_to '設定', admin_settings_path, class: 'icon-setting'
     %li= link_to 'ログアウト', admin_logout_path, class: 'icon-logout'
@@ -13,6 +13,8 @@
     = render_navigation expand_all: true
 
     #notification
-      .title お知らせ
+      .title
+        お知らせ
+        %span.badge.notification-count.hide
 
       %ul

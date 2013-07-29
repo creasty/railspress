@@ -26,7 +26,7 @@ define [
       @listenTo Notifications, 'reset', @addAll
       @listenTo Notifications, 'change:read', @updateCount
 
-      @$counter = $ '#usermenu span.notifications'
+      @$counter = $ '#globalnav span.notification-count'
 
       @$parent = @$el.parent()
       @$ul = @$ '> ul'

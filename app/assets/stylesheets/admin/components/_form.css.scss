@@ -31,17 +31,22 @@ textarea {
 ::-webkit-input-placeholder {
 	height: inherit;
 	vertical-align: middle;
+	color: inherit;
+	opacity: .5;
 }
-
 ::-moz-placeholder {
 	height: inherit;
 	vertical-align: middle;
+	color: inherit;
+	opacity: .5;
 }
-
 :-ms-input-placeholder {
 	height: inherit;
 	vertical-align: middle;
+	color: inherit;
+	opacity: .5;
 }
+
 
 /*=== Form: Base
 ==============================================================================================*/
@@ -57,10 +62,8 @@ textarea {
 	}
 
 	&.error {
-		background: rgba($danger-color, .2);
-	}
-	&.success {
-		background: rgba($success-color, .2);
+		border-color: $danger-color;
+		background: rgba($danger-color, .05);
 	}
 }
 .text,
@@ -328,15 +331,6 @@ label.checkbox > input:checked:after {
 }
 a.btn {
 	line-height: 35px;
-}
-
-#pocket_side .btn,
-.pocket_side .btn {
-	background: $header-bg-color;
-
-	&:hover {
-		background: darken($header-bg-color, 5%);
-	}
 }
 
 /*	Button Link

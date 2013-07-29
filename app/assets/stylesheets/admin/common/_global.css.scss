@@ -3,7 +3,7 @@
 ==============================================================================================*/
 #globalnav {
 	position: relative;
-	background: $header-bg-color;
+	background: $globalnav-bg-color;
 	top: 0;
 	left: 0;
 	height: 100%;
@@ -55,13 +55,13 @@
 			display: block;
 			padding: 21px;
 			font-size: 12px;
-			color: $header-text-color;
+			color: $globalnav-text-color;
 
 			&:before {
 				font-size: 28px;
 				vertical-align: -3px;
 				padding-right: 40px;
-				color: rgba($header-text-color, .4);
+				color: rgba($globalnav-text-color, .4);
 
 				body.globalnav-open & {
 					padding-right: 10px;
@@ -72,7 +72,7 @@
 		}
 
 		& > a:hover {
-			color: $header-text-color;
+			color: $globalnav-text-color;
 			background: rgba(#000, .1);
 
 			&:before {
@@ -91,7 +91,16 @@
 
 			&:after {
 				content: "";
-				@include arrow(bottom, 7px, $header-bg-color, 50%, 100%);
+				@include arrow(left, 7px, $main-bg-color);
+				@include transition(left .15s .3s);
+				top: 50%;
+				margin-top: -7px;
+				left: 70px - 7px;
+
+				body.globalnav-open & {
+					left: 250px - 7px;
+					@include transition(none);
+				}
 			}
 		}
 	}
@@ -100,14 +109,15 @@
 /*	User Menu
 -----------------------------------------------*/
 #usermenu {
+	@extend .compact;
+	@extend .menu;
+
 	position: relative;
 	padding: 0;
 	margin: 0;
 	list-style: none;
-	height: 70px;
-	@extend .compact;
-	@extend .menu;
-	background: rgba(#000, .3);
+	height: 70px - 1px;
+	border-bottom: 1px solid rgba(#000, .2);
 
 	> li {
 		&:first-child > a {
@@ -124,7 +134,7 @@
 			width: 54px;
 			text-align: center;
 			font-size: 10px;
-			color: $header-text-color;
+			color: $globalnav-text-color;
 
 			&:hover {
 				color: $primary-color;
@@ -143,20 +153,10 @@
 				@include box-shadow(0 0 0 1px rgba(#000, .3));
 			}
 
-			span.notifications {
+			span.notification-count {
 				position: absolute;
 				right: 10px;
 				top: 10px;
-				font-size: 10px;
-				font-weight: bold;
-				padding: 0;
-				line-height: 16px;
-				background: $primary-color;
-				height: 16px;
-				min-width: 16px;
-				text-align: center;
-				color: $menubar-bg-color;
-				@include border-radius(16px);
 				@include box-shadow(0 0 0 1px rgba(#000, .4));
 			}
 		}
@@ -169,20 +169,25 @@
 
 	opacity: 0;
 	@include transition(opacity .3s);
+	border-top: 1px solid rgba(#000, .2);
 
 	body.globalnav-open & {
 		opacity: 1;
 	}
 
 	> .title {
-		margin: 25px 0;
+		margin: 25px 0 25px;
 		padding: 0 25px;
 		font-size: 14px;
 		font-weight: bold;
 		line-height: 1;
 		letter-spacing: 1px;
 		cursor: default;
-		color: $header-text-color;
+		color: $globalnav-text-color;
+
+		span.notification-count {
+			margin-left: 10px;
+		}
 	}
 
 	> ul {
@@ -190,7 +195,7 @@
 		padding: 0;
 		margin: 0;
 		width: 250px;
-		color: $header-text-color;
+		color: $globalnav-text-color;
 		font-size: 11px;
 
 		li {
@@ -232,7 +237,7 @@
 
 				time {
 					display: block;
-					color: rgba($header-text-color, .4);
+					color: rgba($globalnav-text-color, .4);
 				}
 			}
 		}
