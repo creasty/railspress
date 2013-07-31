@@ -6,24 +6,21 @@ require [
   'domReady!'
 ], ($, _, LineChart) ->
 
+  $activities = $ '#activities'
+  $commits = $ '#commits'
   $google_analytics = $ '#google_analytics'
   $google_analytics_table = $ '#google_analytics_table'
-  $activities = $ '#activities'
 
   $.ajax
     url: '/admin/activities'
-    success: (data) ->
+    success: ({commits, ga}) ->
       $activities.removeClass 'loader'
 
-      LineChart.attachTo $activities,
-        values: data.values
-        labels: data.labels
-        tooltips: data.tooltips
-        padding: [60, 20, 50, 20]
+      LineChart.attachTo $commits,
+        values: commits.values
+        labels: commits.labels
+        tooltips: commits.tooltips
 
-  $.ajax
-    url: '/admin/google_analytics'
-    success: (data) ->
       temp = _.template """
         <tr>
           <td><a href="<%= page_path %>" target="_blank"><%= page_title %></a></td>
@@ -35,14 +32,10 @@ require [
         </tr>
       """
 
-      for se in data.search
+      for se in ga.search
         $google_analytics_table.append temp se
-
-      $google_analytics.removeClass 'loader'
 
       LineChart.attachTo $google_analytics,
         unit: ' PV'
-        values: data.pageviews.values
-        labels: data.pageviews.labels
-        padding: [60, 20, 50, 20]
-
+        values: ga.pageviews.values
+        labels: ga.pageviews.labels

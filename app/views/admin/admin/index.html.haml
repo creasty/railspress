@@ -1,21 +1,20 @@
 
 #main
 
-  #activities.ui-line-chart.loader
-    %h2 Activities: Posts & Comments
+  #activities.loader
+    %h2 Activities & Reactions
+    #commits
+    #google_analytics
 
-  #google_analytics.ui-line-chart.loader
-    %h2 Google Analytics
-
-  %table.table
+  %table.table.table-fixed
     %thead
       %tr
         %th ページ
-        %th PV
-        %th オーガニック
-        %th 新規
-        %th 離脱率
-        %th 検索エンジン
+        %th{ width: 80 } PV
+        %th{ width: 80 } オーガニック
+        %th{ width: 60 } 新規
+        %th{ width: 60 } 離脱率
+        %th{ width: 80 } 検索エンジン
 
     %tbody#google_analytics_table
 

@@ -6,7 +6,29 @@ class Admin::AdminController < Admin::ApplicationController
   end
 
   def activities
-    @activities = {
+    render json: {
+      commits: commits,
+      ga: ga,
+    }
+  end
+
+  def login
+    if is_admin?
+      redirect_to admin_root_path
+    end
+  end
+
+  def logout
+    sign_out current_user
+    redirect_to admin_login_path
+  end
+
+
+private
+
+
+  def commits
+    @commits = {
       values: [],
       labels: [],
       tooltips: [],
@@ -33,32 +55,35 @@ class Admin::AdminController < Admin::ApplicationController
     30.times do |day|
       d = oma + day.day
 
-      post_d = @posts[post_index].d
-      comment_d = @comments[comment_index].d
-
-      @activities[:labels] << '%02d' % d.day
+      @commits[:labels] << '%02d' % d.day
 
       post_count = 0
       comment_count = 0
 
-      if d.month == post_d.month && d.day == post_d.day
+      if (post_d = @posts[post_index].try :d) && d.month == post_d.month && d.day == post_d.day
         post_count = @posts[post_index].count
         post_index += 1 if @posts.length > post_index + 1
       end
 
-      if d.month == comment_d.month && d.day == comment_d.day
+      if (comment_d = @comments[comment_index].try :d) && d.month == comment_d.month && d.day == comment_d.day
         comment_count = @comments[comment_index].count
         comment_index += 1 if @comments.length > comment_index + 1
       end
 
-      @activities[:values] << post_count + comment_count
-      @activities[:tooltips] << '%d 記事<br>%d コメント' % [post_count, comment_count]
+      @commits[:values] << post_count + comment_count
+      @commits[:tooltips] << '%d 記事<br>%d コメント' % [post_count, comment_count]
     end
 
-    render json: @activities
+    @commits
   end
 
-  def google_analytics
+  def ga
+    @pageviews = {
+      values: [],
+      labels: [],
+    }
+    @search = []
+
     GoogleAnalytics.login
 
     pageviews = GoogleAnalytics.pageview(
@@ -74,19 +99,14 @@ class Admin::AdminController < Admin::ApplicationController
       sort: :pageviews.desc
     ).results
 
-    @pageviews = {
-      values: [],
-      labels: [],
-    }
     pageviews.each do |pv|
       @pageviews[:labels] << pv.date[6..-1]
       @pageviews[:values] << pv.pageviews
     end
 
-    @search = []
     search.each do |se|
       @search << {
-        page_title: view_context.truncate(se.page_title, length: 40, ommission: '...'),
+        page_title: view_context.truncate(se.page_title, length: 60, ommission: '...'),
         page_path: se.page_path,
         pageviews: se.pageviews,
         organic: se.organic_searches,
@@ -96,21 +116,10 @@ class Admin::AdminController < Admin::ApplicationController
       }
     end
 
-    render json: {
+    {
       pageviews: @pageviews,
       search: @search,
     }
-  end
-
-  def login
-    if is_admin?
-      redirect_to admin_root_path
-    end
-  end
-
-  def logout
-    sign_out current_user
-    redirect_to admin_login_path
   end
 
 end

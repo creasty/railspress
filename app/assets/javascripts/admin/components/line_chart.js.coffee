@@ -10,9 +10,10 @@ define [
   defineComponent ->
 
     @defaultAttrs
-      className: 'ui-line-chart'
+      uiClassName: 'ui-line-chart'
+      className: ''
 
-      padding: [20, 20, 50, 20]
+      padding: [0, 0, 0, 0]
       data: []
       labels: []
       tooltips: []
@@ -30,7 +31,11 @@ define [
       @maximum = Math.max @values...
       @minimum = Math.min @values...
 
-      @$node.addClass @attr.className
+      @$container = $ '<div class="line-chart-container"></div>'
+      @$container.appendTo @$node
+      @$container.addClass @attr.className
+
+      @$node.addClass @attr.uiClassName
 
       for i in [0...@len] by 1
         if i < @len - 1
@@ -38,7 +43,7 @@ define [
             $(@attr.lineHtml)
             .css
               transformOrigin: '0 50%'
-            .appendTo @$node
+            .appendTo @$container
 
         @$dots[i] =
           $(@attr.dotHtml)
@@ -46,17 +51,17 @@ define [
           .powerTip
             placement: 'n'
             smartPlacement: true
-          .appendTo @$node
+          .appendTo @$container
 
         @$labels[i] =
           $(@attr.labelHtml)
           .addClass(if i == 0 then 'first' else if i == @len - 1 then 'last' else null)
           .html(@labels[i])
-          .appendTo @$node
+          .appendTo @$container
 
     @render = ->
-      @height = @$node.height() - @attr.padding[0] - @attr.padding[2]
-      @width = @$node.width() - @attr.padding[1] - @attr.padding[3]
+      @height = @$container.height()
+      @width = @$container.width()
 
       @dx = @width / (@len - 1)
 
@@ -91,9 +96,9 @@ define [
         bottom: @getPosY i
         left: @getPosX i
 
-    @getPosX = (i) -> @dx * i + @attr.padding[3]
+    @getPosX = (i) -> @dx * i
 
-    @getPosY = (i) -> @ratio * (@values[i] - @minimum) + @attr.padding[2]
+    @getPosY = (i) -> @ratio * (@values[i] - @minimum)
 
     @after 'initialize', ->
       @values = @$node.data('values') ? @attr.values

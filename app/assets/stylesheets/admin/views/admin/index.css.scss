@@ -1,11 +1,33 @@
 
 body#admin.index {
 
-	.ui-line-chart {
+	#activities {
+		background: $primary-color;
+		position: relative;
 		height: 250px;
+		width: 100%;
 
-		+ .ui-line-chart {
-			margin-top: 25px;
+		.ui-line-chart {
+			position: absolute;
+			top: 0;
+			left: 0;
+			height: 250px;
+			width: 100%;
+			background: none;
+
+			.line-chart-container {
+				top: 60px;
+			}
+		}
+
+		#commits {
+			.dot,
+			.line {
+				background: #71a9a7;
+			}
+			.label {
+				display: none;
+			}
 		}
 
 		h2 {
@@ -15,17 +37,10 @@ body#admin.index {
 			margin: 0;
 			line-height: 1;
 		}
+
 	}
 
-	#activities {
-		background: $info-color;
-
-		.dot {
-			border: 2px solid $info-color;
-		}
-	}
-
-	#google_analytics {
+	#google_analytics_ {
 		background: $ga-color;
 
 		.dot {
