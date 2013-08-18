@@ -1,11 +1,4 @@
 
-#=== Page Animation
-#==============================================================================================
-window.onload = ->
-  body = document.getElementsByTagName('body')[0]
-  body.className = body.className.replace /\bloader\b/, ''
-
-
 #=== Rails UJS
 #==============================================================================================
 require ['jquery_ujs']
