@@ -82,7 +82,7 @@ table.table {
 			height: 42px;
 			padding: 25px 25px;
 
-			color: rgba(#000, .5);
+			color: $menubar-text-color;
 		}
 
 		th {
@@ -189,3 +189,28 @@ table .wrap {
 	vertical-align: middle;
 	@include force-wrap;
 }
+
+
+/*=== Decap
+==============================================================================================*/
+.decap-body-wrapper {
+	position: relative;
+}
+
+.decap-head-wrapper {
+	position: fixed;
+	top: 70px;
+
+	&.affix-top .decap-head {
+		visibility: hidden;
+	}
+
+	&.affix-bottom {
+		position: absolute;
+		top: inherit;
+		left: 0;
+		right: 0;
+	}
+}
+
+

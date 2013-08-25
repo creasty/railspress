@@ -34,7 +34,7 @@
 		@extend .clear-after;
 		margin: 25px -25px -25px;
 		padding: 20px 25px;
-		background: $menubar-bg-color;
+		background: $titlebar-bg-color;
 		@include border-radius(0 0 3px 3px);
 
 		.btn {

@@ -12,6 +12,7 @@ $experimental-support-for-microsoft: true;
 /*	Font
 -----------------------------------------------*/
 $family: unquote("'Open Sans', Arial, Helvetica, 'Hiragino Kaku Gothic Pro', 'ヒラギノ角ゴ Pro W3', 'メイリオ', Meiryo");
+$family-code: unquote("Monaco, 'Courier New', Courier, monospace, 'Hiragino Kaku Gothic Pro', 'ヒラギノ角ゴ Pro W3', 'メイリオ', Meiryo");
 
 
 /*	Color Scheme
@@ -22,16 +23,19 @@ $body-bg-color: #202329;
 $globalnav-bg-color: #202329;
 $globalnav-text-color: #88959e;
 
-$menubar-bg-color: #e6e2d8;
-$menubar-text-color: #88857c;
-
 $main-bg-color: #f0f0f0;
 $main-text-color: #666;
 $main-rule-color: #d0d0d0;
 
+$titlebar-bg-color: #e6e2d8;
+$titlebar-text-color: #88857c;
+
+$menubar-bg-color: #e7e7e7;
+$menubar-text-color: #999;
+
 $side-bg-color: #34373c;
-$side-text-color: $menubar-bg-color;
-$side-muted-text-color: $menubar-text-color;
+$side-text-color: $titlebar-bg-color;
+$side-muted-text-color: $titlebar-text-color;
 
 $primary-color: #287d7a;
 
@@ -48,8 +52,8 @@ $multiple-selection-color: #ebece6;
 $anchor-color: $primary-color;
 $anchor-active-color: darken($anchor-color, 10%);
 
-$form-base-color: $menubar-text-color;
-$form-base-hover-color: darken($menubar-text-color, 5%);
+$form-base-color: $titlebar-text-color;
+$form-base-hover-color: darken($titlebar-text-color, 5%);
 
 $ga-color: #d08039;
 $facebook-color: desaturate(#3b5998, 20%);

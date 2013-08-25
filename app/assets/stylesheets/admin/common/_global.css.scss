@@ -62,12 +62,11 @@
 				vertical-align: -3px;
 				padding-right: 40px;
 				color: rgba($globalnav-text-color, .4);
+				@include transition(color .3s, padding-right .15s);
 
 				body.globalnav-open & {
-					padding-right: 10px;
+					padding-right: 18px;
 				}
-
-				@include transition(color .3s, padding-right .3s);
 			}
 		}
 
@@ -80,13 +79,13 @@
 			}
 		}
 		&.selected > a {
-			color: $menubar-bg-color;
+			color: $titlebar-bg-color;
 			background: $primary-color;
 
 			&:before {
 				opacity: 1;
 				color: rgba(#000, .5);
-				color: $menubar-bg-color;
+				color: $titlebar-bg-color;
 			}
 
 			&:after {
@@ -120,44 +119,55 @@
 	border-bottom: 1px solid rgba(#000, .2);
 
 	> li {
-		&:first-child > a {
-			padding: 18px;
-			width: 34px;
-			height: 34px;
-		}
-
 		> a {
 			display: block;
 			position: relative;
 			padding: 15px 18px 16px;
 			height: 39px;
-			width: 54px;
-			text-align: center;
-			font-size: 10px;
 			color: $globalnav-text-color;
 
 			&:hover {
 				color: $primary-color;
 			}
+		}
 
-			&:before {
-				width: 100%;
-				text-align: center;
-				font-size: 22px;
-				padding: 0 0 2px;
-				display: block;
-			}
+		&.avatar > a {
+			padding: 18px;
+			width: 158px;
+			height: 34px;
+			line-height: 0;
 
 			img {
 				@include border-radius(2px);
 				@include box-shadow(0 0 0 1px rgba(#000, .3));
+				vertical-align: top;
+				margin-right: 40px;
+				@include transition(color .3s, margin-right .15s);
+
+				body.globalnav-open & {
+					margin-right: 18px;
+				}
 			}
 
-			span.notification-count {
+			.name {
+				line-height: 34px;
+				font-weight: bold;
+			}
+
+			.notification-count {
 				position: absolute;
-				right: 10px;
+				left: 40px;
 				top: 10px;
 				@include box-shadow(0 0 0 1px rgba(#000, .4));
+			}
+		}
+
+		&.logout {
+			width: 56px;
+
+			i, i:before {
+				font-size: 22px;
+				line-height: 33px;
 			}
 		}
 	}

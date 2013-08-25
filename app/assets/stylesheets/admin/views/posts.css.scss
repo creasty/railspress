@@ -99,35 +99,15 @@ body#posts.edit {
 		}
 	}
 
-	#post_content_ace {
+	#post_content {
+		font-family: $family-code;
+		line-height: 1.8;
 		position: absolute;
-		top: 127px;
-		left: 15px;
-		bottom: 10px;
-		right: 15px;
-		background: none;
-		color: #586e75;
-
-		.ace_scroller {
-			background: none;
-		}
-		.ace_gutter {
-			background: none;
-		}
-		.ace_gutter-cell {
-			color: #bbb;
-		}
-		.ace_gutter-active-line,
-		.ace_active-line {
-			background: $single-selection-color;
-		}
-		.ace_selection {
-			background: #eee8d5;
-		}
-		.ace_cursor {
-			border-left: 1px solid $side-bg-color;
-			@include transition(.3s opacity);
-		}
+		top: 118px;
+		left: 0;
+		bottom: 0;
+		right: 0;
+		padding: 25px;
 	}
 
 	#post_thumbnail {

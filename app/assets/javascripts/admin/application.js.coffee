@@ -48,7 +48,7 @@ require [
     placement: 'n'
     smartPlacement: true
 
-  $('#menubar a').powerTip
+  $('#titlebar a').powerTip
     placement: 's'
     offset: 12
     smartPlacement: true

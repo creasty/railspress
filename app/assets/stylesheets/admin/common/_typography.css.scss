@@ -110,7 +110,7 @@ sup {
 pre,
 code {
 	font-size: 11px;
-	font-family: Monaco, "Courier New", Courier, monospace;
+	font-family: $family-code;
 	background-color: #f7f7f7;
 	border: 1px solid rgba(0, 0, 0, .15);
 	letter-spacing: 0 !important;
@@ -162,7 +162,7 @@ del {
 	height: 16px;
 	min-width: 16px;
 	text-align: center;
-	color: $menubar-bg-color;
+	color: $titlebar-bg-color;
 	letter-spacing: 0;
 	@include border-radius(16px);
 }

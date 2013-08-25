@@ -21,17 +21,17 @@ body {
 }
 
 
-/*=== Menubar
+/*=== Title bar
 ==============================================================================================*/
-#menubar {
+#titlebar {
 	position: absolute;
 	top: 0;
 	left: 0;
 	right: 0;
 	height: 70px;
 	@include experimental(user-select, none);
-	color: $menubar-bg-color;
-	background: $side-bg-color;
+	color: $titlebar-text-color;
+	background: $titlebar-bg-color;
 
 	h1 {
 		font-size: 20px;
@@ -43,7 +43,7 @@ body {
 
 	[class*="icon-"] {
 		@include inline-block;
-		color: rgba($menubar-bg-color, .5);
+		color: rgba($titlebar-text-color, .5);
 		margin: -14px 0 -10px 10px;
 		@include transition(.3s linear);
 
@@ -66,7 +66,7 @@ body {
 		position: relative;
 		width: 16px;
 		height: 16px;
-		border: 2px solid rgba($menubar-bg-color, .5);
+		border: 2px solid rgba($titlebar-text-color, .5);
 		@include border-radius(3px);
 
 		&:hover {
@@ -164,7 +164,7 @@ body {
 	top: 0;
 	right: 0;
 	width: 310px;
-	padding: 70px 25px 25px;
+	padding: 25px 25px 25px;
 
 	#modal_container & {
 		padding-top: 25px;
@@ -208,7 +208,7 @@ body {
 			}
 
 			&:hover {
-				color: $side-muted-text-color;
+				color: $primary-color;
 			}
 		}
 

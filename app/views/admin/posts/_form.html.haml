@@ -2,7 +2,7 @@
 = form_for [:admin, @post], html: { id: 'post_form', 'data-id' => params[:id] } do |f|
 
   #pocket_body
-    #main.no-padding.loader
+    #main.no-padding
       = f.text_field :title, placeholder: 'タイトルを入力してください', autocomplete: 'off'
 
       .menubar
@@ -25,9 +25,7 @@
           %li
             %a.tooltip.icon-code{ title: 'コード' }
 
-      = f.text_area :content, class: 'hide'
-      #post_content_ace
-
+      = f.text_area :content, placeholder: 'ここに本文を書きます...'
 
   #pocket_side
 

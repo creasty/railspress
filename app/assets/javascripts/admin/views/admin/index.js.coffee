@@ -8,8 +8,8 @@ require [
 
   $activities = $ '#activities'
   $commits = $ '#commits'
-  $google_analytics = $ '#google_analytics'
-  $google_analytics_table = $ '#google_analytics_table'
+  $ga = $ '#google_analytics'
+  $ga_table = $ '#google_analytics_table'
 
   $.ajax
     url: '/admin/activities'
@@ -32,10 +32,9 @@ require [
         </tr>
       """
 
-      for se in ga.search
-        $google_analytics_table.append temp se
+      $ga_table.append temp se for se in ga.search
 
-      LineChart.attachTo $google_analytics,
+      LineChart.attachTo $ga,
         unit: ' PV'
         values: ga.pageviews.values
         labels: ga.pageviews.labels

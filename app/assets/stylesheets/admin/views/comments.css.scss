@@ -96,7 +96,6 @@ body#comments {
 
 				.avatar {
 					width: 48px;
-					color: $menubar-text-color;
 					float: left;
 					margin-left: -48px - 25px;
 
@@ -218,7 +217,7 @@ body#comments {
 			z-index: 100;
 			min-height: 48px;
 			padding: 25px 157px 25px 93px;
-			background: $menubar-bg-color;
+			background: $titlebar-bg-color;
 			background: $main-bg-color;
 			cursor: text;
 			@include transition(box-shadow .3s);

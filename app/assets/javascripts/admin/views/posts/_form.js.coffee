@@ -7,13 +7,13 @@ require [
   'common/notify'
   'common/alert'
   'common/modal'
-  'ace/ace'
 
   'backbone.syphon'
   'powertip'
   'datepicker'
   'selectize'
-  'ace/mode/markdown'
+  'behave'
+  'rangy'
   'domReady!'
 ], (
   $
@@ -118,81 +118,53 @@ require [
 
     initialize: ->
       @$textarea = $ '#post_content'
-      @editor = ACE.edit 'post_content_ace'
-      @session = @editor.getSession()
+      @textarea = @$textarea.get 0
+
+      new Behave
+        textarea:   @textarea
+        softTabs:   false
+        tabSize:    4
+        autoOpen:   true
+        overwrite:  true
+        autoStrip:  true
+        autoIndent: false
 
       @modal = Modal content: '/admin/media?modal=insert', iframe: true, destroy: true
 
       $(window).on 'insertMedia', @insertMedia.bind @
 
       @render()
-      @$el.removeClass 'loader'
+      # @$el.removeClass 'loader'
 
-    render: ->
-      @editor.setTheme 'ace/theme/solarized_light'
-      @session.setMode 'ace/mode/markdown'
-      @session.setTabSize 2
-      @session.setUseWrapMode true
-      @session.setValue @$textarea.val()
-
-      @session.on 'change', =>
-        @$textarea.val @session.getValue()
-
-      @editor.setHighlightActiveLine true
-      @editor.renderer.setShowGutter false
-      @editor.setShowPrintMargin false
-      @editor.focus()
-
-      @editor.commands.addCommand
-        name: 'Save'
-        bindKey:
-          win: 'Ctrl-S'
-          mac: 'Command-S'
-        readOnly: false
-        exec: (editor) -> Post.save()
-
-      @
+    render: -> @
 
     getSelectionText: ->
-      ran = @editor.getSelection().getRange()
-      @session.getTextRange ran
+      { start, end } = @$textarea.getSelection()
+      @$textarea.val()[start...end]
 
-    insertAndMoveCursor: (start, text) ->
-      @session.insert start, text.replace /[\x02\x03\x0b]/g, ''
+    insertText: (text, repl = false) ->
+      { start, end } = @$textarea.getSelection()
+      offset = if repl then start else end
 
-      { row, column } = start
+      _text = text.replace /[\x02\x03\x0b]/g, ''
+
+      @$textarea.setSelection offset, end
+      @$textarea.replaceSelectedText _text
+
       p = {}
       ch =
         '\x0b': 'cur'
         '\x02': 'begin'
         '\x03': 'end'
 
-      text.split('\n').forEach (t, i) ->
-        col = column
-        for c, name of ch
-          idx = t.indexOf c
-          if idx >= 0
-            p[name] = [row + i, col + idx]
-            --col if name == 'begin'
+      for c, name of ch when ~(idx = text.indexOf c)
+        --idx if name == 'end'
+        p[name] = offset + idx
 
       if p.begin && p.end
-        @editor.moveCursorTo p.begin...
-        @editor.clearSelection()
-        @editor.selection.selectTo p.end...
+        @$textarea.setSelection p.begin, p.end
       else if p.cur
-        @editor.moveCursorTo p.cur...
-        @editor.clearSelection()
-
-    insertText: (text) ->
-      ran = @editor.getSelection().getRange()
-      @insertAndMoveCursor ran.start, text
-      @editor.focus()
-
-    replaceSelection: (text) ->
-      ran = @editor.getSelection().getRange()
-      @session.remove ran
-      @insertAndMoveCursor ran.start, text
-      @editor.focus()
+        @$textarea.setSelection p.cur, p.cur
 
     insertLink: (e, txt) ->
       e.preventDefault()
@@ -200,7 +172,7 @@ require [
 
       repl = "[#{txt}](\x0b)"
 
-      @replaceSelection repl
+      @insertText repl, true
 
     textBold: (e) ->
       e.preventDefault()
@@ -208,7 +180,7 @@ require [
 
       repl = "**\x02#{txt}\x03**"
 
-      @replaceSelection repl
+      @insertText repl, true
 
     textItalic: (e) ->
       e.preventDefault()
@@ -217,7 +189,7 @@ require [
 
       repl = "_\x02#{txt}\x03_"
 
-      @replaceSelection repl
+      @insertText repl, true
 
     textUnderline: (e) ->
       e.preventDefault()
@@ -225,7 +197,7 @@ require [
 
       repl = "<u>\x02#{txt}\x03</u>"
 
-      @replaceSelection repl
+      @insertText repl, true
 
     textStrike: (e) ->
       e.preventDefault()
@@ -233,7 +205,7 @@ require [
 
       repl = "~~\x02#{txt}\x03~~"
 
-      @replaceSelection repl
+      @insertText repl, true
 
     textQuote: (e) ->
       e.preventDefault()
@@ -241,7 +213,7 @@ require [
 
       repl = txt.replace /^/mg, '> '
 
-      @replaceSelection repl
+      @insertText repl, true
 
     textCode: (e) ->
       e.preventDefault()
@@ -253,7 +225,7 @@ require [
         else
           "`\x02#{txt}\x03`"
 
-      @replaceSelection repl
+      @insertText repl, true
 
     selectMedia: (e) ->
       e.preventDefault()

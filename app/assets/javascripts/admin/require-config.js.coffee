@@ -42,6 +42,7 @@
     'jquery_ujs': ['jquery']
     'masonry': ['jquery']
     'powertip': ['jquery']
+    'rangy': ['jquery']
     'selectize': ['jquery']
     'underscore': exports: '_'
 

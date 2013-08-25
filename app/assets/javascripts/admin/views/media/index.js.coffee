@@ -373,7 +373,7 @@ define [
     initialize: ->
       @$main = $ '#main'
       @$fileField = $ '#medium_asset'
-      @$btnAdd = $ '#menubar > h1 > a.icon-plus'
+      @$btnAdd = $ '#titlebar > h1 > a.icon-plus'
 
       FileUploader.attachTo @$el,
         fileInputSelector: '#medium_asset'
