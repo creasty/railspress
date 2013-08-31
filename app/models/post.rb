@@ -2,6 +2,7 @@
 
 class Post < ActiveRecord::Base
 
+  include PublicActivity::Model
   include Rails.application.routes.url_helpers
 
   attr_accessor :date_str, :time_str
@@ -54,6 +55,12 @@ class Post < ActiveRecord::Base
 
     where q
   end
+
+  #  Activity
+  #-----------------------------------------------
+  tracked \
+    except: [:destroy],
+    owner: ->(controller, model) { User.current_user }
 
   #  FriendlyId
   #-----------------------------------------------

@@ -24,6 +24,8 @@ gem 'redcarpet'
 gem 'garb', git: 'git://github.com/Sija/garb.git'
 gem 'delayed_job_active_record'
 gem 'daemons'
+gem 'public_activity'
+
 
 group :assets do
   gem 'sass-rails', '~> 3.2.3'

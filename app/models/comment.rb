@@ -1,5 +1,6 @@
 class Comment < ActiveRecord::Base
 
+  include PublicActivity::Model
   include Rails.application.routes.url_helpers
   include ActionView::Helpers
 
@@ -53,6 +54,13 @@ class Comment < ActiveRecord::Base
   #  Kaminari
   #-----------------------------------------------
   paginates_per 10
+
+  #  Activity
+  #-----------------------------------------------
+  tracked \
+    except: [:update, :destroy],
+    owner: ->(controller, model) { User.current_user },
+    recipient: ->(controller, model) { model.post.user }
 
   #  Markdown
   #-----------------------------------------------
