@@ -84,8 +84,8 @@
 
 			&:before {
 				opacity: 1;
-				color: rgba(#000, .5);
 				color: $titlebar-bg-color;
+				// color: darken($primary-color, 15%);
 			}
 
 			&:after {

@@ -171,9 +171,12 @@ body#comments {
 
 								@each $color in $colors {
 									&.icon-#{nth($color, 1)} {
-										color: nth($color, 2);
+										&:hover {
+											color: nth($color, 2);
+										}
 
 										&.active {
+											color: nth($color, 2);
 											font-weight: bold;
 										}
 
@@ -217,8 +220,7 @@ body#comments {
 			z-index: 100;
 			min-height: 48px;
 			padding: 25px 157px 25px 93px;
-			background: $titlebar-bg-color;
-			background: $main-bg-color;
+			background: rgba($main-bg-color, .9);
 			cursor: text;
 			@include transition(box-shadow .3s);
 

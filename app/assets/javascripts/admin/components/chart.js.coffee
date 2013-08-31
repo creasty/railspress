@@ -10,8 +10,11 @@ define [
   defineComponent ->
 
     @defaultAttrs
-      uiClassName: 'ui-line-chart'
+      uiClassName: 'ui-chart'
       className: ''
+      type: 'line'
+
+      barMinHeight: 2
 
       padding: [0, 0, 0, 0]
       data: []
@@ -21,38 +24,54 @@ define [
 
       lineHtml: '<div class="line"></div>'
       dotHtml: '<div class="dot"></div>'
+
+      barHtml: '<div class="bar"></div>'
+
       labelHtml: '<div class="label"></div>'
 
     @init = ->
       @$lines = []
       @$dots = []
       @$labels = []
+      @$bars = []
+
       @len = @values.length
       @maximum = Math.max @values...
       @minimum = Math.min @values...
 
-      @$container = $ '<div class="line-chart-container"></div>'
+      @$container = $ '<div class="ui-chart-container"></div>'
       @$container.appendTo @$node
       @$container.addClass @attr.className
 
       @$node.addClass @attr.uiClassName
 
-      for i in [0...@len] by 1
-        if i < @len - 1
-          @$lines[i] =
-            $(@attr.lineHtml)
-            .css
-              transformOrigin: '0 50%'
+      if 'line' == @attr.type
+        for i in [0...@len] by 1
+          if i < @len - 1
+            @$lines[i] =
+              $(@attr.lineHtml)
+              .css
+                transformOrigin: '0 50%'
+              .appendTo @$container
+
+          @$dots[i] =
+            $(@attr.dotHtml)
+            .data('powertip', @tooltips[i] ? (@values[i] + @unit))
+            .powerTip
+              placement: 'n'
+              smartPlacement: true
+            .appendTo @$container
+      else
+        for i in [0...@len] by 1
+          @$bars[i] =
+            $(@attr.barHtml)
+            .data('powertip', @tooltips[i] ? (@values[i] + @unit))
+            .powerTip
+              placement: 'n'
+              smartPlacement: true
             .appendTo @$container
 
-        @$dots[i] =
-          $(@attr.dotHtml)
-          .data('powertip', @tooltips[i] ? (@values[i] + @unit))
-          .powerTip
-            placement: 'n'
-            smartPlacement: true
-          .appendTo @$container
-
+      for i in [0...@len] by 1
         @$labels[i] =
           $(@attr.labelHtml)
           .addClass(if i == 0 then 'first' else if i == @len - 1 then 'last' else null)
@@ -71,10 +90,15 @@ define [
         else
           @height / (@maximum - @minimum)
 
-      for i in [0...@len] by 1
-        @drawLine i if i < @len - 1
-        @drawDot i
-        @renderLabelX i
+      if 'line' == @attr.type
+        for i in [0...@len] by 1
+          @drawLine i if i < @len - 1
+          @drawDot i
+          @renderLabelX i
+      else
+        for i in [0...@len] by 1
+          @drawBar i
+          @renderLabelX i
 
     @renderLabelX = (i) ->
       @$labels[i].css left: @getPosX i
@@ -96,9 +120,14 @@ define [
         bottom: @getPosY i
         left: @getPosX i
 
-    @getPosX = (i) -> @dx * i
+    @drawBar = (i) ->
+      @$bars[i].css
+        height: @attr.barMinHeight + @getPosY i
+        left: @getPosX i
 
-    @getPosY = (i) -> @ratio * (@values[i] - @minimum)
+    @getPosX = (i) -> @dx * i | 0
+
+    @getPosY = (i) -> @ratio * (@values[i] - @minimum) | 0
 
     @after 'initialize', ->
       @values = @$node.data('values') ? @attr.values

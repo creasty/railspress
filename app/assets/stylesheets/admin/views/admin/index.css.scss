@@ -7,7 +7,7 @@ body#admin.index {
 		height: 250px;
 		width: 100%;
 
-		.ui-line-chart {
+		.ui-chart {
 			position: absolute;
 			top: 0;
 			left: 0;
@@ -15,14 +15,13 @@ body#admin.index {
 			width: 100%;
 			background: none;
 
-			.line-chart-container {
+			.ui-chart-container {
 				top: 60px;
 			}
 		}
 
 		#commits {
-			.dot,
-			.line {
+			.bar {
 				background: #71a9a7;
 			}
 			.label {
@@ -33,9 +32,13 @@ body#admin.index {
 		h2 {
 			color: #fff;
 			border: none;
-			padding: 20px;
+			padding: 25px;
 			margin: 0;
 			line-height: 1;
+			text-transform: uppercase;
+			font-size: 14px;
+			font-weight: bold;
+			letter-spacing: 1px;
 		}
 
 	}

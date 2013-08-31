@@ -7,6 +7,7 @@ require [
   'common/notify'
   'common/alert'
   'common/modal'
+  'components/preloader'
 
   'backbone.syphon'
   'powertip'
@@ -24,7 +25,7 @@ require [
   Notify
   Alert
   Modal
-  ACE
+  Preloader
 ) ->
 
   #  Componets
@@ -291,6 +292,8 @@ require [
       @$form.date.datepicker format: 'yyyy.mm.dd'
 
       @$form.thumbnail.html @thumbnailTemplate thumbnail: @$form.thumbnail.data 'thumbnail'
+
+      Preloader.attachTo @$form.thumbnail.find 'img'
 
       $.ajax
         url: "#{Post.urlRoot}/tags"

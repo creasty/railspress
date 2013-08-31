@@ -1,15 +1,15 @@
 
-.ui-line-chart {
+.ui-chart {
 	position: relative;
 	background: $primary-color;
 	overflow: hidden;
 
-	.line-chart-container {
+	.ui-chart-container {
 		position: absolute;
 		top: 25px;
-		right: 20px;
-		bottom: 50px;
-		left: 20px;
+		right: 29px;
+		bottom: 56px;
+		left: 29px;
 		overflow: visible;
 	}
 
@@ -41,15 +41,23 @@
 		}
 	}
 
+	.bar {
+		position: absolute;
+		bottom: 0;
+		width: 6px;
+		margin-left: -3px;
+		background: $main-bg-color;
+		z-index: 10;
+	}
+
 	.label {
 		position: absolute;
-		bottom: -32px;
+		bottom: -31px;
 		width: 100px;
 		text-align: center;
 		margin-left: -50px;
 		color: rgba(#fff, .5);
 		font-size: 11px;
-		font-weight: bold;
 		text-transform: uppercase;
 		line-height: 1;
 		@include experimental(user-select, none);
@@ -57,11 +65,11 @@
 
 		&.first {
 			text-align: left;
-			margin-left: -2px;
+			margin-left: -4px;
 		}
 		&.last {
 			text-align: right;
-			margin-left: -100px + 3px;
+			margin-left: -100px + 4px;
 		}
 	}
 }

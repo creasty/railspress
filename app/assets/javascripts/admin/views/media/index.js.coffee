@@ -501,7 +501,7 @@ define [
           $img = $ "<figure style=\"background-image: url(#{src})\"></figure>"
 
           $img.on 'click', =>
-            offset = -80 + @$pocketBody.scrollTop()
+            offset = -90 + @$pocketBody.scrollTop()
 
             @$pocketBody
             .stop()

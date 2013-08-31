@@ -2,9 +2,9 @@
 require [
   'jquery'
   'underscore'
-  'components/line_chart'
+  'components/chart'
   'domReady!'
-], ($, _, LineChart) ->
+], ($, _, Chart) ->
 
   $activities = $ '#activities'
   $commits = $ '#commits'
@@ -13,12 +13,13 @@ require [
 
   $.ajax
     url: '/admin/activities'
-    success: ({commits, ga}) ->
+    success: ({ commits, ga }) ->
       $activities.removeClass 'loader'
 
-      LineChart.attachTo $commits,
-        values: commits.values
-        labels: commits.labels
+      Chart.attachTo $commits,
+        type:     'bar'
+        values:   commits.values
+        labels:   commits.labels
         tooltips: commits.tooltips
 
       temp = _.template """
@@ -34,7 +35,7 @@ require [
 
       $ga_table.append temp se for se in ga.search
 
-      LineChart.attachTo $ga,
-        unit: ' PV'
+      Chart.attachTo $ga,
+        unit:  ' PV'
         values: ga.pageviews.values
         labels: ga.pageviews.labels

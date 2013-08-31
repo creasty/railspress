@@ -53,6 +53,11 @@ require [
     offset: 12
     smartPlacement: true
 
+#  Preloader
+#-----------------------------------------------
+require ['components/preloader', 'domReady!'], (Preloader) ->
+  Preloader.attachTo 'img[data-src]'
+
 
 #=== Global Navigation
 #==============================================================================================

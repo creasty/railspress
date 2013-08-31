@@ -6,9 +6,10 @@ define [
   'text!app/templates/users/list_item.html'
   'common/alert'
   'common/notify'
+  'components/preloader'
 
   'powertip'
-], ($, _, Backbone, itemTemplate, Alert, Notify) ->
+], ($, _, Backbone, itemTemplate, Alert, Notify, Preloader) ->
 
   class UserView extends Backbone.View
 
@@ -35,9 +36,13 @@ define [
     render: ->
       @$el.html @template @model.toJSON()
       @$checkbox = @$el.find '.checkbox'
+
       @$el.find('.btn').powerTip
         placement: 'n'
         smartPlacement: true
+
+      Preloader.attachTo @$el.find 'img'
+
       @renderSelected()
       @
 

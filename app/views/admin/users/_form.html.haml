@@ -10,7 +10,7 @@
           %td.label
             アバター
           %td
-            = image_tag avatar_url(@user, 64), alt: '', size: '64x64'
+            = image_preloader avatar_url(@user, 64), alt: '', size: '64x64'
 
         %tr
           %td

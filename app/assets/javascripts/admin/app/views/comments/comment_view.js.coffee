@@ -7,6 +7,7 @@ define [
   'text!app/templates/comments/comment.html'
   'common/alert'
   'common/notify'
+  'components/preloader'
 
   'powertip'
 ], (
@@ -17,6 +18,7 @@ define [
   CommentTemplate
   Alert
   Notify
+  Preloader
 ) ->
 
   class CommentView extends Backbone.View
@@ -54,6 +56,8 @@ define [
 
       @$like = @$ '.icon-good'
       @$dislike = @$ '.icon-bad'
+
+      Preloader.attachTo @$el.find 'img'
 
       @$('time').timeago()
       @$('.tooltip').powerTip
