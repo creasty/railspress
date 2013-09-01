@@ -3,6 +3,7 @@
 	position: relative;
 	background: $primary-color;
 	overflow: hidden;
+	@include experimental(user-select, none);
 
 	.ui-chart-container {
 		position: absolute;

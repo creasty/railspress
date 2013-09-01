@@ -4,8 +4,6 @@ RailsPress::Application.routes.draw do
   #-----------------------------------------------
   namespace :admin do
     root to: 'admin#index'
-    get :activities, to: 'admin#activities'
-    get :google_analytics, to: 'admin#google_analytics'
 
     devise_scope :user do
       get :login, to: 'admin#login'
@@ -31,6 +29,11 @@ RailsPress::Application.routes.draw do
     resources :media
 
     resources :notifications, except: %w[show edit]
+
+    resources :activities, except: %w[show edit] do
+      get :dashboard
+    end
+
     resources :settings
   end
 

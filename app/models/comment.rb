@@ -1,6 +1,5 @@
 class Comment < ActiveRecord::Base
 
-  include PublicActivity::Model
   include Rails.application.routes.url_helpers
   include ActionView::Helpers
 
@@ -11,6 +10,7 @@ class Comment < ActiveRecord::Base
   belongs_to :post
   belongs_to :user
   has_many :ratings, as: :ratable, dependent: :destroy
+  has_many :activities, as: :trackable, dependent: :destroy
 
   #  Validation
   #-----------------------------------------------
@@ -54,13 +54,6 @@ class Comment < ActiveRecord::Base
   #  Kaminari
   #-----------------------------------------------
   paginates_per 10
-
-  #  Activity
-  #-----------------------------------------------
-  tracked \
-    except: [:update, :destroy],
-    owner: ->(controller, model) { User.current_user },
-    recipient: ->(controller, model) { model.post.user }
 
   #  Markdown
   #-----------------------------------------------
@@ -184,7 +177,7 @@ private
   #  Notifications
   #-----------------------------------------------
   def notify_comment
-    Notification.comment self
+    Activity.comment self
   end
 
   def notify_reply
@@ -194,7 +187,7 @@ private
 
     object_users.each do |object_user|
       object_user = User.find_by_username object_user[0]
-      Notification.reply self, object_user
+      Activity.reply self, object_user
     end
   end
 

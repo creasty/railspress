@@ -2,7 +2,6 @@
 
 class Post < ActiveRecord::Base
 
-  include PublicActivity::Model
   include Rails.application.routes.url_helpers
 
   attr_accessor :date_str, :time_str
@@ -16,6 +15,7 @@ class Post < ActiveRecord::Base
   belongs_to :thumbnail, class_name: '::Medium'
   has_many :comments, dependent: :destroy
   has_many :ratings, as: :ratable, dependent: :destroy
+  has_many :activities, as: :trackable, dependent: :destroy
 
   accepts_nested_attributes_for :user, allow_destroy: true
   # accepts_nested_attributes_for :tag_list
@@ -55,12 +55,6 @@ class Post < ActiveRecord::Base
 
     where q
   end
-
-  #  Activity
-  #-----------------------------------------------
-  tracked \
-    except: [:destroy],
-    owner: ->(controller, model) { User.current_user }
 
   #  FriendlyId
   #-----------------------------------------------
@@ -116,4 +110,3 @@ class Post < ActiveRecord::Base
   end
 
 end
-

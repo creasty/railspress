@@ -1,0 +1,12 @@
+ja:
+  activities:
+
+    comment:
+      create: "%{username} さんが「%{post_title}」にコメントしました: %{excerpt}"
+      reply: "%{username} さんがあなたのコメントに返信しました: %{excerpt}"
+
+    account:
+      destroy: "アカウントを削除しました"
+
+    topic_01: "あいああああいあいあいあいあい%{num}人がフォローしました"
+    topic_02: "%{num}人がフォローしましたあいああああいあいあいあいあい"

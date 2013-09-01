@@ -19,14 +19,14 @@ define [
   #-----------------------------------------------
   class NotificationsView extends Backbone.View
 
-    el: '#notification'
+    el: '#global_notifications'
 
     initialize: ->
       @listenTo Notifications, 'add', @addOne
       @listenTo Notifications, 'reset', @addAll
       @listenTo Notifications, 'change:read', @updateCount
 
-      @$counter = $ '#globalnav span.notification-count'
+      @$counter = $ '#globalnav span.notifications-count'
 
       @$parent = @$el.parent()
       @$ul = @$ '> ul'

@@ -176,6 +176,7 @@ body {
 
 	background: $side-bg-color;
 	color: $side-text-color;
+	@include experimental(user-select, none);
 
 	a {
 		color: $side-muted-text-color;
@@ -239,6 +240,7 @@ body {
 	height: 48px;
 	padding: 13px 25px 12px;
 	@include box-sizing(border-box);
+	@include experimental(user-select, none);
 
 	> ul {
 		@extend .menu;

@@ -1,17 +1,14 @@
 
-class Notification < ActiveRecord::Base
+class Activity < ActiveRecord::Base
 
-  attr_accessible :name, :params, :user, :read
-  serialize :params
+  attr_accessible :owner, :trackable, :recipient, :key, :parameters, :read
+  serialize :parameters
 
   #  Association
   #-----------------------------------------------
-  belongs_to :user
-
-  #  Validation
-  #-----------------------------------------------
-  validate :user, presence: true
-  validate :name, presence: true
+  belongs_to :owner, polymorphic: true
+  belongs_to :trackable, polymorphic: true
+  belongs_to :recipient, polymorphic: true
 
   #  Scope
   #-----------------------------------------------
@@ -20,20 +17,18 @@ class Notification < ActiveRecord::Base
 
   #  Public Methods
   #-----------------------------------------------
-  def message
-    op = params.merge params
-    op[:scope] = :notifications
+  def to_text
+    op = parameters.dup
+    op[:scope] = :activities
     op[:default] = ''
-    I18n.t name, op
+    I18n.t self.key, op
   end
 
   def to_json
     {
       id: id,
-      name: name,
-      icon: 'info',
-      icon_type: 'icon',
-      message: message,
+      key: key,
+      text: to_text,
       timestamp: created_at.to_i,
       read: read?,
     }
@@ -46,9 +41,12 @@ class Notification < ActiveRecord::Base
     def comment(comment)
       return if comment.post.user.id == comment.user.id
 
-      create user: comment.post.user,
-        name: 'comment',
-        params: {
+      create \
+        key: 'comment.create',
+        trackable: comment,
+        owner: comment.user,
+        recipient: comment.post.user,
+        parameters: {
           username: comment.user.username,
           post_title: comment.post.title,
           excerpt: comment.content.strip[0..30],
@@ -58,9 +56,12 @@ class Notification < ActiveRecord::Base
     end
 
     def reply(comment, object_user)
-      create user: object_user,
-        name: 'reply',
-        params: {
+      create \
+        key: 'comment.reply',
+        trackable: comment,
+        owner: comment.user,
+        recipient: object_user,
+        parameters: {
           username: comment.user.username,
           excerpt: comment.content.strip[0..30],
         }
