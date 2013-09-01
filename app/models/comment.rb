@@ -17,6 +17,11 @@ class Comment < ActiveRecord::Base
   validates :user, presence: true
   validates :content, presence: true
 
+  #  Callbacks
+  #-----------------------------------------------
+  after_create :notify_reply
+  after_create :notify_comment
+
   #  Scope
   #-----------------------------------------------
   def self.with_ratings(user)
@@ -45,11 +50,6 @@ class Comment < ActiveRecord::Base
     ")
     .group('comments.id')
   end
-
-  #  Callbacks
-  #-----------------------------------------------
-  after_create :notify_reply
-  after_create :notify_comment
 
   #  Kaminari
   #-----------------------------------------------
@@ -177,7 +177,20 @@ private
   #  Notifications
   #-----------------------------------------------
   def notify_comment
-    Activity.comment self
+    return if self.post.user.id == self.user.id
+
+    Activity.create \
+      key: 'comment.create',
+      trackable: self,
+      owner: self.user,
+      recipient: self.post.user,
+      parameters: {
+        username: self.user.username,
+        post_title: self.post.title,
+        excerpt: self.content.strip[0..30],
+      }
+
+    NotificationMailer.delay.comment self
   end
 
   def notify_reply
@@ -187,7 +200,18 @@ private
 
     object_users.each do |object_user|
       object_user = User.find_by_username object_user[0]
-      Activity.reply self, object_user
+
+      Activity.create \
+        key: 'comment.reply',
+        trackable: self,
+        owner: self.user,
+        recipient: object_user,
+        parameters: {
+          username: self.user.username,
+          excerpt: self.content.strip[0..30],
+        }
+
+      NotificationMailer.delay.reply self, object_user
     end
   end
 

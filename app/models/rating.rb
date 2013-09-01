@@ -17,6 +17,10 @@ class Rating < ActiveRecord::Base
     presence: true,
     uniqueness: { scope: [:ratable_type, :ratable_id] }
 
+  #  Callbacks
+  #-----------------------------------------------
+  after_create :notify_rating
+
   #  Scope
   #-----------------------------------------------
   scope :positives, -> { where 'positive > 0' }
@@ -28,6 +32,22 @@ class Rating < ActiveRecord::Base
       sum(negative) as total_negatives
     ')
     .first
+  end
+
+
+private
+
+
+  #  Notifications
+  #-----------------------------------------------
+  def notify_rating
+    Activity.create \
+      key: "#{ratable.class.name.downcase}.rating.create",
+      trackable: self,
+      owner: self.user,
+      recipient: self.ratable.user
+
+    NotificationMailer.delay.rating self
   end
 
 end

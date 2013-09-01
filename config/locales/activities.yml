@@ -5,6 +5,9 @@ ja:
       create: "%{username} さんが「%{post_title}」にコメントしました: %{excerpt}"
       reply: "%{username} さんがあなたのコメントに返信しました: %{excerpt}"
 
+      rating:
+        create: "%{username} さんがあなたのコメントに「いいね」しました"
+
     account:
       destroy: "アカウントを削除しました"
 

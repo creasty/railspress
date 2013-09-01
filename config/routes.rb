@@ -30,8 +30,10 @@ RailsPress::Application.routes.draw do
 
     resources :notifications, except: %w[show edit]
 
-    resources :activities, except: %w[show edit] do
-      get :dashboard
+    resources :activities, only: :index do
+      collection do
+        get :dashboard
+      end
     end
 
     resources :settings

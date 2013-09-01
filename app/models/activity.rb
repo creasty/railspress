@@ -18,7 +18,7 @@ class Activity < ActiveRecord::Base
   #  Public Methods
   #-----------------------------------------------
   def to_text
-    op = parameters.dup
+    op = parameters.nil? ? {} : parameters.dup
     op[:scope] = :activities
     op[:default] = ''
     I18n.t self.key, op
@@ -32,43 +32,6 @@ class Activity < ActiveRecord::Base
       timestamp: created_at.to_i,
       read: read?,
     }
-  end
-
-  #  Notify
-  #-----------------------------------------------
-  class << self
-
-    def comment(comment)
-      return if comment.post.user.id == comment.user.id
-
-      create \
-        key: 'comment.create',
-        trackable: comment,
-        owner: comment.user,
-        recipient: comment.post.user,
-        parameters: {
-          username: comment.user.username,
-          post_title: comment.post.title,
-          excerpt: comment.content.strip[0..30],
-        }
-
-      NotificationMailer.delay.comment comment
-    end
-
-    def reply(comment, object_user)
-      create \
-        key: 'comment.reply',
-        trackable: comment,
-        owner: comment.user,
-        recipient: object_user,
-        parameters: {
-          username: comment.user.username,
-          excerpt: comment.content.strip[0..30],
-        }
-
-      NotificationMailer.delay.reply comment, object_user
-    end
-
   end
 
 end

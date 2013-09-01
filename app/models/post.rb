@@ -18,13 +18,18 @@ class Post < ActiveRecord::Base
   has_many :activities, as: :trackable, dependent: :destroy
 
   accepts_nested_attributes_for :user, allow_destroy: true
-  # accepts_nested_attributes_for :tag_list
 
   #  Validation
   #-----------------------------------------------
   validates :status, numericality: { only_integer: true }
   validates :title, presence: true
   validates :user_id, numericality: true
+
+  #  Callbacks
+  #-----------------------------------------------
+  after_create :activity_create
+  after_update :activity_update
+  before_destroy :activity_destroy
 
   #  Scope
   #-----------------------------------------------
@@ -107,6 +112,29 @@ class Post < ActiveRecord::Base
   end
   def time_str=(time)
     self.created_at = "#{date_str} #{time}"
+  end
+
+
+private
+
+
+  #  Notifications
+  #-----------------------------------------------
+  def activity_create
+    record_activity 'create'
+  end
+  def activity_update
+    record_activity 'update'
+  end
+  def activity_destroy
+    record_activity 'destroy'
+  end
+
+  def record_activity(action)
+    Activity.create \
+      key: "post.#{action}",
+      trackable: self,
+      owner: self.user
   end
 
 end
