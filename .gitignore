@@ -3,6 +3,7 @@ Thumbs.db
 
 /.bundle
 
+/config/application.yml
 /db/*.sqlite3
 
 /log/*.log
@@ -12,7 +13,5 @@ db/schema.rb
 
 /public/system
 
-*.sublime-project
-*.sublime-workspace
-
 vendor/assets/components
+
