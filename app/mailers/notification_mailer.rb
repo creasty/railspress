@@ -9,6 +9,20 @@ class NotificationMailer < ActionMailer::Base
   default from: ENV['MAIL_NOREPLY']
 
 
+  #  レイティングされたとき、ratable の所有者に送る
+  #-----------------------------------------------
+  def rating(rating)
+    @rating = rating
+    @user = @rating.ratable.user
+
+    subject = I18n.t(
+      'notification_mailer.rating.subject',
+      username: @user.username
+    )
+
+    mail to: @user.email, subject: subject
+  end
+
   #  コメントが投稿されたとき、記事の作成者に送る
   #-----------------------------------------------
   def comment(comment)

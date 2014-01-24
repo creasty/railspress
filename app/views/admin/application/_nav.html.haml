@@ -5,7 +5,7 @@
       = link_to edit_admin_user_path(current_user) do
         = image_preloader(avatar_url(current_user, 32), size: '32x32')
         %span.name= current_user.name
-        %span.badge.notification-count.hide
+        %span.badge.notifications-count.hide
 
     %li.logout
       = link_to admin_logout_path do
@@ -14,9 +14,9 @@
   %nav
     = render_navigation expand_all: true
 
-    #notification
+    #global_notifications
       .title
         お知らせ
-        %span.badge.notification-count.hide
+        %span.badge.notifications-count.hide
 
       %ul

@@ -154,7 +154,7 @@
 				font-weight: bold;
 			}
 
-			.notification-count {
+			.notifications-count {
 				position: absolute;
 				left: 40px;
 				top: 10px;
@@ -165,9 +165,17 @@
 		&.logout {
 			width: 56px;
 
-			i, i:before {
-				font-size: 22px;
-				line-height: 33px;
+			a {
+				color: rgba($globalnav-text-color, .3);
+
+				&:hover {
+					color: $primary-color;
+				}
+
+				i, i:before {
+					font-size: 22px;
+					line-height: 33px;
+				}
 			}
 		}
 	}
@@ -175,27 +183,28 @@
 
 /*	Notification
 -----------------------------------------------*/
-#notification {
+#global_notifications {
 
 	opacity: 0;
 	@include transition(opacity .3s);
-	border-top: 1px solid rgba(#000, .2);
 
 	body.globalnav-open & {
 		opacity: 1;
 	}
 
 	> .title {
-		margin: 25px 0 25px;
-		padding: 0 25px;
+		// margin: 25px 0 25px;
+		padding: 25px 25px;
 		font-size: 14px;
 		font-weight: bold;
 		line-height: 1;
 		letter-spacing: 1px;
 		cursor: default;
 		color: $globalnav-text-color;
+		border: solid rgba(#000, .2);
+		border-width: 1px 0;
 
-		span.notification-count {
+		span.notifications-count {
 			margin-left: 10px;
 		}
 	}

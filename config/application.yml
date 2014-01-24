@@ -1,21 +1,21 @@
 
 development:
 
-  APP_DOMAIN: 'creasty.com'
+  APP_DOMAIN:   'creasty.com'
   MAIL_NOREPLY: 'no-reply@creasty.com'
 
   RESERVED_WORDS: 'master webmaster admin admins administrator'
 
-  TWITTER_KEY: 'UWC1Z3BYQ9GGNg1ixBiVJw'
-  TWITTER_SECRET: 'ZimTPG4Cj19ETvkmPZusPKHaHN975CbIqnPrEgYXw8'
-  TWITTER_TOKEN: '148334424-tfeF62cliaJcIfYJjHzAz7FVDs1lSFDjiY4onGup'
-  TWITTER_TOKEN_SECRET: 'PzWHUVGuYA5TCA15nk8kdxihKHD60FTxYg24KiNJqfg'
+  TWITTER_KEY:          'UWC1Z3BYQ9GGNg1ixBiVJw'
+  TWITTER_SECRET:       'ZimTPG4Cj19ETvkmPZusPKHaHN975CbIqnPrEgYXw8'
+  TWITTER_TOKEN:        '148334424-09BxZkZHZNKhLV7IvOrb3GDnLP5oiEobBDX1YtEO'
+  TWITTER_TOKEN_SECRET: 'dACSdL6i1Nx56AWQXSvuWE6B8CZaKDkRXijyBpc0HxtrJ'
 
   FACEBOOK_APP_ID: '423468787678045'
   FACEBOOK_SECRET: '9149b132fc2dc63a2b0c582c3f68da41'
 
-  GOOGLE_API_KEY: 'AIzaSyCv3Fh19Z8Fc15ZiwQqw06Wh4q28MyzCP0'
-  GOOGLE_USERNAME: 'ykiwng@gmail.com'
-  GOOGLE_PASSWORD: 'kytwqsetmodzecqz'
+  GOOGLE_API_KEY:             'AIzaSyDiv2U4SMBQ2yBOkk82cfrmZit4sCYKMys'
+  GOOGLE_USERNAME:            'ykiwng@gmail.com'
+  GOOGLE_PASSWORD:            'hwgqwuicttwfvslv'
   GOOGLE_ANALYTICS_USERAGENT: 'UA-4498942-3'
 

@@ -12,7 +12,7 @@ require [
   $ga_table = $ '#google_analytics_table'
 
   $.ajax
-    url: '/admin/activities'
+    url: '/admin/activities/dashboard'
     success: ({ commits, ga }) ->
       $activities.removeClass 'loader'
 

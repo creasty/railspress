@@ -18,7 +18,7 @@ class Admin::NotificationsController < Admin::ApplicationController
         total_pages: @notifications.total_pages,
         unread: User.current_user.notifications.unread.count
       },
-      @notifications.map { |m| m.to_json }
+      @notifications.map { |notification| notification.to_json }
     ]
   end
 

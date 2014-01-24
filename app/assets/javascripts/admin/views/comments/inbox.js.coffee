@@ -123,6 +123,8 @@ define [
       @$thread = $ '#thread'
       @$thread.on 'scroll', @loadMore.bind(@)
 
+      @$threads_list = $ '#threads_list'
+
     loadComments: (post_id) ->
       Comments.post_id = post_id
 
@@ -144,7 +146,11 @@ define [
       comment.set 'post_id', Comments.post_id
 
       comment.save op,
-        success: ->
+        success: =>
+          thread = CommentsThreads.where(id: comment.get('post_id'))[0]
+          thread.view.$el.prependTo @$threads_list
+          thread.set 'timestamp', comment.get 'timestamp'
+
           Comments.add comment
           CommentsObserver.trigger 'addedNew'
 
@@ -281,7 +287,7 @@ define [
       ++el.rows while el.scrollHeight > el.clientHeight && el.rows < 10
 
     updateListPadding: ->
-      @$commentsList.css 'paddingTop', @$el.outerHeight() + 20
+      @$commentsList.css 'paddingTop', @$el.outerHeight() + 25
 
     onScroll: ->
       top = @$commentsList.scrollTop()

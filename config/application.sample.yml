@@ -1,0 +1,21 @@
+
+development:
+
+  APP_DOMAIN: 'localhost'
+  MAIL_NOREPLY: 'no-reply@localhost'
+
+  RESERVED_WORDS: 'master webmaster admin admins administrator'
+
+  TWITTER_KEY:          ''
+  TWITTER_SECRET:       ''
+  TWITTER_TOKEN:        ''
+  TWITTER_TOKEN_SECRET: ''
+
+  FACEBOOK_APP_ID: ''
+  FACEBOOK_SECRET: ''
+
+  GOOGLE_API_KEY:             ''
+  GOOGLE_USERNAME:            ''
+  GOOGLE_PASSWORD:            ''
+  GOOGLE_ANALYTICS_USERAGENT: ''
+
